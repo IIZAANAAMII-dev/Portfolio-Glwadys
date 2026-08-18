@@ -31,6 +31,7 @@ export interface SpatialCameraState {
 export interface AppState {
   currentChapter: Chapter;
   scrollProgress: number;
+  chapterProgress: number;
   isBehindActive: boolean;
   activeProject: 'yuna' | 'mgc' | 'comptoir' | null;
   quality: QualityConfig;
@@ -64,7 +65,9 @@ class StateStore<T> {
 
   subscribe(listener: Listener<T>) {
     this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
   }
 }
 
@@ -84,6 +87,7 @@ export const initialCameraState: SpatialCameraState = {
 export const appStore = new StateStore<AppState>({
   currentChapter: 'intro',
   scrollProgress: 0,
+  chapterProgress: 0,
   isBehindActive: false,
   activeProject: null,
   quality: detectQuality(),

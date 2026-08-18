@@ -27,8 +27,9 @@ export function CustomCursor() {
       gsap.to(cursorRef.current, {
         x: e.clientX,
         y: e.clientY,
-        duration: 0.18,
-        ease: 'power2.out',
+        duration: 0.075,
+        ease: 'power3.out',
+        overwrite: 'auto',
       });
     };
 
@@ -46,7 +47,7 @@ export function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className="fixed top-0 left-0 pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center justify-center transition-all duration-300"
+      className="fixed top-0 left-0 pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center justify-center transition-all duration-150"
       style={{
         width: isExpanded ? '84px' : '14px',
         height: isExpanded ? '84px' : '14px',

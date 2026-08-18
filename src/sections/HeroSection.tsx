@@ -13,6 +13,7 @@ export function HeroSection({ locale }: { locale: string }) {
   const glwadysRef = useRef<HTMLHeadingElement>(null);
   const dalleauRef = useRef<HTMLHeadingElement>(null);
   const metaGlassRef = useRef<HTMLDivElement>(null);
+  const portraitFrameRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     MasterTimelineManager.init();
@@ -23,9 +24,9 @@ export function HeroSection({ locale }: { locale: string }) {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=180%',
+          end: () => window.innerWidth < 768 ? '+=110%' : '+=140%',
           pin: true,
-          scrub: 1.2,
+          scrub: 0.5,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -41,11 +42,12 @@ export function HeroSection({ locale }: { locale: string }) {
 
       tl
         // Phase 1 (0-40%): Words split, camera moves closer
-        .to(glwadysRef.current, { xPercent: -15, opacity: 0.9, duration: 1 })
-        .to(dalleauRef.current, { xPercent: 15, opacity: 0.9, duration: 1 }, '<')
-        .to(headlineRef.current, { yPercent: -30, opacity: 0.2, duration: 1 }, '<')
+        .to(glwadysRef.current, { xPercent: -11, opacity: 0.88, duration: 0.8 })
+        .to(dalleauRef.current, { xPercent: 11, opacity: 0.88, duration: 0.8 }, '<')
+        .to(headlineRef.current, { yPercent: -24, opacity: 0.15, duration: 0.8 }, '<')
+        .to(portraitFrameRef.current, { scale: 1.14, yPercent: -6, opacity: 1, duration: 0.9 }, '<0.1')
         // Phase 2 (40-100%): Camera dives into portrait
-        .to(metaGlassRef.current, { opacity: 0, y: -40, duration: 0.8 }, '<0.3')
+        .to(metaGlassRef.current, { opacity: 0, y: -28, duration: 0.55 }, '<0.16')
         .to(
           {},
           {
@@ -93,6 +95,7 @@ export function HeroSection({ locale }: { locale: string }) {
 
       {/* Center Giant Spatial Display Typography */}
       <div className="my-auto flex flex-col items-center justify-center relative py-12 pointer-events-none">
+        <div ref={portraitFrameRef} className="absolute w-[36vw] max-w-[360px] aspect-[3/4] rounded-[12rem] border border-accent-gold/25 bg-background-dark/45 backdrop-blur-[2px] opacity-70" />
         {/* Rear Deep Name: GLWADYS */}
         <h1
           ref={glwadysRef}
@@ -132,3 +135,4 @@ export function HeroSection({ locale }: { locale: string }) {
     </section>
   );
 }
+

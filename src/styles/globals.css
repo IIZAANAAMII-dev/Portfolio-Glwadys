@@ -30,7 +30,7 @@
     scroll-behavior: auto;
   }
 
-  body {
+body {
     background-color: var(--color-bg-dark);
     color: var(--color-text-light);
     overflow-x: hidden;
@@ -41,6 +41,11 @@
     background: rgba(216, 194, 157, 0.35);
     color: #ffffff;
   }
+}
+
+/* Full-bleed chapter surfaces deliberately hide the fixed WebGL stage outside its act. */
+.scene-surface {
+  background: var(--color-bg-dark);
 }
 
 /* Glassmorphism primitives */

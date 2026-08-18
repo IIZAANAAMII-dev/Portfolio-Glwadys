@@ -34,9 +34,9 @@ export function ServicesSection() {
         },
         y: 40,
         opacity: 0,
-        stagger: 0.1,
-        duration: 1.0,
-        ease: 'power3.out',
+        stagger: 0.05,
+        duration: 0.65,
+        ease: 'power4.out',
       });
     }, sectionRef);
 

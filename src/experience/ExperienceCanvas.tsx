@@ -8,6 +8,16 @@ import { MediaPlane } from './MediaPlane';
 import { Phone } from './Phone';
 import { ProjectConstellation } from './ProjectConstellation';
 import { appStore } from '../lib/store';
+import type { Chapter } from '../lib/store';
+
+function ChapterGroup({ chapters, children }: { chapters: Chapter[]; children: React.ReactNode }) {
+  const [chapter, setChapter] = useState(() => appStore.getState().currentChapter);
+  useEffect(() => {
+    const unsubscribe = appStore.subscribe((state) => setChapter(state.currentChapter));
+    return () => unsubscribe();
+  }, []);
+  return <group visible={chapters.includes(chapter)}>{children}</group>;
+}
 
 export function ExperienceCanvas() {
   const [quality, setQuality] = useState(() => appStore.getState().quality);
@@ -48,6 +58,7 @@ export function ExperienceCanvas() {
           <pointLight position={[-6, -4, 4]} intensity={0.8} color="#d8c29d" />
 
           {/* Chapter 0/1: Intro & Hero Spatial Planes */}
+          <ChapterGroup chapters={['intro', 'hero', 'identity']}>
           <group position={[0, 0, 0]}>
             {/* Portrait Plane (Center) */}
             <MediaPlane
@@ -72,8 +83,10 @@ export function ExperienceCanvas() {
               label="BEHIND / MOODBOARD"
             />
           </group>
+          </ChapterGroup>
 
           {/* Chapter 2: Phone Sequence & Signature Dive */}
+          <ChapterGroup chapters={['social']}>
           <group position={[0, -6.5, 0]}>
             <Phone
               position={[0, 0, 0.5]}
@@ -81,8 +94,10 @@ export function ExperienceCanvas() {
               screenTextureUrl="/assets/projects/yuna-story.svg"
             />
           </group>
+          </ChapterGroup>
 
           {/* Chapter 3: 3D Content Gallery Floating Nodes */}
+          <ChapterGroup chapters={['gallery']}>
           <group position={[0, -12, 0]}>
             <MediaPlane
               position={[-4.5, 2.0, 1.0]}
@@ -103,6 +118,7 @@ export function ExperienceCanvas() {
               label="COMMUNITY ESSENCE"
             />
           </group>
+          </ChapterGroup>
 
           {/* Chapter 8: Work Constellation */}
           <ProjectConstellation />

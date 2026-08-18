@@ -22,11 +22,11 @@ export function ExperienceSection() {
             start: 'top 70%',
             toggleActions: 'play none none reverse',
           },
-          y: 60,
+          y: 42,
           opacity: 0,
-          stagger: 0.2,
-          duration: 1.2,
-          ease: 'power3.out',
+          stagger: 0.08,
+          duration: 0.7,
+          ease: 'power4.out',
         });
       }
     }, sectionRef);

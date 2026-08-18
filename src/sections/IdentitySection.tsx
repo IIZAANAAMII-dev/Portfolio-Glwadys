@@ -23,9 +23,9 @@ export function IdentitySection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=200%',
+          end: '+=165%',
           pin: true,
-          scrub: 1.2,
+          scrub: 0.55,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {

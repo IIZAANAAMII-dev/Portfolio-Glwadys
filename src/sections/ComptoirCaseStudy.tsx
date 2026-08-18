@@ -12,18 +12,10 @@ export function ComptoirCaseStudy() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.comptoir-element', {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none reverse',
-        },
-        y: 35,
-        opacity: 0,
-        stagger: 0.15,
-        duration: 1.2,
-        ease: 'power3.out',
-      });
+      const elements = sectionRef.current?.querySelectorAll('.comptoir-element');
+      const tl = gsap.timeline({ scrollTrigger: { trigger: sectionRef.current, start: 'top top', end: () => window.innerWidth < 768 ? '+=105%' : '+=115%', pin: true, scrub: 0.55, anticipatePin: 1, invalidateOnRefresh: true } });
+      tl.fromTo(elements || [], { y: 48, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.9, ease: 'power4.out' })
+        .to(elements || [], { y: -14, duration: 0.7, ease: 'none' }, '<0.35');
     }, sectionRef);
 
     return () => ctx.revert();
@@ -33,7 +25,7 @@ export function ComptoirCaseStudy() {
     <section
       id="comptoir-case-study"
       ref={sectionRef}
-      className="relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10 my-12"
+      className="relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10 my-12 bg-background-dark"
     >
       {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono-tag border-b border-white/10 pb-6">

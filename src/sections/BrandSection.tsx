@@ -24,7 +24,7 @@ export function BrandSection() {
           start: 'top top',
           end: '+=160%',
           pin: true,
-          scrub: 1.2,
+          scrub: 0.55,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -42,7 +42,7 @@ export function BrandSection() {
         tl.fromTo(
           items,
           { y: 60, opacity: 0, scale: 0.95 },
-          { y: 0, opacity: 1, scale: 1, stagger: 0.15, duration: 1.5, ease: 'power3.out' }
+          { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.9, ease: 'power4.out' }
         ).to(
           {},
           {

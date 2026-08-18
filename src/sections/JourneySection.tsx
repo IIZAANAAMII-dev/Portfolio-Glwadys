@@ -24,9 +24,9 @@ export function JourneySection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => `+=${track.scrollWidth * 1.1}`,
+          end: () => `+=${Math.max(track.scrollWidth * 0.82, window.innerHeight * 2.4)}`,
           pin: true,
-          scrub: 1.2,
+          scrub: 0.55,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -43,7 +43,7 @@ export function JourneySection() {
       tl.to(track, {
         x: -totalShift,
         ease: 'none',
-        duration: 3,
+        duration: 2.1,
       });
     }, sectionRef);
 

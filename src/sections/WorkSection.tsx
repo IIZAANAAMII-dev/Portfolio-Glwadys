@@ -22,9 +22,9 @@ export function WorkSection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=180%',
+          end: '+=145%',
           pin: true,
-          scrub: 1.2,
+          scrub: 0.55,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -42,7 +42,7 @@ export function WorkSection() {
         tl.fromTo(
           cards,
           { y: 80, opacity: 0, scale: 0.9 },
-          { y: 0, opacity: 1, scale: 1, stagger: 0.2, duration: 1.5, ease: 'power3.out' }
+          { y: 0, opacity: 1, scale: 1, stagger: 0.1, duration: 0.95, ease: 'power4.out' }
         );
       }
     }, sectionRef);

@@ -26,9 +26,9 @@ export function StrategySection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => `+=${steps.scrollWidth * 1.1}`,
+          end: () => `+=${Math.max(steps.scrollWidth * 0.82, window.innerHeight * 2.4)}`,
           pin: true,
-          scrub: 1.2,
+          scrub: 0.55,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -45,11 +45,11 @@ export function StrategySection() {
       tl.to(steps, {
         x: -totalShift,
         ease: 'none',
-        duration: 3,
+        duration: 2.1,
       }).to(
         {},
         {
-          duration: 3,
+          duration: 2.1,
           onUpdate: function () {
             const prog = this.progress();
             MasterTimelineManager.updateCamera({

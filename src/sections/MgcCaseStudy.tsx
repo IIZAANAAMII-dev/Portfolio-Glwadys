@@ -15,20 +15,9 @@ export function MgcCaseStudy() {
     const ctx = gsap.context(() => {
       const items = scrapbookRef.current?.querySelectorAll('.scrapbook-item');
 
-      gsap.from(items || [], {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none reverse',
-        },
-        scale: 0.9,
-        y: 50,
-        rotate: (i) => (i % 2 === 0 ? -4 : 4),
-        opacity: 0,
-        stagger: 0.15,
-        duration: 1.2,
-        ease: 'power3.out',
-      });
+      const tl = gsap.timeline({ scrollTrigger: { trigger: sectionRef.current, start: 'top top', end: () => window.innerWidth < 768 ? '+=105%' : '+=120%', pin: true, scrub: 0.55, anticipatePin: 1, invalidateOnRefresh: true } });
+      tl.fromTo(items || [], { scale: 0.88, y: 60, opacity: 0, rotation: (i) => (i % 2 === 0 ? -4 : 4) }, { scale: 1, y: 0, opacity: 1, rotation: 0, stagger: 0.08, duration: 0.9, ease: 'power4.out' })
+        .to(items || [], { y: -14, duration: 0.75, ease: 'none' }, '<0.35');
     }, sectionRef);
 
     return () => ctx.revert();
@@ -38,7 +27,7 @@ export function MgcCaseStudy() {
     <section
       id="mgc-case-study"
       ref={sectionRef}
-      className="relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10 my-12"
+      className="relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10 my-12 bg-background-dark"
     >
       {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono-tag border-b border-white/10 pb-6">

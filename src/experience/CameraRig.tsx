@@ -26,7 +26,8 @@ export function CameraRig() {
 
   useFrame((_, delta) => {
     const quality = appStore.getState().quality;
-    const lerpFactor = quality.tier === 'MEDIUM' ? 0.12 : 0.07;
+    // Camera must follow the scroll story, not trail behind it.
+    const lerpFactor = quality.tier === 'MEDIUM' ? 0.2 : 0.16;
     const factor = 1.0 - Math.exp(-delta * (lerpFactor * 60));
 
     camera.position.lerp(targetPos.current, factor);

@@ -24,9 +24,9 @@ export function GallerySection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => `+=${track.scrollWidth * 1.2}`,
+          end: () => `+=${Math.max(track.scrollWidth * 0.82, window.innerHeight * 2.4)}`,
           pin: true,
-          scrub: 1.2,
+          scrub: 0.55,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -44,11 +44,11 @@ export function GallerySection() {
       tl.to(track, {
         x: -totalWidth,
         ease: 'none',
-        duration: 3,
+        duration: 2.1,
       }).to(
         {},
         {
-          duration: 3,
+          duration: 2.1,
           onUpdate: function () {
             const prog = this.progress();
             MasterTimelineManager.updateCamera({
@@ -70,7 +70,7 @@ export function GallerySection() {
     <section
       id="gallery-section"
       ref={sectionRef}
-      className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden z-10 select-none py-8"
+      className="scene-surface relative min-h-screen w-full flex flex-col justify-between overflow-hidden z-10 select-none py-8"
     >
       {/* Top Header */}
       <div className="px-6 md:px-14 flex justify-between items-start font-mono-tag">

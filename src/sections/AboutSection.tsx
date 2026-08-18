@@ -23,9 +23,9 @@ export function AboutSection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=180%',
+          end: '+=150%',
           pin: true,
-          scrub: 1.2,
+          scrub: 0.55,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -43,7 +43,7 @@ export function AboutSection() {
       tl.fromTo(line1Ref.current, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 1 })
         .fromTo(line2Ref.current, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '-=0.4')
         .fromTo(line3Ref.current, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 1 }, '-=0.4')
-        .fromTo(line4Ref.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.2 }, '-=0.3')
+        .fromTo(line4Ref.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.3')
         .fromTo(bioRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, '-=0.5');
     }, sectionRef);
 

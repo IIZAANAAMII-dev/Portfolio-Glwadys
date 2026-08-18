@@ -26,14 +26,15 @@ export function SocialSection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=250%',
+          end: () => window.innerWidth < 768 ? '+=220%' : '+=290%',
           pin: true,
-          scrub: 1.2,
+          scrub: 0.55,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             const p = self.progress;
-            if (p > 0.8) {
+            appStore.setState({ chapterProgress: p });
+            if (p > 0.94) {
               MasterTimelineManager.setChapter('gallery');
             } else {
               MasterTimelineManager.setChapter('social');
@@ -42,13 +43,13 @@ export function SocialSection() {
         },
       });
 
-      // Camera dive sequence towards phone
-      tl.to('.social-card-left', { xPercent: -120, opacity: 0, duration: 1 })
-        .to('.social-card-right', { xPercent: 120, opacity: 0, duration: 1 }, '<')
+      // A dedicated, opaque phone scene: content clears before the camera enters.
+      tl.to('.social-card-left', { xPercent: -120, opacity: 0, duration: 0.75 })
+        .to('.social-card-right', { xPercent: 120, opacity: 0, duration: 0.75 }, '<')
         .to(
           {},
           {
-            duration: 1.8,
+              duration: 1.35,
             onUpdate: function () {
               const prog = this.progress();
               // Camera advances straight into the phone screen center (Camera Dive)
@@ -65,6 +66,7 @@ export function SocialSection() {
 
     return () => {
       unsub();
+      appStore.setState({ chapterProgress: 0 });
       ctx.revert();
     };
   }, []);
@@ -73,7 +75,7 @@ export function SocialSection() {
     <section
       id="social-section"
       ref={sectionRef}
-      className="relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10"
+      className="scene-surface relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10"
     >
       {/* Top Header */}
       <div className="flex justify-between items-start font-mono-tag">
@@ -149,3 +151,4 @@ export function SocialSection() {
     </section>
   );
 }
+
