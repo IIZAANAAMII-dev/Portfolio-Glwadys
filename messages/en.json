@@ -50,30 +50,33 @@
     "diveHint": "Dive"
   },
   "gallery": {
-    "tag": "Inside content",
-    "title": "3D editorial gallery",
-    "subtitle": "Spatial navigation across dynamic visual formats, editorial typography, and brand narratives."
+    "tag": "03 / INSIDE CONTENT",
+    "title": "3D EDITORIAL GALLERY",
+    "subtitle": "Spatial navigation across dynamic visual formats, editorial typography, and brand narratives.",
+    "phaseX": "AXIS X: HORIZONTAL FLOW",
+    "phaseY": "AXIS Y: VERTICAL DEPTH",
+    "phaseZ": "AXIS Z: INFINITE SPACE"
   },
   "brand": {
-    "tag": "BRAND CONSISTENCY",
-    "title": "Identity in motion",
+    "tag": "04 / BRAND CONSISTENCY",
+    "title": "FROM CREATIVE CHAOS TO STRATEGIC ORDER",
     "subtitle": "Every piece of content reinforces a coherent brand ecosystem.",
-    "pillarsTitle": "Communication pillars",
-    "toneTitle": "Tone & positioning",
-    "paletteTitle": "Visual harmony",
-    "messagingTitle": "Key messages"
+    "pillarsTitle": "COMMUNICATION PILLARS",
+    "toneTitle": "TONE & POSITIONING",
+    "paletteTitle": "VISUAL HARMONY",
+    "messagingTitle": "KEY MESSAGES"
   },
   "strategy": {
-    "tag": "STRATEGY",
-    "title": "Intention before image",
+    "tag": "05 / STRATEGY",
+    "title": "METHOD STRUCTURES THE OUTCOME",
     "subtitle": "Planning, audience research, pillars and storytelling.",
-    "step1": "Market research & watch",
+    "step1": "01. MARKET RESEARCH & COMPETITIVE WATCH",
     "step1Desc": "Understanding industry dynamics and pinpointing differentiation angles.",
-    "step2": "Pillars & editorial tone",
+    "step2": "02. CONTENT PILLARS & EDITORIAL TONE",
     "step2Desc": "Defining expression territories and high-value messaging guidelines.",
-    "step3": "Planning & production",
+    "step3": "03. DISTRIBUTION PLANNING & PRODUCTION",
     "step3Desc": "Rigorous calendars ensuring consistency, freshness, and multi-channel coherence.",
-    "step4": "Community care & feedback",
+    "step4": "04. ENGAGEMENT & FEEDBACK LOOP",
     "step4Desc": "Thoughtful community engagement and ongoing presence refinement."
   },
   "about": {

@@ -50,30 +50,33 @@
     "diveHint": "Immersion"
   },
   "gallery": {
-    "tag": "Dans le contenu",
-    "title": "Galerie éditoriale 3D",
-    "subtitle": "Navigation spatiale à travers les formats visuels, typographies éditoriales et narrations de marque."
+    "tag": "03 / DANS LE CONTENU",
+    "title": "GALERIE ÉDITORIALE 3D",
+    "subtitle": "Navigation spatiale à travers les formats visuels, typographies éditoriales et narrations de marque.",
+    "phaseX": "AXE X : FLUX HORIZONTAL",
+    "phaseY": "AXE Y : PROFONDEUR VERTICALE",
+    "phaseZ": "AXE Z : ESPACE IMMERSIF"
   },
   "brand": {
-    "tag": "COHÉRENCE",
-    "title": "Identité en mouvement",
+    "tag": "04 / COHÉRENCE DE MARQUE",
+    "title": "DU CHAOS CRÉATIF À L'ORDRE STRATÉGIQUE",
     "subtitle": "Chaque publication renforce un écosystème de marque cohérent.",
-    "pillarsTitle": "Piliers de communication",
-    "toneTitle": "Ton & positionnement",
-    "paletteTitle": "Harmonie visuelle",
-    "messagingTitle": "Messages clés"
+    "pillarsTitle": "PILIERS DE COMMUNICATION",
+    "toneTitle": "TON & POSITIONNEMENT",
+    "paletteTitle": "HARMONIE VISUELLE",
+    "messagingTitle": "MESSAGES CLÉS"
   },
   "strategy": {
-    "tag": "MÉTHODE",
-    "title": "Avant l'image, l'intention",
+    "tag": "05 / STRATÉGIE",
+    "title": "LA MÉTHODE STRUCTURE LE RÉSULTAT",
     "subtitle": "Planning, recherche d'audience, piliers et storytelling.",
-    "step1": "Étude de marché & veille",
+    "step1": "01. ÉTUDE DE MARCHÉ & VEILLE CONCURRENTIELLE",
     "step1Desc": "Comprendre les dynamiques sectorielles et identifier les opportunités de différenciation.",
-    "step2": "Piliers & ligne éditoriale",
+    "step2": "02. PILIERS DE CONTENU & LIGNE ÉDITORIALE",
     "step2Desc": "Définir les territoires d'expression et les messages à forte valeur ajoutée.",
-    "step3": "Planning & production",
+    "step3": "03. PLANNING DE DIFFUSION & PRODUCTION",
     "step3Desc": "Calendrier rigoureux garantissant régularité, fraîcheur et cohérence multi-plateforme.",
-    "step4": "Engagement & ajustement",
+    "step4": "04. ENGAGEMENT & RETOUR D'EXPÉRIENCE",
     "step4Desc": "Animation communautaire et optimisation continue de la présence."
   },
   "about": {
