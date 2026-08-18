@@ -4,99 +4,102 @@
     "description": "Creative portfolio & content direction of Glwadys Dalleau. Social Media Management, Content Creation, Brand Communication, and Digital Strategy."
   },
   "nav": {
-    "tag": "PORTFOLIO / 2026",
-    "status": "AVAILABLE FOR NEW PROJECTS",
-    "location": "MARSEILLE, FR",
-    "index": "CHAPTERS",
-    "contact": "CONTACT",
-    "switchLanguage": "LANGUAGE"
+    "tag": "Portfolio 2026",
+    "status": "Available for new projects",
+    "location": "Marseille, FR",
+    "index": "Chapters",
+    "contact": "Contact",
+    "switchLanguage": "Language"
   },
   "intro": {
-    "sub": "GLWADYS DALLEAU",
-    "location": "MARSEILLE / FRANCE",
-    "roles": "SOCIAL / CONTENT / BRAND",
-    "scrollHint": "SCROLL TO EXPLORE"
+    "sub": "Glwadys Dalleau",
+    "location": "Marseille / France",
+    "roles": "Social, Content, Brand",
+    "scrollHint": "Scroll to explore"
   },
   "hero": {
-    "lead": "CREATIVE PORTFOLIO",
-    "headlinePart1": "I TURN BRANDS",
-    "headlinePart2": "INTO STORIES",
-    "headlinePart3": "PEOPLE REMEMBER.",
+    "lead": "Creative portfolio",
+    "headlinePart1": "I turn brands",
+    "headlinePart2": "into stories",
+    "headlinePart3": "people remember.",
     "headlinePart4": "",
-    "roleTag": "SOCIAL MEDIA & BRAND STRATEGY",
-    "experienceYears": "~5 YEARS FREELANCE EXPERIENCE",
-    "badge": "FRONT / BEHIND THE SCENES"
+    "roleTag": "Social Media & Brand Strategy",
+    "experienceYears": "~5 years freelance experience",
+    "badge": "Front & behind the scenes"
   },
   "identity": {
-    "tag": "01 / DECONSTRUCTION",
-    "title": "FROM PERSON TO PRESENCE",
+    "tag": "Deconstruction",
+    "title": "From person to presence",
     "subtitle": "Every visual carries intention. The portrait transforms into dynamic cells that structure digital attention.",
-    "caption": "MULTI-CHANNEL CONTENT ARCHITECTURE"
+    "caption": "Editorial & visual balance"
   },
   "social": {
-    "tag": "02 / SOCIAL WORLD",
-    "title": "CAPTURING ATTENTION IN THE FEED",
+    "tag": "SOCIAL WORLD",
+    "title": "Capturing attention in the feed",
     "subtitle": "Reels, Stories, editorial posts, and brand narratives designed to stop the infinite scroll.",
-    "frontLabel": "FRONT / FINAL CONTENT",
-    "behindLabel": "BEHIND / STRATEGY & MOODBOARDS",
+    "frontLabel": "Final content",
+    "behindLabel": "Strategy & moodboards",
+    "frontTitle": "New Collection",
+    "behindTitle": "Grid & Visual Harmony",
+    "frontRightTitle": "Dynamic Storytelling",
+    "behindRightTitle": "Scripting & Hook",
     "frontDesc": "What your audience sees: polished aesthetics, captivating storytelling, and organic reach.",
     "behindDesc": "What drives results: content calendars, audience research, brand pillars, and artistic direction.",
-    "diveHint": "DIVE THROUGH SCREEN"
+    "frontRightDesc": "Product value with high completion rate.",
+    "behindRightDesc": "3s hook, visual rhythm and natural CTA.",
+    "diveHint": "Dive"
   },
   "gallery": {
-    "tag": "03 / INSIDE CONTENT",
-    "title": "3D EDITORIAL GALLERY",
-    "subtitle": "Spatial navigation across dynamic visual formats, editorial typography, and brand narratives.",
-    "phaseX": "AXIS X: HORIZONTAL FLOW",
-    "phaseY": "AXIS Y: VERTICAL DEPTH",
-    "phaseZ": "AXIS Z: INFINITE SPACE"
+    "tag": "Inside content",
+    "title": "3D editorial gallery",
+    "subtitle": "Spatial navigation across dynamic visual formats, editorial typography, and brand narratives."
   },
   "brand": {
-    "tag": "04 / BRAND CONSISTENCY",
-    "title": "FROM CREATIVE CHAOS TO STRATEGIC ORDER",
-    "subtitle": "Creating content is not enough: you must build an ecosystem where every post reinforces overall identity.",
-    "pillarsTitle": "COMMUNICATION PILLARS",
-    "toneTitle": "TONE & POSITIONING",
-    "paletteTitle": "VISUAL HARMONY",
-    "messagingTitle": "KEY MESSAGES"
+    "tag": "BRAND CONSISTENCY",
+    "title": "Identity in motion",
+    "subtitle": "Every piece of content reinforces a coherent brand ecosystem.",
+    "pillarsTitle": "Communication pillars",
+    "toneTitle": "Tone & positioning",
+    "paletteTitle": "Visual harmony",
+    "messagingTitle": "Key messages"
   },
   "strategy": {
-    "tag": "05 / STRATEGY",
-    "title": "METHOD STRUCTURES THE OUTCOME",
-    "subtitle": "Clarity before the first shot. Planning, audience research, content pillars, and storytelling.",
-    "step1": "01. MARKET RESEARCH & COMPETITIVE BENCHMARK",
+    "tag": "STRATEGY",
+    "title": "Intention before image",
+    "subtitle": "Planning, audience research, pillars and storytelling.",
+    "step1": "Market research & watch",
     "step1Desc": "Understanding industry dynamics and pinpointing differentiation angles.",
-    "step2": "02. CONTENT PILLARS & EDITORIAL TONE",
+    "step2": "Pillars & editorial tone",
     "step2Desc": "Defining expression territories and high-value messaging guidelines.",
-    "step3": "03. RELEASE SCHEDULE & PRODUCTION FLOW",
+    "step3": "Planning & production",
     "step3Desc": "Rigorous calendars ensuring consistency, freshness, and multi-channel coherence.",
-    "step4": "04. COMMUNITY CARE & FEEDBACK LOOP",
+    "step4": "Community care & feedback",
     "step4Desc": "Thoughtful community engagement and ongoing presence refinement."
   },
   "about": {
-    "tag": "06 / ABOUT",
-    "line1": "I CREATE CONTENT.",
-    "line2": "I BUILD COMMUNITIES.",
-    "line3": "I SHAPE BRAND STORIES.",
-    "line4": "I MAKE PEOPLE STOP SCROLLING.",
+    "tag": "About",
+    "line1": "I create content.",
+    "line2": "I build communities.",
+    "line3": "I shape brand stories.",
+    "line4": "I make people stop scrolling.",
     "bio": "Social Media Manager and freelance content creator with ~5 years of experience. My approach combines aesthetic sensibility, organizational discipline, and digital culture to turn every platform into an enduring asset."
   },
   "journey": {
-    "tag": "07 / JOURNEY",
-    "title": "EVOLUTION & MILESTONES",
-    "subtitle": "A continuous progression from hands-on creation toward brand direction and holistic strategy.",
-    "y2021": "2021 — CREATIVE ROOTS & SOCIAL MEDIA",
-    "y2022": "2022 — YUNA BIJOUX APPRENTICESHIP & CONTENT",
-    "y2023": "2023 — IPAC FACTORY BACHELOR DEGREE & FREELANCE",
-    "y2024": "2024 — LE COMPTOIR DE MATHILDE: EXPERIENCE & MERCHANDISING",
-    "y2025": "2025 — MARSEILLE GIRLS CLUB: COMMUNITY & EVENTS",
-    "y2026": "2026 — SOCIAL MEDIA DIRECTION & BRAND STRATEGY"
+    "tag": "JOURNEY",
+    "title": "2021—2026",
+    "subtitle": "From hands-on creation to brand direction.",
+    "y2021": "Creative roots & social media",
+    "y2022": "Yuna Bijoux, Brest",
+    "y2023": "IPAC Factory bachelor & freelance",
+    "y2024": "Le Comptoir de Mathilde",
+    "y2025": "Marseille Girls Club",
+    "y2026": "Social media & brand direction"
   },
   "work": {
-    "tag": "08 / SELECTED WORK",
-    "title": "WORK CONSTELLATION",
+    "tag": "Selected work",
+    "title": "Work constellation",
     "subtitle": "Three distinct universes showcasing varied skills: fine jewelry, lifestyle community, and gourmet artisan retail.",
-    "explore": "EXPLORE CASE STUDY",
+    "explore": "Explore case study",
     "yuna": {
       "title": "YUNA BIJOUX",
       "role": "Social Media & Communication Support (Work-Study)",
@@ -123,9 +126,9 @@
     }
   },
   "services": {
-    "tag": "09 / EXPERTISE",
-    "title": "SERVICES & CAPABILITIES",
-    "subtitle": "Comprehensive guidance from initial concept to strategic execution.",
+    "tag": "EXPERTISE",
+    "title": "SERVICES",
+    "subtitle": "From concept to strategic execution.",
     "s1": "SOCIAL MEDIA MANAGEMENT",
     "s1Desc": "Daily channel orchestration, scheduling, and high-performance curation.",
     "s2": "CONTENT CREATION",
@@ -142,26 +145,26 @@
     "s7Desc": "Competitive benchmarking, social trend analysis, and insights."
   },
   "experience": {
-    "tag": "10 / PROFESSIONAL BACKGROUND",
-    "title": "EXPERIENCE & EDUCATION",
+    "tag": "Professional background",
+    "title": "Experience & education",
     "subtitle": "Real-world expertise backed by rigorous international business education.",
-    "educationTitle": "ACADEMIC BACKGROUND",
-    "educationSchool": "IPAC BACHELOR FACTORY",
+    "educationTitle": "Academic background",
+    "educationSchool": "IPAC Bachelor Factory",
     "educationDegree": "Bachelor in International Business — Marketing & Negotiation (2020 – 2023)"
   },
   "contact": {
-    "tag": "11 / COLLABORATION",
-    "headline": "LET'S CREATE SOMETHING PEOPLE REMEMBER.",
+    "tag": "Collaboration",
+    "headline": "Let's create something people remember.",
     "sub": "Open for freelance missions, brand partnerships, and high-impact content strategies.",
-    "emailLabel": "DIRECT EMAIL",
-    "linkedinLabel": "PROFESSIONAL NETWORK",
-    "copyEmail": "COPY EMAIL",
-    "emailCopied": "EMAIL COPIED TO CLIPBOARD",
-    "locationNote": "BASED IN MARSEILLE — AVAILABLE IN FRANCE & REMOTELY"
+    "emailLabel": "Direct email",
+    "linkedinLabel": "Professional network",
+    "copyEmail": "Copy email",
+    "emailCopied": "Email copied to clipboard",
+    "locationNote": "Based in Marseille — available in France & remotely"
   },
   "footer": {
-    "rights": "© 2026 GLWADYS DALLEAU. ALL RIGHTS RESERVED.",
-    "craft": "ART DIRECTION & CREATIVE CRAFT",
-    "backToTop": "BACK TO TOP"
+    "rights": "© 2026 Glwadys Dalleau. All rights reserved.",
+    "craft": "Art direction & creative craft",
+    "backToTop": "Back to top"
   }
 }

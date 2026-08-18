@@ -102,7 +102,6 @@ export function IdentitySection() {
           className="grid grid-cols-2 gap-4 w-full max-w-lg aspect-square p-4 rounded-3xl border border-white/5 bg-white/[0.01]"
         >
           <div className="grid-cell glass-panel rounded-2xl p-4 flex flex-col justify-between overflow-hidden relative shadow-lg">
-            <span className="font-mono-tag text-[10px] text-accent-gold">01. STORY</span>
             <div className="w-8 h-8 rounded-full bg-accent-gold/20 flex items-center justify-center my-auto">
               <span className="text-accent-gold text-xs">✦</span>
             </div>
@@ -110,19 +109,16 @@ export function IdentitySection() {
           </div>
 
           <div className="grid-cell glass-panel rounded-2xl p-4 flex flex-col justify-between overflow-hidden relative shadow-lg">
-            <span className="font-mono-tag text-[10px] text-foreground-muted">02. FEED</span>
             <div className="w-full h-8 rounded-lg bg-white/5 my-auto" />
             <p className="font-sans text-xs text-foreground-light font-medium">Esthétique de marque</p>
           </div>
 
           <div className="grid-cell glass-panel rounded-2xl p-4 flex flex-col justify-between overflow-hidden relative shadow-lg">
-            <span className="font-mono-tag text-[10px] text-foreground-muted">03. REEL</span>
             <div className="w-6 h-6 rounded-md bg-accent-gold/30 my-auto" />
             <p className="font-sans text-xs text-foreground-light font-medium">Storytelling court</p>
           </div>
 
           <div className="grid-cell glass-panel rounded-2xl p-4 flex flex-col justify-between overflow-hidden relative shadow-lg">
-            <span className="font-mono-tag text-[10px] text-accent-gold">04. STRATÉGIE</span>
             <div className="w-10 h-2 rounded bg-accent-gold my-auto" />
             <p className="font-sans text-xs text-foreground-light font-medium">Cohérence globale</p>
           </div>
@@ -131,7 +127,6 @@ export function IdentitySection() {
 
       {/* Bottom Status */}
       <div className="flex justify-between items-end font-mono-tag text-foreground-muted text-[10px]">
-        <span>TRANSITION : CELLULES → SOCIAL PRESENCE</span>
         <span>GLWADYS DALLEAU</span>
       </div>
     </section>

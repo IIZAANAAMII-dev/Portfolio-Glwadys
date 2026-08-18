@@ -15,7 +15,6 @@ import { YunaCaseStudy } from '@/sections/YunaCaseStudy';
 import { MgcCaseStudy } from '@/sections/MgcCaseStudy';
 import { ComptoirCaseStudy } from '@/sections/ComptoirCaseStudy';
 import { ServicesSection } from '@/sections/ServicesSection';
-import { ExperienceSection } from '@/sections/ExperienceSection';
 import { ContactSection } from '@/sections/ContactSection';
 
 type Props = {
@@ -41,7 +40,6 @@ export default function HomePage({ params: { locale } }: Props) {
       <MgcCaseStudy />
       <ComptoirCaseStudy />
       <ServicesSection />
-      <ExperienceSection />
       <ContactSection />
     </div>
   );

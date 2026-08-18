@@ -19,31 +19,24 @@ export function ContactSection() {
   return (
     <section
       id="contact-section"
-      className="relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10 my-12"
+      className="relative min-h-[120vh] w-full flex flex-col justify-between p-6 md:p-14 -mt-[20vh] pt-[24vh] overflow-hidden z-20 bg-gradient-to-b from-background-dark/95 via-background-dark to-background-dark"
     >
-      {/* Top Header */}
       <div className="flex justify-between items-start font-mono-tag border-b border-white/10 pb-6">
         <div>
           <span className="text-accent-gold text-xs font-semibold">{t('tag')}</span>
           <p className="font-mono text-xs text-foreground-muted mt-1">{t('locationNote')}</p>
         </div>
-        <span className="text-xs text-foreground-muted hidden sm:inline">
-          COLLABORATION & MISSIONS
-        </span>
       </div>
 
-      {/* Center Giant CTA Statement */}
-      <div className="my-auto max-w-5xl mx-auto w-full text-center py-12 flex flex-col items-center justify-center">
-        <h2 className="font-editorial text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-foreground-light tracking-tight leading-[0.95]">
+      <div className="my-auto max-w-6xl mx-auto w-full text-center py-16 flex flex-col items-center justify-center">
+        <h2 className="font-editorial text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-foreground-light tracking-tight leading-[0.9]">
           {t('headline')}
         </h2>
-        <p className="font-sans text-sm sm:text-base md:text-lg text-foreground-muted max-w-xl mx-auto mt-6 leading-relaxed">
+        <p className="font-sans text-sm sm:text-base md:text-lg text-foreground-muted max-w-2xl mx-auto mt-8 leading-relaxed">
           {t('sub')}
         </p>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 mt-10">
-          {/* Direct Email Action with Copy button */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 mt-12">
           <div className="glass-panel p-2 rounded-full flex items-center gap-3 pr-4 border border-accent-gold/40">
             <a
               href={`mailto:${email}`}
@@ -65,7 +58,6 @@ export function ContactSection() {
             </button>
           </div>
 
-          {/* LinkedIn Profile */}
           <a
             href={linkedinUrl}
             target="_blank"
@@ -85,10 +77,8 @@ export function ContactSection() {
         )}
       </div>
 
-      {/* Bottom Status */}
       <div className="flex justify-between items-end font-mono-tag text-foreground-muted text-[10px] border-t border-white/10 pt-4">
-        <span>MARSEILLE · FRANCE</span>
-        <span>11 / COLLABORATION & CONTACT</span>
+        <span>{t('locationNote')}</span>
       </div>
     </section>
   );

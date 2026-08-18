@@ -128,11 +128,9 @@ export function HeroSection({ locale }: { locale: string }) {
       </div>
 
       {/* Bottom Editorial Caption */}
-      <div className="flex justify-between items-end font-mono-tag text-foreground-muted text-[10px] pb-4">
-        <span>01 / DIRECTION DE CONTENU</span>
-        <span>SCROLL POUR ENTRER DANS LA STRUCTURE</span>
+      <div className="flex justify-end items-end font-mono-tag text-foreground-muted text-[10px] pb-4">
+        <span>{t('badge')}</span>
       </div>
     </section>
   );
 }
-

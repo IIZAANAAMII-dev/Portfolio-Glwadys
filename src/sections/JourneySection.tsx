@@ -24,9 +24,14 @@ export function JourneySection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => `+=${Math.max(track.scrollWidth * 0.82, window.innerHeight * 2.4)}`,
+          end: () => {
+            const isMobile = window.innerWidth < 768;
+            const multiplier = isMobile ? 0.22 : 0.4;
+            const base = isMobile ? 0.9 : 1.4;
+            return `+=${Math.max(track.scrollWidth * multiplier, window.innerHeight * base)}`;
+          },
           pin: true,
-          scrub: 0.55,
+          scrub: 0.5,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -43,20 +48,25 @@ export function JourneySection() {
       tl.to(track, {
         x: -totalShift,
         ease: 'none',
-        duration: 2.1,
-      });
+        duration: 1.4,
+      }).fromTo(
+        '.j-year-item',
+        { y: 28, opacity: 0.15 },
+        { y: 0, opacity: 1, stagger: 0.07, duration: 0.55, ease: 'power4.out' },
+        '<0.1'
+      );
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   const milestones = [
-    { year: '2021', text: t('y2021'), depth: 'back', role: 'Social Media Initial Craft' },
-    { year: '2022', text: t('y2022'), depth: 'front', role: 'Yuna Bijoux Work-Study (Brest)' },
-    { year: '2023', text: t('y2023'), depth: 'back', role: 'IPAC Factory Bachelor Degree' },
-    { year: '2024', text: t('y2024'), depth: 'front', role: 'Le Comptoir de Mathilde Merchandising' },
-    { year: '2025', text: t('y2025'), depth: 'back', role: 'Marseille Girls Club Community' },
-    { year: '2026', text: t('y2026'), depth: 'front', role: 'Strategic Brand & Social Direction' },
+    { year: '2021', text: t('y2021') },
+    { year: '2022', text: t('y2022') },
+    { year: '2023', text: t('y2023') },
+    { year: '2024', text: t('y2024') },
+    { year: '2025', text: t('y2025') },
+    { year: '2026', text: t('y2026') },
   ];
 
   return (
@@ -65,62 +75,37 @@ export function JourneySection() {
       ref={sectionRef}
       className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden z-10 select-none py-8"
     >
-      {/* Top Header */}
       <div className="px-6 md:px-14 flex justify-between items-start font-mono-tag">
         <div>
           <span className="text-accent-gold text-xs">{t('tag')}</span>
           <h2 className="font-editorial text-2xl sm:text-4xl text-foreground-light mt-1">
             {t('title')}
           </h2>
+          <p className="font-sans text-xs text-foreground-muted mt-1">
+            {t('subtitle')}
+          </p>
         </div>
-        <span className="text-[10px] text-foreground-muted hidden sm:inline">
-          ~5 ANS DE MATURATION PROFESSIONNELLE
-        </span>
       </div>
 
-      {/* Horizontal Giant Years Track */}
       <div className="my-auto w-full overflow-visible">
         <div
           ref={trackRef}
-          className="flex items-center gap-10 md:gap-16 px-6 md:px-14 w-max"
+          className="flex items-end gap-[12vw] md:gap-[16vw] pl-6 md:pl-14 pr-[60vw] w-max"
         >
-          {milestones.map((m, idx) => (
+          {milestones.map((m) => (
             <div
-              key={idx}
-              className="relative flex flex-col justify-between w-[320px] sm:w-[420px] md:w-[480px] h-[380px] glass-panel p-8 rounded-3xl border border-white/10 group hover:border-accent-gold/40 transition-all duration-300"
+              key={m.year}
+              className="j-year-item flex flex-col justify-end w-[70vw] md:w-[34vw] h-[45vh] border-b border-white/10 pb-4"
             >
-              {/* Giant Background Year Typo */}
-              <span className="font-editorial text-7xl sm:text-9xl text-white/5 font-bold absolute -top-6 right-4 select-none pointer-events-none group-hover:text-accent-gold/10 transition-colors">
+              <span className="font-editorial text-[22vw] md:text-[11vw] leading-[0.75] text-foreground-light/90 select-none">
                 {m.year}
               </span>
-
-              <div className="flex justify-between items-center font-mono-tag text-xs text-accent-gold z-10">
-                <span>MILESTONE {idx + 1}</span>
-                <span className="text-foreground-muted">{m.year}</span>
-              </div>
-
-              <div className="z-10 my-auto">
-                <h3 className="font-editorial text-2xl text-foreground-light leading-snug">
-                  {m.text}
-                </h3>
-                <p className="font-sans text-xs text-foreground-muted mt-2">
-                  {m.role}
-                </p>
-              </div>
-
-              <div className="border-t border-white/10 pt-3 flex justify-between items-center text-[10px] font-mono text-foreground-muted z-10">
-                <span>PROGRESSION</span>
-                <span className="text-accent-gold">ÉVOLUTION 3D</span>
-              </div>
+              <p className="font-sans text-sm md:text-base text-foreground-muted mt-3 max-w-xs">
+                {m.text}
+              </p>
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Bottom Status */}
-      <div className="px-6 md:px-14 flex justify-between items-end font-mono-tag text-foreground-muted text-[10px]">
-        <span>TIMELINE HORIZONTALE SPATIALE</span>
-        <span>07 / PARCOURS 2021–2026</span>
       </div>
     </section>
   );

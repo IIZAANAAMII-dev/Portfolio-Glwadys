@@ -27,8 +27,8 @@ export function CustomCursor() {
         unsub();
       };
     }
-    const xTo = gsap.quickTo(cursorRef.current, 'x', { duration: 0.14, ease: 'power3.out' });
-    const yTo = gsap.quickTo(cursorRef.current, 'y', { duration: 0.14, ease: 'power3.out' });
+    const xTo = gsap.quickTo(cursorRef.current, 'x', { duration: 0.09, ease: 'power3.out' });
+    const yTo = gsap.quickTo(cursorRef.current, 'y', { duration: 0.09, ease: 'power3.out' });
 
     const onMouseMove = (e: MouseEvent) => {
       if (!cursorRef.current) return;

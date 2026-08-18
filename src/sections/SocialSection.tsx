@@ -106,9 +106,8 @@ export function SocialSection() {
       <div ref={cardsContainerRef} className="my-auto grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full items-center">
         {/* Left Card: Editorial Feed */}
         <div className="social-card-left glass-panel p-6 rounded-3xl border border-white/10 transition-all duration-500">
-          <span className="font-mono-tag text-[10px] text-accent-gold">FEED INSTAGRAM</span>
-          <h3 className="font-editorial text-xl text-foreground-light mt-2">
-            {isBehind ? 'Grille & Harmonie Visuelle' : 'Nouvelle Collection'}
+          <h3 className="font-editorial text-xl text-foreground-light">
+            {isBehind ? t('behindTitle') : t('frontTitle')}
           </h3>
           <p className="text-xs text-foreground-muted mt-2 leading-relaxed">
             {isBehind ? t('behindDesc') : t('frontDesc')}
@@ -118,37 +117,28 @@ export function SocialSection() {
         {/* Center Target: Smartphone Dive Portal */}
         <div className="glass-panel p-8 rounded-3xl border border-accent-gold/40 text-center flex flex-col items-center justify-center relative shadow-2xl">
           <div className="w-12 h-12 rounded-full bg-accent-gold/20 flex items-center justify-center mb-3">
-            <Smartphone className="w-6 h-6 text-accent-gold animate-bounce" />
+            <Smartphone className="w-6 h-6 text-accent-gold" />
           </div>
           <span className="font-mono-tag text-[10px] text-accent-gold font-bold">
             {t('diveHint')}
-          </span>
-          <p className="font-editorial text-lg text-foreground-light mt-1">
-            Plongée dans la création
-          </p>
-          <span className="font-mono text-[10px] text-foreground-muted mt-2">
-            Scroll pour traverser l&apos;écran
           </span>
         </div>
 
         {/* Right Card: Short-form Reels */}
         <div className="social-card-right glass-panel p-6 rounded-3xl border border-white/10 transition-all duration-500">
-          <span className="font-mono-tag text-[10px] text-accent-gold">REELS & RETENTION</span>
-          <h3 className="font-editorial text-xl text-foreground-light mt-2">
-            {isBehind ? 'Scripting & Hook' : 'Storytelling Dynamique'}
+          <h3 className="font-editorial text-xl text-foreground-light">
+            {isBehind ? t('behindRightTitle') : t('frontRightTitle')}
           </h3>
           <p className="text-xs text-foreground-muted mt-2 leading-relaxed">
-            {isBehind ? 'Accroche 3s, rythme visuel et CTA naturel.' : 'Valorisation produit avec fort taux de complétion.'}
+            {isBehind ? t('behindRightDesc') : t('frontRightDesc')}
           </p>
         </div>
       </div>
 
-      {/* Bottom Status */}
       <div className="flex justify-between items-end font-mono-tag text-foreground-muted text-[10px]">
-        <span>SIGNATURE MOVE : CAMERA DIVE 3D</span>
-        <span>02 / SOCIAL PRESENCE</span>
+        <span>{t('tag')}</span>
+        <span>{t('title')}</span>
       </div>
     </section>
   );
 }
-

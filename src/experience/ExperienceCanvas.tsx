@@ -7,6 +7,7 @@ import { CameraRig } from './CameraRig';
 import { MediaPlane } from './MediaPlane';
 import { Phone } from './Phone';
 import { ProjectConstellation } from './ProjectConstellation';
+import { GalleryRoom } from './GalleryRoom';
 import { appStore } from '../lib/store';
 import { SceneDirector, SceneLayer } from './SceneDirector';
 import { SPATIAL_LANES } from '../config/spatial';
@@ -14,18 +15,23 @@ import { SPATIAL_LANES } from '../config/spatial';
 export function ExperienceCanvas() {
   const [quality, setQuality] = useState(() => appStore.getState().quality);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
     const unsub = appStore.subscribe((state) => {
       setQuality(state.quality);
     });
     return () => {
+      window.removeEventListener('resize', checkMobile);
       unsub();
     };
   }, []);
 
-  if (!mounted || !quality.enableWebGL) {
+  if (!mounted || !quality.enableWebGL || isMobile) {
     return null;
   }
 
@@ -58,14 +64,12 @@ export function ExperienceCanvas() {
               position={[0, 0.2, 0.0]}
               scale={[3.2, 4.2, 1]}
               textureUrl="/assets/editorial/portrait-glwadys.svg"
-              label="GLWADYS DALLEAU"
             />
             {/* Story Card (Right / Mid) */}
             <MediaPlane
               position={[3.8, 1.4, SPATIAL_LANES.foreground.z]}
               scale={[1.8, 3.0, 1]}
               textureUrl="/assets/projects/yuna-story.svg"
-              label="STORY / ORGANIQUE"
             />
             {/* Behind The Scenes Moodboard Card (Left / Back) */}
             <MediaPlane
@@ -73,7 +77,6 @@ export function ExperienceCanvas() {
               scale={[2.2, 2.2, 1]}
               textureUrl="/assets/projects/mgc-scrapbook.svg"
               isBehindLayer
-              label="BEHIND / MOODBOARD"
             />
           </group>
           </SceneLayer>
@@ -89,28 +92,11 @@ export function ExperienceCanvas() {
           </group>
           </SceneLayer>
 
-          {/* Chapter 3: 3D Content Gallery Floating Nodes */}
+          {/* Chapter 3: 3D Editorial Gallery Room */}
           <SceneLayer scene="gallery">
-          <group position={[0, -12, 0]}>
-            <MediaPlane
-              position={[-4.5, 2.0, SPATIAL_LANES.foreground.z]}
-              scale={[2.6, 3.4, 1]}
-              textureUrl="/assets/projects/yuna-story.svg"
-              label="VERTICAL REELS"
-            />
-            <MediaPlane
-              position={[4.2, -1.2, SPATIAL_LANES.midground.z]}
-              scale={[3.2, 2.4, 1]}
-              textureUrl="/assets/projects/comptoir-macro.svg"
-              label="PRODUCT EDITORIAL"
-            />
-            <MediaPlane
-              position={[0, 3.2, SPATIAL_LANES.background.z]}
-              scale={[3.8, 2.6, 1]}
-              textureUrl="/assets/projects/mgc-scrapbook.svg"
-              label="COMMUNITY ESSENCE"
-            />
-          </group>
+            <group position={[0, -12, 0]}>
+              <GalleryRoom />
+            </group>
           </SceneLayer>
 
           {/* Chapter 8: Work Constellation */}

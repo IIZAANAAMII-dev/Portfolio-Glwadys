@@ -4,99 +4,102 @@
     "description": "Portfolio créatif et direction de contenu de Glwadys Dalleau. Social Media Management, Création de contenu, Communication de marque et Stratégie digitale."
   },
   "nav": {
-    "tag": "PORTFOLIO / 2026",
-    "status": "DISPONIBLE POUR NOUVEAUX PROJETS",
-    "location": "MARSEILLE, FR",
-    "index": "CHAPITRES",
-    "contact": "CONTACT",
-    "switchLanguage": "LANGUE"
+    "tag": "Portfolio 2026",
+    "status": "Disponible pour nouveaux projets",
+    "location": "Marseille, FR",
+    "index": "Chapitres",
+    "contact": "Contact",
+    "switchLanguage": "Langue"
   },
   "intro": {
-    "sub": "GLWADYS DALLEAU",
-    "location": "MARSEILLE / FRANCE",
-    "roles": "SOCIAL / CONTENU / MARQUE",
+    "sub": "PORTFOLIO 2026",
+    "location": "MARSEILLE",
+    "roles": "SOCIAL, CONTENU, MARQUE",
     "scrollHint": "FAIRE DÉFILER POUR EXPLORER"
   },
   "hero": {
-    "lead": "PORTFOLIO CRÉATIF",
-    "headlinePart1": "JE TRANSFORME",
-    "headlinePart2": "LES MARQUES EN",
-    "headlinePart3": "HISTOIRES DONT",
-    "headlinePart4": "ON SE SOUVIENT.",
-    "roleTag": "SOCIAL MEDIA & BRAND STRATEGY",
-    "experienceYears": "~5 ANS D'EXPÉRIENCE FREELANCE",
-    "badge": "FRONT / BEHIND THE SCENES"
+    "lead": "Portfolio Créatif",
+    "headlinePart1": "Je transforme",
+    "headlinePart2": "les marques en",
+    "headlinePart3": "histoires dont",
+    "headlinePart4": "on se souvient.",
+    "roleTag": "Social Media & Brand Strategy",
+    "experienceYears": "~5 ans d'expérience freelance",
+    "badge": "Front & behind the scenes"
   },
   "identity": {
-    "tag": "01 / DÉCONSTRUCTION",
-    "title": "DE LA PERSONNE À LA PRÉSENCE",
+    "tag": "Déconstruction",
+    "title": "De la personne à la présence",
     "subtitle": "Chaque image raconte une intention. Le portrait se déploie en cellules dynamiques qui structurent l'attention digitale.",
-    "caption": "ARCHITECTURE DE CONTENU MULTI-CANAL"
+    "caption": "Équilibre éditorial & visuel"
   },
   "social": {
-    "tag": "02 / UNIVERS SOCIAL",
-    "title": "CAPTURER L'ATTENTION DANS LE FLUX",
+    "tag": "UNIVERS SOCIAL",
+    "title": "Capturer l'attention dans le flux",
     "subtitle": "Reels, Stories, publications éditoriales et campagnes de marque pensées pour stopper le scroll.",
-    "frontLabel": "FRONT / CONTENU FINAL",
-    "behindLabel": "BEHIND / STRATÉGIE & MOODBOARD",
+    "frontLabel": "Contenu final",
+    "behindLabel": "Stratégie & moodboard",
+    "frontTitle": "Nouvelle Collection",
+    "behindTitle": "Grille & Harmonie Visuelle",
+    "frontRightTitle": "Storytelling Dynamique",
+    "behindRightTitle": "Scripting & Hook",
     "frontDesc": "Ce que votre audience découvre : esthétique soignée, narration captivante et engagement organique.",
     "behindDesc": "Ce qui structure le résultat : calendrier éditorial, analyse d'audience, piliers de marque et direction artistique.",
-    "diveHint": "IMMERSION DANS L'ÉCRAN"
+    "frontRightDesc": "Valorisation produit avec fort taux de complétion.",
+    "behindRightDesc": "Accroche 3s, rythme visuel et CTA naturel.",
+    "diveHint": "Immersion"
   },
   "gallery": {
-    "tag": "03 / DANS LE CONTENU",
-    "title": "GALERIE ÉDITORIALE 3D",
-    "subtitle": "Navigation spatiale à travers les formats visuels, typographies éditoriales et narrations de marque.",
-    "phaseX": "AXE X : FLUX HORIZONTAL",
-    "phaseY": "AXE Y : PROFONDEUR VERTICALE",
-    "phaseZ": "AXE Z : ESPACE IMMERSIF"
+    "tag": "Dans le contenu",
+    "title": "Galerie éditoriale 3D",
+    "subtitle": "Navigation spatiale à travers les formats visuels, typographies éditoriales et narrations de marque."
   },
   "brand": {
-    "tag": "04 / COHÉRENCE DE MARQUE",
-    "title": "DU CHAOS CRÉATIF À L'ORDRE STRATÉGIQUE",
-    "subtitle": "Créer du contenu ne suffit pas : il faut bâtir un écosystème où chaque publication renforce l'identité globale.",
-    "pillarsTitle": "PILIERS DE COMMUNICATION",
-    "toneTitle": "TON & POSITIONNEMENT",
-    "paletteTitle": "HARMONIE VISUELLE",
-    "messagingTitle": "MESSAGES CLÉS"
+    "tag": "COHÉRENCE",
+    "title": "Identité en mouvement",
+    "subtitle": "Chaque publication renforce un écosystème de marque cohérent.",
+    "pillarsTitle": "Piliers de communication",
+    "toneTitle": "Ton & positionnement",
+    "paletteTitle": "Harmonie visuelle",
+    "messagingTitle": "Messages clés"
   },
   "strategy": {
-    "tag": "05 / STRATÉGIE",
-    "title": "LA MÉTHODE STRUCTURE LE RÉSULTAT",
-    "subtitle": "Une vision claire avant la première prise de vue. Planning, recherche d'audience, piliers et storytelling.",
-    "step1": "01. ÉTUDE DE MARCHÉ & VEILLE CONCURRENTIELLE",
+    "tag": "MÉTHODE",
+    "title": "Avant l'image, l'intention",
+    "subtitle": "Planning, recherche d'audience, piliers et storytelling.",
+    "step1": "Étude de marché & veille",
     "step1Desc": "Comprendre les dynamiques sectorielles et identifier les opportunités de différenciation.",
-    "step2": "02. PILIERS DE CONTENU & LIGNE ÉDITORIALE",
+    "step2": "Piliers & ligne éditoriale",
     "step2Desc": "Définir les territoires d'expression et les messages à forte valeur ajoutée.",
-    "step3": "03. PLANNING DE DIFFUSION & PRODUCTION",
+    "step3": "Planning & production",
     "step3Desc": "Calendrier rigoureux garantissant régularité, fraîcheur et cohérence multi-plateforme.",
-    "step4": "04. ENGAGEMENT & RETOUR D'EXPÉRIENCE",
+    "step4": "Engagement & ajustement",
     "step4Desc": "Animation communautaire et optimisation continue de la présence."
   },
   "about": {
-    "tag": "06 / À PROPOS",
-    "line1": "JE CRÉE DU CONTENU.",
-    "line2": "JE FÉDÈRE DES COMMUNAUTÉS.",
-    "line3": "JE FAÇONNE L'HISTOIRE DES MARQUES.",
-    "line4": "JE FAIS EN SORTE QU'ON S'ARRÊTE DE DÉFILER.",
+    "tag": "À propos",
+    "line1": "Je crée du contenu.",
+    "line2": "Je fédère des communautés.",
+    "line3": "Je façonne l'histoire des marques.",
+    "line4": "Je fais en sorte qu'on s'arrête de défiler.",
     "bio": "Social Media Manager et créatrice de contenu freelance depuis environ 5 ans. Mon approche combine sensibilité esthétique, rigueur d'organisation et culture digitale pour transformer chaque canal en levier d'attractivité pérenne."
   },
   "journey": {
-    "tag": "07 / PARCOURS",
-    "title": "ÉVOLUTION & EXPÉRIENCE",
-    "subtitle": "Une progression continue de la création pure vers la direction de marque et la stratégie globale.",
-    "y2021": "2021 — DÉBUTS CRÉATIFS & SOCIAL MEDIA",
-    "y2022": "2022 — ALTERNANCE YUNA BIJOUX & GESTION DE CONTENU",
-    "y2023": "2023 — DIPLÔME BACHELOR IPAC FACTORY & FREELANCE",
-    "y2024": "2024 — LE COMPTOIR DE MATHILDE : EXPÉRIENCE & MERCHANDISING",
-    "y2025": "2025 — MARSEILLE GIRLS CLUB : COMMUNAUTÉ & ÉVÉNEMENTS",
-    "y2026": "2026 — DIRECTION SOCIAL MEDIA & STRATÉGIE DE MARQUE"
+    "tag": "PARCOURS",
+    "title": "2021—2026",
+    "subtitle": "De la création pure à la direction de marque.",
+    "y2021": "Débuts créatifs & social media",
+    "y2022": "Yuna Bijoux, Brest",
+    "y2023": "Bachelor IPAC Factory & freelance",
+    "y2024": "Le Comptoir de Mathilde",
+    "y2025": "Marseille Girls Club",
+    "y2026": "Direction social media & marque"
   },
   "work": {
-    "tag": "08 / PROJETS SÉLECTIONNÉS",
-    "title": "CONSTELLATION DE RÉALISATIONS",
+    "tag": "Projets sélectionnés",
+    "title": "Constellation de réalisations",
     "subtitle": "Trois univers majeurs illustrant la diversité des compétences : joaillerie, communauté lifestyle et art de vivre gourmand.",
-    "explore": "EXPLORER LE CAS",
+    "explore": "Explorer le cas",
     "yuna": {
       "title": "YUNA BIJOUX",
       "role": "Social Media & Communication Support (Alternance)",
@@ -123,9 +126,9 @@
     }
   },
   "services": {
-    "tag": "09 / EXPERTISES",
-    "title": "SERVICES & COMPÉTENCES",
-    "subtitle": "Un accompagnement complet de l'idée au déploiement stratégique.",
+    "tag": "EXPERTISES",
+    "title": "SERVICES",
+    "subtitle": "De l'idée au déploiement stratégique.",
     "s1": "SOCIAL MEDIA MANAGEMENT",
     "s1Desc": "Gestion quotidienne, planification et optimisation de vos canaux sociaux.",
     "s2": "CRÉATION DE CONTENU",
@@ -142,26 +145,26 @@
     "s7Desc": "Veille concurrentielle, analyse des tendances et benchmark sectoriel."
   },
   "experience": {
-    "tag": "10 / PARCOURS PROFESSIONNEL",
-    "title": "EXPÉRIENCES & FORMATION",
+    "tag": "Parcours professionnel",
+    "title": "Expériences & formation",
     "subtitle": "Un socle de compétences forgé sur le terrain et structuré par une formation internationale.",
-    "educationTitle": "FORMATION ACADÉMIQUE",
-    "educationSchool": "IPAC BACHELOR FACTORY",
+    "educationTitle": "Formation académique",
+    "educationSchool": "IPAC Bachelor Factory",
     "educationDegree": "Bachelor International Business — Marketing & Négociation (2020 – 2023)"
   },
   "contact": {
-    "tag": "11 / COLLABORATION",
-    "headline": "CRÉONS ENSEMBLE UNE HISTOIRE DONT ON SE SOUVIENT.",
+    "tag": "Collaboration",
+    "headline": "Créons ensemble une histoire dont on se souvient.",
     "sub": "Disponible pour missions freelance, collaborations de marque et stratégies de contenu à impact.",
-    "emailLabel": "EMAIL DIRECT",
-    "linkedinLabel": "RÉSEAU PROFESSIONNEL",
-    "copyEmail": "COPIER L'EMAIL",
-    "emailCopied": "EMAIL COPIÉ DANS LE PRESSE-PAPIER",
-    "locationNote": "BASÉE À MARSEILLE — DISPONIBLE EN FRANCE & EN TÉLÉTRAVAIL"
+    "emailLabel": "Email direct",
+    "linkedinLabel": "Réseau professionnel",
+    "copyEmail": "Copier l'email",
+    "emailCopied": "Email copié dans le presse-papiers",
+    "locationNote": "Basée à Marseille — disponible en France & en télétravail"
   },
   "footer": {
-    "rights": "© 2026 GLWADYS DALLEAU. TOUS DROITS RÉSERVÉS.",
-    "craft": "DIRECTION ARTISTIQUE & CRAFT CRÉATIF",
-    "backToTop": "RETOURNER EN HAUT"
+    "rights": "© 2026 Glwadys Dalleau. Tous droits réservés.",
+    "craft": "Direction artistique & craft créatif",
+    "backToTop": "Retourner en haut"
   }
 }

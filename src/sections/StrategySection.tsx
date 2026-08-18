@@ -26,7 +26,7 @@ export function StrategySection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => `+=${Math.max(steps.scrollWidth * 0.82, window.innerHeight * 2.4)}`,
+          end: () => `+=${Math.max(steps.scrollWidth * 0.45, window.innerHeight * 1.4)}`,
           pin: true,
           scrub: 0.55,
           anticipatePin: 1,
@@ -45,11 +45,11 @@ export function StrategySection() {
       tl.to(steps, {
         x: -totalShift,
         ease: 'none',
-        duration: 2.1,
+        duration: 1.2,
       }).to(
         {},
         {
-          duration: 2.1,
+          duration: 1.2,
           onUpdate: function () {
             const prog = this.progress();
             MasterTimelineManager.updateCamera({
@@ -85,7 +85,7 @@ export function StrategySection() {
         </div>
 
         <span className="font-editorial text-4xl sm:text-6xl text-[#121418]/10 tracking-widest hidden md:inline font-bold">
-          STRATEGY
+          {t('tag')}
         </span>
       </div>
 
@@ -93,14 +93,10 @@ export function StrategySection() {
       <div className="my-auto w-full overflow-visible">
         <div
           ref={stepsTrackRef}
-          className="flex items-center gap-6 md:gap-10 w-max pr-14"
+          className="flex items-stretch gap-4 md:gap-8 w-max px-6 md:px-14"
         >
-          {/* Step 1 */}
-          <div className="w-[300px] sm:w-[380px] md:w-[440px] bg-white/80 backdrop-blur-md rounded-3xl p-8 border border-black/5 shadow-sm flex flex-col justify-between h-[360px]">
-            <div className="flex justify-between items-center">
-              <span className="font-mono-tag text-xs text-[#a38f6e] font-bold">ÉTAPE 01</span>
-              <Target className="w-5 h-5 text-[#a38f6e]" />
-            </div>
+          <div className="w-[280px] sm:w-[360px] md:w-[420px] flex flex-col justify-between border-t border-black/10 pt-4 pb-8">
+            <Target className="w-5 h-5 text-[#a38f6e]" />
             <div>
               <h3 className="font-editorial text-2xl text-[#121418] mb-3">
                 {t('step1')}
@@ -109,17 +105,10 @@ export function StrategySection() {
                 {t('step1Desc')}
               </p>
             </div>
-            <div className="border-t border-black/5 pt-3 text-[10px] font-mono text-[#626670]">
-              BENCHMARK & VEILLE SECTORIELLE
-            </div>
           </div>
 
-          {/* Step 2 */}
-          <div className="w-[300px] sm:w-[380px] md:w-[440px] bg-white/80 backdrop-blur-md rounded-3xl p-8 border border-black/5 shadow-sm flex flex-col justify-between h-[360px]">
-            <div className="flex justify-between items-center">
-              <span className="font-mono-tag text-xs text-[#a38f6e] font-bold">ÉTAPE 02</span>
-              <TrendingUp className="w-5 h-5 text-[#a38f6e]" />
-            </div>
+          <div className="w-[280px] sm:w-[360px] md:w-[420px] flex flex-col justify-between border-t border-black/10 pt-4 pb-8">
+            <TrendingUp className="w-5 h-5 text-[#a38f6e]" />
             <div>
               <h3 className="font-editorial text-2xl text-[#121418] mb-3">
                 {t('step2')}
@@ -128,17 +117,10 @@ export function StrategySection() {
                 {t('step2Desc')}
               </p>
             </div>
-            <div className="border-t border-black/5 pt-3 text-[10px] font-mono text-[#626670]">
-              IDENTITÉ & TON ÉDITORIAL
-            </div>
           </div>
 
-          {/* Step 3 */}
-          <div className="w-[300px] sm:w-[380px] md:w-[440px] bg-white/80 backdrop-blur-md rounded-3xl p-8 border border-black/5 shadow-sm flex flex-col justify-between h-[360px]">
-            <div className="flex justify-between items-center">
-              <span className="font-mono-tag text-xs text-[#a38f6e] font-bold">ÉTAPE 03</span>
-              <Calendar className="w-5 h-5 text-[#a38f6e]" />
-            </div>
+          <div className="w-[280px] sm:w-[360px] md:w-[420px] flex flex-col justify-between border-t border-black/10 pt-4 pb-8">
+            <Calendar className="w-5 h-5 text-[#a38f6e]" />
             <div>
               <h3 className="font-editorial text-2xl text-[#121418] mb-3">
                 {t('step3')}
@@ -147,17 +129,10 @@ export function StrategySection() {
                 {t('step3Desc')}
               </p>
             </div>
-            <div className="border-t border-black/5 pt-3 text-[10px] font-mono text-[#626670]">
-              CALENDRIER DE DIFFUSION & PRODUCTION
-            </div>
           </div>
 
-          {/* Step 4 */}
-          <div className="w-[300px] sm:w-[380px] md:w-[440px] bg-white/80 backdrop-blur-md rounded-3xl p-8 border border-black/5 shadow-sm flex flex-col justify-between h-[360px]">
-            <div className="flex justify-between items-center">
-              <span className="font-mono-tag text-xs text-[#a38f6e] font-bold">ÉTAPE 04</span>
-              <CheckCircle2 className="w-5 h-5 text-[#a38f6e]" />
-            </div>
+          <div className="w-[280px] sm:w-[360px] md:w-[420px] flex flex-col justify-between border-t border-black/10 pt-4 pb-8">
+            <CheckCircle2 className="w-5 h-5 text-[#a38f6e]" />
             <div>
               <h3 className="font-editorial text-2xl text-[#121418] mb-3">
                 {t('step4')}
@@ -166,17 +141,13 @@ export function StrategySection() {
                 {t('step4Desc')}
               </p>
             </div>
-            <div className="border-t border-black/5 pt-3 text-[10px] font-mono text-[#626670]">
-              ENGAGEMENT & AJUSTEMENT CONTINU
-            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Footer Light */}
       <div className="flex justify-between items-end font-mono-tag text-[#626670] text-[10px]">
-        <span>GRILLE STRATÉGIQUE IVOIRE</span>
-        <span>05 / MÉTHODE & CADRE</span>
+        <span>{t('title')}</span>
+        <span>{t('tag')}</span>
       </div>
     </section>
   );

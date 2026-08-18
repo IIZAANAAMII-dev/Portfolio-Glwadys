@@ -15,11 +15,12 @@ export function useLenis() {
     if (prefersReducedMotion) return;
 
     const lenis = new Lenis({
-      // Fast enough to feel connected to the wheel; Lenis is the only scroll engine.
-      duration: 0.72,
+      duration: 0.55,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       smoothWheel: true,
+      wheelMultiplier: 1.35,
+      touchMultiplier: 1.6,
     });
     lenisRef.current = lenis;
 

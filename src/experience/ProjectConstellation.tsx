@@ -22,12 +22,10 @@ export function ProjectConstellation() {
 
   return (
     <group ref={groupRef} position={[0, -18, SPATIAL_LANES.midground.z]}>
-      {/* Node 1: YUNA BIJOUX (Left / Near) */}
       <group position={[-3.2, 1.2, SPATIAL_LANES.primary.z]}>
         <MediaPlane
           scale={[2.2, 2.8, 1]}
           textureUrl="/assets/projects/yuna-story.svg"
-          label="YUNA BIJOUX"
           onClick={() => {
             appStore.setState({ activeProject: 'yuna' });
             setActiveProject('yuna');
@@ -35,12 +33,10 @@ export function ProjectConstellation() {
         />
       </group>
 
-      {/* Node 2: MARSEILLE GIRLS CLUB (Center-Right / High) */}
       <group position={[2.8, 2.0, SPATIAL_LANES.midground.z + 1.2]}>
         <MediaPlane
           scale={[2.6, 2.6, 1]}
           textureUrl="/assets/projects/mgc-scrapbook.svg"
-          label="MARSEILLE GIRLS CLUB"
           onClick={() => {
             appStore.setState({ activeProject: 'mgc' });
             setActiveProject('mgc');
@@ -48,12 +44,10 @@ export function ProjectConstellation() {
         />
       </group>
 
-      {/* Node 3: LE COMPTOIR DE MATHILDE (Right-Far / Warm) */}
       <group position={[3.6, -1.8, SPATIAL_LANES.background.z + 1.8]}>
         <MediaPlane
           scale={[2.5, 2.5, 1]}
           textureUrl="/assets/projects/comptoir-macro.svg"
-          label="LE COMPTOIR DE MATHILDE"
           onClick={() => {
             appStore.setState({ activeProject: 'comptoir' });
             setActiveProject('comptoir');

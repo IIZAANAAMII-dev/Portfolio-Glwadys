@@ -79,82 +79,67 @@ export function BrandSection() {
           </h2>
         </div>
         <span className="text-[10px] text-foreground-muted hidden sm:inline">
-          CHAOS CRÉATIF → ORDRE DE MARQUE
+          {t('subtitle')}
         </span>
       </div>
 
-      {/* Spatial Brand Identity Table */}
+      {/* Brand Identity Lines */}
       <div
         ref={tableRef}
-        className="my-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto w-full"
+        className="my-auto grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto w-full"
       >
-        {/* Table Item 1: Communication Pillars */}
-        <div className="brand-table-item glass-panel p-6 rounded-3xl border border-white/10 flex flex-col justify-between hover:border-accent-gold/40 transition-all duration-300">
-          <div className="flex items-center justify-between mb-4">
-            <span className="font-mono-tag text-[10px] text-accent-gold">01. PILIERS</span>
+        <div className="brand-table-item border-t border-white/10 pt-4 pb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-editorial text-2xl text-foreground-light">
+              {t('pillarsTitle')}
+            </h3>
             <Compass className="w-4 h-4 text-accent-gold" />
           </div>
-          <h3 className="font-editorial text-xl text-foreground-light mb-2">
-            {t('pillarsTitle')}
-          </h3>
           <p className="font-sans text-xs text-foreground-muted leading-relaxed">
             Inspiration, éducation produit, immersion coulisses et preuve sociale.
           </p>
         </div>
 
-        {/* Table Item 2: Tone & Voice */}
-        <div className="brand-table-item glass-panel p-6 rounded-3xl border border-white/10 flex flex-col justify-between hover:border-accent-gold/40 transition-all duration-300">
-          <div className="flex items-center justify-between mb-4">
-            <span className="font-mono-tag text-[10px] text-accent-gold">02. POSITIONNEMENT</span>
+        <div className="brand-table-item border-t border-white/10 pt-4 pb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-editorial text-2xl text-foreground-light">
+              {t('toneTitle')}
+            </h3>
             <MessageSquare className="w-4 h-4 text-accent-gold" />
           </div>
-          <h3 className="font-editorial text-xl text-foreground-light mb-2">
-            {t('toneTitle')}
-          </h3>
           <p className="font-sans text-xs text-foreground-muted leading-relaxed">
             Élégant, accessible, direct, incarné et chaleureux.
           </p>
         </div>
 
-        {/* Table Item 3: Palette & Harmony */}
-        <div className="brand-table-item glass-panel p-6 rounded-3xl border border-white/10 flex flex-col justify-between hover:border-accent-gold/40 transition-all duration-300">
-          <div className="flex items-center justify-between mb-4">
-            <span className="font-mono-tag text-[10px] text-accent-gold">03. HARMONIE</span>
+        <div className="brand-table-item border-t border-white/10 pt-4 pb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-editorial text-2xl text-foreground-light">
+              {t('paletteTitle')}
+            </h3>
             <Palette className="w-4 h-4 text-accent-gold" />
-          </div>
-          <h3 className="font-editorial text-xl text-foreground-light mb-2">
-            {t('paletteTitle')}
-          </h3>
-          <div className="flex items-center gap-2 my-2">
-            <span className="w-4 h-4 rounded-full bg-[#0b0c0e] border border-white/20" />
-            <span className="w-4 h-4 rounded-full bg-[#f5f3ef]" />
-            <span className="w-4 h-4 rounded-full bg-[#d8c29d]" />
-            <span className="w-4 h-4 rounded-full bg-[#7d4f39]" />
           </div>
           <p className="font-sans text-xs text-foreground-muted leading-relaxed">
             Obsidian, ivoire chaud, champagne et nuances artisanales.
           </p>
         </div>
 
-        {/* Table Item 4: Key Messaging */}
-        <div className="brand-table-item glass-panel p-6 rounded-3xl border border-white/10 flex flex-col justify-between hover:border-accent-gold/40 transition-all duration-300">
-          <div className="flex items-center justify-between mb-4">
-            <span className="font-mono-tag text-[10px] text-accent-gold">04. MESSAGES</span>
+        <div className="brand-table-item border-t border-white/10 pt-4 pb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-editorial text-2xl text-foreground-light">
+              {t('messagingTitle')}
+            </h3>
             <Sparkles className="w-4 h-4 text-accent-gold" />
           </div>
-          <h3 className="font-editorial text-xl text-foreground-light mb-2">
-            {t('messagingTitle')}
-          </h3>
           <p className="font-sans text-xs text-foreground-muted leading-relaxed">
             Clarifier la valeur unique de la marque dès les premières secondes.
           </p>
         </div>
       </div>
 
-      {/* Bottom Footer Status */}
       <div className="flex justify-between items-end font-mono-tag text-foreground-muted text-[10px]">
-        <span>DIRECTION ARTISTIQUE STRUCTURÉE</span>
-        <span>04 / COHÉRENCE GLOBALE</span>
+        <span>{t('title')}</span>
+        <span>{t('tag')}</span>
       </div>
     </section>
   );

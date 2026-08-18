@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTranslations } from 'next-intl';
 import { MasterTimelineManager } from '../motion/MasterTimeline';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 export function WorkSection() {
   const t = useTranslations('work');
@@ -72,115 +72,59 @@ export function WorkSection() {
             {t('subtitle')}
           </p>
         </div>
-        <div className="glass-pill px-4 py-2 rounded-full hidden sm:flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-accent-gold" />
-          <span className="text-[10px] font-mono text-accent-gold">CONSTELLATION 3D</span>
-        </div>
       </div>
 
-      {/* 3 Major Spatial Case Study Gateways */}
       <div
         ref={cardsRef}
-        className="my-auto grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto w-full"
+        className="my-auto w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6"
+        style={{ perspective: '1200px' }}
       >
-        {/* Case 1: YUNA BIJOUX */}
-        <div
-          onClick={() => scrollToCase('yuna-case-study')}
-          className="work-constellation-node glass-panel p-8 rounded-3xl border border-white/10 hover:border-accent-gold/60 transition-all duration-500 cursor-pointer flex flex-col justify-between h-[420px] group relative overflow-hidden"
-        >
-          <div className="flex justify-between items-start">
-            <span className="font-mono-tag text-xs text-accent-gold">01 / JOAILLERIE</span>
-            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent-gold group-hover:text-background-dark transition-all">
-              <ArrowUpRight className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="my-auto">
-            <h3 className="font-editorial text-3xl text-foreground-light group-hover:text-accent-gold transition-colors">
-              {t('yuna.title')}
-            </h3>
-            <p className="font-mono-tag text-[10px] text-foreground-muted mt-1">
-              {t('yuna.role')} · {t('yuna.location')}
-            </p>
-            <p className="font-sans text-xs text-foreground-muted mt-3 line-clamp-3 leading-relaxed">
-              {t('yuna.summary')}
-            </p>
-          </div>
-          <div className="border-t border-white/10 pt-3 flex flex-wrap gap-1.5">
-            {['Storytelling', 'Reels', 'Reach'].map((sk) => (
-              <span key={sk} className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-white/5 text-foreground-light">
-                {sk}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Case 2: MARSEILLE GIRLS CLUB */}
-        <div
-          onClick={() => scrollToCase('mgc-case-study')}
-          className="work-constellation-node glass-panel p-8 rounded-3xl border border-white/10 hover:border-[#e27d60]/60 transition-all duration-500 cursor-pointer flex flex-col justify-between h-[420px] group relative overflow-hidden"
-        >
-          <div className="flex justify-between items-start">
-            <span className="font-mono-tag text-xs text-[#e27d60]">02 / COMMUNAUTÉ</span>
-            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#e27d60] group-hover:text-background-dark transition-all">
-              <ArrowUpRight className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="my-auto">
-            <h3 className="font-editorial text-3xl text-foreground-light group-hover:text-[#e27d60] transition-colors">
-              {t('mgc.title')}
-            </h3>
-            <p className="font-mono-tag text-[10px] text-foreground-muted mt-1">
-              {t('mgc.role')} · {t('mgc.location')}
-            </p>
-            <p className="font-sans text-xs text-foreground-muted mt-3 line-clamp-3 leading-relaxed">
-              {t('mgc.summary')}
-            </p>
-          </div>
-          <div className="border-t border-white/10 pt-3 flex flex-wrap gap-1.5">
-            {['Community', 'Scrapbook', 'Events'].map((sk) => (
-              <span key={sk} className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-white/5 text-foreground-light">
-                {sk}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Case 3: LE COMPTOIR DE MATHILDE */}
-        <div
-          onClick={() => scrollToCase('comptoir-case-study')}
-          className="work-constellation-node glass-panel p-8 rounded-3xl border border-white/10 hover:border-[#c5a880]/60 transition-all duration-500 cursor-pointer flex flex-col justify-between h-[420px] group relative overflow-hidden"
-        >
-          <div className="flex justify-between items-start">
-            <span className="font-mono-tag text-xs text-[#c5a880]">03 / ART DE VIVRE</span>
-            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#c5a880] group-hover:text-background-dark transition-all">
-              <ArrowUpRight className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="my-auto">
-            <h3 className="font-editorial text-3xl text-foreground-light group-hover:text-[#c5a880] transition-colors">
-              {t('comptoir.title')}
-            </h3>
-            <p className="font-mono-tag text-[10px] text-foreground-muted mt-1">
-              {t('comptoir.role')} · {t('comptoir.location')}
-            </p>
-            <p className="font-sans text-xs text-foreground-muted mt-3 line-clamp-3 leading-relaxed">
-              {t('comptoir.summary')}
-            </p>
-          </div>
-          <div className="border-t border-white/10 pt-3 flex flex-wrap gap-1.5">
-            {['Merchandising', 'Conseil', 'Expérience'].map((sk) => (
-              <span key={sk} className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-white/5 text-foreground-light">
-                {sk}
-              </span>
-            ))}
-          </div>
-        </div>
+        {[
+          { id: 'yuna-case-study', color: 'accent-gold' },
+          { id: 'mgc-case-study', color: '#e27d60' },
+          { id: 'comptoir-case-study', color: '#c5a880' },
+        ].map((item, idx) => {
+          const key = item.id.replace('-case-study', '') as 'yuna' | 'mgc' | 'comptoir';
+          const isLeft = idx === 0;
+          const isRight = idx === 2;
+          return (
+            <button
+              key={item.id}
+              onClick={() => scrollToCase(item.id)}
+              className="work-constellation-node group text-left p-6 rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-500 focus:outline-none"
+              style={{
+                transform: isLeft ? 'rotateY(6deg)' : isRight ? 'rotateY(-6deg)' : 'rotateY(0deg)',
+                transformOrigin: isLeft ? 'right center' : isRight ? 'left center' : 'center',
+              }}
+            >
+              <div className="flex justify-between items-start mb-8">
+                <span
+                  className="font-mono text-xs font-semibold"
+                  style={{ color: item.color === 'accent-gold' ? '#d8c29d' : item.color }}
+                >
+                  {t(`${key}.location`)}
+                </span>
+                <ArrowUpRight className="w-4 h-4 text-foreground-muted group-hover:text-foreground-light transition-colors" />
+              </div>
+              <div className="my-auto">
+                <h3 className="font-editorial text-2xl sm:text-3xl text-foreground-light group-hover:text-white transition-colors leading-tight">
+                  {t(`${key}.title`)}
+                </h3>
+                <p className="font-mono-tag text-[10px] text-foreground-muted mt-1">
+                  {t(`${key}.role`)}
+                </p>
+                <p className="font-sans text-xs text-foreground-muted mt-4 line-clamp-3 leading-relaxed">
+                  {t(`${key}.summary`)}
+                </p>
+              </div>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Bottom Footer Status */}
       <div className="flex justify-between items-end font-mono-tag text-foreground-muted text-[10px]">
-        <span>CONSTELLATION DE PROJETS SPATIAUX</span>
-        <span>08 / RÉALISATIONS SÉLECTIONNÉES</span>
+        <span>PROJETS SÉLECTIONNÉS</span>
+        <span>{t('yuna.location')} · {t('mgc.location')} · {t('comptoir.location')}</span>
       </div>
     </section>
   );

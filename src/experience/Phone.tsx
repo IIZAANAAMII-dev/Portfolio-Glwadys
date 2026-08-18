@@ -24,13 +24,21 @@ export function Phone({
   const phaseRefs = useRef<Array<THREE.Mesh | null>>([]);
   const [hovered, setHovered] = useState(false);
 
-  const texture = useMemo(() => {
-    if (!screenTextureUrl) return null;
+  const screenTextures = useMemo(() => {
     const loader = new THREE.TextureLoader();
-    const tex = loader.load(screenTextureUrl);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    return tex;
+    const urls = [
+      screenTextureUrl,
+      '/assets/projects/mgc-scrapbook.svg',
+      '/assets/projects/comptoir-macro.svg',
+    ];
+    return urls.map((url) => {
+      const tex = loader.load(url);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    });
   }, [screenTextureUrl]);
+
+  const screenRef = useRef<THREE.Mesh>(null);
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
@@ -81,6 +89,13 @@ export function Phone({
       4,
       delta
     );
+    // Switch screen texture in three beats based on social scroll progress
+    if (screenRef.current) {
+      const screenIndex = Math.min(2, Math.floor(progress * 3));
+      const screenMaterial = screenRef.current.material as THREE.MeshBasicMaterial;
+      screenMaterial.map = screenTextures[screenIndex];
+    }
+
     phaseRefs.current.forEach((mesh, index) => {
       if (!mesh) return;
       const active = progress >= index / 3 && progress < (index + 1) / 3 + 0.12;
@@ -97,7 +112,7 @@ export function Phone({
       onPointerOver={(e) => {
         e.stopPropagation();
         setHovered(true);
-        appStore.setState({ cursorMode: 'open', cursorText: 'DIVE IN' });
+        appStore.setState({ cursorMode: 'open' });
       }}
       onPointerOut={() => {
         setHovered(false);
@@ -119,13 +134,9 @@ export function Phone({
       </mesh>
 
       {/* Screen Display Plane */}
-      <mesh position={[0, 0, 0.1]}>
+      <mesh ref={screenRef} position={[0, 0, 0.1]}>
         <planeGeometry args={[2.0, 4.2]} />
-        {texture ? (
-          <meshBasicMaterial map={texture} toneMapped={false} />
-        ) : (
-          <meshStandardMaterial color="#0b0c0e" roughness={0.1} />
-        )}
+        <meshBasicMaterial map={screenTextures[0]} toneMapped={false} />
       </mesh>
 
       {/* Dynamic Island / Top Camera Bezel */}

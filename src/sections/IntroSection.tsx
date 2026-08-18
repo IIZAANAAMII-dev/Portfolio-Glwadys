@@ -12,14 +12,13 @@ export function IntroSection() {
   const lineRef = useRef<HTMLDivElement>(null);
   const metaRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     MasterTimelineManager.init();
 
     const ctx = gsap.context(() => {
-      // Intro initial entrance animation
+      // Premium intro cinematic
       const tl = gsap.timeline({
         onComplete: () => {
           appStore.setState({ currentChapter: 'hero' });
@@ -28,23 +27,18 @@ export function IntroSection() {
       });
       tl.fromTo(
         metaRef.current,
-        { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.55, ease: 'power4.out' }
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.65, ease: 'power4.out' }
       ).fromTo(
         lineRef.current,
-        { scaleX: 0 },
-        { scaleX: 1, duration: 0.7, ease: 'expo.out' },
-        '-=0.32'
-      ).fromTo(
-        cardsRef.current?.children || [],
-        { opacity: 0, y: 32, rotate: -3 },
-        { opacity: 1, y: 0, rotate: 0, duration: 0.6, stagger: 0.07, ease: 'power4.out' },
+        { scaleY: 0 },
+        { scaleY: 1, duration: 0.8, ease: 'expo.out' },
         '-=0.35'
       ).fromTo(
         nameRef.current,
-        { clipPath: 'inset(0 0 100% 0)', yPercent: 12 },
-        { clipPath: 'inset(0 0 0% 0)', yPercent: 0, duration: 0.72, ease: 'expo.out' },
-        '-=0.25'
+        { clipPath: 'inset(0 0 100% 0)', yPercent: 10 },
+        { clipPath: 'inset(0 0 0% 0)', yPercent: 0, duration: 1.0, ease: 'expo.out' },
+        '-=0.45'
       );
 
     }, sectionRef);
@@ -57,51 +51,37 @@ export function IntroSection() {
       id="intro-section"
       ref={sectionRef}
       aria-hidden={!visible}
-      className={`fixed inset-0 min-h-screen w-full flex flex-col justify-between p-6 md:p-14 z-[60] select-none pointer-events-none bg-background-dark transition-opacity duration-300 ${visible ? 'opacity-100' : 'opacity-0 invisible'}`}
+      className={`fixed inset-0 min-h-screen w-full flex flex-col justify-between items-center p-6 md:p-14 z-[60] select-none pointer-events-none bg-background-dark transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0 invisible'}`}
     >
       {/* Top Intro Tag */}
-      <div ref={metaRef} className="flex justify-between items-start text-foreground-muted font-mono-tag">
+      <div ref={metaRef} className="w-full flex justify-between items-start text-foreground-muted font-mono-tag">
         <div>
           <p className="text-foreground-light tracking-widest">{t('sub')}</p>
           <p className="text-[10px] text-accent-gold mt-1">{t('location')}</p>
         </div>
         <div className="text-right">
           <p>{t('roles')}</p>
-          <p className="text-[10px] text-foreground-muted mt-1">2021 — 2026</p>
         </div>
       </div>
 
-      {/* Horizontal Hairline */}
-      <div
-        ref={lineRef}
-        className="w-full h-[1px] bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent origin-center my-auto"
-      />
-
-      <div className="relative flex items-center justify-center min-h-[43vh] overflow-hidden">
-        <div ref={cardsRef} className="absolute inset-0 pointer-events-none">
-          <div className="absolute left-[7%] top-[12%] w-24 md:w-36 aspect-[3/4] overflow-hidden rounded-2xl border border-white/15 rotate-[-9deg] opacity-90">
-            <img src="/assets/editorial/portrait-glwadys.svg" alt="" className="h-full w-full object-cover" />
-          </div>
-          <div className="absolute right-[9%] top-[8%] w-24 md:w-40 aspect-[9/14] overflow-hidden rounded-2xl border border-accent-gold/40 rotate-[7deg] opacity-90">
-            <img src="/assets/projects/yuna-story.svg" alt="" className="h-full w-full object-cover" />
-          </div>
-          <div className="absolute right-[20%] bottom-[3%] w-20 md:w-28 aspect-square overflow-hidden rounded-full border border-white/15 rotate-[13deg] opacity-80">
-            <img src="/assets/projects/mgc-scrapbook.svg" alt="" className="h-full w-full object-cover" />
-          </div>
-        </div>
-        <div ref={nameRef} className="relative z-10 text-center font-editorial uppercase leading-[0.72] tracking-[-0.075em] text-[15vw] md:text-[12vw] text-foreground-light">
+      {/* Centered Name + Vertical Hairline */}
+      <div className="my-auto flex flex-col items-center justify-center text-center overflow-hidden">
+        <div
+          ref={lineRef}
+          className="w-[1px] h-24 md:h-32 bg-gradient-to-b from-transparent via-accent-gold/50 to-transparent origin-top mb-8"
+        />
+        <div ref={nameRef} className="font-editorial uppercase leading-[0.76] tracking-[-0.06em] text-[12vw] md:text-[9vw] text-foreground-light">
           <span className="block">Glwadys</span>
-          <span className="block pl-[11vw] text-accent-gold">Dalleau</span>
+          <span className="block pl-[8vw] text-accent-gold">Dalleau</span>
         </div>
       </div>
 
-      {/* Bottom Hint */}
-      <div className="flex justify-between items-end font-mono-tag text-foreground-muted">
+      <div className="w-full flex justify-between items-end font-mono-tag text-foreground-muted">
         <span className="text-[10px] tracking-widest text-accent-gold/80 flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-accent-gold animate-ping" />
           {t('scrollHint')}
         </span>
-        <span className="text-[10px]">THE CREATIVE LAYERS</span>
+        <span className="text-[10px] text-foreground-muted">{t('sub')}</span>
       </div>
     </section>
   );

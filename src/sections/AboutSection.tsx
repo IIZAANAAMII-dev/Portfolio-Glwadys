@@ -23,7 +23,7 @@ export function AboutSection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=150%',
+          end: () => window.innerWidth < 768 ? '+=90%' : '+=150%',
           pin: true,
           scrub: 0.55,
           anticipatePin: 1,
@@ -59,7 +59,6 @@ export function AboutSection() {
       {/* Top Tag */}
       <div className="flex justify-between items-center font-mono-tag text-foreground-muted">
         <span className="text-accent-gold">{t('tag')}</span>
-        <span>GLWADYS DALLEAU · VISION</span>
       </div>
 
       {/* Center 4 Kinetic Manifestos */}
@@ -98,10 +97,8 @@ export function AboutSection() {
         </p>
       </div>
 
-      {/* Bottom Status */}
-      <div className="flex justify-between items-end font-mono-tag text-foreground-muted text-[10px]">
-        <span>ESPACE ÉDITORIAL & RESPIRATION</span>
-        <span>06 / MANIFESTE DE CRÉATION</span>
+      <div className="flex justify-end items-end font-mono-tag text-foreground-muted text-[10px]">
+        <span>{t('tag')}</span>
       </div>
     </section>
   );
