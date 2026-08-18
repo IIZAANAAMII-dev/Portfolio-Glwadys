@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTranslations } from 'next-intl';
 import { MasterTimelineManager } from '../motion/MasterTimeline';
-import { CAMERA_PRESETS } from '../config/spatial';
+import { appStore } from '../lib/store';
 
 export function IntroSection() {
   const t = useTranslations('intro');
@@ -14,13 +13,19 @@ export function IntroSection() {
   const metaRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     MasterTimelineManager.init();
 
     const ctx = gsap.context(() => {
       // Intro initial entrance animation
-      const tl = gsap.timeline();
+      const tl = gsap.timeline({
+        onComplete: () => {
+          appStore.setState({ currentChapter: 'hero' });
+          setVisible(false);
+        },
+      });
       tl.fromTo(
         metaRef.current,
         { opacity: 0, y: 15 },
@@ -42,26 +47,6 @@ export function IntroSection() {
         '-=0.25'
       );
 
-      // ScrollTrigger transitioning from Intro into Hero camera space
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.45,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          // Interpolate camera Z from 14 to 8.5
-          MasterTimelineManager.updateCamera({
-            z: gsap.utils.interpolate(14, 8.5, progress),
-            fov: gsap.utils.interpolate(48, 45, progress),
-          });
-          if (progress > 0.5) {
-            MasterTimelineManager.setChapter('hero');
-          } else {
-            MasterTimelineManager.setChapter('intro');
-          }
-        },
-      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -71,7 +56,8 @@ export function IntroSection() {
     <section
       id="intro-section"
       ref={sectionRef}
-      className="relative min-h-[82vh] w-full flex flex-col justify-between p-6 md:p-14 z-10 select-none pointer-events-none"
+      aria-hidden={!visible}
+      className={`fixed inset-0 min-h-screen w-full flex flex-col justify-between p-6 md:p-14 z-[60] select-none pointer-events-none bg-background-dark transition-opacity duration-300 ${visible ? 'opacity-100' : 'opacity-0 invisible'}`}
     >
       {/* Top Intro Tag */}
       <div ref={metaRef} className="flex justify-between items-start text-foreground-muted font-mono-tag">

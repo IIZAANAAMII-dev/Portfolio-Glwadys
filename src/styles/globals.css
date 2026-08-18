@@ -48,6 +48,12 @@ body {
   background: var(--color-bg-dark);
 }
 
+/* The WebGL phone is intentionally legible only during Act 02. */
+.social-surface {
+  background: rgba(11, 12, 14, 0.78);
+  backdrop-filter: blur(1px);
+}
+
 /* Glassmorphism primitives */
 .glass-panel {
   background: rgba(18, 20, 24, 0.65);

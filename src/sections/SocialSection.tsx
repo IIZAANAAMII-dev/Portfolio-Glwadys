@@ -75,7 +75,7 @@ export function SocialSection() {
     <section
       id="social-section"
       ref={sectionRef}
-      className="scene-surface relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10"
+      className="social-surface relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10"
     >
       {/* Top Header */}
       <div className="flex justify-between items-start font-mono-tag">
