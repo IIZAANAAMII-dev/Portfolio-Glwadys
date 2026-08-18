@@ -5,6 +5,7 @@
 | Lenis global | Smooth wheel | durée 1.2 | inertie globale trop présente | durée 0.72, un seul moteur et ticker nettoyé correctement |
 | Curseur | `gsap.to` à chaque mouvement | 0.18s, Power2 | rond en retard sur la souris | 0.075s, Power3, overwrite auto ; états conservés |
 | Intro | metadata + hairline | 1.2s / 1.4s | entrée trop abstraite et lente | 0.55–0.72s, cartes éditoriales + reveal masqué du nom |
+| Intro lifecycle | section dans le flux | min-height viewport | l’intro persistait comme une page entière | overlay fixed, retrait automatique après l’entrée |
 | Intro → hero | caméra scroll | scrub 1.2 | transition douce mais peu décisive | scrub 0.45, continuité visuelle intro/hero |
 | Hero | pin typographique | 180vh, scrub 1.2 | longue pour une variation faible | 140vh, scrub 0.5, cadre portrait qui prend le contrôle |
 | Identity | grille qui se disperse | 200vh, scrub 1.2 | bonne idée, rythme trop dilué | à resserrer au passage final avec reveal de grille plutôt qu’explication |

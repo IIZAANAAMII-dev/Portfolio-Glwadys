@@ -4,6 +4,12 @@
  */
 
 export const DEPTH = {
+  // Shared depth lanes: every plane must declare one of these roles.
+  foreground: 2.0,
+  primary: 0.0,
+  midground: -3.0,
+  background: -6.0,
+  far: -10.0,
   // Z-Axis layers
   heroGlwadysText: 1.5,
   heroDalleauText: -0.5,
@@ -44,6 +50,14 @@ export const DEPTH = {
   cameraDefaultFov: 45,
 } as const;
 
+export const SPATIAL_LANES = {
+  foreground: { z: DEPTH.foreground, contrast: 1, scale: 1 },
+  primary: { z: DEPTH.primary, contrast: 0.92, scale: 0.92 },
+  midground: { z: DEPTH.midground, contrast: 0.78, scale: 0.78 },
+  background: { z: DEPTH.background, contrast: 0.58, scale: 0.64 },
+  far: { z: DEPTH.far, contrast: 0.4, scale: 0.5 },
+} as const;
+
 export const CAMERA_PRESETS = {
   intro: {
     position: [0, 0, 14] as [number, number, number],
@@ -80,6 +94,11 @@ export const CAMERA_PRESETS = {
     lookAt: [0, 0, 0] as [number, number, number],
     fov: 40,
   },
+  strategy: {
+    position: [0, 0, 7.5] as [number, number, number],
+    lookAt: [0, 0, 0] as [number, number, number],
+    fov: 42,
+  },
   constellation: {
     position: [0, 0, 9.0] as [number, number, number],
     lookAt: [0, 0, 0] as [number, number, number],
@@ -93,9 +112,9 @@ export const CAMERA_PRESETS = {
 } as const;
 
 export const MOTION_TIMINGS = {
-  slowScrub: 1.4,
-  standardScrub: 1.0,
-  fastScrub: 0.6,
-  lerpFactorDesktop: 0.08,
-  lerpFactorMobile: 0.12,
+  slowScrub: 0.75,
+  standardScrub: 0.55,
+  fastScrub: 0.4,
+  lerpFactorDesktop: 0.16,
+  lerpFactorMobile: 0.2,
 } as const;

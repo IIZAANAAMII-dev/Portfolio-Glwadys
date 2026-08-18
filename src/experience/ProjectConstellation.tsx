@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import * as THREE from 'three';
 import { MediaPlane } from './MediaPlane';
 import { appStore } from '../lib/store';
+import { SPATIAL_LANES } from '../config/spatial';
 
 export function ProjectConstellation() {
   const groupRef = useRef<THREE.Group>(null);
@@ -14,14 +15,15 @@ export function ProjectConstellation() {
     if (!groupRef.current) return;
     const time = state.clock.getElapsedTime();
     // Gentle orbit drift
-    groupRef.current.rotation.y = Math.sin(time * 0.3) * 0.08;
-    groupRef.current.position.y = Math.cos(time * 0.4) * 0.06;
+    // The constellation is a quiet work anchor, not an orbiting demo.
+    groupRef.current.rotation.y = Math.sin(time * 0.22) * 0.025;
+    groupRef.current.position.y = Math.cos(time * 0.3) * 0.025;
   });
 
   return (
-    <group ref={groupRef} position={[0, -18, -2]}>
+    <group ref={groupRef} position={[0, -18, SPATIAL_LANES.midground.z]}>
       {/* Node 1: YUNA BIJOUX (Left / Near) */}
-      <group position={[-3.2, 1.2, 1.5]}>
+      <group position={[-3.2, 1.2, SPATIAL_LANES.primary.z]}>
         <MediaPlane
           scale={[2.2, 2.8, 1]}
           textureUrl="/assets/projects/yuna-story.svg"
@@ -34,7 +36,7 @@ export function ProjectConstellation() {
       </group>
 
       {/* Node 2: MARSEILLE GIRLS CLUB (Center-Right / High) */}
-      <group position={[2.8, 2.0, 0.2]}>
+      <group position={[2.8, 2.0, SPATIAL_LANES.midground.z + 1.2]}>
         <MediaPlane
           scale={[2.6, 2.6, 1]}
           textureUrl="/assets/projects/mgc-scrapbook.svg"
@@ -47,7 +49,7 @@ export function ProjectConstellation() {
       </group>
 
       {/* Node 3: LE COMPTOIR DE MATHILDE (Right-Far / Warm) */}
-      <group position={[3.6, -1.8, -1.8]}>
+      <group position={[3.6, -1.8, SPATIAL_LANES.background.z + 1.8]}>
         <MediaPlane
           scale={[2.5, 2.5, 1]}
           textureUrl="/assets/projects/comptoir-macro.svg"

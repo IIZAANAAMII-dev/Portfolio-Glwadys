@@ -8,16 +8,8 @@ import { MediaPlane } from './MediaPlane';
 import { Phone } from './Phone';
 import { ProjectConstellation } from './ProjectConstellation';
 import { appStore } from '../lib/store';
-import type { Chapter } from '../lib/store';
-
-function ChapterGroup({ chapters, children }: { chapters: Chapter[]; children: React.ReactNode }) {
-  const [chapter, setChapter] = useState(() => appStore.getState().currentChapter);
-  useEffect(() => {
-    const unsubscribe = appStore.subscribe((state) => setChapter(state.currentChapter));
-    return () => unsubscribe();
-  }, []);
-  return <group visible={chapters.includes(chapter)}>{children}</group>;
-}
+import { SceneDirector, SceneLayer } from './SceneDirector';
+import { SPATIAL_LANES } from '../config/spatial';
 
 export function ExperienceCanvas() {
   const [quality, setQuality] = useState(() => appStore.getState().quality);
@@ -50,6 +42,7 @@ export function ExperienceCanvas() {
         }}
       >
         <Suspense fallback={null}>
+          <SceneDirector>
           <CameraRig />
 
           {/* Luxury Ambient & Directional Lighting */}
@@ -58,7 +51,7 @@ export function ExperienceCanvas() {
           <pointLight position={[-6, -4, 4]} intensity={0.8} color="#d8c29d" />
 
           {/* Chapter 0/1: Intro & Hero Spatial Planes */}
-          <ChapterGroup chapters={['intro', 'hero', 'identity']}>
+          <SceneLayer scene="opening">
           <group position={[0, 0, 0]}>
             {/* Portrait Plane (Center) */}
             <MediaPlane
@@ -69,59 +62,60 @@ export function ExperienceCanvas() {
             />
             {/* Story Card (Right / Mid) */}
             <MediaPlane
-              position={[3.8, 1.4, 1.2]}
+              position={[3.8, 1.4, SPATIAL_LANES.foreground.z]}
               scale={[1.8, 3.0, 1]}
               textureUrl="/assets/projects/yuna-story.svg"
               label="STORY / ORGANIQUE"
             />
             {/* Behind The Scenes Moodboard Card (Left / Back) */}
             <MediaPlane
-              position={[-3.6, -1.0, -2.0]}
+              position={[-3.6, -1.0, SPATIAL_LANES.background.z]}
               scale={[2.2, 2.2, 1]}
               textureUrl="/assets/projects/mgc-scrapbook.svg"
               isBehindLayer
               label="BEHIND / MOODBOARD"
             />
           </group>
-          </ChapterGroup>
+          </SceneLayer>
 
           {/* Chapter 2: Phone Sequence & Signature Dive */}
-          <ChapterGroup chapters={['social']}>
+          <SceneLayer scene="social">
           <group position={[0, -6.5, 0]}>
             <Phone
-              position={[0, 0, 0.5]}
+              position={[0, 0, SPATIAL_LANES.primary.z + 0.5]}
               scale={1.05}
               screenTextureUrl="/assets/projects/yuna-story.svg"
             />
           </group>
-          </ChapterGroup>
+          </SceneLayer>
 
           {/* Chapter 3: 3D Content Gallery Floating Nodes */}
-          <ChapterGroup chapters={['gallery']}>
+          <SceneLayer scene="gallery">
           <group position={[0, -12, 0]}>
             <MediaPlane
-              position={[-4.5, 2.0, 1.0]}
+              position={[-4.5, 2.0, SPATIAL_LANES.foreground.z]}
               scale={[2.6, 3.4, 1]}
               textureUrl="/assets/projects/yuna-story.svg"
               label="VERTICAL REELS"
             />
             <MediaPlane
-              position={[4.2, -1.2, -1.2]}
+              position={[4.2, -1.2, SPATIAL_LANES.midground.z]}
               scale={[3.2, 2.4, 1]}
               textureUrl="/assets/projects/comptoir-macro.svg"
               label="PRODUCT EDITORIAL"
             />
             <MediaPlane
-              position={[0, 3.2, -3.0]}
+              position={[0, 3.2, SPATIAL_LANES.background.z]}
               scale={[3.8, 2.6, 1]}
               textureUrl="/assets/projects/mgc-scrapbook.svg"
               label="COMMUNITY ESSENCE"
             />
           </group>
-          </ChapterGroup>
+          </SceneLayer>
 
           {/* Chapter 8: Work Constellation */}
-          <ProjectConstellation />
+          <SceneLayer scene="work"><ProjectConstellation /></SceneLayer>
+          </SceneDirector>
         </Suspense>
       </Canvas>
     </div>

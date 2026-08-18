@@ -22,21 +22,25 @@ export function CustomCursor() {
       });
     });
 
+    if (!cursorRef.current) {
+      return () => {
+        unsub();
+      };
+    }
+    const xTo = gsap.quickTo(cursorRef.current, 'x', { duration: 0.14, ease: 'power3.out' });
+    const yTo = gsap.quickTo(cursorRef.current, 'y', { duration: 0.14, ease: 'power3.out' });
+
     const onMouseMove = (e: MouseEvent) => {
       if (!cursorRef.current) return;
-      gsap.to(cursorRef.current, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.075,
-        ease: 'power3.out',
-        overwrite: 'auto',
-      });
+      xTo(e.clientX);
+      yTo(e.clientY);
     };
 
     window.addEventListener('mousemove', onMouseMove);
     return () => {
       unsub();
       window.removeEventListener('mousemove', onMouseMove);
+      gsap.killTweensOf(cursorRef.current);
     };
   }, []);
 

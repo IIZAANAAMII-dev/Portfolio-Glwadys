@@ -4,6 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import { useRef, useMemo, useState } from 'react';
 import * as THREE from 'three';
 import { appStore } from '../lib/store';
+import { SPATIAL_LANES } from '../config/spatial';
 
 interface MediaPlaneProps {
   position?: [number, number, number];
@@ -54,9 +55,11 @@ export function MediaPlane({
     // Shift in Z if Front / Behind mode is active
     let zOffset = 0;
     if (isBehindLayer) {
-      zOffset = isBehind ? 1.5 : -2.5;
+      zOffset = isBehind
+        ? SPATIAL_LANES.foreground.z - SPATIAL_LANES.background.z
+        : SPATIAL_LANES.background.z - SPATIAL_LANES.primary.z;
     } else {
-      zOffset = isBehind ? -2.0 : 0.0;
+      zOffset = isBehind ? SPATIAL_LANES.background.z - SPATIAL_LANES.primary.z : 0;
     }
 
     const goalZ = position[2] + zOffset + (hovered ? 0.4 : 0);

@@ -28,6 +28,9 @@
 - Téléphone enrichi de trois beats de contenu synchronisés au progrès du pin (Feed / Story / Campaign) sans remonter la scène.
 - Timeline, stratégie, work et services resserrés avec des overlaps plus courts.
 - Case studies Yuna, MGC et Comptoir convertis en mini-séquences pinned, avec entrées simultanées, rotation éditoriale et sortie en profondeur.
+- Reconstruction spatiale : `SceneDirector`, lanes de profondeur partagées et `CAMERA_PATH` pour supprimer les placements 3D arbitraires.
+- Visibility gating strict : Opening, Social, Gallery et Work ne rendent que leur scène active.
+- Curseur piloté par `gsap.quickTo` pour supprimer les tweens concurrents à chaque mouvement souris.
 - Paramètres de vitesse globaux et curseur recalibrés.
 
 ## Vérifications à poursuivre

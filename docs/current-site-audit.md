@@ -33,3 +33,8 @@ Audit réalisé sur l’implémentation locale et sa structure de scènes (18 ao
 ## Verdict
 
 La DA n’avait pas besoin d’être remplacée. Le vrai défaut était de réalisation : trop de lissage, de temps de scroll et de couches visibles en même temps. La refonte doit monter en contraste de rythme, mieux isoler les actes et faire de chaque pin un événement clair.
+
+## Clarification de structure
+
+- L’intro est un overlay d’entrée temporaire ; elle ne doit pas devenir une section persistante du parcours.
+- Le téléphone 3D est réservé à `02 / UNIVERS SOCIAL`. Le canvas est masqué par chapitre avant et après cette scène.
