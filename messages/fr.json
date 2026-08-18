@@ -1,0 +1,167 @@
+{
+  "meta": {
+    "title": "Glwadys Dalleau — Social Media Manager & Brand Strategist",
+    "description": "Portfolio créatif et direction de contenu de Glwadys Dalleau. Social Media Management, Création de contenu, Communication de marque et Stratégie digitale."
+  },
+  "nav": {
+    "tag": "PORTFOLIO / 2026",
+    "status": "DISPONIBLE POUR NOUVEAUX PROJETS",
+    "location": "MARSEILLE, FR",
+    "index": "CHAPITRES",
+    "contact": "CONTACT",
+    "switchLanguage": "LANGUE"
+  },
+  "intro": {
+    "sub": "GLWADYS DALLEAU",
+    "location": "MARSEILLE / FRANCE",
+    "roles": "SOCIAL / CONTENU / MARQUE",
+    "scrollHint": "FAIRE DÉFILER POUR EXPLORER"
+  },
+  "hero": {
+    "lead": "PORTFOLIO CRÉATIF",
+    "headlinePart1": "JE TRANSFORME",
+    "headlinePart2": "LES MARQUES EN",
+    "headlinePart3": "HISTOIRES DONT",
+    "headlinePart4": "ON SE SOUVIENT.",
+    "roleTag": "SOCIAL MEDIA & BRAND STRATEGY",
+    "experienceYears": "~5 ANS D'EXPÉRIENCE FREELANCE",
+    "badge": "FRONT / BEHIND THE SCENES"
+  },
+  "identity": {
+    "tag": "01 / DÉCONSTRUCTION",
+    "title": "DE LA PERSONNE À LA PRÉSENCE",
+    "subtitle": "Chaque image raconte une intention. Le portrait se déploie en cellules dynamiques qui structurent l'attention digitale.",
+    "caption": "ARCHITECTURE DE CONTENU MULTI-CANAL"
+  },
+  "social": {
+    "tag": "02 / UNIVERS SOCIAL",
+    "title": "CAPTURER L'ATTENTION DANS LE FLUX",
+    "subtitle": "Reels, Stories, publications éditoriales et campagnes de marque pensées pour stopper le scroll.",
+    "frontLabel": "FRONT / CONTENU FINAL",
+    "behindLabel": "BEHIND / STRATÉGIE & MOODBOARD",
+    "frontDesc": "Ce que votre audience découvre : esthétique soignée, narration captivante et engagement organique.",
+    "behindDesc": "Ce qui structure le résultat : calendrier éditorial, analyse d'audience, piliers de marque et direction artistique.",
+    "diveHint": "IMMERSION DANS L'ÉCRAN"
+  },
+  "gallery": {
+    "tag": "03 / DANS LE CONTENU",
+    "title": "GALERIE ÉDITORIALE 3D",
+    "subtitle": "Navigation spatiale à travers les formats visuels, typographies éditoriales et narrations de marque.",
+    "phaseX": "AXE X : FLUX HORIZONTAL",
+    "phaseY": "AXE Y : PROFONDEUR VERTICALE",
+    "phaseZ": "AXE Z : ESPACE IMMERSIF"
+  },
+  "brand": {
+    "tag": "04 / COHÉRENCE DE MARQUE",
+    "title": "DU CHAOS CRÉATIF À L'ORDRE STRATÉGIQUE",
+    "subtitle": "Créer du contenu ne suffit pas : il faut bâtir un écosystème où chaque publication renforce l'identité globale.",
+    "pillarsTitle": "PILIERS DE COMMUNICATION",
+    "toneTitle": "TON & POSITIONNEMENT",
+    "paletteTitle": "HARMONIE VISUELLE",
+    "messagingTitle": "MESSAGES CLÉS"
+  },
+  "strategy": {
+    "tag": "05 / STRATÉGIE",
+    "title": "LA MÉTHODE STRUCTURE LE RÉSULTAT",
+    "subtitle": "Une vision claire avant la première prise de vue. Planning, recherche d'audience, piliers et storytelling.",
+    "step1": "01. ÉTUDE DE MARCHÉ & VEILLE CONCURRENTIELLE",
+    "step1Desc": "Comprendre les dynamiques sectorielles et identifier les opportunités de différenciation.",
+    "step2": "02. PILIERS DE CONTENU & LIGNE ÉDITORIALE",
+    "step2Desc": "Définir les territoires d'expression et les messages à forte valeur ajoutée.",
+    "step3": "03. PLANNING DE DIFFUSION & PRODUCTION",
+    "step3Desc": "Calendrier rigoureux garantissant régularité, fraîcheur et cohérence multi-plateforme.",
+    "step4": "04. ENGAGEMENT & RETOUR D'EXPÉRIENCE",
+    "step4Desc": "Animation communautaire et optimisation continue de la présence."
+  },
+  "about": {
+    "tag": "06 / À PROPOS",
+    "line1": "JE CRÉE DU CONTENU.",
+    "line2": "JE FÉDÈRE DES COMMUNAUTÉS.",
+    "line3": "JE FAÇONNE L'HISTOIRE DES MARQUES.",
+    "line4": "JE FAIS EN SORTE QU'ON S'ARRÊTE DE DÉFILER.",
+    "bio": "Social Media Manager et créatrice de contenu freelance depuis environ 5 ans. Mon approche combine sensibilité esthétique, rigueur d'organisation et culture digitale pour transformer chaque canal en levier d'attractivité pérenne."
+  },
+  "journey": {
+    "tag": "07 / PARCOURS",
+    "title": "ÉVOLUTION & EXPÉRIENCE",
+    "subtitle": "Une progression continue de la création pure vers la direction de marque et la stratégie globale.",
+    "y2021": "2021 — DÉBUTS CRÉATIFS & SOCIAL MEDIA",
+    "y2022": "2022 — ALTERNANCE YUNA BIJOUX & GESTION DE CONTENU",
+    "y2023": "2023 — DIPLÔME BACHELOR IPAC FACTORY & FREELANCE",
+    "y2024": "2024 — LE COMPTOIR DE MATHILDE : EXPÉRIENCE & MERCHANDISING",
+    "y2025": "2025 — MARSEILLE GIRLS CLUB : COMMUNAUTÉ & ÉVÉNEMENTS",
+    "y2026": "2026 — DIRECTION SOCIAL MEDIA & STRATÉGIE DE MARQUE"
+  },
+  "work": {
+    "tag": "08 / PROJETS SÉLECTIONNÉS",
+    "title": "CONSTELLATION DE RÉALISATIONS",
+    "subtitle": "Trois univers majeurs illustrant la diversité des compétences : joaillerie, communauté lifestyle et art de vivre gourmand.",
+    "explore": "EXPLORER LE CAS",
+    "yuna": {
+      "title": "YUNA BIJOUX",
+      "role": "Social Media & Communication Support (Alternance)",
+      "location": "Brest",
+      "period": "Sep 2022 – Jul 2023",
+      "summary": "Valorisation de collections de bijoux raffinés, storytelling produit, création visuelle et engagement sur les réseaux sociaux.",
+      "skills": ["Social Media Management", "Création Visuelle", "Planning Éditorial", "Storytelling Produit", "Reach Organique"]
+    },
+    "mgc": {
+      "title": "MARSEILLE GIRLS CLUB",
+      "role": "Community & Communication Support (CDI Temps Partiel)",
+      "location": "Marseille / Hybride",
+      "period": "Avr 2025 – Avr 2026",
+      "summary": "Animation et dynamisation d'un club féminin méditerranéen : formats scrapbook, relais événements, engagement et authenticité.",
+      "skills": ["Contenu Digital", "Engagement Communautaire", "Événementiel", "Cohérence de Marque", "Planning"]
+    },
+    "comptoir": {
+      "title": "LE COMPTOIR DE MATHILDE",
+      "role": "Expérience Client & Support Vente (CDD)",
+      "location": "Marseille",
+      "period": "Oct 2024 – Présent",
+      "summary": "Immersion dans l'univers de l'épicerie fine artisanale, conseil personnalisé, merchandising soigné et valorisation de marque.",
+      "skills": ["Expérience Client", "Conseil Produit", "Merchandising Visuel", "Storytelling de Marque", "Opérations"]
+    }
+  },
+  "services": {
+    "tag": "09 / EXPERTISES",
+    "title": "SERVICES & COMPÉTENCES",
+    "subtitle": "Un accompagnement complet de l'idée au déploiement stratégique.",
+    "s1": "SOCIAL MEDIA MANAGEMENT",
+    "s1Desc": "Gestion quotidienne, planification et optimisation de vos canaux sociaux.",
+    "s2": "CRÉATION DE CONTENU",
+    "s2Desc": "Production de photos, vidéos courtes, formats Reels & Stories à forte rétention.",
+    "s3": "STRATÉGIE DE CONTENU",
+    "s3Desc": "Définition des piliers, personas, ligne éditoriale et calendrier stratégique.",
+    "s4": "COMMUNICATION DE MARQUE",
+    "s4Desc": "Harmonisation des messages, ton éditorial et identité visuelle cohérente.",
+    "s5": "MARKETING DIGITAL",
+    "s5Desc": "Déploiement de dispositifs digitaux orientés visibilité et conversion.",
+    "s6": "COMMUNITY MANAGEMENT",
+    "s6Desc": "Modération, interactions bienveillantes et fidélisation de votre audience.",
+    "s7": "ÉTUDES DE MARCHÉ",
+    "s7Desc": "Veille concurrentielle, analyse des tendances et benchmark sectoriel."
+  },
+  "experience": {
+    "tag": "10 / PARCOURS PROFESSIONNEL",
+    "title": "EXPÉRIENCES & FORMATION",
+    "subtitle": "Un socle de compétences forgé sur le terrain et structuré par une formation internationale.",
+    "educationTitle": "FORMATION ACADÉMIQUE",
+    "educationSchool": "IPAC BACHELOR FACTORY",
+    "educationDegree": "Bachelor International Business — Marketing & Négociation (2020 – 2023)"
+  },
+  "contact": {
+    "tag": "11 / COLLABORATION",
+    "headline": "CRÉONS ENSEMBLE UNE HISTOIRE DONT ON SE SOUVIENT.",
+    "sub": "Disponible pour missions freelance, collaborations de marque et stratégies de contenu à impact.",
+    "emailLabel": "EMAIL DIRECT",
+    "linkedinLabel": "RÉSEAU PROFESSIONNEL",
+    "copyEmail": "COPIER L'EMAIL",
+    "emailCopied": "EMAIL COPIÉ DANS LE PRESSE-PAPIER",
+    "locationNote": "BASÉE À MARSEILLE — DISPONIBLE EN FRANCE & EN TÉLÉTRAVAIL"
+  },
+  "footer": {
+    "rights": "© 2026 GLWADYS DALLEAU. TOUS DROITS RÉSERVÉS.",
+    "craft": "DIRECTION ARTISTIQUE & CRAFT CRÉATIF",
+    "backToTop": "RETOURNER EN HAUT"
+  }
+}

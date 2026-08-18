@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200">
+  <defs>
+    <linearGradient id="comptoirBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3e271d"/>
+      <stop offset="50%" stop-color="#1f140e"/>
+      <stop offset="100%" stop-color="#0e0a07"/>
+    </linearGradient>
+    <radialGradient id="chocGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c5a880" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#comptoirBg)"/>
+  <circle cx="600" cy="550" r="400" fill="url(#chocGlow)"/>
+
+  <!-- Artisan Chocolate / Gourmet Product Macro -->
+  <rect x="350" y="320" width="500" height="420" rx="20" fill="#2d1c14" stroke="#c5a880" stroke-width="2" stroke-opacity="0.6"/>
+  <circle cx="600" cy="530" r="120" fill="#4d3023" stroke="#c5a880" stroke-width="1.5"/>
+  <text x="600" y="540" font-family="serif" font-size="28" fill="#f5f3ef" text-anchor="middle" letter-spacing="2">ARTISAN</text>
+
+  <text x="100" y="980" font-family="serif" font-size="58" font-weight="400" fill="#f5f3ef">LE COMPTOIR DE MATHILDE</text>
+  <text x="100" y="1040" font-family="sans-serif" font-size="20" font-weight="600" fill="#c5a880" letter-spacing="4">CUSTOMER EXPERIENCE & MERCHANDISING</text>
+  <text x="100" y="1090" font-family="sans-serif" font-size="18" fill="#8e929c">Épicerie fine · Merchandising visuel · Conseil gourmand</text>
+</svg>

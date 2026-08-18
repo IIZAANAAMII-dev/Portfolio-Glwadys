@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="jewelryBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#19191d"/>
+      <stop offset="50%" stop-color="#0f1013"/>
+      <stop offset="100%" stop-color="#08080a"/>
+    </linearGradient>
+    <radialGradient id="ringGlow" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#d8c29d" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#jewelryBg)"/>
+  <circle cx="540" cy="850" r="380" fill="url(#ringGlow)"/>
+
+  <!-- Delicate Gold Ring Silhouette -->
+  <circle cx="540" cy="850" r="220" stroke="#d8c29d" stroke-width="12" fill="none" opacity="0.9"/>
+  <circle cx="540" cy="850" r="190" stroke="#f5f3ef" stroke-width="2" fill="none" opacity="0.4"/>
+  <circle cx="540" cy="630" r="24" fill="#ffffff" opacity="0.95"/>
+  
+  <!-- Instagram Story Interface Overlay -->
+  <rect x="60" y="80" width="960" height="4" rx="2" fill="#ffffff" fill-opacity="0.6"/>
+  <text x="60" y="160" font-family="sans-serif" font-size="28" font-weight="700" fill="#ffffff" letter-spacing="1">@yunabijoux</text>
+  <text x="240" y="160" font-family="sans-serif" font-size="24" font-weight="400" fill="#8e929c">2h</text>
+  
+  <!-- Product Story Caption -->
+  <rect x="60" y="1520" width="960" height="240" rx="24" fill="#181a1e" fill-opacity="0.8" stroke="#ffffff" stroke-opacity="0.08"/>
+  <text x="100" y="1590" font-family="serif" font-size="44" font-weight="600" fill="#f5f3ef">Nouvelle Collection Or & Perles</text>
+  <text x="100" y="1660" font-family="sans-serif" font-size="28" font-weight="400" fill="#d8c29d">Artisanat français · Pièces limitées</text>
+  <text x="100" y="1710" font-family="sans-serif" font-size="22" font-weight="500" fill="#8e929c">Storytelling & Direction Social Media par Glwadys Dalleau</text>
+</svg>
