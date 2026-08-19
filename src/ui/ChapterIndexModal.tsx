@@ -5,7 +5,7 @@ import { appStore, Chapter } from '../lib/store';
 import { X, ArrowRight } from 'lucide-react';
 
 const CHAPTERS: { id: Chapter; num: string; nameFr: string; nameEn: string; nameKo: string; sectionId: string }[] = [
-  { id: 'intro', num: '00', nameFr: 'Introduction', nameEn: 'Introduction', nameKo: '인트로', sectionId: 'intro-section' },
+  { id: 'intro', num: '00', nameFr: 'Introduction', nameEn: 'Introduction', nameKo: '인트로', sectionId: 'hero-section' },
   { id: 'hero', num: '01', nameFr: 'Le Récit & Vision', nameEn: 'The Vision & Hero', nameKo: '비전 & 헤로', sectionId: 'hero-section' },
   { id: 'identity', num: '02', nameFr: 'Déconstruction & Présence', nameEn: 'Identity & Grid', nameKo: '아이덴티티 그리드', sectionId: 'identity-section' },
   { id: 'social', num: '03', nameFr: 'Univers Social & Front / Behind', nameEn: 'Social World & Front / Behind', nameKo: '소셜 월드 & 비하인드', sectionId: 'social-section' },

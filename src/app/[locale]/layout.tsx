@@ -7,7 +7,7 @@ import { Footer } from '@/ui/Footer';
 import { CustomCursor } from '@/ui/CustomCursor';
 import { ChapterIndexModal } from '@/ui/ChapterIndexModal';
 import { BehindSwitch } from '@/ui/BehindSwitch';
-import { ExperienceCanvas } from '@/experience/ExperienceCanvas';
+
 import { NoiseOverlay } from '@/ui/NoiseOverlay';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
@@ -97,7 +97,6 @@ export default async function LocaleLayout({
         }
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <ExperienceCanvas />
           <CustomCursor />
           <NoiseOverlay />
           <BottomNav locale={locale} />

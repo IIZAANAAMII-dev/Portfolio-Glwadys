@@ -4,6 +4,7 @@ import { useLenis } from '@/hooks/useLenis';
 import { OpeningSection } from '@/sections/OpeningSection';
 import { IdentitySection } from '@/sections/IdentitySection';
 import { SocialSection } from '@/sections/SocialSection';
+import { PhoneStorySection } from '@/sections/PhoneStorySection';
 import { GallerySection } from '@/sections/GallerySection';
 import { BrandSection } from '@/sections/BrandSection';
 import { StrategySection } from '@/sections/StrategySection';
@@ -28,6 +29,7 @@ export default function HomePage({ params: { locale } }: Props) {
       <OpeningSection locale={locale} />
       <IdentitySection />
       <SocialSection />
+      <PhoneStorySection />
       <GallerySection />
       <BrandSection />
       <StrategySection />

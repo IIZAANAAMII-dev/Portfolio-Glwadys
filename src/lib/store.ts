@@ -15,34 +15,16 @@ export type Chapter =
   | 'experience'
   | 'contact';
 
-export interface SpatialCameraState {
-  x: number;
-  y: number;
-  z: number;
-  lookAtX: number;
-  lookAtY: number;
-  lookAtZ: number;
-  fov: number;
-  rotX: number;
-  rotY: number;
-  rotZ: number;
-}
-
 export interface AppState {
   currentChapter: Chapter;
-  scrollProgress: number;
-  chapterProgress: number;
-  isBehindActive: boolean;
-  activeProject: 'yuna' | 'mgc' | 'comptoir' | null;
-  quality: QualityConfig;
-  camera: SpatialCameraState;
-  isIndexOpen: boolean;
   isLoaded: boolean;
-  cursorMode: 'default' | 'view' | 'open' | 'front' | 'behind' | 'scroll' | 'drag';
+  isIndexOpen: boolean;
+  isBehindActive: boolean;
+  quality: QualityConfig;
+  cursorMode: 'default' | 'view' | 'open';
   cursorText?: string;
 }
 
-// Simple subscriber pattern without heavy external dependencies
 type Listener<T> = (state: T) => void;
 
 class StateStore<T> {
@@ -71,29 +53,12 @@ class StateStore<T> {
   }
 }
 
-export const initialCameraState: SpatialCameraState = {
-  x: 0,
-  y: 0,
-  z: 14,
-  lookAtX: 0,
-  lookAtY: 0,
-  lookAtZ: 0,
-  fov: 48,
-  rotX: 0,
-  rotY: 0,
-  rotZ: 0,
-};
-
 export const appStore = new StateStore<AppState>({
   currentChapter: 'intro',
-  scrollProgress: 0,
-  chapterProgress: 0,
-  isBehindActive: false,
-  activeProject: null,
-  quality: detectQuality(),
-  camera: initialCameraState,
-  isIndexOpen: false,
   isLoaded: false,
+  isIndexOpen: false,
+  isBehindActive: false,
+  quality: detectQuality(),
   cursorMode: 'default',
   cursorText: undefined,
 });

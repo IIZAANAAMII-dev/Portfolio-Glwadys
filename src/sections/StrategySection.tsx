@@ -46,21 +46,7 @@ export function StrategySection() {
         x: -totalShift,
         ease: 'none',
         duration: 1.2,
-      }).to(
-        {},
-        {
-          duration: 1.2,
-          onUpdate: function () {
-            const prog = this.progress();
-            MasterTimelineManager.updateCamera({
-              x: 0,
-              y: gsap.utils.interpolate(-15.0, -18.0, prog),
-              z: gsap.utils.interpolate(7.0, 8.5, prog),
-            });
-          },
-        },
-        '<'
-      );
+      });
     }, sectionRef);
 
     return () => ctx.revert();

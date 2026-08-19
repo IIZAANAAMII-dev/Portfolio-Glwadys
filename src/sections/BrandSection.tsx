@@ -43,20 +43,6 @@ export function BrandSection() {
           items,
           { y: 60, opacity: 0, scale: 0.95 },
           { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.9, ease: 'power4.out' }
-        ).to(
-          {},
-          {
-            duration: 1,
-            onUpdate: function () {
-              const prog = this.progress();
-              MasterTimelineManager.updateCamera({
-                x: gsap.utils.interpolate(4.0, 0, prog),
-                y: gsap.utils.interpolate(-12.0, -15.0, prog),
-                z: gsap.utils.interpolate(7.5, 7.0, prog),
-              });
-            },
-          },
-          '<'
         );
       }
     }, sectionRef);
