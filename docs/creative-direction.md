@@ -57,16 +57,19 @@ No gradient backgrounds. No neon.
 ## Motion Language
 
 ### Primary Mechanics
+
 1. Shared media transformation: one image/crop becomes the next scene.
 2. Pinned editorial storytelling: major moments stay while scroll drives the timeline.
 3. Local WebGL cinematic: one short spatial sequence, then unmount.
 
 ### Secondary Mechanics
+
 1. Mask / crop reveals.
 2. Horizontal image tracks.
 3. Kinetic typography.
 
 ### Easing & Timing
+
 - Easing: power3.out, power4.inOut, sine.inOut, expo.out.
 - No bounce, elastic, spring.
 - Micro 150–300ms, UI 300–500ms, major 500–900ms, stagger 0.03–0.08s.
