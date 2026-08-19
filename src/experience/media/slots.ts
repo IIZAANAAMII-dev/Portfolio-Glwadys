@@ -54,8 +54,8 @@ const series = (
 ): Slot[] =>
   Array.from({ length: count }, (_, i) => ({
     ...base,
-    ...perIndex?.(i + 1),
     id: `${prefix}_${String(i + 1).padStart(2, '0')}`,
+    ...perIndex?.(i + 1),
   }));
 
 export const SLOTS: Slot[] = [

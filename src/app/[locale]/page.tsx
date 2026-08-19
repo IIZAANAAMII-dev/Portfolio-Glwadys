@@ -5,6 +5,7 @@ import { ActOpening } from '@/experience/acts/ActOpening';
 import { ActSocial } from '@/experience/acts/ActSocial';
 import { ActCreative } from '@/experience/acts/ActCreative';
 import { ActWork } from '@/experience/acts/ActWork';
+import { ActFinal } from '@/experience/acts/ActFinal';
 import { BottomNav } from '@/experience/ui/BottomNav';
 import { Grain } from '@/experience/ui/Grain';
 
@@ -28,6 +29,7 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
         <ActSocial />
         <ActCreative />
         <ActWork />
+        <ActFinal />
       </main>
 
       <Grain />
