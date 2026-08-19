@@ -9,6 +9,10 @@
     "location": "프랑스 마르세유",
     "index": "챕터 목록",
     "contact": "연락처",
+    "home": "홈",
+    "work": "작업",
+    "about": "소개",
+    "expertise": "전문분야",
     "switchLanguage": "언어"
   },
   "intro": {
@@ -18,14 +22,9 @@
     "scrollHint": "스크롤하여 탐색하기"
   },
   "hero": {
-    "lead": "크리에이티브 포트폴리오",
-    "headlinePart1": "기억에 남는",
-    "headlinePart2": "브랜드 스토리로",
-    "headlinePart3": "전환합니다.",
-    "headlinePart4": "",
-    "roleTag": "소셜 미디어 & 브랜드 전략",
-    "experienceYears": "약 5년의 프리랜서 실무 경험",
-    "badge": "프론트 & 비하인드 스토리"
+    "headline": "기억에 남는 브랜드 스토리로 전환합니다.",
+    "nameTop": "GLWADYS",
+    "nameBottom": "DALLEAU"
   },
   "identity": {
     "tag": "해체와 구축",

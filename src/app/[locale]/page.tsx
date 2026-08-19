@@ -1,8 +1,7 @@
 'use client';
 
 import { useLenis } from '@/hooks/useLenis';
-import { IntroSection } from '@/sections/IntroSection';
-import { HeroSection } from '@/sections/HeroSection';
+import { OpeningSection } from '@/sections/OpeningSection';
 import { IdentitySection } from '@/sections/IdentitySection';
 import { SocialSection } from '@/sections/SocialSection';
 import { GallerySection } from '@/sections/GallerySection';
@@ -26,8 +25,7 @@ export default function HomePage({ params: { locale } }: Props) {
 
   return (
     <div className="relative w-full">
-      <IntroSection />
-      <HeroSection locale={locale} />
+      <OpeningSection locale={locale} />
       <IdentitySection />
       <SocialSection />
       <GallerySection />

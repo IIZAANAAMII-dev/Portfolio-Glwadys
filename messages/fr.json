@@ -9,6 +9,10 @@
     "location": "Marseille, FR",
     "index": "Chapitres",
     "contact": "Contact",
+    "home": "Accueil",
+    "work": "Work",
+    "about": "À propos",
+    "expertise": "Expertise",
     "switchLanguage": "Langue"
   },
   "intro": {
@@ -18,14 +22,9 @@
     "scrollHint": "FAIRE DÉFILER POUR EXPLORER"
   },
   "hero": {
-    "lead": "Portfolio Créatif",
-    "headlinePart1": "Je transforme",
-    "headlinePart2": "les marques en",
-    "headlinePart3": "histoires dont",
-    "headlinePart4": "on se souvient.",
-    "roleTag": "Social Media & Brand Strategy",
-    "experienceYears": "~5 ans d'expérience freelance",
-    "badge": "Front & behind the scenes"
+    "headline": "Je transforme les marques en histoires dont on se souvient.",
+    "nameTop": "GLWADYS",
+    "nameBottom": "DALLEAU"
   },
   "identity": {
     "tag": "Déconstruction",

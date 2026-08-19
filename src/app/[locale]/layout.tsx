@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
-import { Navbar } from '@/ui/Navbar';
+import { BottomNav } from '@/ui/BottomNav';
 import { Footer } from '@/ui/Footer';
 import { CustomCursor } from '@/ui/CustomCursor';
 import { ChapterIndexModal } from '@/ui/ChapterIndexModal';
@@ -100,7 +100,7 @@ export default async function LocaleLayout({
           <ExperienceCanvas />
           <CustomCursor />
           <NoiseOverlay />
-          <Navbar locale={locale} />
+          <BottomNav locale={locale} />
           <ChapterIndexModal locale={locale} />
           <BehindSwitch locale={locale} />
           <main className="relative z-10">{children}</main>

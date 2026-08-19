@@ -4,7 +4,6 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { CameraRig } from './CameraRig';
-import { MediaPlane } from './MediaPlane';
 import { Phone } from './Phone';
 import { ProjectConstellation } from './ProjectConstellation';
 import { GalleryRoom } from './GalleryRoom';
@@ -55,31 +54,6 @@ export function ExperienceCanvas() {
           <ambientLight intensity={0.65} />
           <directionalLight position={[5, 8, 10]} intensity={1.2} color="#ffffff" />
           <pointLight position={[-6, -4, 4]} intensity={0.8} color="#d8c29d" />
-
-          {/* Chapter 0/1: Intro & Hero Spatial Planes */}
-          <SceneLayer scene="opening">
-          <group position={[0, 0, 0]}>
-            {/* Portrait Plane (Center) */}
-            <MediaPlane
-              position={[0, 0.2, 0.0]}
-              scale={[3.2, 4.2, 1]}
-              textureUrl="/assets/editorial/portrait-glwadys.svg"
-            />
-            {/* Story Card (Right / Mid) */}
-            <MediaPlane
-              position={[3.8, 1.4, SPATIAL_LANES.foreground.z]}
-              scale={[1.8, 3.0, 1]}
-              textureUrl="/assets/projects/yuna-story.svg"
-            />
-            {/* Behind The Scenes Moodboard Card (Left / Back) */}
-            <MediaPlane
-              position={[-3.6, -1.0, SPATIAL_LANES.background.z]}
-              scale={[2.2, 2.2, 1]}
-              textureUrl="/assets/projects/mgc-scrapbook.svg"
-              isBehindLayer
-            />
-          </group>
-          </SceneLayer>
 
           {/* Chapter 2: Phone Sequence & Signature Dive */}
           <SceneLayer scene="social">
