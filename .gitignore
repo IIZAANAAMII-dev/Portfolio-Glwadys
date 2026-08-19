@@ -1,0 +1,28 @@
+# dependencies
+node_modules
+.pnpm-store
+
+# next
+.next
+out
+dist
+
+# env
+.env
+.env.local
+.env.*.local
+
+# vercel
+.vercel
+
+# misc
+.DS_Store
+*.log
+
+# skills (local, untracked)
+.agents
+.windsurf
+
+# ide
+.vscode
+.idea
