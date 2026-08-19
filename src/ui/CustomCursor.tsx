@@ -7,18 +7,23 @@ import { appStore } from '../lib/store';
 export function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
+  const [enable, setEnable] = useState(false);
   const [cursorState, setCursorState] = useState(() => ({
     mode: appStore.getState().cursorMode,
     text: appStore.getState().cursorText,
-    enable: appStore.getState().quality.enableCustomCursor,
   }));
 
   useEffect(() => {
+    const isTouch =
+      typeof window !== 'undefined' &&
+      ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setEnable(!isTouch && !prefersReduced && window.innerWidth >= 1024);
+
     const unsub = appStore.subscribe((state) => {
       setCursorState({
         mode: state.cursorMode,
         text: state.cursorText,
-        enable: state.quality.enableCustomCursor,
       });
     });
 
@@ -44,7 +49,7 @@ export function CustomCursor() {
     };
   }, []);
 
-  if (!cursorState.enable) return null;
+  if (!enable) return null;
 
   const isExpanded = cursorState.mode !== 'default';
 

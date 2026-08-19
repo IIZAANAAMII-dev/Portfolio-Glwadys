@@ -3,85 +3,113 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useTranslations } from 'next-intl';
-import { MasterTimelineManager } from '../motion/MasterTimeline';
 import { appStore } from '../lib/store';
+
+const MEDIA = [
+  { src: '/assets/editorial/portrait-glwadys.svg', x: '50%', y: '58%', w: '30vw', z: 10 },
+  { src: '/assets/projects/yuna-story.svg', x: '20%', y: '22%', w: '18vw', z: 20 },
+  { src: '/assets/projects/mgc-scrapbook.svg', x: '80%', y: '24%', w: '16vw', z: 20 },
+  { src: '/assets/projects/comptoir-macro.svg', x: '22%', y: '74%', w: '14vw', z: 10 },
+];
 
 export function IntroSection() {
   const t = useTranslations('intro');
   const sectionRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-  const metaRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(true);
+  const mediaRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    MasterTimelineManager.init();
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      setDone(true);
+      appStore.setState({ isLoaded: true, currentChapter: 'hero' });
+      if (sectionRef.current) sectionRef.current.style.display = 'none';
+      return;
+    }
 
     const ctx = gsap.context(() => {
-      // Premium intro cinematic
       const tl = gsap.timeline({
+        delay: 0.2,
         onComplete: () => {
-          appStore.setState({ currentChapter: 'hero' });
-          setVisible(false);
+          gsap.to(sectionRef.current, {
+            opacity: 0,
+            duration: 0.7,
+            ease: 'power2.inOut',
+            onComplete: () => {
+              if (sectionRef.current) sectionRef.current.style.display = 'none';
+              setDone(true);
+              appStore.setState({ isLoaded: true, currentChapter: 'hero' });
+            },
+          });
         },
       });
+
       tl.fromTo(
-        metaRef.current,
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.65, ease: 'power4.out' }
-      ).fromTo(
-        lineRef.current,
-        { scaleY: 0 },
-        { scaleY: 1, duration: 0.8, ease: 'expo.out' },
-        '-=0.35'
-      ).fromTo(
         nameRef.current,
-        { clipPath: 'inset(0 0 100% 0)', yPercent: 10 },
-        { clipPath: 'inset(0 0 0% 0)', yPercent: 0, duration: 1.0, ease: 'expo.out' },
-        '-=0.45'
+        { clipPath: 'inset(0 0 100% 0)', yPercent: 8 },
+        { clipPath: 'inset(0 0 0% 0)', yPercent: 0, duration: 1.0, ease: 'expo.out' }
       );
 
+      tl.fromTo(
+        mediaRefs.current,
+        { scale: 0.7, opacity: 0, y: 50 },
+        {
+          scale: 1,
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          stagger: 0.1,
+        },
+        '-=0.5'
+      );
+
+      tl.to({}, { duration: 0.35 });
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
+  if (done) return null;
+
   return (
     <section
       id="intro-section"
       ref={sectionRef}
-      aria-hidden={!visible}
-      className={`fixed inset-0 min-h-screen w-full flex flex-col justify-between items-center p-6 md:p-14 z-[60] select-none pointer-events-none bg-background-dark transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0 invisible'}`}
+      className="fixed inset-0 z-[100] h-screen w-full flex flex-col items-center justify-center bg-[#0b0c0e] select-none"
+      aria-hidden="true"
     >
-      {/* Top Intro Tag */}
-      <div ref={metaRef} className="w-full flex justify-between items-start text-foreground-muted font-mono-tag">
-        <div>
-          <p className="text-foreground-light tracking-widest">{t('sub')}</p>
-          <p className="text-[10px] text-accent-gold mt-1">{t('location')}</p>
-        </div>
-        <div className="text-right">
-          <p>{t('roles')}</p>
-        </div>
+      <div
+        ref={nameRef}
+        className="absolute z-[60] text-center font-editorial uppercase leading-[0.78] tracking-[-0.06em] text-[13vw] md:text-[9vw] text-foreground-light"
+        style={{ top: '40%', transform: 'translateY(-50%)' }}
+      >
+        <span className="block">Glwadys</span>
+        <span className="block pl-[4vw] text-accent-gold">Dalleau</span>
       </div>
 
-      {/* Centered Name + Vertical Hairline */}
-      <div className="my-auto flex flex-col items-center justify-center text-center overflow-hidden">
-        <div
-          ref={lineRef}
-          className="w-[1px] h-24 md:h-32 bg-gradient-to-b from-transparent via-accent-gold/50 to-transparent origin-top mb-8"
+      {MEDIA.map((m, i) => (
+        <img
+          key={m.src}
+          ref={(el) => { mediaRefs.current[i] = el; }}
+          src={m.src}
+          alt=""
+          className="absolute object-cover rounded-sm opacity-0"
+          style={{
+            left: m.x,
+            top: m.y,
+            width: m.w,
+            maxWidth: '260px',
+            transform: 'translate(-50%, -50%)',
+            zIndex: m.z,
+          }}
         />
-        <div ref={nameRef} className="font-editorial uppercase leading-[0.76] tracking-[-0.06em] text-[12vw] md:text-[9vw] text-foreground-light">
-          <span className="block">Glwadys</span>
-          <span className="block pl-[8vw] text-accent-gold">Dalleau</span>
-        </div>
-      </div>
+      ))}
 
-      <div className="w-full flex justify-between items-end font-mono-tag text-foreground-muted">
-        <span className="text-[10px] tracking-widest text-accent-gold/80 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent-gold animate-ping" />
-          {t('scrollHint')}
-        </span>
-        <span className="text-[10px] text-foreground-muted">{t('sub')}</span>
+      <div className="absolute bottom-8 w-full px-8 flex justify-between font-mono-tag text-[10px] text-foreground-muted uppercase tracking-widest">
+        <span>{t('location')}</span>
+        <span>{t('roles')}</span>
       </div>
     </section>
   );
