@@ -3,9 +3,6 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const planes = [
   { id: 'portrait', x: '0vw', y: '0vh', z: 0, w: '26vw', h: '34vh', fromScale: 0.3, toScale: 1, label: 'Portrait' },
@@ -15,7 +12,7 @@ const planes = [
   { id: 'media4', x: '22vw', y: '20vh', z: -150, w: '20vw', h: '24vh', fromScale: 0.2, toScale: 1.2, label: 'Media 04' },
 ];
 
-export default function ActOpeningHero() {
+export default function ActIntroHero() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
 
@@ -24,6 +21,7 @@ export default function ActOpeningHero() {
       const stage = stageRef.current;
       if (!stage) return;
 
+      // 3D mouse parallax on desktop
       let mouseCleanup: (() => void) | undefined;
       const isTouch = window.matchMedia('(pointer: coarse)').matches;
       if (!isTouch) {
@@ -41,37 +39,30 @@ export default function ActOpeningHero() {
         mouseCleanup = () => window.removeEventListener('mousemove', onMove);
       }
 
+      // Intro timeline on mount
       const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=180%',
-          pin: true,
-          scrub: 0.5,
-        },
+        defaults: { ease: 'power3.out' },
+        delay: 0.2,
       });
 
-      // Name appears
-      tl.fromTo('.opening-name', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.08, ease: 'none' }, 0);
+      tl.fromTo('.opening-name', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 })
+        .to('.opening-name', { opacity: 0, duration: 0.4, delay: 0.4 })
+        .addLabel('explode');
 
-      // Media explodes from center
       planes.forEach((p, i) => {
         tl.fromTo(
           `.plane-${p.id}`,
           { x: 0, y: 0, z: 0, scale: p.fromScale, opacity: 0 },
-          { x: p.x, y: p.y, z: p.z, scale: p.toScale, opacity: 1, duration: 0.2, ease: 'none' },
-          0.04 + i * 0.02
+          { x: p.x, y: p.y, z: p.z, scale: p.toScale, opacity: 1, duration: 1.2, ease: 'power4.out' },
+          `explode+=${i * 0.05}`
         );
       });
 
-      // Hero info
-      tl.fromTo('.hero-name', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.12, ease: 'none' }, 0.34);
-      tl.fromTo('.hero-headline', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.1, ease: 'none' }, 0.4);
-      tl.fromTo('.hero-meta', { opacity: 0 }, { opacity: 1, duration: 0.08, ease: 'none' }, 0.46);
-      tl.fromTo('.bottom-nav', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.06, ease: 'none' }, 0.5);
-
-      // Shrink
-      tl.to(stage, { scale: 0.78, duration: 0.25, ease: 'none' }, 0.6);
+      tl.fromTo('.hero-name-top', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1 }, '-=0.8')
+        .fromTo('.hero-name-bottom', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1 }, '-=0.85')
+        .fromTo('.hero-headline', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.6')
+        .fromTo('.hero-meta', { opacity: 0 }, { opacity: 1, duration: 0.6 }, '-=0.4')
+        .fromTo('.bottom-nav', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.3');
 
       return () => {
         mouseCleanup?.();
@@ -91,7 +82,7 @@ export default function ActOpeningHero() {
         className="relative w-full h-full will-change-transform"
         style={{ transformStyle: 'preserve-3d' }}
       >
-        <div className="opening-name absolute left-1/2 -translate-x-1/2 top-[10vh] text-center font-sans text-[clamp(1.5rem,3vw,3rem)] tracking-[0.35em] uppercase font-medium text-ivory opacity-0">
+        <div className="opening-name absolute left-1/2 -translate-x-1/2 top-[45vh] text-center font-sans text-[clamp(1.5rem,3vw,3rem)] tracking-[0.35em] uppercase font-medium text-ivory">
           Glwadys Dalleau
         </div>
 
@@ -109,7 +100,10 @@ export default function ActOpeningHero() {
           </div>
         ))}
 
-        <h2 className="hero-name absolute left-1/2 -translate-x-1/2 top-[76vh] font-sans text-[clamp(2.5rem,10vw,10rem)] leading-[0.85] tracking-[-0.03em] text-ivory uppercase font-medium opacity-0">
+        <h2 className="hero-name-top absolute left-1/2 -translate-x-1/2 top-[8vh] font-sans text-[clamp(3rem,14vw,14rem)] leading-[0.85] tracking-[-0.03em] text-ivory uppercase font-medium opacity-0">
+          Glwadys
+        </h2>
+        <h2 className="hero-name-bottom absolute left-1/2 -translate-x-1/2 top-[72vh] font-sans text-[clamp(3rem,14vw,14rem)] leading-[0.85] tracking-[-0.03em] text-ivory uppercase font-medium opacity-0">
           Dalleau
         </h2>
 
