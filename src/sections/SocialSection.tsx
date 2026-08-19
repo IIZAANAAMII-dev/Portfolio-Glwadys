@@ -6,12 +6,20 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTranslations } from 'next-intl';
 import { MasterTimelineManager } from '../motion/MasterTimeline';
 import { appStore } from '../lib/store';
-import { Smartphone, Eye, Layers } from 'lucide-react';
+
+const SOCIAL_MEDIA = [
+  { src: '/assets/projects/yuna-story.svg', from: { x: '-26vw', y: '-18vh' }, to: { x: '-8%', y: '-35%' }, w: '18vw' },
+  { src: '/assets/projects/mgc-scrapbook.svg', from: { x: '26vw', y: '-16vh' }, to: { x: '8%', y: '-38%' }, w: '17vw' },
+  { src: '/assets/projects/comptoir-macro.svg', from: { x: '-28vw', y: '18vh' }, to: { x: '-12%', y: '34%' }, w: '15vw' },
+  { src: '/assets/editorial/portrait-glwadys.svg', from: { x: '28vw', y: '20vh' }, to: { x: '12%', y: '32%' }, w: '16vw' },
+];
 
 export function SocialSection() {
   const t = useTranslations('social');
   const sectionRef = useRef<HTMLDivElement>(null);
-  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const phoneRef = useRef<HTMLDivElement>(null);
+  const phoneScreenRef = useRef<HTMLDivElement>(null);
+  const mediaRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [isBehind, setIsBehind] = useState(false);
 
   useEffect(() => {
@@ -26,7 +34,7 @@ export function SocialSection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => window.innerWidth < 768 ? '+=220%' : '+=290%',
+          end: () => (window.innerWidth < 768 ? '+=220%' : '+=260%'),
           pin: true,
           scrub: 0.55,
           anticipatePin: 1,
@@ -43,25 +51,55 @@ export function SocialSection() {
         },
       });
 
-      // A dedicated, opaque phone scene: content clears before the camera enters.
-      tl.to('.social-card-left', { xPercent: -120, opacity: 0, duration: 0.75 })
-        .to('.social-card-right', { xPercent: 120, opacity: 0, duration: 0.75 }, '<')
-        .to(
-          {},
-          {
-              duration: 1.35,
-            onUpdate: function () {
-              const prog = this.progress();
-              // Camera advances straight into the phone screen center (Camera Dive)
-              MasterTimelineManager.updateCamera({
-                z: gsap.utils.interpolate(7.5, 1.4, prog),
-                y: gsap.utils.interpolate(-3.0, -6.5, prog),
-                fov: gsap.utils.interpolate(45, 54, prog),
-              });
-            },
-          },
-          '<'
-        );
+      // 0-35% : media enter and compose around phone
+      tl.fromTo(
+        mediaRefs.current,
+        { xPercent: -200, yPercent: -150, scale: 0.7, opacity: 0 },
+        {
+          xPercent: 0,
+          yPercent: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.35,
+          ease: 'power2.out',
+          stagger: 0.04,
+        }
+      );
+
+      // 35-75% : media converge into phone
+      tl.to(
+        mediaRefs.current,
+        {
+          x: 0,
+          y: 0,
+          scale: 0.25,
+          opacity: 0,
+          duration: 0.4,
+          ease: 'power3.in',
+          stagger: 0.03,
+        },
+        '+=0.05'
+      );
+
+      // 75-100% : phone screen expands to full viewport
+      tl.to(
+        phoneRef.current,
+        {
+          scale: 2.2,
+          yPercent: 10,
+          opacity: 0,
+          duration: 0.2,
+          ease: 'power2.in',
+        },
+        '+=0.05'
+      );
+
+      tl.fromTo(
+        phoneScreenRef.current,
+        { scale: 0.95, opacity: 1 },
+        { scale: 3, opacity: 0, duration: 0.2, ease: 'power2.in' },
+        '<0.1'
+      );
     }, sectionRef);
 
     return () => {
@@ -75,68 +113,62 @@ export function SocialSection() {
     <section
       id="social-section"
       ref={sectionRef}
-      className="social-surface relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10"
+      className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-[#0b0c0e] z-20"
     >
-      {/* Top Header */}
-      <div className="flex justify-between items-start font-mono-tag">
-        <div>
-          <span className="text-accent-gold text-xs">{t('tag')}</span>
-          <h2 className="font-editorial text-2xl sm:text-4xl text-foreground-light mt-1">
-            {t('title')}
-          </h2>
-        </div>
-
-        {/* Front / Behind Status Indicator */}
-        <div className="glass-panel px-4 py-2 rounded-full flex items-center gap-2">
-          {isBehind ? (
-            <>
-              <Layers className="w-3.5 h-3.5 text-accent-gold" />
-              <span className="text-xs text-accent-gold font-semibold">{t('behindLabel')}</span>
-            </>
-          ) : (
-            <>
-              <Eye className="w-3.5 h-3.5 text-foreground-muted" />
-              <span className="text-xs text-foreground-light">{t('frontLabel')}</span>
-            </>
-          )}
-        </div>
+      <div className="absolute top-8 left-6 md:left-14 z-30 font-mono-tag text-[10px] text-foreground-muted uppercase tracking-widest">
+        <span className="text-accent-gold block text-xs mb-1">{t('tag')}</span>
+        <h2 className="font-editorial text-2xl sm:text-4xl text-foreground-light">
+          {t('title')}
+        </h2>
       </div>
 
-      {/* Floating Spatial Cards (Front / Behind DOM representations) */}
-      <div ref={cardsContainerRef} className="my-auto grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full items-center">
-        {/* Left Card: Editorial Feed */}
-        <div className="social-card-left glass-panel p-6 rounded-3xl border border-white/10 transition-all duration-500">
-          <h3 className="font-editorial text-xl text-foreground-light">
-            {isBehind ? t('behindTitle') : t('frontTitle')}
-          </h3>
-          <p className="text-xs text-foreground-muted mt-2 leading-relaxed">
-            {isBehind ? t('behindDesc') : t('frontDesc')}
-          </p>
-        </div>
+      <div className="absolute top-8 right-6 md:right-14 z-30 glass-panel px-4 py-2 rounded-full flex items-center gap-2">
+        <span className={`text-[10px] font-semibold ${isBehind ? 'text-accent-gold' : 'text-foreground-light'}`}>
+          {isBehind ? t('behindLabel') : t('frontLabel')}
+        </span>
+      </div>
 
-        {/* Center Target: Smartphone Dive Portal */}
-        <div className="glass-panel p-8 rounded-3xl border border-accent-gold/40 text-center flex flex-col items-center justify-center relative shadow-2xl">
-          <div className="w-12 h-12 rounded-full bg-accent-gold/20 flex items-center justify-center mb-3">
-            <Smartphone className="w-6 h-6 text-accent-gold" />
+      {/* Floating media */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        {SOCIAL_MEDIA.map((m, i) => (
+          <div
+            key={m.src}
+            ref={(el) => { mediaRefs.current[i] = el; }}
+            className="absolute opacity-0"
+            style={{
+              left: '50%',
+              top: '50%',
+              width: m.w,
+              maxWidth: '280px',
+              transform: `translate(calc(-50% + ${m.from.x}), calc(-50% + ${m.from.y}))`,
+            }}
+          >
+            <div className="overflow-hidden rounded-sm border border-white/10 shadow-2xl shadow-black/40 bg-[#15171a]">
+              <img src={m.src} alt="" className="w-full h-auto" />
+            </div>
           </div>
-          <span className="font-mono-tag text-[10px] text-accent-gold font-bold">
-            {t('diveHint')}
-          </span>
-        </div>
+        ))}
+      </div>
 
-        {/* Right Card: Short-form Reels */}
-        <div className="social-card-right glass-panel p-6 rounded-3xl border border-white/10 transition-all duration-500">
-          <h3 className="font-editorial text-xl text-foreground-light">
-            {isBehind ? t('behindRightTitle') : t('frontRightTitle')}
-          </h3>
-          <p className="text-xs text-foreground-muted mt-2 leading-relaxed">
-            {isBehind ? t('behindRightDesc') : t('frontRightDesc')}
-          </p>
+      {/* Phone */}
+      <div
+        ref={phoneRef}
+        className="relative z-20 w-[38vh] max-w-[300px] aspect-[9/19.5] rounded-[3rem] bg-gradient-to-br from-[#1a1a1e] to-[#0e0e10] p-3 shadow-2xl shadow-black/60 border border-white/8"
+      >
+        <div
+          ref={phoneScreenRef}
+          className="w-full h-full rounded-[2.4rem] overflow-hidden bg-[#0b0c0e]"
+        >
+          <img
+            src="/assets/projects/yuna-story.svg"
+            alt=""
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
 
-      <div className="flex justify-between items-end font-mono-tag text-foreground-muted text-[10px]">
-        <span>{t('tag')}</span>
+      <div className="absolute bottom-8 w-full px-6 md:px-14 flex justify-between font-mono-tag text-[10px] text-foreground-muted uppercase tracking-widest z-30">
+        <span>{isBehind ? t('behindLabel') : t('frontLabel')}</span>
         <span>{t('title')}</span>
       </div>
     </section>
