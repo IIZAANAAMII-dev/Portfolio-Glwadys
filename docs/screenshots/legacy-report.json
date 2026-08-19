@@ -1,0 +1,19 @@
+{
+  "url": "http://localhost:3006/fr",
+  "width": 1440,
+  "height": 900,
+  "metrics": {
+    "scrollHeight": 16963,
+    "viewportHeight": 900,
+    "screens": 18.85
+  },
+  "written": [
+    "legacy-000.png",
+    "legacy-012.png",
+    "legacy-040.png",
+    "legacy-075.png"
+  ],
+  "errors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}

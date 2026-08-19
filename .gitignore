@@ -33,3 +33,8 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Original media drops. Kept local; only the optimised derivatives in
+# public/media are committed. README.md is tracked so the drop instructions stay.
+media-source/*
+!media-source/README.md
