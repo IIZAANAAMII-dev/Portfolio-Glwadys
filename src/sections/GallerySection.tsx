@@ -24,7 +24,7 @@ export function GallerySection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => `+=${Math.max(track.scrollWidth * 0.82, window.innerHeight * 2.4)}`,
+          end: () => `+=${Math.max(track.scrollWidth * 0.65, window.innerHeight * 1.6)}`,
           pin: true,
           scrub: 0.55,
           anticipatePin: 1,

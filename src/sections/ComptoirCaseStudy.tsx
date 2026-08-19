@@ -13,7 +13,7 @@ export function ComptoirCaseStudy() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const elements = sectionRef.current?.querySelectorAll('.comptoir-element');
-      const tl = gsap.timeline({ scrollTrigger: { trigger: sectionRef.current, start: 'top top', end: () => window.innerWidth < 768 ? '+=105%' : '+=115%', pin: true, scrub: 0.55, anticipatePin: 1, invalidateOnRefresh: true } });
+      const tl = gsap.timeline({ scrollTrigger: { trigger: sectionRef.current, start: 'top 75%', end: 'bottom 20%', toggleActions: 'play none none reverse' } });
       tl.fromTo(elements || [], { y: 48, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.9, ease: 'power4.out' })
         .to(elements || [], { y: -14, duration: 0.7, ease: 'none' }, '<0.35');
     }, sectionRef);

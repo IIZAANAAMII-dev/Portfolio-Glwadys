@@ -26,8 +26,8 @@ export function JourneySection() {
           start: 'top top',
           end: () => {
             const isMobile = window.innerWidth < 768;
-            const multiplier = isMobile ? 0.22 : 0.4;
-            const base = isMobile ? 0.9 : 1.4;
+            const multiplier = isMobile ? 0.18 : 0.32;
+            const base = isMobile ? 0.7 : 1.1;
             return `+=${Math.max(track.scrollWidth * multiplier, window.innerHeight * base)}`;
           },
           pin: true,

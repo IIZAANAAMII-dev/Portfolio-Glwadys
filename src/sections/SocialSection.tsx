@@ -34,7 +34,7 @@ export function SocialSection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => (window.innerWidth < 768 ? '+=220%' : '+=260%'),
+          end: () => (window.innerWidth < 768 ? '+=160%' : '+=180%'),
           pin: true,
           scrub: 0.55,
           anticipatePin: 1,

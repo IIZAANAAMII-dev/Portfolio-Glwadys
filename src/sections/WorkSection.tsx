@@ -18,31 +18,26 @@ export function WorkSection() {
     const ctx = gsap.context(() => {
       const cards = cardsRef.current?.querySelectorAll('.work-constellation-node');
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=145%',
-          pin: true,
-          scrub: 0.55,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const p = self.progress;
-            if (p > 0.8) {
-              MasterTimelineManager.setChapter('services');
-            } else {
-              MasterTimelineManager.setChapter('work');
-            }
-          },
-        },
-      });
-
       if (cards && cards.length > 0) {
-        tl.fromTo(
+        gsap.fromTo(
           cards,
           { y: 80, opacity: 0, scale: 0.9 },
-          { y: 0, opacity: 1, scale: 1, stagger: 0.1, duration: 0.95, ease: 'power4.out' }
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            stagger: 0.1,
+            duration: 0.85,
+            ease: 'power4.out',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 70%',
+              end: 'bottom 20%',
+              toggleActions: 'play none none reverse',
+              onEnter: () => MasterTimelineManager.setChapter('work'),
+              onLeaveBack: () => MasterTimelineManager.setChapter('journey'),
+            },
+          }
         );
       }
     }, sectionRef);
@@ -61,7 +56,6 @@ export function WorkSection() {
       ref={sectionRef}
       className="relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10"
     >
-      {/* Top Header */}
       <div className="flex justify-between items-start font-mono-tag">
         <div>
           <span className="text-accent-gold text-xs">{t('tag')}</span>
@@ -91,7 +85,7 @@ export function WorkSection() {
             <button
               key={item.id}
               onClick={() => scrollToCase(item.id)}
-              className="work-constellation-node group text-left p-6 rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-500 focus:outline-none"
+              className="work-constellation-node group text-left p-6 rounded-2xl border border-white/10 hover:border-white/30 transition-all duration-500 focus:outline-none opacity-0"
               style={{
                 transform: isLeft ? 'rotateY(6deg)' : isRight ? 'rotateY(-6deg)' : 'rotateY(0deg)',
                 transformOrigin: isLeft ? 'right center' : isRight ? 'left center' : 'center',

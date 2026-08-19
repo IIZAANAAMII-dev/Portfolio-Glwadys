@@ -13,7 +13,7 @@ export function YunaCaseStudy() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const elements = sectionRef.current?.querySelectorAll('.yuna-element');
-      const tl = gsap.timeline({ scrollTrigger: { trigger: sectionRef.current, start: 'top top', end: () => window.innerWidth < 768 ? '+=105%' : '+=125%', pin: true, scrub: 0.55, anticipatePin: 1, invalidateOnRefresh: true } });
+      const tl = gsap.timeline({ scrollTrigger: { trigger: sectionRef.current, start: 'top 75%', end: 'bottom 20%', toggleActions: 'play none none reverse' } });
       tl.fromTo(elements || [], { y: 54, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.9, ease: 'power4.out' })
         .to(elements || [], { y: -18, scale: 1.015, duration: 0.8, ease: 'none' }, '<0.3');
     }, sectionRef);

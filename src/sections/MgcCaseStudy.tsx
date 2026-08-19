@@ -15,7 +15,7 @@ export function MgcCaseStudy() {
     const ctx = gsap.context(() => {
       const items = scrapbookRef.current?.querySelectorAll('.scrapbook-item');
 
-      const tl = gsap.timeline({ scrollTrigger: { trigger: sectionRef.current, start: 'top top', end: () => window.innerWidth < 768 ? '+=105%' : '+=120%', pin: true, scrub: 0.55, anticipatePin: 1, invalidateOnRefresh: true } });
+      const tl = gsap.timeline({ scrollTrigger: { trigger: sectionRef.current, start: 'top 75%', end: 'bottom 20%', toggleActions: 'play none none reverse' } });
       tl.fromTo(items || [], { scale: 0.88, y: 60, opacity: 0, rotation: (i) => (i % 2 === 0 ? -4 : 4) }, { scale: 1, y: 0, opacity: 1, rotation: 0, stagger: 0.08, duration: 0.9, ease: 'power4.out' })
         .to(items || [], { y: -14, duration: 0.75, ease: 'none' }, '<0.35');
     }, sectionRef);

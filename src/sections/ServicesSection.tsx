@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTranslations } from 'next-intl';
+import { MasterTimelineManager } from '../motion/MasterTimeline';
 
 export function ServicesSection() {
   const t = useTranslations('services');
@@ -13,19 +14,7 @@ export function ServicesSection() {
     const ctx = gsap.context(() => {
       const items = gsap.utils.toArray<HTMLElement>('.service-line');
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=130%',
-          pin: true,
-          scrub: 0.45,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      tl.fromTo(
+      gsap.fromTo(
         items,
         { y: 60, opacity: 0, rotateX: -6 },
         {
@@ -33,20 +22,17 @@ export function ServicesSection() {
           opacity: 1,
           rotateX: 0,
           stagger: 0.08,
-          duration: 0.55,
+          duration: 0.6,
           ease: 'power4.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 70%',
+            end: 'bottom 20%',
+            toggleActions: 'play none none reverse',
+            onEnter: () => MasterTimelineManager.setChapter('services'),
+            onLeaveBack: () => MasterTimelineManager.setChapter('work'),
+          },
         }
-      ).fromTo(
-        '.service-title',
-        { x: -40, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          stagger: 0.08,
-          duration: 0.45,
-          ease: 'power3.out',
-        },
-        '<0.12'
       );
     }, sectionRef);
 
@@ -67,7 +53,7 @@ export function ServicesSection() {
     <section
       id="services-section"
       ref={sectionRef}
-      className="relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10 bg-background-dark/90"
+      className="relative min-h-screen w-full flex flex-col justify-between p-6 md:p-14 overflow-hidden z-10 bg-[#0b0c0e]"
     >
       <div className="flex justify-between items-start font-mono-tag border-b border-white/10 pb-6">
         <div>
@@ -85,7 +71,7 @@ export function ServicesSection() {
         {services.map((srv, idx) => (
           <div
             key={idx}
-            className="service-line group border-b border-white/10 py-4 flex flex-col md:flex-row md:items-end justify-between cursor-pointer hover:border-accent-gold transition-colors duration-300"
+            className="service-line group border-b border-white/10 py-4 flex flex-col md:flex-row md:items-end justify-between cursor-pointer hover:border-accent-gold transition-colors duration-300 opacity-0"
           >
             <h3 className="service-title font-editorial text-3xl sm:text-5xl md:text-6xl text-foreground-light group-hover:text-accent-gold transition-colors leading-tight">
               {srv.title}

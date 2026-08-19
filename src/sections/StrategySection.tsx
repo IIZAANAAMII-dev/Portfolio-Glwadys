@@ -26,7 +26,7 @@ export function StrategySection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: () => `+=${Math.max(steps.scrollWidth * 0.45, window.innerHeight * 1.4)}`,
+          end: () => `+=${Math.max(steps.scrollWidth * 0.35, window.innerHeight * 1.2)}`,
           pin: true,
           scrub: 0.55,
           anticipatePin: 1,
