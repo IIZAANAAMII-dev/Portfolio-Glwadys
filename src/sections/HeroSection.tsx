@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useTranslations } from 'next-intl';
 
 const MEDIA = [
-  { src: '/assets/editorial/portrait-glwadys.svg', x: '50%', y: '46%', w: '30vw', anchor: 'center' },
-  { src: '/assets/projects/yuna-story.svg', x: '18%', y: '22%', w: '16vw' },
-  { src: '/assets/projects/mgc-scrapbook.svg', x: '82%', y: '24%', w: '15vw' },
-  { src: '/assets/projects/comptoir-macro.svg', x: '20%', y: '74%', w: '14vw' },
+  { src: '/assets/editorial/portrait-glwadys.svg', x: '50%', y: '34%', xMobile: '50%', yMobile: '18%', w: '22vw', wMobile: '32vw', anchor: 'center' },
+  { src: '/assets/projects/yuna-story.svg', x: '18%', y: '22%', xMobile: '12%', yMobile: '16%', w: '16vw', wMobile: '22vw' },
+  { src: '/assets/projects/mgc-scrapbook.svg', x: '82%', y: '24%', xMobile: '88%', yMobile: '16%', w: '15vw', wMobile: '20vw' },
+  { src: '/assets/projects/comptoir-macro.svg', x: '20%', y: '74%', xMobile: '18%', yMobile: '78%', w: '14vw', wMobile: '18vw' },
 ];
 
 export function HeroSection({ locale }: { locale: string }) {
@@ -19,10 +19,18 @@ export function HeroSection({ locale }: { locale: string }) {
   const headlineRef = useRef<HTMLDivElement>(null);
   const mediaRefs = useRef<(HTMLDivElement | null)[]>([]);
   const mouse = useRef({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    const onResize = () => check();
+    window.addEventListener('resize', onResize);
+
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
+    if (reduced) {
+      return () => window.removeEventListener('resize', onResize);
+    }
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -79,6 +87,7 @@ export function HeroSection({ locale }: { locale: string }) {
     return () => {
       ctx.revert();
       window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('resize', onResize);
       gsap.ticker.remove(onTick);
     };
   }, []);
@@ -90,41 +99,46 @@ export function HeroSection({ locale }: { locale: string }) {
       className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-[#0b0c0e] z-10 select-none"
     >
       <div className="pointer-events-none absolute inset-0">
-        {MEDIA.map((m, i) => (
-          <div
-            key={m.src}
-            ref={(el) => { mediaRefs.current[i] = el; }}
-            className="absolute opacity-0"
-            style={{
-              left: m.x,
-              top: m.y,
-              width: m.w,
-              maxWidth: '320px',
-              transform: 'translate(-50%, -50%)',
-            }}
-          >
-            <div className="overflow-hidden rounded-sm border border-white/10 shadow-2xl shadow-black/40 bg-[#15171a]">
-              <img
-                src={m.src}
-                alt=""
-                className="w-full h-auto"
-                style={{ filter: 'saturate(0.9) brightness(1.05)' }}
-              />
+        {MEDIA.map((m, i) => {
+          const left = isMobile ? m.xMobile : m.x;
+          const top = isMobile ? m.yMobile : m.y;
+          const width = isMobile ? m.wMobile : m.w;
+          return (
+            <div
+              key={m.src}
+              ref={(el) => { mediaRefs.current[i] = el; }}
+              className="absolute opacity-0"
+              style={{
+                left,
+                top,
+                width,
+                maxWidth: isMobile ? '180px' : '320px',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              <div className="overflow-hidden rounded-sm border border-white/10 shadow-2xl shadow-black/40 bg-[#15171a]">
+                <img
+                  src={m.src}
+                  alt=""
+                  className="w-full h-auto"
+                  style={{ filter: 'saturate(0.9) brightness(1.05)' }}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="relative z-20 flex flex-col items-center text-center px-4">
         <h1
           ref={glwadysRef}
-          className="font-editorial text-[15vw] md:text-[12vw] leading-[0.8] tracking-[-0.05em] text-foreground-light font-medium uppercase"
+          className="font-editorial text-[13vw] md:text-[12vw] leading-[0.8] tracking-[-0.04em] text-foreground-light font-medium uppercase"
         >
           GLWADYS
         </h1>
         <h1
           ref={dalleauRef}
-          className="font-editorial text-[15vw] md:text-[12vw] leading-[0.8] tracking-[-0.05em] text-foreground-light/80 font-medium uppercase"
+          className="font-editorial text-[13vw] md:text-[12vw] leading-[0.8] tracking-[-0.04em] text-foreground-light/80 font-medium uppercase"
         >
           DALLEAU
         </h1>
@@ -132,9 +146,9 @@ export function HeroSection({ locale }: { locale: string }) {
 
       <div
         ref={headlineRef}
-        className="relative z-20 mt-8 max-w-2xl text-center px-6 opacity-0"
+        className="relative z-20 mt-4 md:mt-8 max-w-2xl text-center px-6 opacity-0"
       >
-        <p className="font-sans text-lg sm:text-2xl md:text-3xl font-light text-accent-gold leading-snug tracking-tight">
+        <p className="font-sans text-base sm:text-2xl md:text-3xl font-light text-accent-gold leading-snug tracking-tight">
           {t('headlinePart1')} {t('headlinePart2')}{' '}
           <span className="font-editorial italic font-normal text-foreground-light">
             {t('headlinePart3')}

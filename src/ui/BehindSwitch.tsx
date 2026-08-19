@@ -21,10 +21,10 @@ export function BehindSwitch({ locale }: { locale: string }) {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-40">
       <button
         onClick={toggle}
-        className={`glass-panel px-4 py-2.5 rounded-full flex items-center gap-2.5 text-xs font-mono transition-all duration-500 shadow-2xl cursor-pointer ${
+        className={`glass-panel px-3 py-2 rounded-full flex items-center gap-2 text-[10px] md:text-xs font-mono transition-all duration-500 shadow-2xl cursor-pointer ${
           isBehind
             ? 'bg-accent-gold text-background-dark font-bold border-accent-gold'
             : 'text-foreground-light hover:border-accent-gold/50'
@@ -33,13 +33,13 @@ export function BehindSwitch({ locale }: { locale: string }) {
       >
         {isBehind ? (
           <>
-            <Layers className="w-4 h-4 text-background-dark animate-pulse" />
-            <span>BEHIND : STRATÉGIE ACTIVE</span>
+            <Layers className="w-3.5 h-3.5 text-background-dark" />
+            <span className="hidden sm:inline">BEHIND</span>
           </>
         ) : (
           <>
-            <Eye className="w-4 h-4 text-accent-gold" />
-            <span>FRONT : CONTENU FINAL</span>
+            <Eye className="w-3.5 h-3.5 text-accent-gold" />
+            <span className="hidden sm:inline">FRONT</span>
           </>
         )}
       </button>
