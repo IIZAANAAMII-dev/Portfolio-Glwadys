@@ -5,11 +5,11 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
 const planes = [
-  { id: 'portrait', x: '0vw', y: '0vh', z: 0, w: '26vw', h: '34vh', fromScale: 0.3, toScale: 1, label: 'Portrait' },
-  { id: 'media1', x: '-30vw', y: '-20vh', z: 120, w: '18vw', h: '22vh', fromScale: 0.2, toScale: 0.9, label: 'Media 01' },
-  { id: 'media2', x: '28vw', y: '-18vh', z: -100, w: '16vw', h: '28vh', fromScale: 0.2, toScale: 1.1, label: 'Media 02' },
-  { id: 'media3', x: '-18vw', y: '22vh', z: 80, w: '14vw', h: '18vh', fromScale: 0.2, toScale: 0.85, label: 'Media 03' },
-  { id: 'media4', x: '22vw', y: '20vh', z: -150, w: '20vw', h: '24vh', fromScale: 0.2, toScale: 1.2, label: 'Media 04' },
+  { id: 'portrait', x: '0vw', y: '0vh', z: 0, w: '22vw', h: '30vh', fromScale: 0.3, toScale: 1, label: 'Portrait' },
+  { id: 'media1', x: '-34vw', y: '-22vh', z: 120, w: '16vw', h: '20vh', fromScale: 0.2, toScale: 0.9, label: 'Media 01' },
+  { id: 'media2', x: '32vw', y: '-20vh', z: -100, w: '14vw', h: '26vh', fromScale: 0.2, toScale: 1.1, label: 'Media 02' },
+  { id: 'media3', x: '-14vw', y: '24vh', z: 80, w: '12vw', h: '16vh', fromScale: 0.2, toScale: 0.85, label: 'Media 03' },
+  { id: 'media4', x: '26vw', y: '22vh', z: -150, w: '18vw', h: '22vh', fromScale: 0.2, toScale: 1.2, label: 'Media 04' },
 ];
 
 export default function ActIntroHero() {
@@ -21,7 +21,6 @@ export default function ActIntroHero() {
       const stage = stageRef.current;
       if (!stage) return;
 
-      // 3D mouse parallax on desktop
       let mouseCleanup: (() => void) | undefined;
       const isTouch = window.matchMedia('(pointer: coarse)').matches;
       if (!isTouch) {
@@ -39,7 +38,6 @@ export default function ActIntroHero() {
         mouseCleanup = () => window.removeEventListener('mousemove', onMove);
       }
 
-      // Intro timeline on mount
       const tl = gsap.timeline({
         defaults: { ease: 'power3.out' },
         delay: 0.2,
@@ -82,7 +80,7 @@ export default function ActIntroHero() {
         className="relative w-full h-full will-change-transform"
         style={{ transformStyle: 'preserve-3d' }}
       >
-        <div className="opening-name absolute left-1/2 -translate-x-1/2 top-[45vh] text-center font-sans text-[clamp(1.5rem,3vw,3rem)] tracking-[0.35em] uppercase font-medium text-ivory">
+        <div className="opening-name absolute left-1/2 -translate-x-1/2 top-[45vh] text-center font-sans text-[clamp(1.5rem,3vw,3rem)] tracking-[0.35em] uppercase font-medium text-ivory z-10">
           Glwadys Dalleau
         </div>
 
@@ -100,20 +98,20 @@ export default function ActIntroHero() {
           </div>
         ))}
 
-        <h2 className="hero-name-top absolute left-1/2 -translate-x-1/2 top-[8vh] font-sans text-[clamp(3rem,14vw,14rem)] leading-[0.85] tracking-[-0.03em] text-ivory uppercase font-medium opacity-0">
+        <h2 className="hero-name-top absolute left-1/2 -translate-x-1/2 top-[8vh] z-30 font-sans text-[clamp(3rem,14vw,14rem)] leading-[0.85] tracking-[-0.03em] text-ivory uppercase font-medium opacity-0 pointer-events-none">
           Glwadys
         </h2>
-        <h2 className="hero-name-bottom absolute left-1/2 -translate-x-1/2 top-[72vh] font-sans text-[clamp(3rem,14vw,14rem)] leading-[0.85] tracking-[-0.03em] text-ivory uppercase font-medium opacity-0">
+        <h2 className="hero-name-bottom absolute left-1/2 -translate-x-1/2 top-[72vh] z-30 font-sans text-[clamp(3rem,14vw,14rem)] leading-[0.85] tracking-[-0.03em] text-ivory uppercase font-medium opacity-0 pointer-events-none">
           Dalleau
         </h2>
 
-        <div className="hero-headline absolute left-[8vw] bottom-[18vh] max-w-[28vw] opacity-0">
-          <p className="font-serif italic text-[clamp(1rem,1.8vw,1.5rem)] leading-snug text-ivory/90">
+        <div className="hero-headline absolute left-[8vw] bottom-[18vh] max-w-[28vw] z-30 opacity-0 pointer-events-none">
+          <p className="font-serif italic text-[clamp(1rem,1.8vw,1.5rem)] leading-snug text-ivory/90 bg-obsidian/40 p-4 -m-4">
             Je transforme les marques en histoires dont on se souvient.
           </p>
         </div>
 
-        <div className="hero-meta absolute right-[8vw] bottom-[18vh] text-right font-mono text-[10px] uppercase tracking-[0.15em] text-ivory/60 leading-relaxed opacity-0">
+        <div className="hero-meta absolute right-[8vw] bottom-[18vh] text-right z-30 font-mono text-[10px] uppercase tracking-[0.15em] text-ivory/60 leading-relaxed opacity-0 pointer-events-none">
           <p>Social Media / Content / Brand</p>
           <p>Marseille — FR</p>
         </div>

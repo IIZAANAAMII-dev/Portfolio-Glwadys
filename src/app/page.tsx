@@ -1,13 +1,13 @@
 import ActIntroHero from '@/components/ActIntroHero';
+import ActStoryPhone from '@/components/ActStoryPhone';
+import Grain from '@/components/Grain';
 
 export default function Home() {
   return (
     <main className="relative">
-      <div className="grain" aria-hidden="true" />
+      <Grain />
       <ActIntroHero />
-      <section className="h-screen w-full bg-ivory text-obsidian flex items-center justify-center">
-        <p className="font-mono text-xs uppercase tracking-widest">Next act placeholder</p>
-      </section>
+      <ActStoryPhone />
     </main>
   );
 }
