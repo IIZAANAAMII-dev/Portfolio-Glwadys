@@ -642,3 +642,132 @@
     min-height: 70vh;
   }
 }
+
+/* ============================================================ ACT — WORK */
+
+.work__case {
+  position: relative;
+  min-height: 100svh;
+  padding: var(--gutter);
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  align-items: center;
+  gap: var(--gutter);
+  overflow: hidden;
+}
+
+.work__content {
+  z-index: var(--z-narrative);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+  max-width: 44ch;
+}
+
+.work__content--mgc {
+  grid-column: 2;
+}
+
+.work__title {
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  font-size: clamp(2.25rem, 5.5vw, 5.5rem);
+  text-transform: uppercase;
+}
+
+.work__summary {
+  color: var(--fg-muted);
+}
+
+.work__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+}
+
+.work__skills .meta {
+  color: var(--fg-muted);
+}
+
+.work__mgc-meta {
+  color: var(--clay);
+}
+
+.work__media {
+  position: relative;
+  z-index: var(--z-media);
+  display: grid;
+  gap: var(--s-4);
+}
+
+.work__media--yuna {
+  grid-template-columns: 1fr 0.42fr;
+  align-items: end;
+}
+
+.work__media--mgc {
+  grid-template-columns: 1fr 1fr;
+  transform: rotate(-2deg);
+}
+
+.work__media--comptoir {
+  grid-template-columns: 1.4fr 0.6fr;
+  align-items: start;
+}
+
+.work__yuna-macro,
+.work__comptoir-hero {
+  aspect-ratio: 4 / 5;
+}
+
+.work__yuna-story,
+.work__comptoir-macro {
+  aspect-ratio: 9 / 16;
+}
+
+.work__mgc-wide {
+  aspect-ratio: 3 / 2;
+}
+
+.work__mgc-wide:nth-child(2) {
+  transform: translateY(12%);
+}
+
+@media (max-width: 1023px) {
+  .work__case {
+    grid-template-columns: 1fr;
+    gap: var(--s-12);
+    padding-top: calc(var(--gutter) * 2);
+    padding-bottom: calc(var(--gutter) * 2);
+  }
+
+  .work__content--mgc {
+    grid-column: 1;
+  }
+
+  .work__media--yuna,
+  .work__media--mgc,
+  .work__media--comptoir {
+    grid-template-columns: 1fr 1fr;
+    transform: none;
+  }
+
+  .work__yuna-story,
+  .work__comptoir-macro {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+@media (max-width: 767px) {
+  .work__case {
+    min-height: auto;
+  }
+
+  .work__media--yuna,
+  .work__media--mgc,
+  .work__media--comptoir {
+    grid-template-columns: 1fr;
+  }
+}

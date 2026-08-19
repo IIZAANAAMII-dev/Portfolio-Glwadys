@@ -4,6 +4,7 @@ import { useSmoothScroll } from '@/experience/hooks/useSmoothScroll';
 import { ActOpening } from '@/experience/acts/ActOpening';
 import { ActSocial } from '@/experience/acts/ActSocial';
 import { ActCreative } from '@/experience/acts/ActCreative';
+import { ActWork } from '@/experience/acts/ActWork';
 import { BottomNav } from '@/experience/ui/BottomNav';
 import { Grain } from '@/experience/ui/Grain';
 
@@ -26,6 +27,7 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
         <ActOpening />
         <ActSocial />
         <ActCreative />
+        <ActWork />
       </main>
 
       <Grain />
