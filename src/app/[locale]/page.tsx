@@ -1,42 +1,33 @@
 'use client';
 
-import { useLenis } from '@/hooks/useLenis';
-import { IntroSection } from '@/sections/IntroSection';
-import { HeroSection } from '@/sections/HeroSection';
-import { SocialSection } from '@/sections/SocialSection';
-import { GallerySection } from '@/sections/GallerySection';
-import { BrandSection } from '@/sections/BrandSection';
-import { StrategySection } from '@/sections/StrategySection';
-import { JourneySection } from '@/sections/JourneySection';
-import { WorkSection } from '@/sections/WorkSection';
-import { YunaCaseStudy } from '@/sections/YunaCaseStudy';
-import { MgcCaseStudy } from '@/sections/MgcCaseStudy';
-import { ComptoirCaseStudy } from '@/sections/ComptoirCaseStudy';
-import { ServicesSection } from '@/sections/ServicesSection';
-import { ContactSection } from '@/sections/ContactSection';
+import { useSmoothScroll } from '@/experience/hooks/useSmoothScroll';
+import { ActOpening } from '@/experience/acts/ActOpening';
+import { ActSocial } from '@/experience/acts/ActSocial';
+import { BottomNav } from '@/experience/ui/BottomNav';
+import { Grain } from '@/experience/ui/Grain';
 
-type Props = {
-  params: { locale: string };
-};
-
-export default function HomePage({ params: { locale } }: Props) {
-  useLenis();
+/**
+ * The experience is assembled act by act. Each act owns its own refs, timeline
+ * and cleanup — there is no global master timeline, because a single timeline
+ * spanning the whole page is impossible to reason about and impossible to tear
+ * down safely.
+ */
+export default function HomePage({ params: { locale } }: { params: { locale: string } }) {
+  useSmoothScroll();
 
   return (
-    <div className="relative w-full">
-      <IntroSection />
-      <HeroSection locale={locale} />
-      <SocialSection />
-      <GallerySection />
-      <BrandSection />
-      <StrategySection />
-      <JourneySection />
-      <WorkSection />
-      <YunaCaseStudy />
-      <MgcCaseStudy />
-      <ComptoirCaseStudy />
-      <ServicesSection />
-      <ContactSection />
-    </div>
+    <>
+      <a className="visually-hidden" href="#contact">
+        Aller au contact
+      </a>
+
+      <main id="top">
+        <ActOpening />
+        <ActSocial />
+      </main>
+
+      <Grain />
+      <BottomNav locale={locale} />
+    </>
   );
 }

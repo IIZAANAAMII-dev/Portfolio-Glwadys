@@ -1,16 +1,46 @@
-import { ReactNode } from 'react';
-import { Metadata } from 'next';
+import type { ReactNode } from 'react';
+import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
-import { Navbar } from '@/ui/Navbar';
-import { Footer } from '@/ui/Footer';
-import { CustomCursor } from '@/ui/CustomCursor';
-import { ChapterIndexModal } from '@/ui/ChapterIndexModal';
-import { BehindSwitch } from '@/ui/BehindSwitch';
-import { NoiseOverlay } from '@/ui/NoiseOverlay';
 import { notFound } from 'next/navigation';
+import { Archivo, Instrument_Serif, JetBrains_Mono, Noto_Sans_KR } from 'next/font/google';
 import { locales } from '@/i18n';
-import '@/styles/globals.css';
+import '@/experience/styles/tokens.css';
+import '@/experience/styles/experience.css';
+import '@/experience/styles/acts.css';
+
+/**
+ * Self-hosted at build time by next/font — no render-blocking request to
+ * fonts.googleapis.com and no layout shift. Archivo carries a width axis, which
+ * is what lets the hero name condense to fill a line at poster scale.
+ */
+const display = Archivo({
+  subsets: ['latin'],
+  axes: ['wdth'],
+  display: 'swap',
+  variable: '--font-display',
+});
+
+const editorial = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-editorial',
+});
+
+const mono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
+});
+
+const hangul = Noto_Sans_KR({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
+  variable: '--font-hangul',
+});
 
 export async function generateMetadata({
   params: { locale },
@@ -18,19 +48,14 @@ export async function generateMetadata({
   params: { locale: string };
 }): Promise<Metadata> {
   const t = await getTranslations('meta');
-  const baseUrl = 'https://glwadysdalleau.com';
 
   return {
     title: t('title'),
     description: t('description'),
-    metadataBase: new URL(baseUrl),
+    metadataBase: new URL('https://glwadysdalleau.com'),
     alternates: {
       canonical: `/${locale}`,
-      languages: {
-        fr: '/fr',
-        en: '/en',
-        ko: '/ko',
-      },
+      languages: { fr: '/fr', en: '/en', ko: '/ko' },
     },
     openGraph: {
       title: t('title'),
@@ -38,71 +63,30 @@ export async function generateMetadata({
       type: 'website',
       locale,
       url: `/${locale}`,
-      siteName: 'Glwadys Dalleau — Creative Portfolio',
+      siteName: 'Glwadys Dalleau',
     },
-    twitter: {
-      card: 'summary_large_image',
-      title: t('title'),
-      description: t('description'),
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      },
-    },
+    twitter: { card: 'summary_large_image', title: t('title'), description: t('description') },
+    robots: { index: true, follow: true },
   };
 }
-
-type Props = {
-  children: ReactNode;
-  params: { locale: string };
-};
 
 export default async function LocaleLayout({
   children,
   params: { locale },
-}: Props) {
-  if (!locales.map(String).includes(locale)) {
-    notFound();
-  }
+}: {
+  children: ReactNode;
+  params: { locale: string };
+}) {
+  if (!locales.map(String).includes(locale)) notFound();
 
   const messages = await getMessages();
+  const fonts = [display.variable, editorial.variable, mono.variable, hangul.variable].join(' ');
 
   return (
-    <html lang={locale}>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body
-        className="antialiased bg-background-dark text-foreground-light overflow-x-hidden"
-        style={
-          {
-            '--font-editorial': "'Playfair Display', Georgia, serif",
-            '--font-sans': "'Plus Jakarta Sans', system-ui, sans-serif",
-            '--font-mono': "'JetBrains Mono', monospace",
-            '--font-hangul': "'Noto Sans KR', 'Plus Jakarta Sans', sans-serif",
-          } as React.CSSProperties
-        }
-      >
+    <html lang={locale} className={fonts}>
+      <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <CustomCursor />
-          <NoiseOverlay />
-          <Navbar locale={locale} />
-          <ChapterIndexModal locale={locale} />
-          <BehindSwitch locale={locale} />
-          <main className="relative z-10">{children}</main>
-          <Footer />
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>

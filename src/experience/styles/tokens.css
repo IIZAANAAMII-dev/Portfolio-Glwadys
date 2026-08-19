@@ -1,0 +1,113 @@
+/**
+ * Design tokens — the single source of truth.
+ * Values reconciled in docs/creative-direction.md. Do not introduce a colour,
+ * space, duration or z-index anywhere else.
+ */
+
+:root {
+  /* ---- Grounds ---- */
+  --ink: #0b0b0c;
+  --ink-raised: #131316;
+  --ivory: #f4f1ea;
+  --ivory-deep: #e7e1d5;
+
+  /* ---- Ink on grounds ---- */
+  --on-ink: #f7f6f4;
+  --on-ink-muted: #8b8b93;
+  --on-ivory: #14120f;
+  --on-ivory-muted: #6a655c;
+
+  /* ---- Accents ---- */
+  --champagne: #d9c6a3;
+  --champagne-deep: #a38f6e;
+  --espresso: #1e1812;
+  --clay: #a85d4c;
+
+  /* ---- Hairlines ---- */
+  --rule-on-ink: rgba(247, 246, 244, 0.16);
+  --rule-on-ivory: rgba(20, 18, 15, 0.16);
+
+  /* ---- Type scale (fluid) ---- */
+  --t-mega: clamp(3.25rem, 15.5vw, 18rem);
+  --t-display: clamp(2.5rem, 9vw, 9rem);
+  --t-head: clamp(1.75rem, 4.5vw, 4rem);
+  --t-lead: clamp(1.05rem, 1.7vw, 1.5rem);
+  --t-body: clamp(0.95rem, 1.05vw, 1.0625rem);
+  --t-meta: 0.6875rem;
+
+  /* ---- Tracking ---- */
+  --track-mega: -0.045em;
+  --track-display: -0.03em;
+  --track-meta: 0.14em;
+
+  /* ---- Space scale (4px base) ---- */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-6: 1.5rem;
+  --s-8: 2rem;
+  --s-12: 3rem;
+  --s-16: 4rem;
+  --s-24: 6rem;
+  --s-32: 8rem;
+  --s-48: 12rem;
+
+  /* ---- Layout ---- */
+  --gutter: clamp(1.25rem, 4vw, 5rem);
+  --measure: 62ch;
+
+  /* ---- Motion. Mirrors src/experience/lib/motion.ts ---- */
+  --d-micro: 0.22s;
+  --d-ui: 0.4s;
+  --d-major: 0.7s;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.83, 0, 0.17, 1);
+
+  /* ---- Layers (§43). Seven names. No raw z-index in components. ---- */
+  --z-ground: 0;
+  --z-media: 10;
+  --z-narrative: 20;
+  --z-overlay: 30;
+  --z-grain: 40;
+  --z-nav: 50;
+  --z-modal: 60;
+  --z-cursor: 70;
+}
+
+/* ---- Chapter grounds. Set on a scene wrapper; children inherit. ---- */
+.ground-ink {
+  --ground: var(--ink);
+  --fg: var(--on-ink);
+  --fg-muted: var(--on-ink-muted);
+  --rule: var(--rule-on-ink);
+  background-color: var(--ground);
+  color: var(--fg);
+}
+
+.ground-ivory {
+  --ground: var(--ivory);
+  --fg: var(--on-ivory);
+  --fg-muted: var(--on-ivory-muted);
+  --rule: var(--rule-on-ivory);
+  background-color: var(--ground);
+  color: var(--fg);
+}
+
+.ground-ivory-deep {
+  --ground: var(--ivory-deep);
+  --fg: var(--on-ivory);
+  --fg-muted: var(--on-ivory-muted);
+  --rule: var(--rule-on-ivory);
+  background-color: var(--ground);
+  color: var(--fg);
+}
+
+.ground-espresso {
+  --ground: var(--espresso);
+  --fg: var(--on-ink);
+  --fg-muted: var(--on-ink-muted);
+  --rule: var(--rule-on-ink);
+  background-color: var(--ground);
+  color: var(--fg);
+}
