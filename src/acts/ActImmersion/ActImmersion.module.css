@@ -1,0 +1,171 @@
+.act {
+  position: relative;
+  min-height: 100svh;
+  overflow: clip;
+  background: var(--bordeaux);
+}
+
+.stage {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--bordeaux);
+  color: var(--paper);
+}
+
+.canvas,
+.fallback {
+  position: absolute;
+  inset: 0;
+}
+
+.canvas {
+  z-index: var(--z-canvas);
+  opacity: 1;
+}
+
+.fallback {
+  z-index: var(--z-base);
+  overflow: hidden;
+}
+
+.portal {
+  position: absolute;
+  inset: 0;
+  background: var(--bordeaux);
+}
+
+.plane {
+  position: absolute;
+}
+
+.plane:nth-child(2) {
+  left: 8%;
+  top: 16%;
+  width: 24vw;
+}
+
+.plane:nth-child(3) {
+  left: 38%;
+  top: 8%;
+  width: 14vw;
+}
+
+.plane:nth-child(4) {
+  right: 9%;
+  top: 18%;
+  width: 20vw;
+}
+
+.plane:nth-child(5) {
+  left: 22%;
+  bottom: 7%;
+  width: 15vw;
+}
+
+.plane:nth-child(6) {
+  right: 28%;
+  bottom: 5%;
+  width: 23vw;
+}
+
+.plane:nth-child(7) {
+  right: 5%;
+  bottom: 12%;
+  width: 11vw;
+}
+
+.copy {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-sticky);
+  pointer-events: none;
+}
+
+.chapter {
+  position: absolute;
+  top: var(--margin);
+  left: var(--margin);
+}
+
+.heading {
+  position: absolute;
+  left: var(--margin);
+  bottom: var(--margin);
+  max-width: 8ch;
+}
+
+.statement {
+  position: absolute;
+  right: var(--margin);
+  top: 50%;
+  width: min(29ch, 28vw);
+  translate: 0 -50%;
+}
+
+.depthAxis {
+  position: absolute;
+  right: var(--margin);
+  bottom: var(--margin);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.depthAxis::before {
+  content: '';
+  width: 5rem;
+  height: 1px;
+  background: rgb(var(--paper-rgb) / 0.28);
+}
+
+@media (max-width: 1023px) {
+  .statement {
+    top: auto;
+    bottom: 18vh;
+    width: min(28ch, 72vw);
+    translate: none;
+  }
+
+  .heading {
+    top: 15vh;
+    bottom: auto;
+  }
+
+  .plane:nth-child(n + 6) {
+    display: none;
+  }
+
+  .plane:nth-child(2) {
+    left: 8%;
+    top: 34%;
+    width: 38vw;
+  }
+
+  .plane:nth-child(3) {
+    left: auto;
+    right: 8%;
+    top: 28%;
+    width: 28vw;
+  }
+
+  .plane:nth-child(4) {
+    right: 15%;
+    top: 51%;
+    width: 34vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .act,
+  .stage {
+    min-height: 100svh;
+    height: 100svh;
+  }
+
+  .canvas,
+  .portal {
+    display: none;
+  }
+}

@@ -1,0 +1,190 @@
+/* ============================================================
+   ACT 00 (Opening) + ACT 01 (Hero) — UN SEUL COMPOSANT
+   ============================================================
+   La composition de repos est la HERO. L'Opening est posée par JS depuis
+   cette géométrie, puis une timeline GSAP ramène chaque élément vers le repos.
+   ============================================================ */
+
+.act {
+  position: relative;
+}
+
+.stage {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--ink);
+  transform-origin: center center;
+}
+
+/* ---------- MÉTA ---------- */
+
+.edition,
+.axis,
+.disciplines {
+  position: absolute;
+  opacity: 0.72;
+}
+
+.edition {
+  top: var(--margin);
+  left: var(--margin);
+}
+
+.axis {
+  top: var(--margin);
+  right: var(--margin);
+}
+
+.disciplines {
+  bottom: var(--margin);
+  left: var(--margin);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  list-style: none;
+}
+
+/* ---------- FILETS ---------- */
+
+.ruleH {
+  position: absolute;
+  top: 28%;
+  left: var(--margin);
+  right: var(--margin);
+  height: 1px;
+  background: var(--rule);
+  transform-origin: left center;
+}
+
+/* Une des deux seules apparitions du métallique dans tout le site. */
+.ruleV {
+  position: absolute;
+  left: 31%;
+  top: 30%;
+  width: 1px;
+  height: 32%;
+  background: rgb(var(--champagne-rgb) / 0.45);
+  transform-origin: center top;
+}
+
+/* ============================================================
+   HERO — état de repos
+   ============================================================ */
+
+.nameFirst,
+.nameLast {
+  position: absolute;
+  white-space: nowrap;
+}
+
+.nameFirst {
+  top: 8vh;
+  left: calc(var(--margin) - 0.055em);
+}
+
+.nameLast {
+  bottom: 14vh;
+  right: calc(var(--margin) - 0.055em);
+}
+
+.tagline {
+  position: absolute;
+  left: var(--margin);
+  top: 33%;
+  width: min(30ch, 24%);
+  opacity: 0.88;
+}
+
+.media {
+  position: absolute;
+}
+
+.heroVertical {
+  left: 63%;
+  top: 29%;
+  width: 13.5vw;
+  z-index: var(--z-persistent);
+}
+
+.heroFrame {
+  left: 41%;
+  top: 34%;
+  width: 11vw;
+  z-index: var(--z-media);
+}
+
+.transient {
+  position: absolute;
+  z-index: var(--z-media);
+}
+
+.transient01 {
+  left: 26%;
+  bottom: 13%;
+  width: 9vw;
+}
+
+.transient02 {
+  right: 24%;
+  top: 11%;
+  width: 11vw;
+}
+
+/* ============================================================
+   MOBILE — recomposition, pas réduction
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  .transient,
+  .ruleV {
+    display: none;
+  }
+
+  .nameFirst {
+    top: 12vh;
+  }
+
+  .nameLast {
+    bottom: 17vh;
+  }
+
+  .ruleH {
+    top: 31%;
+  }
+
+  .tagline {
+    top: auto;
+    bottom: 30vh;
+    width: min(28ch, 72%);
+  }
+
+  .heroVertical {
+    left: auto;
+    right: var(--margin);
+    top: 33%;
+    width: 33vw;
+  }
+
+  .heroFrame {
+    left: var(--margin);
+    top: 42%;
+    width: 25vw;
+  }
+
+  .disciplines {
+    flex-direction: row;
+    gap: 1rem;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION — la composition finale, immédiatement
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .transient {
+    display: none;
+  }
+}

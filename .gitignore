@@ -1,0 +1,24 @@
+node_modules/
+.next/
+out/
+build/
+dist/
+
+*.log
+npm-debug.log*
+
+.env
+.env.local
+.env*.local
+
+.DS_Store
+Thumbs.db
+
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# QA : les captures de travail restent lisibles pendant le développement.
+# Seul un set curé de checkpoints est conservé à la fin (docs/qa/checkpoints/).
+test-results/
+playwright-report/
+.playwright/

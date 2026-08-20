@@ -1,0 +1,377 @@
+.act {
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.railSection,
+.systemSection,
+.strategySection {
+  position: relative;
+  min-height: 100svh;
+  overflow: clip;
+}
+
+.stage {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.kicker {
+  position: absolute;
+  top: var(--margin);
+  left: var(--margin);
+  z-index: var(--z-sticky);
+}
+
+.sectionTitle {
+  position: absolute;
+  left: var(--margin);
+  top: 15vh;
+  z-index: var(--z-sticky);
+  max-width: 8ch;
+}
+
+.rail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 6rem);
+  width: max-content;
+  height: 100%;
+  padding-inline: 42vw 14vw;
+}
+
+.railItem {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.railItem:nth-child(4n + 1) {
+  width: 21vw;
+  translate: 0 8vh;
+}
+
+.railItem:nth-child(4n + 2) {
+  width: 14vw;
+  translate: 0 -14vh;
+}
+
+.railItem:nth-child(4n + 3) {
+  width: 25vw;
+  translate: 0 2vh;
+}
+
+.railItem:nth-child(4n) {
+  width: 17vw;
+  translate: 0 15vh;
+}
+
+.railIndex {
+  position: absolute;
+  left: 0;
+  top: -1.4rem;
+}
+
+.railRule {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: var(--margin);
+  height: 1px;
+  background: var(--rule);
+}
+
+.systemSection {
+  min-height: 135svh;
+  background: var(--paper-deep);
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.board {
+  position: absolute;
+  inset: 20vh var(--margin) 12vh;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: center;
+}
+
+.boardItem {
+  position: relative;
+  min-height: 36vh;
+  padding: 1.25rem;
+  border: 1px solid rgb(var(--ink-rgb) / 0.18);
+  background: var(--paper);
+  transform-origin: center;
+}
+
+.board[data-mode='chaos'] .boardItem:nth-child(1) {
+  transform: translate(55%, 8%) rotate(-5deg);
+}
+
+.board[data-mode='chaos'] .boardItem:nth-child(2) {
+  transform: translate(-18%, -10%) rotate(3deg);
+}
+
+.board[data-mode='chaos'] .boardItem:nth-child(3) {
+  transform: translate(-45%, 18%) rotate(-2deg);
+}
+
+.board[data-mode='chaos'] .boardItem:nth-child(4) {
+  transform: translate(-68%, -5%) rotate(5deg);
+}
+
+.board[data-mode='chaos'] .boardItem:nth-child(5) {
+  transform: translate(-85%, 12%) rotate(-4deg);
+}
+
+.boardLabel {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+}
+
+.boardValue {
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3vw, 3rem);
+  font-style: italic;
+  line-height: 1;
+}
+
+.swatches {
+  position: absolute;
+  inset: 28% 1.25rem auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 3.5rem;
+}
+
+.swatches span:nth-child(1) {
+  background: var(--ink);
+}
+
+.swatches span:nth-child(2) {
+  background: var(--bordeaux);
+}
+
+.swatches span:nth-child(3) {
+  background: var(--blush);
+}
+
+.systemStatement {
+  position: absolute;
+  right: var(--margin);
+  bottom: var(--margin);
+  max-width: 30ch;
+  text-align: right;
+}
+
+.strategySection {
+  background: var(--paper);
+}
+
+.strategyWords {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.strategyWord {
+  position: absolute;
+  max-width: 90vw;
+  font-family: var(--font-display);
+  font-size: var(--t-display);
+  font-style: italic;
+  line-height: var(--lh-display);
+  letter-spacing: var(--tr-display);
+  white-space: nowrap;
+}
+
+.strategyLine {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: var(--margin);
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  border-top: 1px solid var(--rule);
+}
+
+.strategyLineItem {
+  padding: 1rem 0.6rem 0;
+  border-right: 1px solid var(--rule);
+  opacity: 0;
+}
+
+.strategyLineItem:last-child {
+  border-right: 0;
+}
+
+.strategyNote {
+  display: block;
+  margin-top: 0.55rem;
+  max-width: 19ch;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.35;
+  opacity: 0.58;
+}
+
+.campaignReveal {
+  position: absolute;
+  right: var(--margin);
+  top: 18vh;
+  width: 22vw;
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+}
+
+@media (max-width: 1023px) {
+  .railSection,
+  .stage {
+    min-height: auto;
+    height: auto;
+  }
+
+  .railSection {
+    padding: var(--space-act) var(--margin);
+  }
+
+  .sectionTitle,
+  .kicker {
+    position: relative;
+    inset: auto;
+  }
+
+  .sectionTitle {
+    margin-top: 2rem;
+  }
+
+  .rail {
+    position: relative;
+    inset: auto;
+    display: grid;
+    width: 100%;
+    height: auto;
+    margin-top: 4rem;
+    padding: 0;
+    gap: 3rem;
+  }
+
+  .railItem:nth-child(n) {
+    width: min(78vw, 28rem);
+    translate: none;
+  }
+
+  .railItem:nth-child(even) {
+    justify-self: end;
+  }
+
+  .systemSection {
+    min-height: 120svh;
+  }
+
+  .board {
+    inset: 20vh var(--margin) 16vh;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .boardItem {
+    min-height: 23vh;
+  }
+
+  .boardItem:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .board[data-mode='chaos'] .boardItem:nth-child(n) {
+    transform: rotate(0deg);
+  }
+
+  .strategyWord {
+    font-size: clamp(2.35rem, 12vw, 5rem);
+    white-space: normal;
+    text-align: center;
+  }
+
+  .strategyLine {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .strategyLineItem:nth-child(-n + 3) {
+    padding-bottom: 0.75rem;
+  }
+
+  .strategyNote {
+    display: none;
+  }
+
+  .campaignReveal {
+    width: 42vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .railSection,
+  .systemSection,
+  .strategySection,
+  .stage,
+  .sticky {
+    min-height: auto;
+    height: auto;
+  }
+
+  .railSection,
+  .systemSection,
+  .strategySection {
+    padding: var(--space-act) var(--margin);
+  }
+
+  .rail,
+  .board,
+  .strategyWords,
+  .strategyLine,
+  .campaignReveal {
+    position: relative;
+    inset: auto;
+  }
+
+  .board {
+    margin-block: 4rem;
+  }
+
+  .strategyWords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-block: 4rem;
+  }
+
+  .strategyWord {
+    position: relative;
+    font-size: var(--t-title);
+  }
+
+  .strategyLineItem,
+  .campaignReveal {
+    opacity: 1;
+    clip-path: none;
+  }
+}

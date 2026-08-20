@@ -1,0 +1,132 @@
+/* ============================================================
+   DESIGN TOKENS
+   Source de vérité unique. Aucune valeur magique dans un composant.
+   Référence : docs/creative-direction.md
+   ============================================================ */
+
+:root {
+  /* ---------- COULEUR ----------
+     Aucun noir pur, aucun blanc pur. Tout est légèrement chaud. */
+  --paper: #f2ede4;
+  --paper-deep: #e5dcce;
+  --ink: #0e0d0c;
+  --graphite: #2a2724;
+  --bordeaux: #3b121b;
+  --oxblood: #5c1a24;
+  --blush: #d9c4b8;
+  --champagne: #c3a87c;
+
+  /* Dérivés — filets et voiles. Écrits en rgb() pour composer l'alpha. */
+  --ink-rgb: 14 13 12;
+  --paper-rgb: 242 237 228;
+  --champagne-rgb: 195 168 124;
+  --oxblood-rgb: 92 26 36;
+
+  /* ---------- SURFACE COURANTE ----------
+     Chaque acte redéfinit ces deux variables. Tout le reste en hérite,
+     ce qui permet de basculer clair/sombre sans dupliquer les règles. */
+  --surface: var(--ink);
+  --on-surface: var(--paper);
+  --on-surface-rgb: var(--paper-rgb);
+  --rule: rgb(var(--on-surface-rgb) / 0.14);
+  --rule-strong: rgb(var(--on-surface-rgb) / 0.32);
+
+  /* ---------- TYPOGRAPHIE ----------
+     Rapport monument/micro ≈ 28:1. C'est ce contraste qui produit le luxe. */
+  --font-display: var(--font-bodoni), 'Bodoni Moda', 'Didot', Georgia, serif;
+  --font-sans: var(--font-inter-tight), 'Inter Tight', system-ui, sans-serif;
+  --font-kr: var(--font-noto-kr), var(--font-inter-tight), system-ui, sans-serif;
+
+  /* 13vw et non 17 : à 17vw un mot de 7 lettres occupe toute la largeur et
+     écrase la bande centrale. Vérifié en capture. */
+  --t-monument: clamp(3.75rem, 13vw, 15rem);
+  --t-display: clamp(2.75rem, 8vw, 8.5rem);
+  --t-title: clamp(1.75rem, 3.6vw, 3.25rem);
+  --t-lead: clamp(1.125rem, 1.7vw, 1.5rem);
+  --t-body: 1rem;
+  --t-meta: 0.75rem;
+  --t-micro: 0.6875rem;
+
+  --lh-monument: 0.82;
+  --lh-display: 0.92;
+  --lh-title: 1.05;
+  --lh-lead: 1.35;
+  --lh-body: 1.55;
+  --lh-meta: 1.2;
+
+  --tr-monument: -0.045em;
+  --tr-display: -0.03em;
+  --tr-title: -0.02em;
+  --tr-lead: -0.01em;
+  --tr-meta: 0.14em;
+  --tr-micro: 0.18em;
+
+  /* ---------- ESPACEMENT ---------- */
+  --gutter: 1.5rem;
+  --margin: clamp(1.25rem, 4vw, 5rem);
+  --space-inline: 0.75rem;
+  --space-related: 1.25rem;
+  --space-block: 4rem;
+  --space-act: clamp(6rem, 12vh, 11rem);
+
+  /* ---------- GRILLE ---------- */
+  --cols: 12;
+
+  /* ---------- Z-INDEX ----------
+     Échelle nommée. Aucun z-index littéral n'est autorisé ailleurs. */
+  --z-below: -1;
+  --z-base: 0;
+  --z-media: 1;
+  --z-persistent: 10;
+  --z-canvas: 20;
+  --z-sticky: 30;
+  --z-grain: 40;
+  --z-nav: 50;
+  --z-cursor: 60;
+  --z-overlay: 70;
+
+  /* ---------- MOUVEMENT ----------
+     Miroir CSS de src/lib/motion.ts. Les deux doivent rester alignés. */
+  --dur-snap: 0.35s;
+  --dur-base: 0.6s;
+  --dur-editorial: 0.9s;
+  --dur-cinematic: 1.2s;
+
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1); /* ≈ expo.out */
+  --ease-move: cubic-bezier(0.215, 0.61, 0.355, 1); /* ≈ power3.out */
+  --ease-handoff: cubic-bezier(0.65, 0, 0.35, 1); /* ≈ power2.inOut */
+
+  /* ---------- MATIÈRE ---------- */
+  --grain-opacity: 0.035;
+
+  /* ---------- TÉLÉPHONE ----------
+     Animées par GSAP pendant la naissance du device (ACT 03).
+     Le rayon d'écran est calculé, jamais fixé : c'est ce qui rend le device
+     crédible. Ratios relevés sur des implémentations sérieuses (≈ 9:19.5). */
+  --phone-bezel: 0px;
+  --phone-radius: 0px;
+  --phone-screen-radius: max(0px, calc(var(--phone-radius) - var(--phone-bezel)));
+  --phone-island: 0px;
+}
+
+/* Actes clairs : on ne réécrit que deux variables, tout en hérite. */
+.surface-paper {
+  --surface: var(--paper);
+  --on-surface: var(--ink);
+  --on-surface-rgb: var(--ink-rgb);
+}
+.surface-paper-deep {
+  --surface: var(--paper-deep);
+  --on-surface: var(--ink);
+  --on-surface-rgb: var(--ink-rgb);
+}
+.surface-ink {
+  --surface: var(--ink);
+  --on-surface: var(--paper);
+  --on-surface-rgb: var(--paper-rgb);
+}
+.surface-bordeaux {
+  --surface: var(--bordeaux);
+  --on-surface: var(--paper);
+  --on-surface-rgb: var(--paper-rgb);
+}

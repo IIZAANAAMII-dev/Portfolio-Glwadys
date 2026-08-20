@@ -1,0 +1,224 @@
+.act {
+  position: relative;
+  min-height: 100svh;
+  overflow: clip;
+}
+
+.stage {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.chapter,
+.beat,
+.note,
+.counter {
+  position: absolute;
+  z-index: var(--z-sticky);
+}
+
+.chapter {
+  top: var(--margin);
+  left: var(--margin);
+}
+
+.beat {
+  left: var(--margin);
+  bottom: var(--margin);
+  font-family: var(--font-display);
+  font-size: var(--t-title);
+  font-style: italic;
+}
+
+.counter {
+  right: var(--margin);
+  top: var(--margin);
+}
+
+.note {
+  right: var(--margin);
+  bottom: var(--margin);
+  width: min(28ch, 23vw);
+  opacity: 0;
+}
+
+.device {
+  --device-w: min(22vw, 17rem);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: var(--z-persistent);
+  width: var(--device-w);
+  aspect-ratio: 9 / 19.5;
+  translate: -50% -50%;
+  padding: var(--phone-bezel);
+  border-radius: var(--phone-radius);
+  background: var(--ink);
+  transform-origin: center center;
+}
+
+.screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--phone-screen-radius);
+  background: var(--graphite);
+}
+
+.screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-media);
+  pointer-events: none;
+  background: linear-gradient(112deg, transparent 20%, rgb(var(--paper-rgb) / 0.09) 48%, transparent 72%);
+  opacity: 0;
+}
+
+.device[data-built='true'] .screen::after {
+  opacity: 1;
+}
+
+.island {
+  position: absolute;
+  top: calc(var(--phone-bezel) + 0.55rem);
+  left: 50%;
+  z-index: var(--z-sticky);
+  width: var(--phone-island);
+  height: 1.1rem;
+  translate: -50% 0;
+  border-radius: 999px;
+  background: var(--ink);
+}
+
+.sideButton {
+  position: absolute;
+  top: 22%;
+  width: 2px;
+  height: 12%;
+  background: var(--graphite);
+  transform: scaleY(0);
+  transform-origin: center top;
+}
+
+.sideButton[data-side='left'] {
+  left: -2px;
+}
+
+.sideButton[data-side='right'] {
+  right: -2px;
+  top: 29%;
+}
+
+.screenHero,
+.feed,
+.story,
+.campaign {
+  position: absolute;
+  inset: 0;
+}
+
+.fillMedia {
+  height: 100%;
+  aspect-ratio: auto;
+}
+
+.feed {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-content: start;
+  gap: 2px;
+  padding-top: 3.3rem;
+  background: var(--paper-deep);
+  translate: 0 105%;
+}
+
+.feedItem {
+  width: 100%;
+}
+
+.story {
+  z-index: var(--z-media);
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+}
+
+.campaign {
+  z-index: var(--z-persistent);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.campaignWord {
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 5rem);
+  font-style: italic;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+
+.breakout {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: var(--z-persistent);
+  width: 28vw;
+  height: 2px;
+  translate: -50% -50%;
+  background: var(--oxblood);
+  transform: scaleX(0);
+  transform-origin: center;
+}
+
+@media (max-width: 1023px) {
+  .device {
+    --device-w: min(58vw, 16rem);
+  }
+
+  .note {
+    bottom: 14vh;
+    width: min(26ch, 72vw);
+  }
+
+  .breakout {
+    width: 72vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .act,
+  .stage {
+    min-height: 110svh;
+    height: auto;
+  }
+
+  .stage {
+    padding-block: var(--space-act);
+  }
+
+  .device {
+    --phone-bezel: 10px;
+    --phone-radius: 42px;
+    --phone-island: 82px;
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: 5rem auto;
+    translate: none;
+  }
+
+  .island {
+    width: 82px;
+  }
+
+  .note {
+    opacity: 1;
+  }
+}

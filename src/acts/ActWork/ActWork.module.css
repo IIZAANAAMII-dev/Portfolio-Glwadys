@@ -1,0 +1,312 @@
+.act {
+  position: relative;
+}
+
+.workHeader {
+  position: relative;
+  min-height: 62svh;
+  padding: var(--space-act) var(--margin);
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom: 1px solid rgb(var(--paper-rgb) / 0.14);
+}
+
+.workTitle {
+  margin-top: 12vh;
+  max-width: 9ch;
+}
+
+.workIndex {
+  position: absolute;
+  top: var(--margin);
+  left: var(--margin);
+}
+
+.project {
+  position: relative;
+  min-height: 118svh;
+  overflow: hidden;
+}
+
+.project[data-project='yuna'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.project[data-project='mgc'] {
+  background: var(--paper-deep);
+  color: var(--ink);
+}
+
+.project[data-project='comptoir'] {
+  min-height: 105svh;
+  background: var(--bordeaux);
+  color: var(--paper);
+}
+
+.meta {
+  position: absolute;
+  top: var(--margin);
+  left: var(--margin);
+  right: var(--margin);
+  z-index: var(--z-sticky);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: start;
+  gap: var(--gutter);
+}
+
+.meta span:nth-child(2) {
+  text-align: center;
+}
+
+.meta span:last-child {
+  text-align: right;
+}
+
+.name {
+  position: absolute;
+  left: var(--margin);
+  top: 20vh;
+  z-index: var(--z-sticky);
+  max-width: 8ch;
+}
+
+.summary {
+  position: absolute;
+  left: var(--margin);
+  bottom: 17vh;
+  z-index: var(--z-sticky);
+  width: min(35ch, 31vw);
+}
+
+.skills {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: var(--margin);
+  z-index: var(--z-sticky);
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+  padding-top: 1rem;
+}
+
+.media {
+  position: absolute;
+  z-index: var(--z-media);
+}
+
+.project[data-project='yuna'] .media:nth-of-type(1) {
+  right: 9%;
+  top: 15%;
+  width: 29vw;
+}
+
+.project[data-project='yuna'] .media:nth-of-type(2) {
+  right: 37%;
+  top: 49%;
+  width: 13vw;
+}
+
+.project[data-project='yuna'] .media:nth-of-type(3) {
+  right: 5%;
+  bottom: 7%;
+  width: 11vw;
+}
+
+.project[data-project='yuna'] .media:nth-of-type(4) {
+  right: 31%;
+  bottom: -18%;
+  width: 20vw;
+  z-index: var(--z-persistent);
+}
+
+.project[data-project='mgc'] .name {
+  left: auto;
+  right: var(--margin);
+  text-align: right;
+  max-width: 10ch;
+}
+
+.project[data-project='mgc'] .summary {
+  left: auto;
+  right: var(--margin);
+}
+
+.project[data-project='mgc'] .media:nth-of-type(1) {
+  left: 7%;
+  top: 17%;
+  width: 23vw;
+  rotate: -5deg;
+}
+
+.project[data-project='mgc'] .media:nth-of-type(2) {
+  left: 30%;
+  top: 39%;
+  width: 25vw;
+  rotate: 3deg;
+}
+
+.project[data-project='mgc'] .media:nth-of-type(3) {
+  left: 10%;
+  bottom: 8%;
+  width: 15vw;
+  rotate: 6deg;
+}
+
+.project[data-project='mgc'] .media:nth-of-type(4) {
+  left: 43%;
+  bottom: 7%;
+  width: 14vw;
+  rotate: -4deg;
+}
+
+.project[data-project='mgc'] .media:nth-of-type(5) {
+  left: 0;
+  bottom: -16%;
+  width: 100vw;
+  z-index: var(--z-persistent);
+}
+
+.annotation {
+  position: absolute;
+  left: 31%;
+  top: 29%;
+  z-index: var(--z-sticky);
+  font-family: var(--font-display);
+  font-size: var(--t-title);
+  font-style: italic;
+  color: var(--oxblood);
+  rotate: -7deg;
+}
+
+.macro {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base);
+  transform-origin: center;
+}
+
+.macro::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(59 18 27 / 0.46);
+}
+
+.project[data-project='comptoir'] .name {
+  top: 24vh;
+}
+
+.project[data-project='comptoir'] .summary {
+  bottom: 20vh;
+}
+
+.comptoirMedia {
+  position: absolute;
+  right: var(--margin);
+  bottom: var(--margin);
+  z-index: var(--z-media);
+  display: flex;
+  align-items: end;
+  gap: var(--gutter);
+}
+
+.comptoirMedia > div:first-child {
+  width: 13vw;
+}
+
+.comptoirMedia > div:last-child {
+  width: 19vw;
+}
+
+@media (max-width: 1023px) {
+  .project {
+    min-height: 112svh;
+  }
+
+  .meta {
+    grid-template-columns: 1fr auto;
+  }
+
+  .meta span:nth-child(2) {
+    display: none;
+  }
+
+  .name {
+    top: 16vh;
+  }
+
+  .summary {
+    bottom: 19vh;
+    width: min(34ch, 78vw);
+  }
+
+  .skills {
+    gap: 0.6rem;
+    overflow: hidden;
+  }
+
+  .skills li:nth-child(n + 3) {
+    display: none;
+  }
+
+  .project[data-project='yuna'] .media:nth-of-type(1) {
+    right: 7%;
+    top: 34%;
+    width: 54vw;
+  }
+
+  .project[data-project='yuna'] .media:nth-of-type(2) {
+    left: var(--margin);
+    right: auto;
+    top: 48%;
+    width: 27vw;
+  }
+
+  .project[data-project='yuna'] .media:nth-of-type(n + 3) {
+    display: none;
+  }
+
+  .project[data-project='mgc'] .name {
+    top: 15vh;
+  }
+
+  .project[data-project='mgc'] .media:nth-of-type(1) {
+    left: 5%;
+    top: 36%;
+    width: 45vw;
+  }
+
+  .project[data-project='mgc'] .media:nth-of-type(2) {
+    left: auto;
+    right: 6%;
+    top: 43%;
+    width: 44vw;
+  }
+
+  .project[data-project='mgc'] .media:nth-of-type(n + 3) {
+    display: none;
+  }
+
+  .annotation {
+    left: var(--margin);
+    top: 29%;
+  }
+
+  .comptoirMedia > div:first-child {
+    display: none;
+  }
+
+  .comptoirMedia > div:last-child {
+    width: 38vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project {
+    min-height: 100svh;
+  }
+}

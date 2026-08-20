@@ -1,0 +1,171 @@
+/* Navigation flottante basse. Capsule premium, compacte, très propre.
+   Elle naît à la fin de l'Opening et se transformera en CTA final (ACT 09). */
+
+.nav {
+  position: fixed;
+  bottom: clamp(1rem, 2.4vh, 1.75rem);
+  left: 50%;
+  z-index: var(--z-nav);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 0.45rem;
+  /* Le seul arrondi du site en dehors du téléphone : c'est une capsule,
+     sa forme EST son identité. */
+  border-radius: 999px;
+  border: 1px solid rgb(var(--paper-rgb) / 0.16);
+  background: rgb(20 19 17 / 0.72);
+  /* Flou léger et NON animé : le coût est payé une fois. */
+  backdrop-filter: blur(14px) saturate(140%);
+  color: var(--paper);
+  /* État initial : absente. Révélée par GSAP à la fin de l'Opening. */
+  opacity: 0;
+  visibility: hidden;
+  translate: -50% 140%;
+  transition:
+    translate var(--dur-editorial) var(--ease-reveal),
+    opacity var(--dur-base) var(--ease-reveal),
+    visibility var(--dur-base);
+}
+
+.navItems {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.nav[data-visible='true'] {
+  opacity: 1;
+  visibility: visible;
+  translate: -50% 0;
+}
+
+/* Se contracte pendant les séquences immersives. */
+.nav[data-compact='true'] {
+  gap: 0;
+}
+
+.nav[data-compact='true'] .label {
+  max-width: 0;
+  opacity: 0;
+  margin-inline: 0;
+}
+
+.item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: color var(--dur-snap) var(--ease-move);
+}
+
+.label {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 12ch;
+  transition:
+    max-width var(--dur-base) var(--ease-handoff),
+    opacity var(--dur-snap) var(--ease-move);
+}
+
+.item:hover,
+.item:focus-visible {
+  color: var(--paper);
+}
+
+.item[aria-current='true'] {
+  color: var(--paper);
+}
+
+/* Pastille d'état actif : discrète, une seule à la fois. */
+.item[aria-current='true']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgb(var(--oxblood-rgb) / 0.55);
+  z-index: -1;
+}
+
+.item:not([aria-current='true']) {
+  color: rgb(var(--paper-rgb) / 0.62);
+}
+
+.divider {
+  width: 1px;
+  align-self: stretch;
+  margin-inline: 0.35rem;
+  background: rgb(var(--paper-rgb) / 0.16);
+}
+
+.langs {
+  display: flex;
+  gap: 0.1rem;
+}
+
+.lang {
+  padding: 0.5rem 0.5rem;
+  border-radius: 999px;
+  color: rgb(var(--paper-rgb) / 0.5);
+  transition: color var(--dur-snap) var(--ease-move);
+}
+
+.lang[aria-current='true'],
+.lang:hover,
+.lang:focus-visible {
+  color: var(--paper);
+}
+
+.contactCta {
+  display: none;
+  min-height: 2.35rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding-inline: 1rem;
+  color: var(--paper);
+}
+
+.nav[data-contact='true'] {
+  min-width: min(25rem, calc(100vw - 2rem));
+  border-color: rgb(var(--champagne-rgb) / 0.28);
+}
+
+.nav[data-contact='true'] .navItems,
+.nav[data-contact='true'] .divider,
+.nav[data-contact='true'] .langs {
+  display: none;
+}
+
+.nav[data-contact='true'] .contactCta {
+  display: flex;
+  flex: 1;
+}
+
+@media (max-width: 1023px) {
+  .nav {
+    /* Mobile : barre compacte, moins d'items, toujours atteignable au pouce. */
+    gap: 0;
+    padding: 0.3rem 0.35rem;
+  }
+  .navItems {
+    gap: 0;
+  }
+  .item {
+    padding: 0.5rem 0.6rem;
+  }
+  .journeyItem {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav {
+    transition: none;
+    opacity: 1;
+    visibility: visible;
+    translate: -50% 0;
+  }
+}

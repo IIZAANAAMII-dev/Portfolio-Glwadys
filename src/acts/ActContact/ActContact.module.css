@@ -1,0 +1,156 @@
+.act {
+  position: relative;
+  min-height: 112svh;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.chapter,
+.axis,
+.availability,
+.edition {
+  position: absolute;
+}
+
+.chapter {
+  top: var(--margin);
+  left: var(--margin);
+}
+
+.edition {
+  top: var(--margin);
+  right: var(--margin);
+}
+
+.axis {
+  right: var(--margin);
+  bottom: var(--margin);
+  color: var(--champagne);
+}
+
+.availability {
+  left: var(--margin);
+  bottom: var(--margin);
+  opacity: 0.62;
+}
+
+.name {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  top: 11vh;
+  z-index: var(--z-media);
+  font-size: clamp(4.25rem, 14vw, 16rem);
+}
+
+.nameLine:last-child {
+  text-align: right;
+}
+
+.message {
+  position: absolute;
+  left: var(--margin);
+  top: 58%;
+  width: min(31ch, 35vw);
+}
+
+.links {
+  position: absolute;
+  right: var(--margin);
+  top: 60%;
+  display: grid;
+  justify-items: end;
+  gap: 1rem;
+}
+
+.email {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.1vw, 3.7rem);
+  font-style: italic;
+  line-height: 1;
+}
+
+.email::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.5rem;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur-editorial) var(--ease-reveal);
+}
+
+.email:hover::after,
+.email:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.linkedin {
+  opacity: 0.62;
+}
+
+.rule {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  top: 54%;
+  height: 1px;
+  background: rgb(var(--paper-rgb) / 0.18);
+  transform-origin: left;
+}
+
+@media (max-width: 1023px) {
+  .name {
+    top: 15vh;
+    font-size: clamp(3.8rem, 19vw, 8rem);
+  }
+
+  .nameLine:last-child {
+    text-align: left;
+  }
+
+  .rule {
+    top: 48%;
+  }
+
+  .message {
+    top: 53%;
+    width: min(30ch, 80vw);
+  }
+
+  .links {
+    left: var(--margin);
+    right: auto;
+    top: 68%;
+    justify-items: start;
+  }
+
+  .email {
+    font-size: clamp(1.35rem, 6vw, 2.4rem);
+  }
+
+  .axis {
+    max-width: 45vw;
+    text-align: right;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .act {
+    min-height: 100svh;
+  }
+}
