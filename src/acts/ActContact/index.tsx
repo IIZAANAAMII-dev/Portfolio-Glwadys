@@ -24,7 +24,7 @@ export function ActContact({ content }: Props) {
       const mm = gsap.matchMedia();
 
       mm.add(
-        { isReduced: MQ.reduced },
+        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
         (context) => {
           const { isReduced } = context.conditions as { isReduced: boolean };
 
@@ -69,36 +69,41 @@ export function ActContact({ content }: Props) {
   );
 
   return (
-    <footer ref={root} className={`act surface-ink ${styles.act}`} aria-labelledby="contact-title">
+    <footer ref={root} className={`act surface-wood ${styles.act}`}>
       <div className={styles.stage}>
-        <span className={`${styles.chapter} micro`}>09 / {content.contact.heading}</span>
-        <span className={`${styles.edition} micro`}>Portfolio 2026</span>
+        <div className={`${styles.lastPage} paper-card`}>
+          <span className={`${styles.chapter} micro`}>09 / {content.contact.heading}</span>
+          <span className={`${styles.edition} micro`}>Portfolio 2026</span>
 
-        <h2 id="contact-title" className={`${styles.name} monument`}>
-          <span className={`${styles.nameLine} line-mask`}>
-            <span data-contact-name>Glwadys</span>
+          <h2 id="contact-title" className={`${styles.name} monument`}>
+            <span className={`${styles.nameLine} line-mask`}>
+              <span data-contact-name>Glwadys</span>
+            </span>
+            <span className={`${styles.nameLine} line-mask`}>
+              <span data-contact-name>Dalleau</span>
+            </span>
+          </h2>
+
+          <span className={styles.rule} data-contact-rule aria-hidden="true" />
+          <p className={`${styles.message} lead`} data-contact-copy>
+            {content.contact.statement}
+          </p>
+          <span className={`${styles.finalNote} hand-note`} data-contact-copy aria-hidden="true">
+            one last note — let’s make it memorable
           </span>
-          <span className={`${styles.nameLine} line-mask`}>
-            <span data-contact-name>Dalleau</span>
-          </span>
-        </h2>
 
-        <span className={styles.rule} data-contact-rule aria-hidden="true" />
-        <p className={`${styles.message} lead`} data-contact-copy>
-          {content.contact.statement}
-        </p>
+          <div className={styles.links} data-contact-copy>
+            <a className={styles.email} href={`mailto:${content.contact.email}`}>
+              {content.contact.email}
+            </a>
+            <a className={`${styles.linkedin} micro`} href={content.contact.linkedin} target="_blank" rel="noreferrer">
+              {content.contact.linkedinLabel} ↗
+            </a>
+          </div>
 
-        <div className={styles.links} data-contact-copy>
-          <a className={styles.email} href={`mailto:${content.contact.email}`}>
-            {content.contact.email}
-          </a>
-          <a className={`${styles.linkedin} micro`} href={content.contact.linkedin} target="_blank" rel="noreferrer">
-            {content.contact.linkedinLabel} ↗
-          </a>
+          <span className={`${styles.availability} micro`}>{content.contact.availability}</span>
+          <span className={`${styles.axis} micro`}>{content.contact.axis}</span>
         </div>
-
-        <span className={`${styles.availability} micro`}>{content.contact.availability}</span>
-        <span className={`${styles.axis} micro`}>{content.contact.axis}</span>
       </div>
     </footer>
   );

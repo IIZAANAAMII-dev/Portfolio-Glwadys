@@ -2,8 +2,8 @@
   position: relative;
   min-height: 112svh;
   overflow: hidden;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--wood-brown);
+  color: var(--ink);
 }
 
 .stage {
@@ -12,6 +12,16 @@
   height: 100vh;
   height: 100svh;
   overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 45%, rgb(var(--champagne-rgb) / 0.08), transparent 40%),
+    var(--wood-brown);
+}
+
+.lastPage {
+  position: absolute;
+  inset: clamp(1rem, 3vw, 2.75rem);
+  overflow: hidden;
+  color: var(--ink);
 }
 
 .chapter,
@@ -34,7 +44,7 @@
 .axis {
   right: var(--margin);
   bottom: var(--margin);
-  color: var(--champagne);
+  color: var(--rich-wine);
 }
 
 .availability {
@@ -61,6 +71,15 @@
   left: var(--margin);
   top: 58%;
   width: min(31ch, 35vw);
+}
+
+.finalNote {
+  position: absolute;
+  left: 38%;
+  top: 67%;
+  max-width: 14ch;
+  color: var(--rich-wine);
+  rotate: -4deg;
 }
 
 .links {
@@ -100,7 +119,7 @@
 }
 
 .linkedin {
-  opacity: 0.62;
+  opacity: 1;
 }
 
 .rule {
@@ -109,7 +128,7 @@
   right: var(--margin);
   top: 54%;
   height: 1px;
-  background: rgb(var(--paper-rgb) / 0.18);
+  background: rgb(var(--ink-rgb) / 0.18);
   transform-origin: left;
 }
 
@@ -139,6 +158,18 @@
     justify-items: start;
   }
 
+  .lastPage {
+    inset: 0.75rem;
+  }
+
+  .finalNote {
+    left: auto;
+    right: var(--margin);
+    top: 57%;
+    max-width: 11ch;
+    text-align: right;
+  }
+
   .email {
     font-size: clamp(1.35rem, 6vw, 2.4rem);
   }
@@ -146,6 +177,7 @@
   .axis {
     max-width: 45vw;
     text-align: right;
+    bottom: calc(var(--margin) + 2.6rem);
   }
 }
 

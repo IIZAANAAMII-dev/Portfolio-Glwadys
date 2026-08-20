@@ -48,6 +48,7 @@ export function ActSocial({ content, locale }: Props) {
           const satellites = q<HTMLElement>('[data-social-satellite]');
           const behind = q<HTMLElement>('[data-behind]')[0];
           const behindMediaEls = q<HTMLElement>('[data-behind-media]');
+          const behindDetails = q<HTMLElement>('[data-behind-detail]');
           const firstSatellite = satellites[0];
           if (!dominant || !behind || !firstSatellite) return;
 
@@ -57,6 +58,7 @@ export function ActSocial({ content, locale }: Props) {
             yPercent: (i: number) => (i % 2 === 0 ? 24 : -18),
           });
           gsap.set(behindMediaEls, { scale: 0.94, autoAlpha: 0 });
+          gsap.set(behindDetails, { y: 12, autoAlpha: 0 });
 
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
@@ -96,6 +98,7 @@ export function ActSocial({ content, locale }: Props) {
               },
               0.52,
             )
+            .to(q<HTMLElement>(`.${styles.frontLabel}`), { autoAlpha: 0, y: -12, duration: 0.18 }, 0.48)
             .to(
               behind,
               {
@@ -112,6 +115,11 @@ export function ActSocial({ content, locale }: Props) {
             .to(q<HTMLElement>('[data-behind-label]'), { autoAlpha: 1, y: 0, duration: 0.2 }, 0.62)
             .to(q<HTMLElement>('[data-social-statement]'), { autoAlpha: 1, y: 0, duration: 0.22 }, 0.68)
             .to(q<HTMLElement>('[data-social-layers]'), { autoAlpha: 1, y: 0, duration: 0.2 }, 0.72)
+            .to(
+              behindDetails,
+              { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.18 },
+              0.66,
+            )
             .to(
               dominant,
               {
@@ -153,7 +161,12 @@ export function ActSocial({ content, locale }: Props) {
         </div>
 
         {socialSatellites.map((item, index) => (
-          <div className={styles.satellite} data-social-satellite key={item.id}>
+          <div
+            className={styles.satellite}
+            data-social-satellite
+            data-social-slot={index + 1}
+            key={item.id}
+          >
             <Media
               item={item}
               locale={locale}
@@ -166,6 +179,9 @@ export function ActSocial({ content, locale }: Props) {
         ))}
 
         <div className={styles.behind} data-behind>
+          <span className={`${styles.folderTab} micro`} data-behind-detail aria-hidden="true">
+            Brief / Draft / Publish
+          </span>
           <div className={styles.behindGrid}>
             {behindMedia.map((item, index) => (
               <div className={styles.behindMedia} data-behind-media key={item.id}>
@@ -173,6 +189,10 @@ export function ActSocial({ content, locale }: Props) {
               </div>
             ))}
           </div>
+          <span className={`${styles.handNote} hand-note`} data-behind-detail aria-hidden="true">
+            content begins before the feed
+          </span>
+          <span className={`${styles.paperClip} paper-clip`} data-behind-detail aria-hidden="true" />
         </div>
 
         <p className={`${styles.statement} lead`} data-social-statement>

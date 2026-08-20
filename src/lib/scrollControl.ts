@@ -41,6 +41,7 @@ export const SHELL_EVENTS = {
 } as const;
 
 export function emitReady() {
+  document.documentElement.dataset.shellReady = 'true';
   document.dispatchEvent(new CustomEvent(SHELL_EVENTS.ready));
 }
 

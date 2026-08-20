@@ -30,7 +30,7 @@ export function ActPhone({ content, locale }: Props) {
       const mm = gsap.matchMedia();
 
       mm.add(
-        { isDesktop: MQ.desktop, isReduced: MQ.reduced },
+        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
         (context) => {
           const { isDesktop, isReduced } = context.conditions as {
             isDesktop: boolean;
@@ -57,6 +57,7 @@ export function ActPhone({ content, locale }: Props) {
           const campaignLabel = labels[3];
           if (!feedLabel || !focusLabel || !storyLabel || !campaignLabel) return;
           gsap.set(labels, { yPercent: 110, autoAlpha: 0 });
+          gsap.set(q<HTMLElement>('[data-phone-detail]'), { autoAlpha: 0, y: 12 });
 
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
@@ -90,19 +91,24 @@ export function ActPhone({ content, locale }: Props) {
             )
             .to(q<HTMLElement>('[data-phone-button]'), { scaleY: 1, duration: 0.1 }, 0.04)
             .to(feedLabel, { yPercent: 0, autoAlpha: 1, duration: 0.12 }, 0.08)
+            .to(
+              q<HTMLElement>('[data-phone-detail]'),
+              { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.12 },
+              0.08,
+            )
             .to(hero, { yPercent: -102, duration: 0.16 }, 0.16)
             .to(feed, { yPercent: -104, duration: 0.16 }, 0.16)
-            .to(feed, { yPercent: -150, duration: 0.14 }, 0.3)
+            .to(feed, { yPercent: -128, duration: 0.14 }, 0.3)
             .to(feedLabel, { yPercent: -110, autoAlpha: 0, duration: 0.08 }, 0.31)
             .to(focusLabel, { yPercent: 0, autoAlpha: 1, duration: 0.1 }, 0.34)
             .to(q<HTMLElement>('[data-phone-note]'), { xPercent: 0, autoAlpha: 1, duration: 0.12 }, 0.36)
             .to(
               story,
               { clipPath: 'polygon(0 0%, 100% 0%, 100% 100%, 0 100%)', duration: 0.17 },
-              0.46,
+              0.38,
             )
-            .to(focusLabel, { yPercent: -110, autoAlpha: 0, duration: 0.08 }, 0.48)
-            .to(storyLabel, { yPercent: 0, autoAlpha: 1, duration: 0.1 }, 0.5)
+            .to(focusLabel, { yPercent: -110, autoAlpha: 0, duration: 0.08 }, 0.4)
+            .to(storyLabel, { yPercent: 0, autoAlpha: 1, duration: 0.1 }, 0.42)
             .to(q<HTMLElement>('[data-phone-campaign]'), { scale: 1.18, autoAlpha: 1, duration: 0.15 }, 0.6)
             .to(q<HTMLElement>('[data-breakout]'), { scaleX: 1, duration: 0.13 }, 0.63)
             .to(storyLabel, { yPercent: -110, autoAlpha: 0, duration: 0.08 }, 0.64)
@@ -139,12 +145,18 @@ export function ActPhone({ content, locale }: Props) {
           {content.phone.heading}
         </h2>
 
-        <div data-phone-ui>
+        <div className={styles.interface} data-phone-ui>
           <span className={`${styles.chapter} micro`}>03 / {content.phone.heading}</span>
           <span className={`${styles.counter} micro`}>09 : 16</span>
           <p className={`${styles.note} lead`} data-phone-note>
             {content.social.statement}
           </p>
+          <span className={`${styles.digitalNote} hand-note`} data-phone-detail aria-hidden="true">
+            reflection → digital
+          </span>
+          <span className={`${styles.archiveStamp} editorial-stamp`} data-phone-detail aria-hidden="true">
+            {content.opening.axis.replace('↔', '/')}
+          </span>
           <div className={styles.beat} aria-hidden="true">
             {content.phone.beats.map((beat) => (
               <span className="line-mask" key={beat}>

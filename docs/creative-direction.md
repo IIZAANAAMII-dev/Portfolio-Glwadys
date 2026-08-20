@@ -1,4 +1,9 @@
-# Creative Direction
+# Creative Direction — archive pré-presse
+
+> **Archivé le 20 août 2026.** La source de vérité active est
+> [`creative-notebook-direction.md`](creative-notebook-direction.md). Les règles
+> ci-dessous documentent l’ancienne piste pré-presse et ne doivent plus guider
+> de nouvelles décisions visuelles.
 
 > Phase 4 du brief. Ce document est opposable : tout ce qui est construit doit
 > pouvoir se justifier ici, et tout ce qui ne s'y justifie pas doit être supprimé.

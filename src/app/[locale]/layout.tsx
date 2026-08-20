@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Bodoni_Moda, Inter_Tight, Noto_Sans_KR } from 'next/font/google';
+import { Bodoni_Moda, Inter_Tight, Kalam, Noto_Sans_KR } from 'next/font/google';
 import type { ReactNode } from 'react';
 
 import { getContent } from '@/content';
@@ -26,6 +26,14 @@ const interTight = Inter_Tight({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter-tight',
+});
+
+/* Accent manuscrit volontairement limité aux annotations courtes. */
+const kalam = Kalam({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-kalam',
+  weight: '400',
 });
 
 /* Chargé uniquement lorsque /ko l'utilise réellement : pas de preload. */
@@ -78,7 +86,7 @@ export default async function LocaleLayout({
   const typed: Locale = locale;
   const content = getContent(typed);
 
-  const fontVars = [bodoni.variable, interTight.variable, notoKR.variable].join(' ');
+  const fontVars = [bodoni.variable, interTight.variable, kalam.variable, notoKR.variable].join(' ');
 
   return (
     <html lang={htmlLang[typed]} className={fontVars}>

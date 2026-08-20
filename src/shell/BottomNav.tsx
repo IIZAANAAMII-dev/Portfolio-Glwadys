@@ -30,6 +30,7 @@ export function BottomNav({ content, locale }: Props) {
   // La navigation naît à la fin de l'Opening.
   useEffect(() => {
     const onReady = () => setVisible(true);
+    if (document.documentElement.dataset.shellReady === 'true') onReady();
     document.addEventListener(SHELL_EVENTS.ready, onReady);
     return () => document.removeEventListener(SHELL_EVENTS.ready, onReady);
   }, []);
@@ -79,7 +80,7 @@ export function BottomNav({ content, locale }: Props) {
         {TARGETS.map((t) => (
           <a
             key={t.key}
-            className={`${styles.item} ${t.key === 'journey' ? styles.journeyItem : ''}`}
+            className={`${styles.item} ${t.key === 'journey' ? styles.journeyItem : ''} ${t.key === 'expertise' ? styles.expertiseItem : ''}`}
             href={`#${t.id}`}
             aria-current={active === t.key ? 'true' : undefined}
           >

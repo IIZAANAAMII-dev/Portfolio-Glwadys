@@ -127,11 +127,11 @@ const fr: Content = {
   meta: {
     title: 'Glwadys Dalleau — Social Media & Brand Communication',
     description:
-      'Je transforme les marques en histoires dont on se souvient. Social media, création de contenu et communication de marque. Marseille ↔ Seoul.',
+      'Je transforme les marques en histoires dont on se souvient. Social media, création de contenu et communication de marque. Paris ↔ Seoul.',
   },
   opening: {
     edition: 'Portfolio 2026',
-    axis: 'Marseille ↔ Seoul',
+    axis: 'Paris ↔ Seoul',
     tagline: 'Je transforme les marques en histoires dont on se souvient.',
   },
   hero: {
@@ -216,7 +216,7 @@ const fr: Content = {
       { year: '2023', label: 'Bachelor commerce international & marketing', place: 'IPAC' },
       { year: '2024', label: 'Retail, merchandising, marque', place: 'Le Comptoir de Mathilde' },
       { year: '2025', label: 'Communauté et contenu', place: 'Marseille Girls Club' },
-      { year: '2026', label: 'Direction de contenu et de marque', place: 'Marseille ↔ Seoul' },
+      { year: '2026', label: 'Direction de contenu et de marque', place: 'Paris ↔ Seoul' },
     ],
   },
   expertise: {
@@ -228,7 +228,7 @@ const fr: Content = {
       { term: 'Brand Communication', context: 'Positionnement, ton, cohérence.' },
       { term: 'Community', context: 'Animation, modération, relation, fidélisation.' },
       { term: 'Digital Marketing', context: 'Acquisition organique, campagnes, performance.' },
-      { term: 'International', context: 'Français, anglais, coréen. Marseille ↔ Seoul.' },
+      { term: 'International', context: 'Français, anglais, coréen. Paris ↔ Seoul.' },
     ],
   },
   contact: {
@@ -239,7 +239,7 @@ const fr: Content = {
     linkedin: LINKEDIN,
     linkedinLabel: 'LinkedIn',
     availability: 'Disponible — Marseille & à distance',
-    axis: 'Marseille ↔ Seoul',
+    axis: 'Paris ↔ Seoul',
   },
   nav: {
     label: 'Navigation principale',
@@ -260,11 +260,11 @@ const en: Content = {
   meta: {
     title: 'Glwadys Dalleau — Social Media & Brand Communication',
     description:
-      'I turn brands into stories people remember. Social media, content creation and brand communication. Marseille ↔ Seoul.',
+      'I turn brands into stories people remember. Social media, content creation and brand communication. Paris ↔ Seoul.',
   },
   opening: {
     edition: 'Portfolio 2026',
-    axis: 'Marseille ↔ Seoul',
+    axis: 'Paris ↔ Seoul',
     tagline: 'I turn brands into stories people remember.',
   },
   hero: {
@@ -349,7 +349,7 @@ const en: Content = {
       { year: '2023', label: 'Bachelor in international business & marketing', place: 'IPAC' },
       { year: '2024', label: 'Retail, merchandising, brand', place: 'Le Comptoir de Mathilde' },
       { year: '2025', label: 'Community and content', place: 'Marseille Girls Club' },
-      { year: '2026', label: 'Content and brand direction', place: 'Marseille ↔ Seoul' },
+      { year: '2026', label: 'Content and brand direction', place: 'Paris ↔ Seoul' },
     ],
   },
   expertise: {
@@ -361,7 +361,7 @@ const en: Content = {
       { term: 'Brand Communication', context: 'Positioning, tone, consistency.' },
       { term: 'Community', context: 'Engagement, moderation, relationships, loyalty.' },
       { term: 'Digital Marketing', context: 'Organic growth, campaigns, performance.' },
-      { term: 'International', context: 'French, English, Korean. Marseille ↔ Seoul.' },
+      { term: 'International', context: 'French, English, Korean. Paris ↔ Seoul.' },
     ],
   },
   contact: {
@@ -372,7 +372,7 @@ const en: Content = {
     linkedin: LINKEDIN,
     linkedinLabel: 'LinkedIn',
     availability: 'Available — Marseille & remote',
-    axis: 'Marseille ↔ Seoul',
+    axis: 'Paris ↔ Seoul',
   },
   nav: {
     label: 'Main navigation',
@@ -393,11 +393,11 @@ const ko: Content = {
   meta: {
     title: 'Glwadys Dalleau — 소셜 미디어 & 브랜드 커뮤니케이션',
     description:
-      '브랜드를 기억에 남는 이야기로 만듭니다. 소셜 미디어, 콘텐츠 제작, 브랜드 커뮤니케이션. 마르세유 ↔ 서울.',
+      '브랜드를 기억에 남는 이야기로 만듭니다. 소셜 미디어, 콘텐츠 제작, 브랜드 커뮤니케이션. 파리 ↔ 서울.',
   },
   opening: {
     edition: 'Portfolio 2026',
-    axis: '마르세유 ↔ 서울',
+    axis: '파리 ↔ 서울',
     tagline: '브랜드를 기억에 남는 이야기로 만듭니다.',
   },
   hero: {
@@ -482,7 +482,7 @@ const ko: Content = {
       { year: '2023', label: '국제 비즈니스 & 마케팅 학사', place: 'IPAC' },
       { year: '2024', label: '리테일, 머천다이징, 브랜드', place: 'Le Comptoir de Mathilde' },
       { year: '2025', label: '커뮤니티와 콘텐츠', place: 'Marseille Girls Club' },
-      { year: '2026', label: '콘텐츠 및 브랜드 디렉션', place: '마르세유 ↔ 서울' },
+      { year: '2026', label: '콘텐츠 및 브랜드 디렉션', place: '파리 ↔ 서울' },
     ],
   },
   expertise: {
@@ -494,7 +494,7 @@ const ko: Content = {
       { term: 'Brand Communication', context: '포지셔닝, 톤, 일관성.' },
       { term: 'Community', context: '참여, 모더레이션, 관계, 로열티.' },
       { term: 'Digital Marketing', context: '오가닉 성장, 캠페인, 퍼포먼스.' },
-      { term: 'International', context: '프랑스어, 영어, 한국어. 마르세유 ↔ 서울.' },
+      { term: 'International', context: '프랑스어, 영어, 한국어. 파리 ↔ 서울.' },
     ],
   },
   contact: {
@@ -505,7 +505,7 @@ const ko: Content = {
     linkedin: LINKEDIN,
     linkedinLabel: 'LinkedIn',
     availability: '가능 — 마르세유 및 원격',
-    axis: '마르세유 ↔ 서울',
+    axis: '파리 ↔ 서울',
   },
   nav: {
     label: '주요 내비게이션',

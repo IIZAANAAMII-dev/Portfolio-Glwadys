@@ -26,14 +26,27 @@ const FRAGMENT = `
   uniform sampler2D uMap;
   uniform float uOpacity;
   varying vec2 vUv;
+
+  float grain(vec2 p) {
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+  }
+
   void main() {
     vec4 texel = texture2D(uMap, vUv);
-    gl_FragColor = vec4(texel.rgb, texel.a * uOpacity);
+    float edgeDistance = min(min(vUv.x, 1.0 - vUv.x), min(vUv.y, 1.0 - vUv.y));
+    float edgeLight = smoothstep(0.0, 0.075, edgeDistance);
+    float softKey = mix(0.88, 1.06, 1.0 - vUv.y);
+    float fiber = (grain(vUv * 620.0) - 0.5) * 0.018;
+    vec3 warm = vec3(0.028, 0.014, 0.004);
+    vec3 color = texel.rgb * softKey + warm + fiber;
+    color *= mix(0.72, 1.0, edgeLight);
+    gl_FragColor = vec4(color, texel.a * uOpacity);
   }
 `;
 
-const COLORS = ['#d9c4b8', '#2a2724', '#3b121b', '#e5dcce', '#2a2724', '#d9c4b8'];
+const COLORS = ['#bca991', '#28221c', '#592027', '#e8ded1', '#28221c', '#bca991'];
 const LABELS = ['CAMPAIGN', 'STORY', 'MACRO', 'TEXTURE', 'SOCIAL', 'REEL'];
+const ASPECTS = [4 / 5, 9 / 16, 1, 16 / 9, 4 / 5, 9 / 16] as const;
 
 function prepressTexture(index: number) {
   const canvas = document.createElement('canvas');
@@ -45,8 +58,8 @@ function prepressTexture(index: number) {
   ctx.fillStyle = COLORS[index] ?? '#2a2724';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   const light = index === 1 || index === 2 || index === 4;
-  ctx.strokeStyle = light ? 'rgba(242,237,228,.5)' : 'rgba(14,13,12,.42)';
-  ctx.fillStyle = light ? 'rgba(242,237,228,.72)' : 'rgba(14,13,12,.66)';
+  ctx.strokeStyle = light ? 'rgba(243,237,227,.48)' : 'rgba(23,20,15,.4)';
+  ctx.fillStyle = light ? 'rgba(243,237,227,.72)' : 'rgba(23,20,15,.66)';
   ctx.lineWidth = 1;
   ctx.strokeRect(22.5, 22.5, 467, 595);
   ctx.beginPath();
@@ -57,6 +70,13 @@ function prepressTexture(index: number) {
   ctx.letterSpacing = '4px';
   ctx.fillText(`${String(index + 1).padStart(2, '0')} / 06`, 350, 58);
   ctx.fillText(LABELS[index] ?? 'MEDIA', 46, 588);
+
+  for (let i = 0; i < 240; i += 1) {
+    const x = (i * 97 + index * 31) % canvas.width;
+    const y = (i * 53 + index * 67) % canvas.height;
+    ctx.fillStyle = light ? 'rgba(243,237,227,.025)' : 'rgba(23,20,15,.022)';
+    ctx.fillRect(x, y, 1, 1);
+  }
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
@@ -126,7 +146,7 @@ function DepthPlane({ index, progress, mobile }: PlaneProps) {
     const countVisible = mobile ? 4 : 6;
 
     const targetW = size.width * nw;
-    const targetH = targetW * 1.25;
+    const targetH = targetW / (ASPECTS[index] ?? 4 / 5);
     const startW = size.width * 1.08;
     const startH = size.height * 1.08;
 
@@ -136,6 +156,8 @@ function DepthPlane({ index, progress, mobile }: PlaneProps) {
     const spreadZ = depth + travel * (index % 2 === 0 ? 20 : 8);
     node.position.z = THREE.MathUtils.lerp(spreadZ, 0, flatten);
     node.rotation.z = THREE.MathUtils.lerp((index - 2.5) * 0.018, 0, flatten);
+    node.rotation.x = THREE.MathUtils.lerp((index % 2 === 0 ? 1 : -1) * 0.018, 0, flatten);
+    node.rotation.y = THREE.MathUtils.lerp((index - 2.5) * -0.012, 0, flatten);
 
     const width = index === 0 ? THREE.MathUtils.lerp(startW, targetW, reveal) : targetW;
     const height = index === 0 ? THREE.MathUtils.lerp(startH, targetH, reveal) : targetH;
@@ -158,8 +180,12 @@ function DepthPlane({ index, progress, mobile }: PlaneProps) {
 
 function Rig({ progress }: Props) {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
-  const { invalidate, size } = useThree();
+  const { invalidate, setDpr, size } = useThree();
   const mobile = size.width < 1024;
+
+  useLayoutEffect(() => {
+    setDpr(mobile ? 1 : Math.min(window.devicePixelRatio, 2));
+  }, [mobile, setDpr]);
 
   useLayoutEffect(() => {
     const perspective = cameraRef.current;
@@ -196,11 +222,11 @@ export default function ImmersionScene({ progress }: Props) {
   return (
     <Canvas
       frameloop="demand"
-      dpr={[1, 2]}
+      dpr={1}
       camera={{ position: [0, 0, 100], near: 0.1, far: 300 }}
       gl={{ alpha: false, antialias: true, powerPreference: 'high-performance' }}
       onCreated={({ gl }) => {
-        gl.setClearColor(new THREE.Color('#3b121b'), 1);
+        gl.setClearColor(new THREE.Color('#2b1d17'), 1);
       }}
     >
       <Rig progress={progress} />

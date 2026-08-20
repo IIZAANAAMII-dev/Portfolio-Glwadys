@@ -84,7 +84,7 @@ export function ActJourney({ content, locale }: Props) {
           ))}
         </div>
 
-        <span className={`${styles.caption} micro`}>Roots → direction</span>
+        <span className={`${styles.caption} editorial-stamp`}>{content.contact.axis}</span>
       </div>
     </section>
   );

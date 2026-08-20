@@ -63,7 +63,7 @@ export function ActImmersion({ content, locale }: Props) {
 
       const mm = gsap.matchMedia();
       mm.add(
-        { isDesktop: MQ.desktop, isReduced: MQ.reduced },
+        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
         (context) => {
           const { isDesktop, isReduced } = context.conditions as {
             isDesktop: boolean;
@@ -115,7 +115,7 @@ export function ActImmersion({ content, locale }: Props) {
   return (
     <section
       ref={root}
-      className={`act surface-bordeaux ${styles.act}`}
+      className={`act surface-wood ${styles.act}`}
       aria-labelledby="immersion-title"
     >
       <div ref={stage} className={styles.stage}>
@@ -144,7 +144,7 @@ export function ActImmersion({ content, locale }: Props) {
           <p className={`${styles.statement} lead`} data-immersion-copy>
             {content.immersion.statement}
           </p>
-          <span className={`${styles.depthAxis} micro`}>Foreground / Background</span>
+          <span className={`${styles.depthAxis} micro`}>Paper / Archive / Depth</span>
         </div>
       </div>
     </section>

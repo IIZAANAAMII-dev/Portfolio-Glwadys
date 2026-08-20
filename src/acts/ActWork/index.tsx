@@ -42,7 +42,7 @@ function ProjectSection({ project, locale }: { project: Project; locale: Locale 
       const mm = gsap.matchMedia();
 
       mm.add(
-        { isReduced: MQ.reduced },
+        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
         (context) => {
           const { isReduced } = context.conditions as { isReduced: boolean };
           if (isReduced) return;
@@ -118,6 +118,9 @@ function ProjectSection({ project, locale }: { project: Project; locale: Locale 
         <span>{project.place}</span>
         <span>{project.period}</span>
       </div>
+      <span className={`${styles.chapterTab} micro`} aria-hidden="true">
+        File / {project.id}
+      </span>
 
       <h3 id={`${project.id}-title`} className={`${styles.name} display`} data-project-name>
         {project.name}
@@ -127,14 +130,19 @@ function ProjectSection({ project, locale }: { project: Project; locale: Locale 
       </p>
 
       {project.id !== 'comptoir' &&
-        media.map((item) => (
-          <div className={styles.media} data-project-media key={item.id}>
+        media.map((item, index) => (
+          <div
+            className={styles.media}
+            data-project-media
+            data-project-slot={index + 1}
+            key={item.id}
+          >
             <Media item={item} locale={locale} compact sizes="32vw" />
           </div>
         ))}
 
       {project.id === 'mgc' && (
-        <span className={styles.annotation} aria-hidden="true">
+        <span className={`${styles.annotation} hand-note`} aria-hidden="true">
           Community first
         </span>
       )}

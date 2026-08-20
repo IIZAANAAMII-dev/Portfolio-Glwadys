@@ -9,7 +9,11 @@
   height: 100vh;
   height: 100svh;
   overflow: hidden;
-  background: var(--paper);
+  background-color: var(--ivory);
+  background-image:
+    linear-gradient(90deg, transparent 0 7.5%, rgb(var(--oxblood-rgb) / 0.11) 7.5% calc(7.5% + 1px), transparent calc(7.5% + 1px)),
+    radial-gradient(circle at 30% 20%, rgb(var(--ink-rgb) / 0.022) 0 0.7px, transparent 1px);
+  background-size: 100% 100%, 12px 12px;
   color: var(--ink);
 }
 
@@ -35,7 +39,9 @@
   bottom: var(--margin);
   width: min(26ch, 24vw);
   text-align: right;
-  opacity: 0.52;
+  color: var(--rich-wine);
+  opacity: 0.76;
+  rotate: -2deg;
 }
 
 .listViewport {
@@ -56,6 +62,19 @@
   position: relative;
   min-height: 19vh;
   border-bottom: 1px solid var(--rule);
+}
+
+.row::after {
+  content: '';
+  position: absolute;
+  left: 9%;
+  bottom: 12%;
+  width: min(34vw, 28rem);
+  height: 1px;
+  background: rgb(var(--oxblood-rgb) / 0.42);
+  transform: scaleX(0) rotate(-0.6deg);
+  transform-origin: left center;
+  transition: transform var(--dur-editorial) var(--ease-reveal);
 }
 
 .term {
@@ -88,6 +107,11 @@
 .row:hover .context,
 .row:focus-within .context {
   opacity: 0.72;
+}
+
+.row:hover::after,
+.row:focus-within::after {
+  transform: scaleX(1) rotate(-0.6deg);
 }
 
 .index {

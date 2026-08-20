@@ -14,7 +14,7 @@
      sa forme EST son identité. */
   border-radius: 999px;
   border: 1px solid rgb(var(--paper-rgb) / 0.16);
-  background: rgb(20 19 17 / 0.72);
+  background: rgb(var(--wood-rgb) / 0.82);
   /* Flou léger et NON animé : le coût est payé une fois. */
   backdrop-filter: blur(14px) saturate(140%);
   color: var(--paper);
@@ -85,7 +85,7 @@
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  background: rgb(var(--oxblood-rgb) / 0.55);
+  background: rgb(var(--oxblood-rgb) / 0.68);
   z-index: -1;
 }
 
@@ -156,7 +156,8 @@
   .item {
     padding: 0.5rem 0.6rem;
   }
-  .journeyItem {
+  .journeyItem,
+  .expertiseItem {
     display: none;
   }
 }

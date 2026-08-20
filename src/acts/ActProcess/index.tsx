@@ -30,7 +30,7 @@ function ContactSheetRail({ content, locale }: Props) {
 
       const mm = gsap.matchMedia();
       mm.add(
-        { isDesktop: MQ.desktop, isReduced: MQ.reduced },
+        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
         (context) => {
           const { isDesktop, isReduced } = context.conditions as {
             isDesktop: boolean;
@@ -106,7 +106,7 @@ function BrandSystem({ content }: Pick<Props, 'content'>) {
 
       const mm = gsap.matchMedia();
       mm.add(
-        { isDesktop: MQ.desktop, isReduced: MQ.reduced },
+        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
         (context) => {
           const { isDesktop, isReduced } = context.conditions as {
             isDesktop: boolean;
@@ -135,6 +135,9 @@ function BrandSystem({ content }: Pick<Props, 'content'>) {
     <section ref={root} className={styles.systemSection} aria-labelledby="system-title">
       <div className={styles.sticky}>
         <span className={`${styles.kicker} micro`}>05.2 / {content.process.moodboard}</span>
+        <span className={`${styles.boardState} micro`} aria-hidden="true">
+          Loose notes → refined system
+        </span>
         <h3 id="system-title" className={`${styles.sectionTitle} display`}>
           {content.process.system}
         </h3>
@@ -153,7 +156,7 @@ function BrandSystem({ content }: Pick<Props, 'content'>) {
             </article>
           ))}
         </div>
-        <p className={`${styles.systemStatement} lead`}>{content.strategy.sentence}</p>
+        <p className={`${styles.systemStatement} hand-note`}>{content.strategy.sentence}</p>
       </div>
     </section>
   );
@@ -175,7 +178,7 @@ function Strategy({ content, locale }: Props) {
 
       const mm = gsap.matchMedia();
       mm.add(
-        { isDesktop: MQ.desktop, isReduced: MQ.reduced },
+        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
         (context) => {
           const { isDesktop, isReduced } = context.conditions as {
             isDesktop: boolean;
@@ -184,6 +187,9 @@ function Strategy({ content, locale }: Props) {
           if (isReduced) return;
 
           gsap.set(words, { yPercent: 115, autoAlpha: 0 });
+          if (words[0]) {
+            gsap.set(words[0], { yPercent: 0, autoAlpha: 1 });
+          }
           gsap.set(lineItems, { yPercent: 40, autoAlpha: 0 });
 
           const tl = gsap.timeline({
@@ -203,11 +209,10 @@ function Strategy({ content, locale }: Props) {
           words.forEach((word, index) => {
             const at = index * beat;
             const lineItem = lineItems[index];
-            tl.to(word, { yPercent: 0, autoAlpha: 1, duration: beat * 0.42 }, at).to(
-              word,
-              { yPercent: -110, autoAlpha: 0, duration: beat * 0.36 },
-              at + beat * 0.5,
-            );
+            if (index > 0) {
+              tl.to(word, { yPercent: 0, autoAlpha: 1, duration: beat * 0.42 }, at);
+            }
+            tl.to(word, { yPercent: -110, autoAlpha: 0, duration: beat * 0.36 }, at + beat * 0.5);
             if (lineItem) {
               tl.to(
                 lineItem,

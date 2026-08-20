@@ -5,7 +5,7 @@ import type { Locale } from './locales';
  *
  * Aucune image n'est codée en dur dans un composant. Tant qu'un `src` est
  * absent, l'emplacement est rendu comme une **réservation éditoriale cotée**
- * (voir docs/creative-direction.md §7). Renseigner `src` suffit à basculer sur
+ * (voir docs/creative-notebook-direction.md). Renseigner `src` suffit à basculer sur
  * l'image réelle : même ratio, même place, aucun recalage d'animation.
  *
  * Procédure de livraison : docs/asset-manifest.md

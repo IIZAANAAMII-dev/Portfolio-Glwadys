@@ -1,8 +1,5 @@
-/* ============================================================
-   MEDIA — image réelle, ou réservation éditoriale cotée.
-   Une réservation n'est pas un placeholder : c'est une fenêtre cotée,
-   dans le langage du pré-presse. Voir docs/creative-direction.md §7.
-   ============================================================ */
+/* Média réel ou tirage éditorial réservé. Le gabarit évoque désormais une
+   épreuve papier / planche contact, pas une interface de pré-presse froide. */
 
 .frame {
   position: relative;
@@ -15,7 +12,10 @@
   color: var(--tone-fg);
   /* Un aplat graphite sur fond encre est presque invisible : le filet garantit
      que le cadre se lise toujours comme une fenêtre cotée. */
-  box-shadow: inset 0 0 0 1px rgb(var(--on-surface-rgb) / 0.16);
+  border: 1px solid rgb(var(--ink-rgb) / 0.14);
+  box-shadow:
+    0 0.8rem 2.4rem rgb(var(--wood-rgb) / 0.17),
+    inset 0 0 0 0.35rem rgb(var(--ivory-rgb) / 0.22);
 }
 
 .image {
@@ -46,8 +46,19 @@
   pointer-events: none;
 }
 
-/* Repères de coupe aux quatre angles. Filets 1 px, longueur ~14 px.
-   C'est ce détail qui fait lire « gabarit » au lieu de « image manquante ». */
+.reservation::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 21% 31%, currentColor 0 0.5px, transparent 0.8px),
+    radial-gradient(circle at 73% 67%, currentColor 0 0.45px, transparent 0.75px);
+  background-size: 13px 11px, 17px 15px;
+  opacity: 0.045;
+  pointer-events: none;
+}
+
+/* Coins de cadrage très fins : langage de tirage et non placeholder UI. */
 .mark {
   position: absolute;
   width: 14px;
@@ -122,7 +133,7 @@
 /* ---------- TONS ----------
    Aucun gris neutre : tous les aplats viennent de la palette. */
 .frame[data-tone='paper'] {
-  --tone-bg: var(--paper);
+  --tone-bg: var(--ivory);
   --tone-fg: var(--ink);
 }
 .frame[data-tone='paper-deep'] {
@@ -140,4 +151,13 @@
 .frame[data-tone='bordeaux'] {
   --tone-bg: var(--bordeaux);
   --tone-fg: var(--paper);
+}
+
+.frame[data-tone='graphite'] .image {
+  filter: grayscale(1) sepia(0.08) contrast(0.96);
+}
+
+.frame[data-tone='blush'] .image,
+.frame[data-tone='paper-deep'] .image {
+  filter: sepia(0.1) saturate(0.84) contrast(0.98);
 }

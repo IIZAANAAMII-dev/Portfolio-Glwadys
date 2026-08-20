@@ -1,7 +1,7 @@
 # Asset Manifest
 
 > Le site est construit **sans aucun asset photographique**. Chaque emplacement est
-> une réservation éditoriale cotée (voir `creative-direction.md` §7).
+> un tirage éditorial réservé (voir `creative-notebook-direction.md`).
 >
 > Ce document est la liste de courses. Chaque ligne correspond à une entrée réelle
 > de `src/content/media.ts`. Déposer un fichier + renseigner son `src` suffit :
@@ -19,6 +19,10 @@
 stricte : c'est elle qui garantit qu'aucune composition ne bouge. Si le cadrage
 naturel ne correspond pas, ne pas recadrer soi-même — renseigner `focus`
 (ex. `focus: '50% 30%'`) et laisser le site recadrer.
+
+**Direction photo.** Noir et blanc mat ou chaleur contenue, contraste doux,
+grain discret, aucun traitement froid ou saturé. Les visuels doivent se lire
+comme des tirages premium, pas comme des cartes UI.
 
 **Formats.** JPEG ou PNG en entrée, `next/image` produit AVIF/WebP.
 Largeur utile : **2000 px** pour les plein cadre, 1400 px pour le reste.

@@ -37,12 +37,13 @@ export function ActOpeningHero({ content, locale }: Props) {
       const first = q<HTMLElement>(`.${styles.nameFirst}`)[0];
       const last = q<HTMLElement>(`.${styles.nameLast}`)[0];
       const tagline = q<HTMLElement>(`.${styles.tagline}`)[0];
-      if (!first || !last || !tagline) return;
+      const spread = q<HTMLElement>(`.${styles.spread}`)[0];
+      if (!first || !last || !tagline || !spread) return;
 
       const mm = gsap.matchMedia();
 
       mm.add(
-        { isDesktop: MQ.desktop, isReduced: MQ.reduced },
+        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
         (ctx) => {
           const { isDesktop, isReduced } = ctx.conditions as {
             isDesktop: boolean;
@@ -53,12 +54,14 @@ export function ActOpeningHero({ content, locale }: Props) {
           const media = q<HTMLElement>(`.${styles.media}`);
           const metas = q<HTMLElement>('[data-meta]');
           const lines = q<HTMLElement>('.line-mask > *');
+          const notebookDetails = q<HTMLElement>('[data-notebook-detail]');
 
           /* ---------- REDUCED MOTION ----------
              La Hero est déjà l'état de repos CSS : il n'y a rien à jouer.
              Le scroll n'est jamais verrouillé. */
           if (isReduced) {
             gsap.set([...lines], { yPercent: 0 });
+            gsap.set(notebookDetails, { autoAlpha: 1, y: 0 });
             emitReady();
             return;
           }
@@ -88,6 +91,7 @@ export function ActOpeningHero({ content, locale }: Props) {
 
           // Le tracking s'ouvre vers la droite depuis l'ancre : c'est le geste.
           gsap.set([first, last], { letterSpacing: '0.3em' });
+          gsap.set(last, { color: 'var(--ivory)' });
 
           const taglineRect = tagline.getBoundingClientRect();
           placeAt(
@@ -102,6 +106,8 @@ export function ActOpeningHero({ content, locale }: Props) {
           gsap.set(q<HTMLElement>(`.${styles.ruleV}`), { scaleY: 0, autoAlpha: 0 });
           gsap.set(metas, { autoAlpha: 0 });
           gsap.set(q<HTMLElement>(`.${styles.disciplines}`), { autoAlpha: 0 });
+          gsap.set(notebookDetails, { autoAlpha: 0, y: 14 });
+          gsap.set(spread, { autoAlpha: 0, scale: 0.82, rotation: -1.2 });
 
           // Médias persistants : état d'ouverture = décalage relatif vers le centre.
           gsap.set(q<HTMLElement>(`.${styles.heroVertical}`), {
@@ -147,6 +153,13 @@ export function ActOpeningHero({ content, locale }: Props) {
             // 4. La phrase de positionnement.
             .to(tagline, { autoAlpha: 0.88, duration: DUR.base }, 1.1)
 
+            // La couverture révèle le spread de travail, sans effet de page-turn.
+            .to(
+              spread,
+              { autoAlpha: 1, scale: 1, rotation: 0, duration: DUR.editorial },
+              1.18,
+            )
+
             // 5. Les fragments entrent depuis les bords.
             .to(
               [...media, ...transient],
@@ -167,6 +180,7 @@ export function ActOpeningHero({ content, locale }: Props) {
               { x: 0, y: 0, scale: 1, duration: DUR.cinematic, ease: EASE.handoff },
               1.9,
             )
+            .to(last, { color: 'var(--rich-wine)', duration: DUR.editorial }, 1.9)
             .to(
               tagline,
               { x: 0, y: 0, duration: DUR.cinematic, ease: EASE.handoff },
@@ -203,6 +217,11 @@ export function ActOpeningHero({ content, locale }: Props) {
               q<HTMLElement>(`.${styles.disciplines}`),
               { autoAlpha: 0.72, duration: DUR.base },
               2.25,
+            )
+            .to(
+              notebookDetails,
+              { autoAlpha: 1, y: 0, duration: DUR.base, stagger: STAGGER.tight },
+              2.18,
             )
 
             // 7. Le scroll est rendu AVANT la fin perçue : l'attente n'est pas subie.
@@ -251,6 +270,8 @@ export function ActOpeningHero({ content, locale }: Props) {
             .to(q<HTMLElement>(`.${styles.ruleH}`), { scaleX: 0.24, duration: 0.8 }, 0.1)
             .to(q<HTMLElement>(`.${styles.ruleV}`), { scaleY: 0, duration: 0.65 }, 0.12);
 
+          heroTl.to(spread, { scale: 0.94, rotation: -0.35, duration: 0.9 }, 0);
+
           return () => {
             // Filet de sécurité : le scroll ne doit jamais rester verrouillé.
             unlockScroll();
@@ -263,7 +284,10 @@ export function ActOpeningHero({ content, locale }: Props) {
          Un scroll bloqué est un défaut d'accessibilité bloquant. */
       const release = () => unlockScroll();
       window.addEventListener('keydown', release, { once: true });
-      const safety = window.setTimeout(release, 4500);
+      const safety = window.setTimeout(() => {
+        release();
+        emitReady();
+      }, 4500);
 
       return () => {
         window.removeEventListener('keydown', release);
@@ -302,6 +326,7 @@ export function ActOpeningHero({ content, locale }: Props) {
 
         <span className={styles.ruleH} aria-hidden="true" />
         <span className={styles.ruleV} aria-hidden="true" />
+        <span className={`${styles.spread} paper-card`} aria-hidden="true" />
 
         <div className={`${styles.nameFirst} monument`} aria-hidden="true">
           <span className="line-mask">
@@ -327,7 +352,15 @@ export function ActOpeningHero({ content, locale }: Props) {
         </div>
         <div className={`${styles.media} ${styles.heroFrame}`}>
           <Media item={heroFrame} locale={locale} index={2} total={4} sizes="16vw" />
+          <span className={`${styles.tape} paper-tape`} data-notebook-detail aria-hidden="true" />
         </div>
+
+        <span className={`${styles.handNote} hand-note`} data-notebook-detail aria-hidden="true">
+          ideas become direction
+        </span>
+        <span className={`${styles.folio} micro`} data-notebook-detail aria-hidden="true">
+          01 / Creative notebook
+        </span>
 
         {openingMedia.map((m, i) => (
           <div

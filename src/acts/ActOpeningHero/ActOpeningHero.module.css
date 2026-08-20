@@ -14,8 +14,20 @@
   height: 100vh;
   height: 100svh;
   overflow: hidden;
-  background: var(--ink);
+  background:
+    radial-gradient(circle at 66% 46%, rgb(var(--champagne-rgb) / 0.08), transparent 28%),
+    var(--wood-brown);
+  color: var(--ivory);
   transform-origin: center center;
+  box-shadow: 0 2rem 7rem rgb(var(--wood-rgb) / 0.42);
+}
+
+.stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgb(var(--ivory-rgb) / 0.08);
 }
 
 /* ---------- MÉTA ---------- */
@@ -35,6 +47,13 @@
 .axis {
   top: var(--margin);
   right: var(--margin);
+  color: var(--champagne);
+  background-color: var(--wood-brown);
+  opacity: 1;
+}
+
+.axis [data-meta-line] {
+  background-color: var(--wood-brown);
 }
 
 .disciplines {
@@ -69,6 +88,27 @@
   transform-origin: center top;
 }
 
+.spread {
+  position: absolute;
+  left: 36%;
+  right: 7%;
+  top: 25%;
+  bottom: 10%;
+  z-index: var(--z-base);
+  transform-origin: center center;
+}
+
+.spread::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgb(var(--ink-rgb) / 0.15), transparent);
+  box-shadow: -8px 0 18px rgb(var(--wood-rgb) / 0.09);
+}
+
 /* ============================================================
    HERO — état de repos
    ============================================================ */
@@ -77,6 +117,9 @@
 .nameLast {
   position: absolute;
   white-space: nowrap;
+  z-index: var(--z-sticky);
+  color: var(--ivory);
+  text-shadow: 0 0.08em 0.35em rgb(var(--wood-rgb) / 0.18);
 }
 
 .nameFirst {
@@ -87,6 +130,7 @@
 .nameLast {
   bottom: 14vh;
   right: calc(var(--margin) - 0.055em);
+  color: var(--rich-wine);
 }
 
 .tagline {
@@ -95,6 +139,7 @@
   top: 33%;
   width: min(30ch, 24%);
   opacity: 0.88;
+  z-index: var(--z-sticky);
 }
 
 .media {
@@ -113,6 +158,34 @@
   top: 34%;
   width: 11vw;
   z-index: var(--z-media);
+}
+
+.tape {
+  position: absolute;
+  left: 50%;
+  top: -0.55rem;
+  translate: -50% 0;
+  z-index: var(--z-sticky);
+}
+
+.handNote,
+.folio {
+  position: absolute;
+  z-index: var(--z-sticky);
+}
+
+.handNote {
+  left: 67%;
+  top: 58%;
+  color: var(--rich-wine);
+  rotate: -4deg;
+}
+
+.folio {
+  right: 9%;
+  bottom: 17%;
+  color: var(--ink);
+  opacity: 0.58;
 }
 
 .transient {
@@ -142,6 +215,13 @@
     display: none;
   }
 
+  .spread {
+    left: 18%;
+    right: var(--margin);
+    top: 30%;
+    bottom: 13%;
+  }
+
   .nameFirst {
     top: 12vh;
   }
@@ -155,9 +235,9 @@
   }
 
   .tagline {
-    top: auto;
-    bottom: 30vh;
-    width: min(28ch, 72%);
+    top: 20vh;
+    bottom: auto;
+    width: min(28ch, 82%);
   }
 
   .heroVertical {
@@ -171,6 +251,19 @@
     left: var(--margin);
     top: 42%;
     width: 25vw;
+  }
+
+  .handNote {
+    left: auto;
+    right: calc(var(--margin) + 1.5rem);
+    top: 58%;
+    max-width: 11ch;
+    text-align: right;
+  }
+
+  .folio {
+    right: calc(var(--margin) + 0.5rem);
+    bottom: 14%;
   }
 
   .disciplines {

@@ -1,5 +1,10 @@
 # Storyboard
 
+> **Mise à jour DA — 20 août 2026.** Les actes et handoffs restent la structure
+> narrative. Leurs surfaces, accessoires et traitements visuels suivent
+> désormais [`creative-notebook-direction.md`](creative-notebook-direction.md),
+> qui prévaut sur toute mention pré-presse ci-dessous.
+
 > Phase 7 du brief. Neuf **actes narratifs**, pas neuf `<section>` indépendantes.
 > Chaque acte est décrit par : START FRAME · USER ACTION · MOTION · FOCAL ELEMENT ·
 > HANDOFF · END FRAME.

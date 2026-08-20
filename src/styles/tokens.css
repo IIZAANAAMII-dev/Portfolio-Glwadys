@@ -6,21 +6,32 @@
 
 :root {
   /* ---------- COULEUR ----------
-     Aucun noir pur, aucun blanc pur. Tout est légèrement chaud. */
-  --paper: #f2ede4;
-  --paper-deep: #e5dcce;
-  --ink: #0e0d0c;
-  --graphite: #2a2724;
-  --bordeaux: #3b121b;
-  --oxblood: #5c1a24;
-  --blush: #d9c4b8;
-  --champagne: #c3a87c;
+     Creative notebook premium : chaude, mate, jamais digitale.
+     Les anciens noms restent en alias pour éviter les couleurs orphelines. */
+  --ivory: #f3ede3;
+  --paper: #e8ded1;
+  --warm-taupe: #bca991;
+  --ink: #17140f;
+  --charcoal: #28221c;
+  --champagne: #d0ad72;
+  --antique-gold: #986738;
+  --rich-wine: #592027;
+  --espresso: #4a2e21;
+  --wood-brown: #2b1d17;
+
+  --paper-deep: var(--paper);
+  --graphite: var(--charcoal);
+  --bordeaux: var(--rich-wine);
+  --oxblood: var(--rich-wine);
+  --blush: var(--warm-taupe);
 
   /* Dérivés — filets et voiles. Écrits en rgb() pour composer l'alpha. */
-  --ink-rgb: 14 13 12;
-  --paper-rgb: 242 237 228;
-  --champagne-rgb: 195 168 124;
-  --oxblood-rgb: 92 26 36;
+  --ink-rgb: 23 20 15;
+  --paper-rgb: 232 222 209;
+  --ivory-rgb: 243 237 227;
+  --champagne-rgb: 208 173 114;
+  --oxblood-rgb: 89 32 39;
+  --wood-rgb: 43 29 23;
 
   /* ---------- SURFACE COURANTE ----------
      Chaque acte redéfinit ces deux variables. Tout le reste en hérite,
@@ -35,6 +46,7 @@
      Rapport monument/micro ≈ 28:1. C'est ce contraste qui produit le luxe. */
   --font-display: var(--font-bodoni), 'Bodoni Moda', 'Didot', Georgia, serif;
   --font-sans: var(--font-inter-tight), 'Inter Tight', system-ui, sans-serif;
+  --font-hand: var(--font-kalam), 'Segoe Print', 'Bradley Hand', cursive;
   --font-kr: var(--font-noto-kr), var(--font-inter-tight), system-ui, sans-serif;
 
   /* 13vw et non 17 : à 17vw un mot de 7 lettres occupe toute la largeur et
@@ -97,7 +109,10 @@
   --ease-handoff: cubic-bezier(0.65, 0, 0.35, 1); /* ≈ power2.inOut */
 
   /* ---------- MATIÈRE ---------- */
-  --grain-opacity: 0.035;
+  --grain-opacity: 0.048;
+  --paper-shadow: 0 1.4rem 4.5rem rgb(var(--wood-rgb) / 0.2),
+    0 0.2rem 0.7rem rgb(var(--wood-rgb) / 0.12);
+  --paper-edge: rgb(var(--ink-rgb) / 0.13);
 
   /* ---------- TÉLÉPHONE ----------
      Animées par GSAP pendant la naissance du device (ACT 03).
@@ -111,7 +126,7 @@
 
 /* Actes clairs : on ne réécrit que deux variables, tout en hérite. */
 .surface-paper {
-  --surface: var(--paper);
+  --surface: var(--ivory);
   --on-surface: var(--ink);
   --on-surface-rgb: var(--ink-rgb);
 }
@@ -129,4 +144,10 @@
   --surface: var(--bordeaux);
   --on-surface: var(--paper);
   --on-surface-rgb: var(--paper-rgb);
+}
+
+.surface-wood {
+  --surface: var(--wood-brown);
+  --on-surface: var(--ivory);
+  --on-surface-rgb: var(--ivory-rgb);
 }

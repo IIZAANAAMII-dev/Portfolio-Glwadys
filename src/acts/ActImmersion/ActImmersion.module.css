@@ -2,7 +2,7 @@
   position: relative;
   min-height: 100svh;
   overflow: clip;
-  background: var(--bordeaux);
+  background: var(--wood-brown);
 }
 
 .stage {
@@ -10,8 +10,10 @@
   height: 100vh;
   height: 100svh;
   overflow: hidden;
-  background: var(--bordeaux);
-  color: var(--paper);
+  background:
+    radial-gradient(circle at 50% 48%, rgb(var(--champagne-rgb) / 0.08), transparent 38%),
+    var(--wood-brown);
+  color: var(--ivory);
 }
 
 .canvas,
@@ -33,7 +35,7 @@
 .portal {
   position: absolute;
   inset: 0;
-  background: var(--bordeaux);
+  background: var(--wood-brown);
 }
 
 .plane {

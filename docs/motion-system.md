@@ -1,5 +1,11 @@
 # Motion System
 
+> **Mise à jour DA — 20 août 2026.** Cette grammaire technique reste valide,
+> mais ses gestes incarnent désormais la matière décrite dans
+> [`creative-notebook-direction.md`](creative-notebook-direction.md) : feuille
+> qui glisse, tirage qui se superpose, note qui se range et archive qui s’aplatit.
+> Aucun effet de page-turn ou simulateur de livre n’est autorisé.
+
 > Phase 8 du brief. Un langage d'animation **limité et cohérent**.
 > Une grammaire courte appliquée avec rigueur produit une sensation de studio.
 > Vingt-cinq familles d'effets produisent une sensation de démo.

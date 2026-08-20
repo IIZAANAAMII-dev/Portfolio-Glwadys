@@ -26,7 +26,7 @@ export function ActExpertise({ content }: Props) {
 
       const mm = gsap.matchMedia();
       mm.add(
-        { isDesktop: MQ.desktop, isReduced: MQ.reduced },
+        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
         (context) => {
           const { isDesktop, isReduced } = context.conditions as {
             isDesktop: boolean;
@@ -74,7 +74,7 @@ export function ActExpertise({ content }: Props) {
             ))}
           </ol>
         </div>
-        <p className={`${styles.aside} micro`}>{content.strategy.sentence}</p>
+        <p className={`${styles.aside} hand-note`}>{content.strategy.sentence}</p>
       </div>
     </section>
   );
