@@ -1,11 +1,12 @@
 # Asset Manifest
 
-> Le site est construit **sans aucun asset photographique**. Chaque emplacement est
-> un tirage éditorial réservé (voir `creative-notebook-direction.md`).
+> Le site est désormais soutenu par une **série photographique conceptuelle de
+> 18 images générées pour le projet**. Les 47 emplacements du catalogue sont
+> alimentés par ces images et leurs recadrages narratifs.
 >
-> Ce document est la liste de courses. Chaque ligne correspond à une entrée réelle
-> de `src/content/media.ts`. Déposer un fichier + renseigner son `src` suffit :
-> **aucune modification de code, aucun recalage d'animation.**
+> Ce document reste la liste de remplacement pour les futurs médias clients réels.
+> Chaque ligne correspond à une entrée de `src/content/media.ts` : substituer un
+> fichier conserve les ratios, le layout et les animations.
 
 ---
 
@@ -30,7 +31,40 @@ Inutile de compresser en amont. Vidéo : `mp4` H.264 + une image `poster`.
 
 ---
 
-## Priorité 1 — sans ces médias, le site reste en mode réservation
+## Série conceptuelle actuellement intégrée
+
+- **Génération :** OpenAI ImageGen intégré à Codex, le 21 août 2026.
+- **Mode :** génération intégrée, une requête distincte par prise de vue maître.
+- **Direction :** photographie éditoriale chaude et mate, grain argentique discret,
+  palette ivoire / bordeaux / noyer / graphite / métal champagne.
+- **Sécurité de marque :** aucun logo, nom de marque, interface ou slogan n'est
+  incrusté dans les images.
+- **Statut :** visuels conceptuels d'appui. Ils ne doivent pas être présentés comme
+  des photographies de campagnes réellement livrées aux marques citées.
+- **Publication :** remplacer en priorité les images de projet par des médias dont
+  Glwadys ou les marques détiennent les droits dès qu'ils sont disponibles.
+
+Les originaux PNG générés restent conservés dans le dossier de génération Codex.
+Le projet embarque 18 copies JPEG qualité 88, pour un poids total de **3,51 Mo** :
+
+Le prompt set, les ratios et les demandes propres à chaque prise de vue sont
+documentés dans [`docs/generated-photo-prompts.md`](./generated-photo-prompts.md).
+
+| Univers | Fichiers | Dimensions |
+|---|---:|---|
+| Éditorial / Hero | 2 | 941×1672 à 1122×1402 |
+| Social | 4 | 941×1672 à 1254×1254 |
+| Process | 2 | 1122×1402 et 1536×1024 |
+| Yuna | 3 | 941×1672 à 1254×1254 |
+| Marseille Girls Club | 4 | 1122×1402 à 1672×941 |
+| Comptoir | 3 | 1122×1402 à 1672×941 |
+
+Les scènes Phone, Immersion et Journey réemploient volontairement cette série :
+la répétition crée la continuité du récit et évite 29 téléchargements uniques.
+
+---
+
+## Priorité 1 — remplacements réels recommandés
 
 | ID | Acte | Rôle | Ratio | Ce qu'il faut |
 |---|---|---|---|---|
@@ -102,10 +136,12 @@ dessus ; les images doivent la confirmer.
 
 ## Licences
 
-Aucun asset externe n'est utilisé dans le projet. Le grain est généré en SVG
-(`feTurbulence`, data-URI). Les polices — **Bodoni Moda**, **Inter Tight**,
-**Noto Sans KR** — sont sous SIL Open Font License 1.1 et auto-hébergées par
-`next/font`, sans requête vers un tiers.
+Aucun asset photographique externe n'est utilisé dans le projet. La série actuelle
+a été générée spécifiquement avec OpenAI ImageGen et ne contient pas de marque ou
+de personne identifiable. Le grain d'interface est généré en SVG (`feTurbulence`,
+data-URI). Les polices — **Bodoni Moda**, **Inter Tight**, **Noto Sans KR** — sont
+sous SIL Open Font License 1.1 et auto-hébergées par `next/font`, sans requête vers
+un tiers.
 
 Tout média ajouté doit être la propriété de Glwadys ou faire l'objet d'une
 autorisation d'usage. Les contenus produits pour une marque (Yuna, MGC, Comptoir)
@@ -117,8 +153,12 @@ relèvent souvent d'un accord avec cette marque : à vérifier avant publication
 
 | | Compte |
 |---|---|
-| Emplacements définis | voir `src/content/media.ts` |
-| Médias réels fournis | **0** |
-| Emplacements en réservation | **tous** |
+| Emplacements définis | **47** |
+| Emplacements alimentés | **47 / 47** |
+| Photographies maîtres | **18** |
+| Poids source dans le projet | **3,51 Mo** |
+| Emplacements en réservation | **0** |
 
-Le site est pleinement fonctionnel et présentable dans cet état.
+Le site est pleinement fonctionnel et présentable avec cette série conceptuelle.
+Une validation contractuelle reste nécessaire avant d'associer les visuels aux
+expériences clients réelles.

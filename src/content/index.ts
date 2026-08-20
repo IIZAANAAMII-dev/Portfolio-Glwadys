@@ -19,6 +19,15 @@ export interface WorkProject {
   period: string;
   summary: string;
   skills: string[];
+  caseStudy: {
+    challenge: string;
+    direction: string;
+    outcome: string;
+    evidence: Array<{
+      value: string;
+      label: string;
+    }>;
+  };
 }
 
 export interface JourneyEntry {
@@ -84,6 +93,12 @@ export interface Content {
   };
   work: {
     heading: string;
+    caseLabels: {
+      challenge: string;
+      direction: string;
+      outcome: string;
+      evidence: string;
+    };
     projects: WorkProject[];
   };
   journey: {
@@ -94,6 +109,12 @@ export interface Content {
     heading: string;
     entries: ExpertiseEntry[];
   };
+  manifesto: {
+    eyebrow: string;
+    lineOne: string;
+    lineTwo: string;
+    note: string;
+  };
   contact: {
     heading: string;
     statement: string;
@@ -103,6 +124,10 @@ export interface Content {
     linkedinLabel: string;
     availability: string;
     axis: string;
+    services: string;
+    languages: string;
+    backToTop: string;
+    copyright: string;
   };
   nav: {
     label: string;
@@ -175,6 +200,12 @@ const fr: Content = {
   },
   work: {
     heading: 'Sélection',
+    caseLabels: {
+      challenge: 'Enjeu',
+      direction: 'Direction',
+      outcome: 'Résultat',
+      evidence: 'Preuves',
+    },
     projects: [
       {
         id: 'yuna',
@@ -185,6 +216,19 @@ const fr: Content = {
         summary:
           'Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.',
         skills: ['Social Media', 'Contenu visuel', 'Planning éditorial', 'Storytelling produit'],
+        caseStudy: {
+          challenge:
+            'Faire sentir la finesse d’un bijou à travers un écran, sans perdre la proximité de la marque.',
+          direction:
+            'Construire une ligne visuelle sobre autour du geste, de la matière et du détail, puis l’inscrire dans un calendrier cohérent.',
+          outcome:
+            'Une présence produit plus désirable et reconnaissable, pensée pour nourrir la découverte comme la relation.',
+          evidence: [
+            { value: 'Produit', label: 'storytelling & détail' },
+            { value: 'Social', label: 'feed, story, calendrier' },
+            { value: 'Marque', label: 'cohérence visuelle' },
+          ],
+        },
       },
       {
         id: 'mgc',
@@ -195,6 +239,19 @@ const fr: Content = {
         summary:
           'Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.',
         skills: ['Community', 'Contenu digital', 'Événementiel', 'Cohérence de marque'],
+        caseStudy: {
+          challenge:
+            'Faire grandir une communauté locale sans lisser sa spontanéité ni son identité méditerranéenne.',
+          direction:
+            'Mêler formats scrapbook, couverture d’événements et prises de parole directes dans un langage collectif.',
+          outcome:
+            'Une communication vivante qui transforme chaque rendez-vous en récit et chaque membre en relais naturel.',
+          evidence: [
+            { value: 'Community', label: 'animation & proximité' },
+            { value: 'Live', label: 'couverture événementielle' },
+            { value: 'Formats', label: 'scrapbook & social' },
+          ],
+        },
       },
       {
         id: 'comptoir',
@@ -205,6 +262,19 @@ const fr: Content = {
         summary:
           'Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.',
         skills: ['Expérience client', 'Merchandising', 'Storytelling de marque', 'Retail'],
+        caseStudy: {
+          challenge:
+            'Faire vivre une marque gourmande dans chaque détail du parcours, de la vitrine jusqu’au conseil.',
+          direction:
+            'Relier merchandising, connaissance produit et attention portée au client dans une expérience cohérente.',
+          outcome:
+            'Une compréhension concrète de la marque en situation : ce qui attire, ce qui rassure et ce qui déclenche le choix.',
+          evidence: [
+            { value: 'Retail', label: 'expérience en boutique' },
+            { value: 'Produit', label: 'conseil personnalisé' },
+            { value: 'Espace', label: 'merchandising & récit' },
+          ],
+        },
       },
     ],
   },
@@ -231,6 +301,12 @@ const fr: Content = {
       { term: 'International', context: 'Français, anglais, coréen. Paris ↔ Seoul.' },
     ],
   },
+  manifesto: {
+    eyebrow: 'Manifeste / 08.5',
+    lineOne: 'Construire une marque,',
+    lineTwo: 'c’est décider de ce que l’on retiendra.',
+    note: 'Le reste est du bruit.',
+  },
   contact: {
     heading: 'Contact',
     statement: 'Créons quelque chose dont on se souvient.',
@@ -240,6 +316,10 @@ const fr: Content = {
     linkedinLabel: 'LinkedIn',
     availability: 'Disponible — Marseille & à distance',
     axis: 'Paris ↔ Seoul',
+    services: 'Social media · Content · Brand communication',
+    languages: 'FR · EN · KO',
+    backToTop: 'Revenir au début',
+    copyright: '© 2026 Glwadys Dalleau',
   },
   nav: {
     label: 'Navigation principale',
@@ -308,6 +388,12 @@ const en: Content = {
   },
   work: {
     heading: 'Selected work',
+    caseLabels: {
+      challenge: 'Challenge',
+      direction: 'Direction',
+      outcome: 'Outcome',
+      evidence: 'Evidence',
+    },
     projects: [
       {
         id: 'yuna',
@@ -318,6 +404,19 @@ const en: Content = {
         summary:
           'Bringing delicate jewellery collections forward: product storytelling, visual creation and engaging an audience that notices detail.',
         skills: ['Social Media', 'Visual Content', 'Editorial Planning', 'Product Storytelling'],
+        caseStudy: {
+          challenge:
+            'Translate the delicacy of jewellery through a screen without losing the brand’s sense of proximity.',
+          direction:
+            'Build a restrained visual language around gesture, material and detail, then give it a consistent editorial rhythm.',
+          outcome:
+            'A more desirable and recognisable product presence, designed to support discovery and connection.',
+          evidence: [
+            { value: 'Product', label: 'storytelling & detail' },
+            { value: 'Social', label: 'feed, story, calendar' },
+            { value: 'Brand', label: 'visual consistency' },
+          ],
+        },
       },
       {
         id: 'mgc',
@@ -328,6 +427,19 @@ const en: Content = {
         summary:
           'Growing a Mediterranean women’s club: scrapbook formats, event coverage, engagement and authenticity.',
         skills: ['Community', 'Digital Content', 'Event Communication', 'Brand Consistency'],
+        caseStudy: {
+          challenge:
+            'Grow a local community without smoothing away its spontaneity or Mediterranean identity.',
+          direction:
+            'Combine scrapbook formats, event coverage and direct conversation in a collective visual language.',
+          outcome:
+            'Lively communication that turns every gathering into a story and every member into a natural ambassador.',
+          evidence: [
+            { value: 'Community', label: 'engagement & proximity' },
+            { value: 'Live', label: 'event coverage' },
+            { value: 'Formats', label: 'scrapbook & social' },
+          ],
+        },
       },
       {
         id: 'comptoir',
@@ -338,6 +450,19 @@ const en: Content = {
         summary:
           'Immersed in artisanal fine food retail: personal advice, meticulous merchandising and in-store brand storytelling.',
         skills: ['Customer Experience', 'Merchandising', 'Brand Storytelling', 'Retail'],
+        caseStudy: {
+          challenge:
+            'Make a gourmet brand tangible at every step, from the storefront to personal advice.',
+          direction:
+            'Connect merchandising, product knowledge and customer care in one coherent experience.',
+          outcome:
+            'A practical understanding of brand experience: what attracts, reassures and ultimately drives choice.',
+          evidence: [
+            { value: 'Retail', label: 'in-store experience' },
+            { value: 'Product', label: 'personal advice' },
+            { value: 'Space', label: 'merchandising & story' },
+          ],
+        },
       },
     ],
   },
@@ -364,6 +489,12 @@ const en: Content = {
       { term: 'International', context: 'French, English, Korean. Paris ↔ Seoul.' },
     ],
   },
+  manifesto: {
+    eyebrow: 'Manifesto / 08.5',
+    lineOne: 'Building a brand',
+    lineTwo: 'means choosing what people will remember.',
+    note: 'Everything else is noise.',
+  },
   contact: {
     heading: 'Contact',
     statement: 'Let’s make something people remember.',
@@ -373,6 +504,10 @@ const en: Content = {
     linkedinLabel: 'LinkedIn',
     availability: 'Available — Marseille & remote',
     axis: 'Paris ↔ Seoul',
+    services: 'Social media · Content · Brand communication',
+    languages: 'FR · EN · KO',
+    backToTop: 'Back to the beginning',
+    copyright: '© 2026 Glwadys Dalleau',
   },
   nav: {
     label: 'Main navigation',
@@ -441,6 +576,12 @@ const ko: Content = {
   },
   work: {
     heading: '주요 작업',
+    caseLabels: {
+      challenge: '과제',
+      direction: '방향',
+      outcome: '결과',
+      evidence: '근거',
+    },
     projects: [
       {
         id: 'yuna',
@@ -451,6 +592,19 @@ const ko: Content = {
         summary:
           '섬세한 주얼리 컬렉션을 알리는 일. 제품 스토리텔링, 비주얼 제작, 디테일에 민감한 오디언스와의 관계 형성.',
         skills: ['Social Media', '비주얼 콘텐츠', '에디토리얼 기획', '제품 스토리텔링'],
+        caseStudy: {
+          challenge:
+            '브랜드의 친밀함을 잃지 않으면서 화면 안에서 주얼리의 섬세함을 전달하는 것.',
+          direction:
+            '손의 움직임, 소재와 디테일을 중심으로 절제된 비주얼 언어와 일관된 에디토리얼 리듬을 설계했습니다.',
+          outcome:
+            '발견과 관계 형성을 함께 돕는, 더 매력적이고 알아보기 쉬운 제품 존재감을 만들었습니다.',
+          evidence: [
+            { value: '제품', label: '스토리텔링 & 디테일' },
+            { value: 'Social', label: '피드, 스토리, 캘린더' },
+            { value: '브랜드', label: '비주얼 일관성' },
+          ],
+        },
       },
       {
         id: 'mgc',
@@ -461,6 +615,19 @@ const ko: Content = {
         summary:
           '지중해 여성 커뮤니티의 성장. 스크랩북 포맷, 이벤트 기록, 참여와 진정성.',
         skills: ['커뮤니티', '디지털 콘텐츠', '이벤트 커뮤니케이션', '브랜드 일관성'],
+        caseStudy: {
+          challenge:
+            '자발성과 지중해의 정체성을 잃지 않으면서 지역 커뮤니티를 성장시키는 것.',
+          direction:
+            '스크랩북 포맷, 이벤트 현장 기록과 직접적인 대화를 하나의 집단적 비주얼 언어로 엮었습니다.',
+          outcome:
+            '모든 만남을 이야기로, 모든 멤버를 자연스러운 연결점으로 바꾸는 생동감 있는 커뮤니케이션.',
+          evidence: [
+            { value: 'Community', label: '참여 & 친밀함' },
+            { value: 'Live', label: '이벤트 현장 기록' },
+            { value: 'Formats', label: '스크랩북 & 소셜' },
+          ],
+        },
       },
       {
         id: 'comptoir',
@@ -471,6 +638,19 @@ const ko: Content = {
         summary:
           '수공예 식품 리테일 현장. 맞춤 상담, 정교한 머천다이징, 매장에서의 브랜드 스토리텔링.',
         skills: ['고객 경험', '머천다이징', '브랜드 스토리텔링', '리테일'],
+        caseStudy: {
+          challenge:
+            '쇼윈도부터 상담까지, 고객 여정의 모든 디테일에서 미식 브랜드를 경험하게 하는 것.',
+          direction:
+            '머천다이징, 제품 지식과 고객에 대한 세심한 관심을 하나의 일관된 경험으로 연결했습니다.',
+          outcome:
+            '무엇이 시선을 끌고, 신뢰를 주며, 선택을 만드는지 브랜드를 현장에서 이해했습니다.',
+          evidence: [
+            { value: 'Retail', label: '매장 경험' },
+            { value: '제품', label: '맞춤 상담' },
+            { value: '공간', label: '머천다이징 & 이야기' },
+          ],
+        },
       },
     ],
   },
@@ -497,6 +677,12 @@ const ko: Content = {
       { term: 'International', context: '프랑스어, 영어, 한국어. 파리 ↔ 서울.' },
     ],
   },
+  manifesto: {
+    eyebrow: 'Manifesto / 08.5',
+    lineOne: '브랜드를 만든다는 것은,',
+    lineTwo: '사람들이 무엇을 기억할지 결정하는 일입니다.',
+    note: '나머지는 소음입니다.',
+  },
   contact: {
     heading: '연락',
     statement: '기억에 남는 것을 함께 만들어요.',
@@ -506,6 +692,10 @@ const ko: Content = {
     linkedinLabel: 'LinkedIn',
     availability: '가능 — 마르세유 및 원격',
     axis: '파리 ↔ 서울',
+    services: 'Social media · Content · Brand communication',
+    languages: 'FR · EN · KO',
+    backToTop: '처음으로 돌아가기',
+    copyright: '© 2026 Glwadys Dalleau',
   },
   nav: {
     label: '주요 내비게이션',

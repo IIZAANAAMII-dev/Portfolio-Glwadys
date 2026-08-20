@@ -60,6 +60,7 @@ export function ActImmersion({ content, locale }: Props) {
       const rootEl = root.current;
       const stageEl = stage.current;
       if (!rootEl || !stageEl) return;
+      const q = gsap.utils.selector(stageEl);
 
       const mm = gsap.matchMedia();
       mm.add(
@@ -103,6 +104,12 @@ export function ActImmersion({ content, locale }: Props) {
             .fromTo('[data-immersion-heading]', { yPercent: 115 }, { yPercent: 0, duration: 0.2 }, 0.16)
             .fromTo('[data-immersion-copy]', { yPercent: 16, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.22 }, 0.35)
             .to('[data-immersion-copy]', { yPercent: -20, autoAlpha: 0, duration: 0.2 }, 0.74)
+            .to(q<HTMLElement>('[data-immersion-meta]'), { autoAlpha: 0, duration: 0.16 }, 0.76)
+            .to(
+              [stageEl, ...q<HTMLElement>(`.${styles.portal}`)],
+              { backgroundColor: 'var(--ivory)', duration: 0.22 },
+              0.78,
+            )
             .to('[data-immersion-heading]', { yPercent: -110, duration: 0.18 }, 0.8);
         },
       );
@@ -135,7 +142,9 @@ export function ActImmersion({ content, locale }: Props) {
         )}
 
         <div className={styles.copy}>
-          <span className={`${styles.chapter} micro`}>04 / {content.immersion.heading}</span>
+          <span className={`${styles.chapter} micro`} data-immersion-meta>
+            04 / {content.immersion.heading}
+          </span>
           <div className={`${styles.heading} display line-mask`}>
             <h2 id="immersion-title" data-immersion-heading>
               {content.immersion.heading}
@@ -144,7 +153,9 @@ export function ActImmersion({ content, locale }: Props) {
           <p className={`${styles.statement} lead`} data-immersion-copy>
             {content.immersion.statement}
           </p>
-          <span className={`${styles.depthAxis} micro`}>Paper / Archive / Depth</span>
+          <span className={`${styles.depthAxis} micro`} data-immersion-meta>
+            Paper / Archive / Depth
+          </span>
         </div>
       </div>
     </section>

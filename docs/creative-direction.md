@@ -213,9 +213,10 @@ asymétrique ; rien n'est centré par défaut.
 
 ## 7. Matière
 
-**Grain.** Un grain unique, global, en overlay : opacité **0.035**, statique,
-`pointer-events: none`, généré une seule fois (SVG `feTurbulence` en data-URI,
-donc aucune requête réseau, aucun asset binaire). Il ne réduit jamais la
+**Grain.** Un grain unique, global, en overlay : opacité **0.058**, statique,
+`pointer-events: none`, généré une seule fois avec deux échelles de turbulence
+(grain argentique fin + fibre papier large) en data-URI, donc aucune requête
+réseau et aucun asset binaire. Il ne réduit jamais la
 lisibilité et il n'est **jamais animé** — grain animé = anti-pattern documenté.
 Son rôle : donner une matière de papier et unifier ivoire et encre.
 

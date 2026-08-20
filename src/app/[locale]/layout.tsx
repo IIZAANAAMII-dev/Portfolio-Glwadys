@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 
 import { getContent } from '@/content';
 import { htmlLang, isLocale, locales, type Locale } from '@/content/locales';
+import { CustomCursor } from '@/shell/CustomCursor';
 import { Grain } from '@/shell/Grain';
 import { SmoothScroll } from '@/shell/SmoothScroll';
 
@@ -98,6 +99,7 @@ export default async function LocaleLayout({
           <main id="main">{children}</main>
         </SmoothScroll>
         <Grain />
+        <CustomCursor />
       </body>
     </html>
   );

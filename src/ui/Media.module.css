@@ -25,6 +25,24 @@
   object-position: var(--focus, 50% 50%);
 }
 
+/* WebKit peut afficher un filet clair autour des images lazy-loadées. */
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+  .image[loading='lazy'] {
+    clip-path: inset(0.6px);
+  }
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .frame[data-cursor='view'] .image {
+    transform: scale(1.001);
+    transition: transform 900ms var(--ease-reveal);
+  }
+
+  .frame[data-cursor='view']:hover .image {
+    transform: scale(1.028);
+  }
+}
+
 /* ---------- RÉSERVATION ---------- */
 
 .reservation {

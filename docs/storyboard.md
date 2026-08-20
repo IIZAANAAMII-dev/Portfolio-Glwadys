@@ -395,8 +395,9 @@ retail et merchandising → communauté → direction de marque.
 
 **FOCAL ELEMENT** — le playhead.
 
-**HANDOFF → ACT 08** — La bande temporelle s'estompe et **la dernière année
-(`2026`) grandit** jusqu'à devenir le premier mot de l'Expertise.
+**HANDOFF → ACT 08** — Le dernier jalon devient le focus, la jauge atteint 100 %,
+puis un feuillet ivoire réglé balaie la bande temporelle. Ce feuillet est déjà
+le fond de l'Expertise : aucun cut de couleur ou de matière.
 
 ---
 
@@ -415,7 +416,8 @@ passe en `--oxblood` et une précision contextuelle apparaît dans la marge en
 Termes : `SOCIAL MEDIA` · `CONTENT CREATION` · `CONTENT STRATEGY` ·
 `BRAND COMMUNICATION` · `COMMUNITY` · `DIGITAL MARKETING` · `INTERNATIONAL`.
 
-**HANDOFF → ACT 09** — La complexité se réduit. Il ne reste qu'une ligne.
+**HANDOFF → ACT 09** — La complexité se réduit : la feuille ivoire se contracte
+jusqu'aux marges exactes de la dernière page et révèle le bois autour d'elle.
 
 ---
 
@@ -423,7 +425,8 @@ Termes : `SOCIAL MEDIA` · `CONTENT CREATION` · `CONTENT STRATEGY` ·
 
 La fin doit conclure le film, pas afficher un formulaire.
 
-**START FRAME** — Fond `--ink`. Presque vide. **On retourne au point de départ.**
+**START FRAME** — Fond bois, dernière page ivoire presque vide. La géométrie est
+déjà celle léguée par l'Expertise : **on retourne au carnet du point de départ.**
 
 **MOTION**
 `GLWADYS DALLEAU` réapparaît en `--t-monument`, révélé par le **même** mask

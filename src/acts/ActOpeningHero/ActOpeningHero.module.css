@@ -109,6 +109,67 @@
   box-shadow: -8px 0 18px rgb(var(--wood-rgb) / 0.09);
 }
 
+.handoffSurface {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base);
+  pointer-events: none;
+  background: var(--charcoal);
+}
+
+.openingFrame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(18rem, 42vw, 39rem);
+  aspect-ratio: 1.75;
+  z-index: var(--z-persistent);
+  border: 1px solid rgb(var(--champagne-rgb) / 0.72);
+  translate: -50% -50%;
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.openingFrame::before,
+.openingFrame::after {
+  content: '';
+  position: absolute;
+  background: rgb(var(--champagne-rgb) / 0.38);
+}
+
+.openingFrame::before {
+  left: 50%;
+  top: -10%;
+  width: 1px;
+  height: 120%;
+}
+
+.openingFrame::after {
+  left: -6%;
+  top: 50%;
+  width: 112%;
+  height: 1px;
+}
+
+.openingCount,
+.openingCaption {
+  position: absolute;
+  z-index: 1;
+  padding: 0.3rem 0.45rem;
+  color: var(--champagne);
+  background: var(--wood-brown);
+}
+
+.openingCount {
+  left: -1px;
+  top: -1px;
+}
+
+.openingCaption {
+  right: -1px;
+  bottom: -1px;
+}
+
 /* ============================================================
    HERO — état de repos
    ============================================================ */
@@ -151,6 +212,11 @@
   top: 29%;
   width: 13.5vw;
   z-index: var(--z-persistent);
+}
+
+.heroSharedVisual {
+  width: 100%;
+  transform-origin: center;
 }
 
 .heroFrame {
@@ -222,6 +288,11 @@
     bottom: 13%;
   }
 
+  .openingFrame {
+    width: min(78vw, 25rem);
+    aspect-ratio: 1.15;
+  }
+
   .nameFirst {
     top: 12vh;
   }
@@ -277,7 +348,9 @@
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .transient {
+  .transient,
+  .openingFrame,
+  .handoffSurface {
     display: none;
   }
 }

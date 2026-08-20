@@ -38,7 +38,9 @@ export function ActOpeningHero({ content, locale }: Props) {
       const last = q<HTMLElement>(`.${styles.nameLast}`)[0];
       const tagline = q<HTMLElement>(`.${styles.tagline}`)[0];
       const spread = q<HTMLElement>(`.${styles.spread}`)[0];
-      if (!first || !last || !tagline || !spread) return;
+      const openingFrame = q<HTMLElement>('[data-opening-frame]')[0];
+      const handoffSurface = q<HTMLElement>('[data-hero-handoff]')[0];
+      if (!first || !last || !tagline || !spread || !openingFrame || !handoffSurface) return;
 
       const mm = gsap.matchMedia();
 
@@ -54,7 +56,24 @@ export function ActOpeningHero({ content, locale }: Props) {
           const media = q<HTMLElement>(`.${styles.media}`);
           const metas = q<HTMLElement>('[data-meta]');
           const lines = q<HTMLElement>('.line-mask > *');
+          const nameLines = q<HTMLElement>('[data-name-line]');
           const notebookDetails = q<HTMLElement>('[data-notebook-detail]');
+          const heroFrameEl = q<HTMLElement>(`.${styles.heroFrame}`)[0];
+          const heroVerticalEl = q<HTMLElement>(`.${styles.heroVertical}`)[0];
+          const heroSharedVisual = q<HTMLElement>('[data-hero-shared-visual]')[0];
+          const ruleH = q<HTMLElement>(`.${styles.ruleH}`)[0];
+          const ruleV = q<HTMLElement>(`.${styles.ruleV}`)[0];
+          const disciplines = q<HTMLElement>(`.${styles.disciplines}`)[0];
+          if (
+            !heroFrameEl ||
+            !heroVerticalEl ||
+            !heroSharedVisual ||
+            !ruleH ||
+            !ruleV ||
+            !disciplines
+          ) {
+            return;
+          }
 
           /* ---------- REDUCED MOTION ----------
              La Hero est déjà l'état de repos CSS : il n'y a rien à jouer.
@@ -102,27 +121,34 @@ export function ActOpeningHero({ content, locale }: Props) {
           );
           gsap.set(tagline, { autoAlpha: 0 });
 
-          gsap.set(q<HTMLElement>(`.${styles.ruleH}`), { scaleX: 0 });
-          gsap.set(q<HTMLElement>(`.${styles.ruleV}`), { scaleY: 0, autoAlpha: 0 });
+          gsap.set(ruleH, { scaleX: 0 });
+          gsap.set(ruleV, { scaleY: 0, autoAlpha: 0 });
+          gsap.set(nameLines, { yPercent: 112 });
           gsap.set(metas, { autoAlpha: 0 });
-          gsap.set(q<HTMLElement>(`.${styles.disciplines}`), { autoAlpha: 0 });
+          gsap.set(disciplines, { autoAlpha: 0 });
           gsap.set(notebookDetails, { autoAlpha: 0, y: 14 });
           gsap.set(spread, { autoAlpha: 0, scale: 0.82, rotation: -1.2 });
+          gsap.set(openingFrame, { autoAlpha: 0, scaleX: 0.16, scaleY: 0.72 });
+          gsap.set(handoffSurface, {
+            clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)',
+          });
 
           // Médias persistants : état d'ouverture = décalage relatif vers le centre.
-          gsap.set(q<HTMLElement>(`.${styles.heroVertical}`), {
+          gsap.set(heroVerticalEl, {
             xPercent: isDesktop ? -62 : 0,
             yPercent: isDesktop ? 8 : 14,
             scale: 0.82,
             autoAlpha: 0,
+            clipPath: 'inset(100% 0 0 0)',
           });
-          gsap.set(q<HTMLElement>(`.${styles.heroFrame}`), {
+          gsap.set(heroFrameEl, {
             xPercent: isDesktop ? -78 : 0,
             yPercent: isDesktop ? -18 : 16,
             scale: 0.85,
             autoAlpha: 0,
+            clipPath: 'inset(100% 0 0 0)',
           });
-          gsap.set(transient, { autoAlpha: 0, scale: 0.9 });
+          gsap.set(transient, { autoAlpha: 0, scale: 0.9, clipPath: 'inset(100% 0 0 0)' });
 
           /* ---------- TIMELINE MAÎTRESSE ----------
              Un acte = une timeline. ~2.8 s, déverrouillage à 2.4 s. */
@@ -130,34 +156,40 @@ export function ActOpeningHero({ content, locale }: Props) {
 
           tl
             // 1. Le filet se déploie, les méta se posent.
-            .to(q<HTMLElement>(`.${styles.ruleH}`), {
+            .to(openingFrame, {
+              autoAlpha: 0.82,
               scaleX: 1,
+              scaleY: 1,
               duration: DUR.editorial,
             })
+            .to(ruleH, {
+              scaleX: 1,
+              duration: DUR.editorial,
+            }, 0.06)
             .to(metas, { autoAlpha: 0.72, duration: DUR.base, stagger: STAGGER.base }, 0.05)
 
             // 2. Le nom, révélé par ligne.
             .to(
-              q<HTMLElement>('[data-name-line]'),
+              nameLines,
               { yPercent: 0, duration: DUR.editorial, stagger: STAGGER.base },
-              0.35,
+              0.22,
             )
 
             // 3. Le tracking se referme + l'échelle se resserre. Geste signature.
             .to(
               [first, last],
               { letterSpacing: '-0.045em', duration: DUR.editorial, ease: EASE.move },
-              0.6,
+              0.48,
             )
 
             // 4. La phrase de positionnement.
-            .to(tagline, { autoAlpha: 0.88, duration: DUR.base }, 1.1)
+            .to(tagline, { autoAlpha: 0.88, duration: DUR.base }, 0.72)
 
             // La couverture révèle le spread de travail, sans effet de page-turn.
             .to(
               spread,
               { autoAlpha: 1, scale: 1, rotation: 0, duration: DUR.editorial },
-              1.18,
+              0.82,
             )
 
             // 5. Les fragments entrent depuis les bords.
@@ -165,12 +197,13 @@ export function ActOpeningHero({ content, locale }: Props) {
               [...media, ...transient],
               {
                 autoAlpha: 1,
+                clipPath: 'inset(0% 0 0 0)',
                 scale: (i: number, target: Element) =>
                   target.classList.contains(styles.transient ?? '') ? 1 : 0.82,
                 duration: DUR.base,
                 stagger: STAGGER.base,
               },
-              1.35,
+              0.9,
             )
 
             /* 6. MORPHOSE — la composition d'ouverture devient la Hero.
@@ -178,13 +211,13 @@ export function ActOpeningHero({ content, locale }: Props) {
             .to(
               [first, last],
               { x: 0, y: 0, scale: 1, duration: DUR.cinematic, ease: EASE.handoff },
-              1.9,
+              1.28,
             )
-            .to(last, { color: 'var(--rich-wine)', duration: DUR.editorial }, 1.9)
+            .to(last, { color: 'var(--rich-wine)', duration: DUR.editorial }, 1.28)
             .to(
               tagline,
               { x: 0, y: 0, duration: DUR.cinematic, ease: EASE.handoff },
-              1.9,
+              1.28,
             )
             .to(
               media,
@@ -195,7 +228,7 @@ export function ActOpeningHero({ content, locale }: Props) {
                 duration: DUR.cinematic,
                 ease: EASE.handoff,
               },
-              1.95,
+              1.3,
             )
             // Deux fragments quittent le cadre, deux trouvent leur place.
             .to(
@@ -206,27 +239,28 @@ export function ActOpeningHero({ content, locale }: Props) {
                 duration: DUR.editorial,
                 ease: EASE.move,
               },
-              1.9,
+              1.25,
             )
+            .to(openingFrame, { autoAlpha: 0, scaleX: 1.24, scaleY: 1.24, duration: DUR.base }, 1.32)
             .to(
-              q<HTMLElement>(`.${styles.ruleV}`),
+              ruleV,
               { scaleY: 1, autoAlpha: 1, duration: DUR.editorial },
-              2.15,
+              1.72,
             )
             .to(
-              q<HTMLElement>(`.${styles.disciplines}`),
+              disciplines,
               { autoAlpha: 0.72, duration: DUR.base },
-              2.25,
+              1.84,
             )
             .to(
               notebookDetails,
               { autoAlpha: 1, y: 0, duration: DUR.base, stagger: STAGGER.tight },
-              2.18,
+              1.78,
             )
 
             // 7. Le scroll est rendu AVANT la fin perçue : l'attente n'est pas subie.
-            .add(() => unlockScroll(), 2.4)
-            .add(() => emitReady(), 2.65);
+            .add(() => unlockScroll(), 2.12)
+            .add(() => emitReady(), 2.34);
 
           /* ---------- ACT 01 — LA COUVERTURE DEVIENT OBJET ----------
              Timeline distincte car elle est pilotée par le scroll, mais elle
@@ -244,33 +278,76 @@ export function ActOpeningHero({ content, locale }: Props) {
             },
           });
 
+          const socialTarget = () => {
+            const width = isDesktop
+              ? Math.min(window.innerWidth * 0.18, 17 * 16)
+              : window.innerWidth * 0.32;
+            return {
+              left: window.innerWidth * (isDesktop ? 0.42 : 0.34),
+              top: window.innerHeight * (isDesktop ? 0.16 : 0.2),
+              width,
+              height: width * (16 / 9),
+            };
+          };
+
           heroTl
-            .to(stageEl, { scale: 0.88, duration: 1 }, 0)
             .to(
-              q<HTMLElement>(`.${styles.heroFrame}`),
-              { xPercent: -125, autoAlpha: 0, duration: 0.72 },
-              0.08,
+              handoffSurface,
+              {
+                clipPath: 'polygon(0 0%, 100% 0%, 100% 100%, 0 100%)',
+                duration: 0.82,
+              },
+              0.12,
+            )
+            .to(
+              heroFrameEl,
+              { xPercent: -138, yPercent: -14, autoAlpha: 0, duration: 0.7 },
+              0.06,
             )
             .to(
               [first, last],
-              { scale: 0.72, autoAlpha: 0.34, duration: 0.9 },
+              {
+                xPercent: (i: number) => (i === 0 ? -8 : 8),
+                scale: 0.78,
+                autoAlpha: 0,
+                duration: 0.78,
+              },
               0,
             )
-            .to(tagline, { xPercent: -24, autoAlpha: 0.35, duration: 0.75 }, 0.08)
+            .to(tagline, { xPercent: -28, autoAlpha: 0, duration: 0.62 }, 0.06)
             .to(
-              q<HTMLElement>(`.${styles.heroVertical}`),
+              heroVerticalEl,
               {
-                xPercent: isDesktop ? -82 : -45,
-                yPercent: isDesktop ? 10 : 2,
-                scale: isDesktop ? 1.18 : 1.08,
+                x: () => {
+                  const target = socialTarget();
+                  const scaledLeft = heroVerticalEl.offsetLeft + (heroVerticalEl.offsetWidth - target.width) / 2;
+                  return target.left - scaledLeft;
+                },
+                y: () => {
+                  const target = socialTarget();
+                  const scaledTop = heroVerticalEl.offsetTop + (heroVerticalEl.offsetHeight - target.height) / 2;
+                  return target.top - scaledTop;
+                },
                 duration: 1,
               },
               0,
             )
-            .to(q<HTMLElement>(`.${styles.ruleH}`), { scaleX: 0.24, duration: 0.8 }, 0.1)
-            .to(q<HTMLElement>(`.${styles.ruleV}`), { scaleY: 0, duration: 0.65 }, 0.12);
-
-          heroTl.to(spread, { scale: 0.94, rotation: -0.35, duration: 0.9 }, 0);
+            .to(
+              heroSharedVisual,
+              {
+                scale: () => socialTarget().width / heroVerticalEl.offsetWidth,
+                duration: 1,
+              },
+              0,
+            )
+            .to(ruleH, { scaleX: 0, autoAlpha: 0, duration: 0.7 }, 0.08)
+            .to(ruleV, { scaleY: 0, autoAlpha: 0, duration: 0.62 }, 0.1)
+            .to(spread, { scale: 0.9, rotation: -0.5, autoAlpha: 0, duration: 0.72 }, 0)
+            .to(
+              [...metas, ...notebookDetails, disciplines],
+              { autoAlpha: 0, duration: 0.48 },
+              0.08,
+            );
 
           return () => {
             // Filet de sécurité : le scroll ne doit jamais rester verrouillé.
@@ -327,6 +404,12 @@ export function ActOpeningHero({ content, locale }: Props) {
         <span className={styles.ruleH} aria-hidden="true" />
         <span className={styles.ruleV} aria-hidden="true" />
         <span className={`${styles.spread} paper-card`} aria-hidden="true" />
+        <span className={styles.handoffSurface} data-hero-handoff aria-hidden="true" />
+
+        <div className={styles.openingFrame} data-opening-frame aria-hidden="true">
+          <span className={`${styles.openingCount} micro`}>00 / 09</span>
+          <span className={`${styles.openingCaption} micro`}>{opening.edition}</span>
+        </div>
 
         <div className={`${styles.nameFirst} monument`} aria-hidden="true">
           <span className="line-mask">
@@ -348,7 +431,9 @@ export function ActOpeningHero({ content, locale }: Props) {
         </ul>
 
         <div className={`${styles.media} ${styles.heroVertical}`} data-persistent="hero-vertical">
-          <Media item={heroVertical} locale={locale} index={1} total={4} sizes="20vw" />
+          <div className={styles.heroSharedVisual} data-hero-shared-visual>
+            <Media item={heroVertical} locale={locale} index={1} total={4} sizes="20vw" />
+          </div>
         </div>
         <div className={`${styles.media} ${styles.heroFrame}`}>
           <Media item={heroFrame} locale={locale} index={2} total={4} sizes="16vw" />

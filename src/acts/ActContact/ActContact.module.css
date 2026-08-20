@@ -1,11 +1,16 @@
 .act {
   position: relative;
-  min-height: 112svh;
-  overflow: hidden;
+  overflow: clip;
   background: var(--wood-brown);
   color: var(--ink);
 }
 
+.manifestoSection {
+  position: relative;
+  min-height: 156svh;
+}
+
+.manifestoStage,
 .stage {
   position: sticky;
   top: 0;
@@ -17,6 +22,7 @@
     var(--wood-brown);
 }
 
+.manifestoPage,
 .lastPage {
   position: absolute;
   inset: clamp(1rem, 3vw, 2.75rem);
@@ -24,59 +30,148 @@
   color: var(--ink);
 }
 
-.chapter,
-.axis,
-.availability,
-.edition {
+.manifestoPage::before,
+.lastPage::before {
+  content: '';
   position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7.5%;
+  width: 1px;
+  background: rgb(var(--oxblood-rgb) / 0.1);
+  pointer-events: none;
 }
 
+.manifestoEyebrow,
+.manifestoEdition,
+.manifestoAxis,
+.chapter,
+.edition,
+.copyright,
+.backTop {
+  position: absolute;
+  z-index: var(--z-sticky);
+}
+
+.manifestoEyebrow,
 .chapter {
   top: var(--margin);
   left: var(--margin);
 }
 
+.manifestoEdition,
 .edition {
   top: var(--margin);
   right: var(--margin);
 }
 
-.axis {
-  right: var(--margin);
-  bottom: var(--margin);
-  color: var(--rich-wine);
+.edition {
+  right: calc(var(--margin) + clamp(2.5rem, 5vw, 5rem));
 }
 
-.availability {
+.manifestoTitle {
+  position: absolute;
   left: var(--margin);
+  right: var(--margin);
+  top: 24%;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 8.2vw, 9.75rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+
+.manifestoLine > span {
+  display: block;
+}
+
+.manifestoLine {
+  margin-bottom: -0.1em;
+  padding-bottom: 0.1em;
+}
+
+.manifestoLine:last-child {
+  padding-left: 10vw;
+  color: var(--rich-wine);
+  text-align: right;
+}
+
+.manifestoRule {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: 21%;
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.2);
+  transform-origin: left center;
+}
+
+.manifestoNote {
+  position: absolute;
+  left: 48%;
+  bottom: 11%;
+  max-width: 17ch;
+  color: var(--rich-wine);
+  rotate: -3deg;
+}
+
+.manifestoAxis {
+  right: var(--margin);
   bottom: var(--margin);
-  opacity: 0.62;
+}
+
+.contactSection {
+  position: relative;
+  min-height: 116svh;
+}
+
+.lastPage::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: clamp(2.5rem, 5vw, 5rem);
+  aspect-ratio: 1;
+  background:
+    linear-gradient(225deg, var(--wood-brown) 0 49%, rgb(var(--ink-rgb) / 0.12) 50% 51%, transparent 52%);
+  pointer-events: none;
 }
 
 .name {
   position: absolute;
   left: var(--margin);
   right: var(--margin);
-  top: 11vh;
+  top: 9.5vh;
   z-index: var(--z-media);
-  font-size: clamp(4.25rem, 14vw, 16rem);
+  font-size: clamp(4rem, 12.6vw, 14rem);
 }
 
 .nameLine:last-child {
   text-align: right;
 }
 
+.rule {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  top: 50.5%;
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.18);
+  transform-origin: left;
+}
+
 .message {
   position: absolute;
   left: var(--margin);
-  top: 58%;
+  top: 55%;
   width: min(31ch, 35vw);
 }
 
 .finalNote {
   position: absolute;
   left: 38%;
-  top: 67%;
+  top: 64%;
   max-width: 14ch;
   color: var(--rich-wine);
   rotate: -4deg;
@@ -85,7 +180,7 @@
 .links {
   position: absolute;
   right: var(--margin);
-  top: 60%;
+  top: 55%;
   display: grid;
   justify-items: end;
   gap: 1rem;
@@ -94,7 +189,7 @@
 .email {
   position: relative;
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3.1vw, 3.7rem);
+  font-size: clamp(1.55rem, 3vw, 3.55rem);
   font-style: italic;
   line-height: 1;
 }
@@ -118,24 +213,66 @@
   transform-origin: left;
 }
 
-.linkedin {
-  opacity: 1;
-}
-
-.rule {
+.footerMeta {
   position: absolute;
   left: var(--margin);
   right: var(--margin);
-  top: 54%;
-  height: 1px;
-  background: rgb(var(--ink-rgb) / 0.18);
-  transform-origin: left;
+  bottom: calc(var(--margin) + 2.6rem);
+  display: grid;
+  grid-template-columns: 1.15fr 1.45fr 0.7fr 1fr;
+  gap: var(--gutter);
+  padding-top: 1rem;
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
+  color: rgb(var(--ink-rgb) / 0.68);
+}
+
+.footerMeta span:last-child {
+  text-align: right;
+  color: var(--rich-wine);
+}
+
+.copyright {
+  left: var(--margin);
+  bottom: var(--margin);
+  opacity: 0.54;
+}
+
+.backTop {
+  right: var(--margin);
+  bottom: var(--margin);
+  color: var(--rich-wine);
 }
 
 @media (max-width: 1023px) {
+  .manifestoPage,
+  .lastPage {
+    inset: 0.75rem;
+  }
+
+  .manifestoTitle {
+    top: 25%;
+    font-size: clamp(3rem, 13.4vw, 6.5rem);
+    line-height: 0.96;
+  }
+
+  .manifestoLine:last-child {
+    padding-left: 0;
+    margin-top: 0.3em;
+    text-align: left;
+  }
+
+  .manifestoRule {
+    bottom: 24%;
+  }
+
+  .manifestoNote {
+    left: var(--margin);
+    bottom: 13%;
+  }
+
   .name {
-    top: 15vh;
-    font-size: clamp(3.8rem, 19vw, 8rem);
+    top: 13vh;
+    font-size: clamp(3.4rem, 17.5vw, 7.5rem);
   }
 
   .nameLine:last-child {
@@ -143,46 +280,80 @@
   }
 
   .rule {
-    top: 48%;
+    top: 41%;
   }
 
   .message {
-    top: 53%;
+    top: 45%;
     width: min(30ch, 80vw);
-  }
-
-  .links {
-    left: var(--margin);
-    right: auto;
-    top: 68%;
-    justify-items: start;
-  }
-
-  .lastPage {
-    inset: 0.75rem;
   }
 
   .finalNote {
     left: auto;
     right: var(--margin);
-    top: 57%;
-    max-width: 11ch;
+    top: 50%;
+    max-width: 10ch;
     text-align: right;
+  }
+
+  .links {
+    left: var(--margin);
+    right: auto;
+    top: 59%;
+    justify-items: start;
   }
 
   .email {
-    font-size: clamp(1.35rem, 6vw, 2.4rem);
+    font-size: clamp(1.05rem, 5vw, 2.25rem);
   }
 
-  .axis {
-    max-width: 45vw;
+  .footerMeta {
+    bottom: calc(var(--margin) + 8.2rem);
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem 1rem;
+    font-size: 0.58rem;
+  }
+
+  .footerMeta span:nth-child(even) {
     text-align: right;
-    bottom: calc(var(--margin) + 2.6rem);
+  }
+
+  .footerMeta span:last-child {
+    text-align: right;
+  }
+
+  .copyright {
+    bottom: calc(var(--margin) + 5.9rem);
+  }
+
+  .backTop {
+    left: var(--margin);
+    right: auto;
+    bottom: calc(var(--margin) + 4rem);
+  }
+}
+
+@media (max-width: 479px) {
+  .manifestoEdition,
+  .edition {
+    display: none;
+  }
+
+  .footerMeta span:nth-child(2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .act {
+  .manifestoSection,
+  .contactSection {
     min-height: 100svh;
+  }
+
+  .manifestoStage,
+  .stage {
+    position: relative;
   }
 }

@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { Content } from '@/content';
 import { localeLabels, locales, type Locale } from '@/content/locales';
+import { gsap, useGSAP } from '@/lib/gsap';
+import { EASE, MQ, SCRUB } from '@/lib/motion';
 import { SHELL_EVENTS } from '@/lib/scrollControl';
 
 import styles from './BottomNav.module.css';
@@ -22,10 +24,54 @@ const TARGETS = [
   { key: 'contact', id: 'act-contact' },
 ] as const;
 
+type NavKey = (typeof TARGETS)[number]['key'];
+
 export function BottomNav({ content, locale }: Props) {
+  const root = useRef<HTMLElement>(null);
+  const progress = useRef<HTMLSpanElement>(null);
   const [visible, setVisible] = useState(false);
-  const [active, setActive] = useState<string>('home');
+  const [active, setActive] = useState<NavKey>('home');
+  const [activeAct, setActiveAct] = useState(0);
   const [contactMode, setContactMode] = useState(false);
+  const acts = useMemo(
+    () => [
+      { id: 'act-opening', label: content.nav.home, navKey: 'home' as const },
+      { id: 'act-social', label: content.social.heading, navKey: 'home' as const },
+      { id: 'act-phone', label: content.phone.heading, navKey: 'home' as const },
+      { id: 'act-immersion', label: content.immersion.heading, navKey: 'home' as const },
+      { id: 'act-process', label: content.process.heading, navKey: 'home' as const },
+      { id: 'act-work', label: content.work.heading, navKey: 'work' as const },
+      { id: 'act-journey', label: content.journey.heading, navKey: 'journey' as const },
+      { id: 'act-expertise', label: content.expertise.heading, navKey: 'expertise' as const },
+      { id: 'act-contact', label: content.contact.heading, navKey: 'contact' as const },
+    ],
+    [content],
+  );
+
+  useGSAP(
+    () => {
+      const progressEl = progress.current;
+      if (!progressEl) return;
+
+      const mm = gsap.matchMedia();
+      mm.add({ isReduced: MQ.reduced }, (context) => {
+        const { isReduced } = context.conditions as { isReduced: boolean };
+        gsap.set(progressEl, { scaleX: isReduced ? 1 : 0, transformOrigin: 'left center' });
+        if (isReduced) return;
+
+        gsap.to(progressEl, {
+          scaleX: 1,
+          ease: EASE.scrub,
+          scrollTrigger: {
+            start: 0,
+            end: 'max',
+            scrub: SCRUB.exact,
+          },
+        });
+      });
+    },
+    { scope: root },
+  );
 
   // La navigation naît à la fin de l'Opening.
   useEffect(() => {
@@ -47,7 +93,7 @@ export function BottomNav({ content, locale }: Props) {
      dans chaque section : c'est la cause racine de la navigation fausse dans
      les tentatives précédentes du projet. */
   useEffect(() => {
-    const sections = TARGETS.map((t) => document.getElementById(t.id)).filter(
+    const sections = acts.map((act) => document.getElementById(act.id)).filter(
       (el): el is HTMLElement => Boolean(el),
     );
     if (!sections.length) return;
@@ -58,18 +104,22 @@ export function BottomNav({ content, locale }: Props) {
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (!hit) return;
-        const match = TARGETS.find((t) => t.id === hit.target.id);
-        if (match) setActive(match.key);
+        const index = acts.findIndex((act) => act.id === hit.target.id);
+        const match = acts[index];
+        if (!match) return;
+        setActiveAct(index);
+        setActive(match.navKey);
       },
       { rootMargin: '-45% 0px -45% 0px', threshold: [0, 0.2, 0.6, 1] },
     );
 
     sections.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, [acts]);
 
   return (
     <nav
+      ref={root}
       className={`${styles.nav} micro`}
       aria-label={content.nav.label}
       data-visible={visible}
@@ -87,6 +137,16 @@ export function BottomNav({ content, locale }: Props) {
             <span className={styles.label}>{content.nav[t.key]}</span>
           </a>
         ))}
+      </div>
+
+      <div className={styles.storyState} aria-hidden="true">
+        <span className={styles.storyIndex}>
+          ACT {String(activeAct + 1).padStart(2, '0')} / {String(acts.length).padStart(2, '0')}
+        </span>
+        <span className={styles.storyLabel}>{acts[activeAct]?.label}</span>
+        <span className={styles.progressTrack}>
+          <span ref={progress} className={styles.progressFill} />
+        </span>
       </div>
 
       <span className={styles.divider} aria-hidden="true" />

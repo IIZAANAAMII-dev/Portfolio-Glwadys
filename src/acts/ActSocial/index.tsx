@@ -49,6 +49,12 @@ export function ActSocial({ content, locale }: Props) {
           const behind = q<HTMLElement>('[data-behind]')[0];
           const behindMediaEls = q<HTMLElement>('[data-behind-media]');
           const behindDetails = q<HTMLElement>('[data-behind-detail]');
+          const outroCopy = [
+            ...q<HTMLElement>('[data-behind-label]'),
+            ...q<HTMLElement>('[data-social-statement]'),
+            ...q<HTMLElement>('[data-social-layers]'),
+            ...q<HTMLElement>(`.${styles.chapter}`),
+          ];
           const firstSatellite = satellites[0];
           if (!dominant || !behind || !firstSatellite) return;
 
@@ -131,11 +137,21 @@ export function ActSocial({ content, locale }: Props) {
                   const rect = dominant.getBoundingClientRect();
                   return window.innerHeight / 2 - (rect.top + rect.height / 2);
                 },
-                scale: isDesktop ? 1.04 : 1,
+                scale: () => {
+                  const targetWidth = isDesktop
+                    ? Math.min(window.innerWidth * 0.22, 17 * 16)
+                    : Math.min(window.innerWidth * 0.58, 16 * 16);
+                  return targetWidth / dominant.offsetWidth;
+                },
                 rotation: 0,
                 duration: 0.28,
               },
               0.74,
+            )
+            .to(
+              [...satellites, ...behindMediaEls, ...behindDetails, ...outroCopy],
+              { autoAlpha: 0, y: -10, duration: 0.18 },
+              0.8,
             );
         },
       );
@@ -157,7 +173,7 @@ export function ActSocial({ content, locale }: Props) {
         </span>
 
         <div className={styles.dominant} data-social-dominant>
-          <Media item={heroVertical} locale={locale} index={1} total={5} sizes="24vw" />
+          <Media item={heroVertical} locale={locale} index={1} total={5} sizes="24vw" preload={false} />
         </div>
 
         {socialSatellites.map((item, index) => (

@@ -24,10 +24,18 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       <div id="act-opening">
         <ActOpeningHero content={content} locale={locale} />
       </div>
-      <ActSocial content={content} locale={locale} />
-      <ActPhone content={content} locale={locale} />
-      <ActImmersion content={content} locale={locale} />
-      <ActProcess content={content} locale={locale} />
+      <div id="act-social">
+        <ActSocial content={content} locale={locale} />
+      </div>
+      <div id="act-phone">
+        <ActPhone content={content} locale={locale} />
+      </div>
+      <div id="act-immersion">
+        <ActImmersion content={content} locale={locale} />
+      </div>
+      <div id="act-process">
+        <ActProcess content={content} locale={locale} />
+      </div>
       <div id="act-work">
         <ActWork content={content} locale={locale} />
       </div>

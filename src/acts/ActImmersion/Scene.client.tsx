@@ -1,9 +1,11 @@
 'use client';
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { PerspectiveCamera } from '@react-three/drei';
+import { PerspectiveCamera, useTexture } from '@react-three/drei';
 import { useEffect, useLayoutEffect, useMemo, useRef, type MutableRefObject } from 'react';
 import * as THREE from 'three';
+
+import { depthMedia } from '@/content/media';
 
 import { IMMERSION_PROGRESS_EVENT } from './index';
 
@@ -44,58 +46,23 @@ const FRAGMENT = `
   }
 `;
 
-const COLORS = ['#bca991', '#28221c', '#592027', '#e8ded1', '#28221c', '#bca991'];
-const LABELS = ['CAMPAIGN', 'STORY', 'MACRO', 'TEXTURE', 'SOCIAL', 'REEL'];
-const ASPECTS = [4 / 5, 9 / 16, 1, 16 / 9, 4 / 5, 9 / 16] as const;
+const ASPECTS = [9 / 16, 9 / 16, 1, 16 / 9, 4 / 5, 9 / 16] as const;
 
-function prepressTexture(index: number) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 640;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return new THREE.Texture();
-
-  ctx.fillStyle = COLORS[index] ?? '#2a2724';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  const light = index === 1 || index === 2 || index === 4;
-  ctx.strokeStyle = light ? 'rgba(243,237,227,.48)' : 'rgba(23,20,15,.4)';
-  ctx.fillStyle = light ? 'rgba(243,237,227,.72)' : 'rgba(23,20,15,.66)';
-  ctx.lineWidth = 1;
-  ctx.strokeRect(22.5, 22.5, 467, 595);
-  ctx.beginPath();
-  ctx.moveTo(46, 320.5);
-  ctx.lineTo(466, 320.5);
-  ctx.stroke();
-  ctx.font = '500 18px Arial';
-  ctx.letterSpacing = '4px';
-  ctx.fillText(`${String(index + 1).padStart(2, '0')} / 06`, 350, 58);
-  ctx.fillText(LABELS[index] ?? 'MEDIA', 46, 588);
-
-  for (let i = 0; i < 240; i += 1) {
-    const x = (i * 97 + index * 31) % canvas.width;
-    const y = (i * 53 + index * 67) % canvas.height;
-    ctx.fillStyle = light ? 'rgba(243,237,227,.025)' : 'rgba(23,20,15,.022)';
-    ctx.fillRect(x, y, 1, 1);
-  }
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.minFilter = THREE.LinearMipmapLinearFilter;
-  texture.magFilter = THREE.LinearFilter;
-  texture.needsUpdate = true;
-  return texture;
-}
+const DEPTH_TEXTURE_PATHS = depthMedia.map(({ id, src }) => {
+  if (!src) throw new Error(`Missing generated source for immersion media "${id}".`);
+  return src;
+});
 
 interface PlaneProps {
   index: number;
   progress: MutableRefObject<number>;
   mobile: boolean;
+  texture: THREE.Texture;
 }
 
-function DepthPlane({ index, progress, mobile }: PlaneProps) {
+function DepthPlane({ index, progress, mobile, texture }: PlaneProps) {
   const mesh = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
-  const texture = useMemo(() => prepressTexture(index), [index]);
   const material = useMemo(
     () =>
       new THREE.ShaderMaterial({
@@ -115,9 +82,8 @@ function DepthPlane({ index, progress, mobile }: PlaneProps) {
   useEffect(
     () => () => {
       material.dispose();
-      texture.dispose();
     },
-    [material, texture],
+    [material],
   );
 
   const { size } = useThree();
@@ -148,7 +114,7 @@ function DepthPlane({ index, progress, mobile }: PlaneProps) {
     const targetW = size.width * nw;
     const targetH = targetW / (ASPECTS[index] ?? 4 / 5);
     const startW = size.width * 1.08;
-    const startH = size.height * 1.08;
+    const startH = startW / ASPECTS[0];
 
     node.visible = index < countVisible;
     node.position.x = THREE.MathUtils.lerp(index === 0 ? 0 : nx * size.width, nx * size.width, reveal);
@@ -180,8 +146,32 @@ function DepthPlane({ index, progress, mobile }: PlaneProps) {
 
 function Rig({ progress }: Props) {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null);
-  const { invalidate, setDpr, size } = useThree();
+  const textures = useTexture(DEPTH_TEXTURE_PATHS);
+  const { gl, invalidate, setDpr, size } = useThree();
   const mobile = size.width < 1024;
+  const backdrop = useMemo(() => new THREE.Color('#2b1d17'), []);
+  const wood = useMemo(() => new THREE.Color('#2b1d17'), []);
+  const ivory = useMemo(() => new THREE.Color('#f3ede3'), []);
+
+  useFrame(() => {
+    const paperReveal = THREE.MathUtils.smoothstep(progress.current, 0.8, 1);
+    backdrop.lerpColors(wood, ivory, paperReveal);
+    gl.setClearColor(backdrop, 1);
+  });
+
+  useLayoutEffect(() => {
+    const anisotropy = Math.min(8, gl.capabilities.getMaxAnisotropy());
+
+    textures.forEach((texture) => {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.anisotropy = anisotropy;
+      texture.generateMipmaps = true;
+      texture.needsUpdate = true;
+    });
+    invalidate();
+  }, [gl, invalidate, textures]);
 
   useLayoutEffect(() => {
     setDpr(mobile ? 1 : Math.min(window.devicePixelRatio, 2));
@@ -211,7 +201,13 @@ function Rig({ progress }: Props) {
       <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 0, 100]} near={0.1} far={300} />
       <group>
         {Array.from({ length: 6 }, (_, index) => (
-          <DepthPlane key={index} index={index} progress={progress} mobile={mobile} />
+          <DepthPlane
+            key={DEPTH_TEXTURE_PATHS[index]}
+            index={index}
+            progress={progress}
+            mobile={mobile}
+            texture={textures[index] ?? textures[0]!}
+          />
         ))}
       </group>
     </>

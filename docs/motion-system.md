@@ -233,7 +233,24 @@ Masqué pendant l'Opening, réactivé avec la navigation.
 
 ---
 
-## 11. Auto-critique — les questions à repasser à chaque acte
+## 11. Raccords continus entre actes
+
+Les transitions ne sont pas des fades génériques. Chaque fin d'acte fabrique
+la première image du suivant :
+
+- Hero → Social : la photo verticale atteint exactement la géométrie Social ;
+- Social → Phone → Immersion : le même visuel 9:16 devient écran, puis premier plan WebGL ;
+- Immersion → Process : le fond bois s'éclaircit jusqu'au papier ivoire ;
+- Strategy → Work : l'image Yuna et le fond bois restent physiquement en place ;
+- Journey → Expertise : un feuillet ivoire balaie le rail et reprend sa réglure ;
+- Expertise → Contact : le feuillet se contracte aux dimensions de la dernière page.
+
+Chaque raccord est réversible au scroll, piloté par transform/opacity/clip-path,
+et conserve un seul driver par propriété.
+
+---
+
+## 12. Auto-critique — les questions à repasser à chaque acte
 
 1. Est-ce mémorable, ou seulement propre ?
 2. Cette animation raconte-t-elle quelque chose, ou est-elle décorative ?
@@ -245,7 +262,7 @@ Masqué pendant l'Opening, réactivé avec la navigation.
 
 ---
 
-## 12. Interdit visible
+## 13. Interdit visible
 
 Le visiteur ne doit **jamais** lire un terme technique :
 « pinned », « scroll to explore », « immersive experience », « 3D gallery »,

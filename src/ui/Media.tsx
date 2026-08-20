@@ -17,6 +17,8 @@ interface MediaProps {
   className?: string;
   style?: CSSProperties;
   sizes?: string;
+  /** Permet de neutraliser le preload quand le même média réapparaît plus loin dans le film. */
+  preload?: boolean;
 }
 
 /**
@@ -38,6 +40,7 @@ export function Media({
   className,
   style,
   sizes = '(max-width: 1023px) 60vw, 30vw',
+  preload,
 }: MediaProps) {
   const frameStyle = {
     '--ratio': ratioValue[item.ratio],
@@ -51,14 +54,20 @@ export function Media({
 
   if (item.src) {
     return (
-      <div className={classes} data-tone={item.tone} style={frameStyle} data-media={item.id}>
+      <div
+        className={classes}
+        data-tone={item.tone}
+        data-media={item.id}
+        data-cursor="view"
+        style={frameStyle}
+      >
         <Image
           className={styles.image}
           src={item.src}
           alt={item.alt?.[locale] ?? ''}
           fill
           sizes={sizes}
-          priority={item.priority}
+          preload={preload ?? item.priority}
         />
       </div>
     );

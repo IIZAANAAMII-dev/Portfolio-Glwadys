@@ -48,6 +48,7 @@ export function ActPhone({ content, locale }: Props) {
             '--phone-bezel': '0px',
             '--phone-radius': '0px',
             '--phone-island': '0px',
+            aspectRatio: '9 / 16',
           });
 
           const labels = q<HTMLElement>('[data-phone-beat]');
@@ -58,6 +59,7 @@ export function ActPhone({ content, locale }: Props) {
           if (!feedLabel || !focusLabel || !storyLabel || !campaignLabel) return;
           gsap.set(labels, { yPercent: 110, autoAlpha: 0 });
           gsap.set(q<HTMLElement>('[data-phone-detail]'), { autoAlpha: 0, y: 12 });
+          gsap.set(q<HTMLElement>('[data-phone-entry]'), { autoAlpha: 0, y: -10 });
 
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
@@ -74,11 +76,17 @@ export function ActPhone({ content, locale }: Props) {
 
           tl
             .to(
+              q<HTMLElement>('[data-phone-entry]'),
+              { autoAlpha: 1, y: 0, stagger: 0.03, duration: 0.1 },
+              0.02,
+            )
+            .to(
               device,
               {
                 '--phone-bezel': isDesktop ? '10px' : '8px',
                 '--phone-radius': isDesktop ? '44px' : '40px',
                 '--phone-island': isDesktop ? '92px' : '78px',
+                aspectRatio: '9 / 19.5',
                 duration: 0.14,
                 onComplete: () => {
                   device.dataset.built = 'true';
@@ -121,6 +129,7 @@ export function ActPhone({ content, locale }: Props) {
                   const rect = device.getBoundingClientRect();
                   return (window.innerWidth / rect.width) * 1.08;
                 },
+                aspectRatio: '9 / 16',
                 duration: 0.3,
                 ease: EASE.scrub,
               },
@@ -131,7 +140,8 @@ export function ActPhone({ content, locale }: Props) {
               { autoAlpha: 0, scale: 0.92, duration: 0.13 },
               0.76,
             )
-            .to(stageEl, { backgroundColor: 'var(--bordeaux)', duration: 0.22 }, 0.78);
+            .to(stageEl, { backgroundColor: 'var(--bordeaux)', duration: 0.22 }, 0.78)
+            .to(q<HTMLElement>('[data-phone-campaign]'), { autoAlpha: 0, duration: 0.1 }, 0.9);
         },
       );
     },
@@ -146,8 +156,12 @@ export function ActPhone({ content, locale }: Props) {
         </h2>
 
         <div className={styles.interface} data-phone-ui>
-          <span className={`${styles.chapter} micro`}>03 / {content.phone.heading}</span>
-          <span className={`${styles.counter} micro`}>09 : 16</span>
+          <span className={`${styles.chapter} micro`} data-phone-entry>
+            03 / {content.phone.heading}
+          </span>
+          <span className={`${styles.counter} micro`} data-phone-entry>
+            09 : 16
+          </span>
           <p className={`${styles.note} lead`} data-phone-note>
             {content.social.statement}
           </p>
@@ -173,7 +187,13 @@ export function ActPhone({ content, locale }: Props) {
 
           <div className={styles.screen}>
             <div className={styles.screenHero} data-phone-hero>
-              <Media item={heroVertical} locale={locale} className={styles.fillMedia} sizes="28vw" />
+              <Media
+                item={heroVertical}
+                locale={locale}
+                className={styles.fillMedia}
+                sizes="28vw"
+                preload={false}
+              />
             </div>
 
             <div className={styles.feed} data-phone-feed>

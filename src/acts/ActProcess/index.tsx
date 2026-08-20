@@ -227,7 +227,17 @@ function Strategy({ content, locale }: Props) {
               reveal,
               { clipPath: 'polygon(0 0%, 100% 0%, 100% 100%, 0 100%)', duration: 0.14 },
               0.86,
-            );
+            )
+              .to(
+                [...words, ...lineItems, ...q<HTMLElement>(`.${styles.kicker}`)],
+                { autoAlpha: 0, yPercent: -16, duration: 0.1 },
+                0.9,
+              )
+              .to(
+                stageEl,
+                { backgroundColor: 'var(--wood-brown)', color: 'var(--ivory)', duration: 0.1 },
+                0.9,
+              );
           }
         },
       );
