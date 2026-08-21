@@ -1,0 +1,205 @@
+/* Média réel ou tirage éditorial réservé. Le gabarit évoque désormais une
+   épreuve papier / planche contact, pas une interface de pré-presse froide. */
+
+.frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--ratio);
+  overflow: hidden;
+  /* Aucun border-radius : règle absolue de la DA hors téléphone. */
+  border-radius: 0;
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+  /* Un aplat graphite sur fond encre est presque invisible : le filet garantit
+     que le cadre se lise toujours comme une fenêtre cotée. */
+  border: 1px solid rgb(var(--ink-rgb) / 0.14);
+  box-shadow:
+    0 0.8rem 2.4rem rgb(var(--wood-rgb) / 0.17),
+    inset 0 0 0 0.35rem rgb(var(--ivory-rgb) / 0.22);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--focus, 50% 50%);
+}
+
+/* WebKit peut afficher un filet clair autour des images lazy-loadées. */
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+  .image[loading='lazy'] {
+    clip-path: inset(0.6px);
+  }
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .frame[data-cursor='view']::after {
+    content: '';
+    position: absolute;
+    inset: -35% -55%;
+    z-index: var(--z-media);
+    pointer-events: none;
+    background: linear-gradient(
+      112deg,
+      transparent 37%,
+      rgb(var(--ivory-rgb) / 0.2) 49%,
+      transparent 61%
+    );
+    opacity: 0;
+    transform: translateX(-34%);
+    transition:
+      transform 950ms var(--ease-reveal),
+      opacity 350ms var(--ease-move);
+  }
+
+  .frame[data-cursor='view'] .image {
+    transform: scale(1.001);
+    transition: transform 900ms var(--ease-reveal);
+  }
+
+  .frame[data-cursor='view']:hover .image {
+    transform: scale(1.028);
+  }
+
+  .frame[data-cursor='view']:hover::after {
+    opacity: 1;
+    transform: translateX(34%);
+  }
+}
+
+/* ---------- RÉSERVATION ---------- */
+
+.reservation {
+  position: absolute;
+  inset: 0;
+}
+
+/* Vignettage très léger : donne une matière au lieu d'un aplat mort. */
+.reservation::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 100% at 50% 0%,
+    rgb(255 255 255 / 0.05) 0%,
+    transparent 45%,
+    rgb(0 0 0 / 0.1) 100%
+  );
+  pointer-events: none;
+}
+
+.reservation::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 21% 31%, currentColor 0 0.5px, transparent 0.8px),
+    radial-gradient(circle at 73% 67%, currentColor 0 0.45px, transparent 0.75px);
+  background-size: 13px 11px, 17px 15px;
+  opacity: 0.045;
+  pointer-events: none;
+}
+
+/* Coins de cadrage très fins : langage de tirage et non placeholder UI. */
+.mark {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: currentColor;
+  border-style: solid;
+  border-width: 0;
+  opacity: 0.5;
+}
+
+.mark[data-corner='tl'] {
+  top: 8px;
+  left: 8px;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+.mark[data-corner='tr'] {
+  top: 8px;
+  right: 8px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+.mark[data-corner='bl'] {
+  bottom: 8px;
+  left: 8px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+.mark[data-corner='br'] {
+  bottom: 8px;
+  right: 8px;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+/* Légende : rôle + ratio. Cotation, pas décoration. */
+.caption {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+  opacity: 0.62;
+  white-space: nowrap;
+}
+
+/* Index en chiffres tabulaires. */
+.index {
+  position: absolute;
+  right: 14px;
+  top: 12px;
+  opacity: 0.62;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Filet médian : axe de la réservation, très discret. */
+.axis {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 50%;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.14;
+}
+
+/* Sur les très petites réservations, la cotation devient du bruit. */
+.compact .caption,
+.compact .index,
+.compact .axis {
+  display: none;
+}
+
+/* ---------- TONS ----------
+   Aucun gris neutre : tous les aplats viennent de la palette. */
+.frame[data-tone='paper'] {
+  --tone-bg: var(--ivory);
+  --tone-fg: var(--ink);
+}
+.frame[data-tone='paper-deep'] {
+  --tone-bg: var(--paper-deep);
+  --tone-fg: var(--ink);
+}
+.frame[data-tone='graphite'] {
+  --tone-bg: var(--graphite);
+  --tone-fg: var(--paper);
+}
+.frame[data-tone='blush'] {
+  --tone-bg: var(--blush);
+  --tone-fg: var(--ink);
+}
+.frame[data-tone='bordeaux'] {
+  --tone-bg: var(--bordeaux);
+  --tone-fg: var(--paper);
+}
+
+.frame[data-tone='graphite'] .image {
+  filter: grayscale(1) sepia(0.08) contrast(0.96);
+}
+
+.frame[data-tone='blush'] .image,
+.frame[data-tone='paper-deep'] .image {
+  filter: sepia(0.1) saturate(0.84) contrast(0.98);
+}

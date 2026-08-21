@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Glwadys Dalleau">
+  <rect width="64" height="64" fill="#2b1d17" />
+  <rect x="1" y="1" width="62" height="62" fill="none" stroke="#592027" stroke-width="2" />
+  <path d="M13 -8 43 72" stroke="#d0ad72" stroke-width="1" opacity=".72" />
+  <text
+    x="32"
+    y="48"
+    fill="#f3ede3"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="46"
+    font-weight="400"
+    text-anchor="middle"
+  >G</text>
+</svg>
