@@ -15,7 +15,8 @@
   height: 100svh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 66% 46%, rgb(var(--champagne-rgb) / 0.08), transparent 28%),
+    radial-gradient(circle at 68% 43%, rgb(var(--champagne-rgb) / 0.105), transparent 31%),
+    linear-gradient(112deg, rgb(var(--ink-rgb) / 0.08), transparent 52%),
     var(--wood-brown);
   color: var(--ivory);
   transform-origin: center center;
@@ -69,7 +70,7 @@
 
 .ruleH {
   position: absolute;
-  top: 28%;
+  top: 30%;
   left: var(--margin);
   right: var(--margin);
   height: 1px;
@@ -80,8 +81,8 @@
 /* Une des deux seules apparitions du métallique dans tout le site. */
 .ruleV {
   position: absolute;
-  left: 31%;
-  top: 30%;
+  left: 34%;
+  top: 32%;
   width: 1px;
   height: 32%;
   background: rgb(var(--champagne-rgb) / 0.45);
@@ -90,12 +91,20 @@
 
 .spread {
   position: absolute;
-  left: 36%;
-  right: 7%;
-  top: 25%;
-  bottom: 10%;
+  left: 38%;
+  right: 6%;
+  top: 23%;
+  bottom: 11%;
   z-index: var(--z-base);
   transform-origin: center center;
+  overflow: hidden;
+  border: 1px solid rgb(var(--ivory-rgb) / 0.13);
+  background:
+    linear-gradient(90deg, transparent 49.9%, rgb(var(--champagne-rgb) / 0.15) 50%, transparent 50.1%),
+    linear-gradient(145deg, rgb(var(--ivory-rgb) / 0.085), rgb(var(--ivory-rgb) / 0.018));
+  box-shadow:
+    0 2.5rem 7rem rgb(var(--ink-rgb) / 0.22),
+    inset 0 0 0 1px rgb(var(--ink-rgb) / 0.08);
 }
 
 .spread::before {
@@ -105,8 +114,20 @@
   top: 0;
   bottom: 0;
   width: 1px;
-  background: linear-gradient(to bottom, transparent, rgb(var(--ink-rgb) / 0.15), transparent);
-  box-shadow: -8px 0 18px rgb(var(--wood-rgb) / 0.09);
+  background: linear-gradient(to bottom, transparent, rgb(var(--champagne-rgb) / 0.18), transparent);
+  box-shadow: -10px 0 24px rgb(var(--ink-rgb) / 0.1);
+}
+
+.spread::after {
+  content: '01';
+  position: absolute;
+  right: 0.035em;
+  bottom: -0.18em;
+  color: rgb(var(--ivory-rgb) / 0.035);
+  font-family: var(--font-display);
+  font-size: clamp(8rem, 21vw, 23rem);
+  font-style: italic;
+  line-height: 1;
 }
 
 .handoffSurface {
@@ -114,7 +135,39 @@
   inset: 0;
   z-index: var(--z-base);
   pointer-events: none;
-  background: var(--charcoal);
+  background:
+    radial-gradient(circle at 51% 46%, rgb(var(--champagne-rgb) / 0.055), transparent 25%),
+    var(--charcoal);
+  will-change: clip-path;
+}
+
+.handoffIndex,
+.handoffKicker,
+.handoffStatement {
+  position: absolute;
+}
+
+.handoffIndex {
+  left: -0.035em;
+  bottom: -0.24em;
+  color: rgb(var(--ivory-rgb) / 0.045);
+  font-family: var(--font-display);
+  font-size: clamp(13rem, 28vw, 30rem);
+  font-style: italic;
+  line-height: 1;
+}
+
+.handoffKicker {
+  left: var(--margin);
+  bottom: var(--margin);
+  color: var(--champagne);
+}
+
+.handoffStatement {
+  right: var(--margin);
+  top: 44%;
+  width: min(25vw, 24rem);
+  color: rgb(var(--ivory-rgb) / 0.78);
 }
 
 .openingFrame {
@@ -184,12 +237,12 @@
 }
 
 .nameFirst {
-  top: 8vh;
+  top: 9vh;
   left: calc(var(--margin) - 0.055em);
 }
 
 .nameLast {
-  bottom: 14vh;
+  bottom: 11vh;
   right: calc(var(--margin) - 0.055em);
   color: var(--rich-wine);
 }
@@ -197,8 +250,8 @@
 .tagline {
   position: absolute;
   left: var(--margin);
-  top: 33%;
-  width: min(30ch, 24%);
+  top: 39%;
+  width: min(31ch, 25%);
   opacity: 0.88;
   z-index: var(--z-sticky);
 }
@@ -208,9 +261,9 @@
 }
 
 .heroVertical {
-  left: 63%;
-  top: 29%;
-  width: 13.5vw;
+  left: 65%;
+  top: 25%;
+  width: min(18vw, 17rem);
   z-index: var(--z-persistent);
 }
 
@@ -220,18 +273,10 @@
 }
 
 .heroFrame {
-  left: 41%;
-  top: 34%;
-  width: 11vw;
+  left: 44%;
+  top: 43%;
+  width: min(13vw, 12rem);
   z-index: var(--z-media);
-}
-
-.tape {
-  position: absolute;
-  left: 50%;
-  top: -0.55rem;
-  translate: -50% 0;
-  z-index: var(--z-sticky);
 }
 
 .handNote,
@@ -241,17 +286,17 @@
 }
 
 .handNote {
-  left: 67%;
-  top: 58%;
+  left: 73%;
+  top: 63%;
   color: var(--rich-wine);
   rotate: -4deg;
 }
 
 .folio {
-  right: 9%;
-  bottom: 17%;
-  color: var(--ink);
-  opacity: 0.58;
+  right: 8%;
+  bottom: 14%;
+  color: var(--champagne);
+  opacity: 0.72;
 }
 
 .transient {
@@ -282,10 +327,10 @@
   }
 
   .spread {
-    left: 18%;
+    left: var(--margin);
     right: var(--margin);
-    top: 30%;
-    bottom: 13%;
+    top: 31%;
+    bottom: 14%;
   }
 
   .openingFrame {
@@ -293,12 +338,31 @@
     aspect-ratio: 1.15;
   }
 
+  .handoffIndex {
+    left: -0.08em;
+    bottom: 3vh;
+    font-size: clamp(12rem, 63vw, 18rem);
+  }
+
+  .handoffKicker {
+    bottom: 12vh;
+  }
+
+  .handoffStatement {
+    right: var(--margin);
+    top: 57%;
+    width: min(16ch, 54vw);
+    text-align: right;
+  }
+
   .nameFirst {
-    top: 12vh;
+    top: 14vh;
+    font-size: clamp(3.7rem, 17vw, 6.3rem);
   }
 
   .nameLast {
-    bottom: 17vh;
+    bottom: 14vh;
+    font-size: clamp(3.7rem, 17vw, 6.3rem);
   }
 
   .ruleH {
@@ -306,7 +370,7 @@
   }
 
   .tagline {
-    top: 20vh;
+    top: 24vh;
     bottom: auto;
     width: min(28ch, 82%);
   }
@@ -314,32 +378,31 @@
   .heroVertical {
     left: auto;
     right: var(--margin);
-    top: 33%;
-    width: 33vw;
+    top: 36%;
+    width: min(44vw, 17rem);
   }
 
   .heroFrame {
     left: var(--margin);
-    top: 42%;
-    width: 25vw;
+    top: 51%;
+    width: min(29vw, 10.5rem);
   }
 
   .handNote {
     left: auto;
     right: calc(var(--margin) + 1.5rem);
-    top: 58%;
+    top: 68%;
     max-width: 11ch;
     text-align: right;
   }
 
   .folio {
     right: calc(var(--margin) + 0.5rem);
-    bottom: 14%;
+    bottom: 16%;
   }
 
   .disciplines {
-    flex-direction: row;
-    gap: 1rem;
+    display: none;
   }
 }
 

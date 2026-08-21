@@ -204,6 +204,26 @@
   }
 }
 
+@media (max-width: 359px) {
+  .nav {
+    max-width: calc(100vw - 0.5rem);
+    padding-inline: 0.25rem;
+    letter-spacing: 0.12em;
+  }
+
+  .item {
+    padding-inline: 0.38rem;
+  }
+
+  .divider {
+    margin-inline: 0.12rem;
+  }
+
+  .lang {
+    padding-inline: 0.3rem;
+  }
+}
+
 @media (max-width: 1199px) {
   .storyState {
     display: none;

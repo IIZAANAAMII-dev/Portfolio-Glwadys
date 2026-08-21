@@ -25,6 +25,29 @@
   inset: 0;
 }
 
+.entryPortal {
+  position: absolute;
+  inset: 0;
+  z-index: calc(var(--z-canvas) + 1);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.entryMedia {
+  height: 100%;
+  aspect-ratio: auto;
+  border: 0;
+  box-shadow: none;
+}
+
+.entryShade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(var(--ink-rgb) / 0.08), transparent 34% 70%, rgb(var(--ink-rgb) / 0.2)),
+    linear-gradient(90deg, rgb(var(--ink-rgb) / 0.12), transparent 40%);
+}
+
 .canvas {
   z-index: var(--z-canvas);
   opacity: 1;
@@ -97,8 +120,9 @@
 .heading {
   position: absolute;
   left: var(--margin);
-  bottom: var(--margin);
+  bottom: max(14vh, 7.5rem);
   max-width: 8ch;
+  text-shadow: 0 0.12em 0.55em rgb(var(--ink-rgb) / 0.32);
 }
 
 .statement {
@@ -107,12 +131,13 @@
   top: 50%;
   width: min(29ch, 28vw);
   translate: 0 -50%;
+  text-shadow: 0 0.1em 0.7em rgb(var(--ink-rgb) / 0.48);
 }
 
 .depthAxis {
   position: absolute;
   right: var(--margin);
-  bottom: var(--margin);
+  bottom: max(10vh, 5.5rem);
   display: flex;
   align-items: center;
   gap: 0.8rem;

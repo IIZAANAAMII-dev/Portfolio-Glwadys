@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
-import { depthMedia } from '@/content/media';
+import { depthMedia, socialPortal } from '@/content/media';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
 import { useReducedMotion } from '@/lib/useReducedMotion';
@@ -101,16 +101,23 @@ export function ActImmersion({ content, locale }: Props) {
                 scrub: SCRUB.narrative,
               },
             })
-            .fromTo('[data-immersion-heading]', { yPercent: 115 }, { yPercent: 0, duration: 0.2 }, 0.16)
-            .fromTo('[data-immersion-copy]', { yPercent: 16, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.22 }, 0.35)
-            .to('[data-immersion-copy]', { yPercent: -20, autoAlpha: 0, duration: 0.2 }, 0.74)
-            .to(q<HTMLElement>('[data-immersion-meta]'), { autoAlpha: 0, duration: 0.16 }, 0.76)
+            .to('[data-immersion-entry]', { autoAlpha: 0, duration: 0.11 }, 0.075)
+            .fromTo(
+              q<HTMLElement>('[data-immersion-meta]'),
+              { autoAlpha: 0, y: 10 },
+              { autoAlpha: 1, y: 0, duration: 0.16 },
+              0.11,
+            )
+            .fromTo('[data-immersion-heading]', { yPercent: 115 }, { yPercent: 0, duration: 0.2 }, 0.18)
+            .fromTo('[data-immersion-copy]', { yPercent: 16, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.22 }, 0.32)
+            .to('[data-immersion-copy]', { yPercent: -20, autoAlpha: 0, duration: 0.2 }, 0.72)
+            .to(q<HTMLElement>('[data-immersion-meta]'), { autoAlpha: 0, duration: 0.16 }, 0.75)
             .to(
               [stageEl, ...q<HTMLElement>(`.${styles.portal}`)],
-              { backgroundColor: 'var(--ivory)', duration: 0.22 },
-              0.78,
+              { backgroundColor: 'var(--ivory)', duration: 0.2 },
+              0.8,
             )
-            .to('[data-immersion-heading]', { yPercent: -110, duration: 0.18 }, 0.8);
+            .to('[data-immersion-heading]', { yPercent: -110, duration: 0.18 }, 0.78);
         },
       );
     },
@@ -126,10 +133,15 @@ export function ActImmersion({ content, locale }: Props) {
       aria-labelledby="immersion-title"
     >
       <div ref={stage} className={styles.stage}>
+        <div className={styles.entryPortal} data-immersion-entry aria-hidden="true">
+          <Media item={socialPortal} locale={locale} className={styles.entryMedia} sizes="100vw" />
+          <span className={styles.entryShade} />
+        </div>
+
         <div className={styles.fallback} aria-hidden={showCanvas}>
           <div className={styles.portal} />
           {depthMedia.map((item, index) => (
-            <div className={styles.plane} key={item.id}>
+            <div className={styles.plane} data-depth-plane key={item.id}>
               <Media item={item} locale={locale} index={index + 1} total={6} compact sizes="28vw" />
             </div>
           ))}

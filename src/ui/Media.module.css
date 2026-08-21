@@ -33,6 +33,25 @@
 }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .frame[data-cursor='view']::after {
+    content: '';
+    position: absolute;
+    inset: -35% -55%;
+    z-index: var(--z-media);
+    pointer-events: none;
+    background: linear-gradient(
+      112deg,
+      transparent 37%,
+      rgb(var(--ivory-rgb) / 0.2) 49%,
+      transparent 61%
+    );
+    opacity: 0;
+    transform: translateX(-34%);
+    transition:
+      transform 950ms var(--ease-reveal),
+      opacity 350ms var(--ease-move);
+  }
+
   .frame[data-cursor='view'] .image {
     transform: scale(1.001);
     transition: transform 900ms var(--ease-reveal);
@@ -40,6 +59,11 @@
 
   .frame[data-cursor='view']:hover .image {
     transform: scale(1.028);
+  }
+
+  .frame[data-cursor='view']:hover::after {
+    opacity: 1;
+    transform: translateX(34%);
   }
 }
 

@@ -8,7 +8,6 @@ import {
   comptoirMedia,
   comptoirTexture,
   mgcMedia,
-  mgcShared,
   yunaMedia,
   yunaShared,
 } from '@/content/media';
@@ -43,7 +42,7 @@ function ProjectSection({
     project.id === 'yuna'
       ? [...yunaMedia, yunaShared]
       : project.id === 'mgc'
-        ? [...mgcMedia, mgcShared]
+        ? mgcMedia
         : comptoirMedia;
 
   useGSAP(
@@ -225,12 +224,6 @@ function ProjectSection({
               )}
             </div>
           ))}
-
-        {project.id === 'mgc' && (
-          <span className={`${styles.annotation} hand-note`} aria-hidden="true">
-            Community first
-          </span>
-        )}
 
         {project.id === 'comptoir' && (
           <div className={styles.comptoirMedia} data-project-media>

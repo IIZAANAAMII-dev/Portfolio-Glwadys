@@ -110,6 +110,15 @@ const PHOTO = {
     },
     '50% 46%',
   ),
+  socialPortal: generated(
+    'social/social-portal-v2.jpg',
+    {
+      fr: 'Femme en manteau sombre et foulard bordeaux marchant vers la mer à Marseille.',
+      en: 'Woman in a dark coat and burgundy scarf walking toward the sea in Marseille.',
+      ko: '짙은 코트와 버건디 스카프를 두르고 마르세유의 바다를 향해 걷는 여성.',
+    },
+    '32% 50%',
+  ),
   socialObject: generated('social/social-object.jpg', {
     fr: 'Appareil photo noir, planche contact et crayon bordeaux sur papier ivoire.',
     en: 'Black camera, contact sheet and burgundy pencil on ivory paper.',
@@ -258,11 +267,20 @@ export const phoneFeed: MediaItem[] = [
 ];
 export const phoneStory: MediaItem = item('phone-story', 'story', '9:16', 'bordeaux', PHOTO.socialReel);
 
+/** Master paysage haute définition du portail téléphone → immersion. */
+export const socialPortal: MediaItem = item(
+  'social-portal',
+  'campaign',
+  '16:9',
+  'bordeaux',
+  PHOTO.socialPortal,
+);
+
 /* ---------- ACT 04 — plans de la scène immersive ----------
    Réutilisent volontairement les médias déjà vus : on retraverse ce que
    l'on vient de voir. Contrainte technique : ≤ 2048 px. */
 export const depthMedia: MediaItem[] = [
-  item('depth-01', 'story', '9:16', 'blush', PHOTO.socialReel),
+  socialPortal,
   item('depth-02', 'story', '9:16', 'graphite', PHOTO.heroVertical),
   item('depth-03', 'macro', '1:1', 'bordeaux', PHOTO.yunaProduct),
   item('depth-04', 'texture', '16:9', 'paper-deep', PHOTO.mgcShared),

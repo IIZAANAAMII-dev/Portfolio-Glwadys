@@ -30,41 +30,35 @@ export function ActSocial({ content, locale }: Props) {
       const mm = gsap.matchMedia();
 
       mm.add(
-        {
-          isDesktop: MQ.desktop,
-          isMobile: MQ.mobile,
-          isReduced: MQ.reduced,
-        },
+        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
         (context) => {
           const { isDesktop, isReduced } = context.conditions as {
             isDesktop: boolean;
-            isMobile: boolean;
             isReduced: boolean;
           };
-
           if (isReduced) return;
 
           const dominant = q<HTMLElement>('[data-social-dominant]')[0];
-          const satellites = q<HTMLElement>('[data-social-satellite]');
           const behind = q<HTMLElement>('[data-behind]')[0];
+          const satellites = q<HTMLElement>('[data-social-satellite]');
           const behindMediaEls = q<HTMLElement>('[data-behind-media]');
           const behindDetails = q<HTMLElement>('[data-behind-detail]');
-          const outroCopy = [
-            ...q<HTMLElement>('[data-behind-label]'),
-            ...q<HTMLElement>('[data-social-statement]'),
-            ...q<HTMLElement>('[data-social-layers]'),
-            ...q<HTMLElement>(`.${styles.chapter}`),
-          ];
+          const frontCopy = q<HTMLElement>('[data-front-copy]');
+          const behindCopy = q<HTMLElement>('[data-behind-copy]');
           const firstSatellite = satellites[0];
           if (!dominant || !behind || !firstSatellite) return;
 
           gsap.set(satellites, {
             autoAlpha: 0,
-            clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)',
-            yPercent: (i: number) => (i % 2 === 0 ? 24 : -18),
+            clipPath: 'inset(100% 0% 0% 0%)',
+            yPercent: 14,
           });
-          gsap.set(behindMediaEls, { scale: 0.94, autoAlpha: 0 });
-          gsap.set(behindDetails, { y: 12, autoAlpha: 0 });
+          gsap.set(behind, { clipPath: 'inset(0% 0% 0% 100%)' });
+          gsap.set(behindMediaEls, {
+            clipPath: 'inset(0% 0% 100% 0%)',
+            yPercent: 8,
+          });
+          gsap.set([...behindDetails, ...behindCopy], { autoAlpha: 0, y: 14 });
 
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
@@ -84,46 +78,47 @@ export function ActSocial({ content, locale }: Props) {
               satellites,
               {
                 autoAlpha: 1,
-                clipPath: 'polygon(0 0%, 100% 0%, 100% 100%, 0 100%)',
+                clipPath: 'inset(0% 0% 0% 0%)',
                 yPercent: 0,
-                stagger: 0.06,
-                duration: 0.22,
+                stagger: 0.045,
+                duration: 0.24,
               },
-              0,
+              0.03,
             )
-            .to(dominant, { scale: 1.08, duration: 0.26 }, 0.12)
-            .to(firstSatellite, { xPercent: 38, yPercent: -12, scale: 1.12, duration: 0.25 }, 0.24)
-            .to(dominant, { scale: 0.82, yPercent: 8, duration: 0.24 }, 0.3)
+            .to(dominant, { scale: 1.055, duration: 0.24 }, 0.08)
+            .to(firstSatellite, { yPercent: -7, duration: 0.2 }, 0.2)
+            .to(frontCopy, { autoAlpha: 0, yPercent: -22, duration: 0.16 }, 0.34)
             .to(
               satellites,
               {
-                xPercent: (i: number) => (i % 2 === 0 ? -45 : 45),
-                rotation: (i: number) => (i % 2 === 0 ? -1.5 : 1.5),
-                clipPath: 'polygon(0 0, 100% 0, 100% 18%, 0 42%)',
-                duration: 0.28,
+                autoAlpha: 0,
+                xPercent: (index: number) => (index % 2 === 0 ? -16 : 16),
+                clipPath: 'inset(0% 0% 100% 0%)',
+                stagger: 0.025,
+                duration: 0.2,
               },
-              0.52,
+              0.35,
             )
-            .to(q<HTMLElement>(`.${styles.frontLabel}`), { autoAlpha: 0, y: -12, duration: 0.18 }, 0.48)
+            .to(behind, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.32 }, 0.36)
+            .to(dominant, { scale: 0.9, duration: 0.22 }, 0.42)
             .to(
-              behind,
+              behindMediaEls,
               {
-                clipPath: 'polygon(0 0%, 100% 0%, 100% 100%, 0 100%)',
-                duration: 0.34,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                yPercent: 0,
+                stagger: 0.055,
+                duration: 0.18,
               },
-              0.5,
+              0.44,
+            )
+            .to(
+              [...behindCopy, ...behindDetails],
+              { autoAlpha: 1, y: 0, stagger: 0.025, duration: 0.11 },
+              0.49,
             )
             .to(
               behindMediaEls,
-              { scale: 1, autoAlpha: 1, stagger: 0.05, duration: 0.26 },
-              0.56,
-            )
-            .to(q<HTMLElement>('[data-behind-label]'), { autoAlpha: 1, y: 0, duration: 0.2 }, 0.62)
-            .to(q<HTMLElement>('[data-social-statement]'), { autoAlpha: 1, y: 0, duration: 0.22 }, 0.68)
-            .to(q<HTMLElement>('[data-social-layers]'), { autoAlpha: 1, y: 0, duration: 0.2 }, 0.72)
-            .to(
-              behindDetails,
-              { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.18 },
+              { yPercent: (index: number) => (index === 0 ? -3 : 4), duration: 0.28 },
               0.66,
             )
             .to(
@@ -143,15 +138,14 @@ export function ActSocial({ content, locale }: Props) {
                     : Math.min(window.innerWidth * 0.58, 16 * 16);
                   return targetWidth / dominant.offsetWidth;
                 },
-                rotation: 0,
                 duration: 0.28,
               },
-              0.74,
+              0.73,
             )
             .to(
-              [...satellites, ...behindMediaEls, ...behindDetails, ...outroCopy],
-              { autoAlpha: 0, y: -10, duration: 0.18 },
-              0.8,
+              [...behindMediaEls, ...behindDetails, ...behindCopy],
+              { autoAlpha: 0, yPercent: -5, duration: 0.17 },
+              0.79,
             );
         },
       );
@@ -166,59 +160,66 @@ export function ActSocial({ content, locale }: Props) {
           {content.social.heading}
         </h2>
 
-        <span className={`${styles.chapter} micro`}>02 / {content.social.heading}</span>
-        <p className={styles.frontLabel}>{content.social.front}</p>
-        <span className={`${styles.behindLabel} micro`} data-behind-label>
-          {content.social.behind}
-        </span>
-
-        <div className={styles.dominant} data-social-dominant>
-          <Media item={heroVertical} locale={locale} index={1} total={5} sizes="24vw" preload={false} />
+        <div className={styles.frontComposition} data-front-copy>
+          <span className={`${styles.chapter} micro`}>02 / {content.social.heading}</span>
+          <p className={styles.frontLabel}>{content.social.front}</p>
+          <span className={`${styles.frontCount} micro`} aria-hidden="true">
+            Front / 01—04
+          </span>
         </div>
 
-        {socialSatellites.map((item, index) => (
+        <div className={styles.dominant} data-social-dominant>
+          <Media item={heroVertical} locale={locale} index={1} total={4} sizes="24vw" preload={false} />
+        </div>
+
+        {socialSatellites.slice(0, 3).map((item, index) => (
           <div
             className={styles.satellite}
             data-social-satellite
             data-social-slot={index + 1}
             key={item.id}
           >
-            <Media
-              item={item}
-              locale={locale}
-              index={index + 2}
-              total={5}
-              compact={index > 1}
-              sizes="18vw"
-            />
+            <Media item={item} locale={locale} compact sizes="20vw" />
           </div>
         ))}
 
         <div className={styles.behind} data-behind>
-          <span className={`${styles.folderTab} micro`} data-behind-detail aria-hidden="true">
-            Brief / Draft / Publish
+          <span className={styles.behindWord} aria-hidden="true">
+            Behind
           </span>
-          <div className={styles.behindGrid}>
-            {behindMedia.map((item, index) => (
-              <div className={styles.behindMedia} data-behind-media key={item.id}>
-                <Media item={item} locale={locale} index={index + 1} total={2} sizes="34vw" />
-              </div>
-            ))}
-          </div>
-          <span className={`${styles.handNote} hand-note`} data-behind-detail aria-hidden="true">
-            content begins before the feed
-          </span>
-          <span className={`${styles.paperClip} paper-clip`} data-behind-detail aria-hidden="true" />
-        </div>
+          <span className={styles.behindRule} data-behind-detail aria-hidden="true" />
 
-        <p className={`${styles.statement} lead`} data-social-statement>
-          {content.social.statement}
-        </p>
-        <ul className={`${styles.layers} micro`} data-social-layers>
-          {content.social.layers.map((layer) => (
-            <li key={layer}>{layer}</li>
-          ))}
-        </ul>
+          <figure className={styles.behindPrimary} data-behind-media>
+            <Media item={behindMedia[0]!} locale={locale} sizes="52vw" />
+            <figcaption className={`${styles.mediaCaption} micro`}>
+              01 / {behindMedia[0]!.role}
+            </figcaption>
+          </figure>
+
+          <figure className={styles.behindSecondary} data-behind-media>
+            <Media item={behindMedia[1]!} locale={locale} sizes="22vw" />
+            <figcaption className={`${styles.mediaCaption} micro`}>
+              02 / {behindMedia[1]!.role}
+            </figcaption>
+          </figure>
+
+          <div className={styles.behindCopy} data-behind-copy>
+            <span className={`${styles.behindLabel} micro`}>{content.social.behind}</span>
+            <p className={`${styles.statement} lead`}>{content.social.statement}</p>
+            <ul className={`${styles.layers} micro`}>
+              {content.social.layers.map((layer, index) => (
+                <li key={layer}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  {layer}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <span className={`${styles.behindFolio} micro`} data-behind-detail aria-hidden="true">
+            Strategy / Production / Rhythm
+          </span>
+        </div>
       </div>
     </section>
   );

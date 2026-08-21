@@ -85,8 +85,8 @@
   right: var(--margin);
   top: 9vh;
   z-index: var(--z-sticky);
-  padding: 0.65rem 0.85rem;
-  border: 1px solid currentColor;
+  padding: 0 0 0.55rem;
+  border-bottom: 1px solid currentColor;
   color: var(--rich-wine);
 }
 
@@ -154,19 +154,6 @@
   color: var(--rich-wine);
 }
 
-.project[data-project='mgc'] .media[data-project-slot='2']::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: -0.55rem;
-  z-index: var(--z-sticky);
-  width: 5rem;
-  height: 1.05rem;
-  translate: -50% 0;
-  rotate: -3deg;
-  background: rgb(var(--champagne-rgb) / 0.46);
-}
-
 .project[data-project='yuna'] .media[data-project-slot='1'] {
   right: 9%;
   top: 15%;
@@ -196,65 +183,46 @@
   left: auto;
   right: var(--margin);
   text-align: right;
-  max-width: 10ch;
+  top: 17vh;
+  max-width: 9ch;
 }
 
 .project[data-project='mgc'] .summary {
   left: auto;
   right: var(--margin);
+  bottom: 20vh;
 }
 
 @media (min-width: 1024px) {
   .project[data-project='mgc'] .summary {
-    padding: 1rem 1.1rem;
-    border: 1px solid rgb(var(--ink-rgb) / 0.14);
-    background: rgb(var(--paper-rgb) / 0.9);
-    box-shadow: 0 1rem 2.2rem rgb(var(--wood-rgb) / 0.12);
+    padding-top: 1.1rem;
+    border-top: 1px solid rgb(var(--ink-rgb) / 0.22);
+    background: linear-gradient(90deg, var(--paper), rgb(var(--paper-rgb) / 0.76));
   }
 }
 
 .project[data-project='mgc'] .media[data-project-slot='1'] {
   left: 7%;
-  top: 17%;
-  width: 23vw;
-  rotate: -5deg;
+  top: 20%;
+  width: 25vw;
 }
 
 .project[data-project='mgc'] .media[data-project-slot='2'] {
-  left: 30%;
-  top: 39%;
-  width: 25vw;
-  rotate: 3deg;
+  left: 31%;
+  top: 48%;
+  width: 24vw;
 }
 
 .project[data-project='mgc'] .media[data-project-slot='3'] {
-  left: 10%;
-  bottom: 8%;
-  width: 15vw;
-  rotate: 6deg;
+  left: 11%;
+  bottom: 5%;
+  width: 13vw;
 }
 
 .project[data-project='mgc'] .media[data-project-slot='4'] {
-  left: 43%;
-  bottom: 7%;
-  width: 14vw;
-  rotate: -4deg;
-}
-
-.project[data-project='mgc'] .media[data-project-slot='5'] {
-  left: 0;
-  bottom: -16%;
-  width: 100vw;
-  z-index: var(--z-persistent);
-}
-
-.annotation {
-  position: absolute;
-  left: 31%;
-  top: 29%;
-  z-index: var(--z-sticky);
-  color: var(--oxblood);
-  rotate: -7deg;
+  left: 46%;
+  bottom: 9%;
+  width: 11vw;
 }
 
 .macro {
@@ -354,11 +322,43 @@
 }
 
 .caseRow {
+  position: relative;
   display: grid;
   grid-template-rows: auto auto 1fr;
   min-height: 20rem;
   padding: 1.2rem clamp(1rem, 2vw, 2.2rem) 2rem;
   border-left: 1px solid currentColor;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.caseRow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgb(var(--champagne-rgb) / 0.12);
+  transform: scaleY(0);
+  transform-origin: center bottom;
+  transition: transform 700ms var(--ease-reveal);
+}
+
+.caseLabel,
+.caseRow p {
+  transition:
+    translate 700ms var(--ease-reveal),
+    color 450ms var(--ease-move);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .caseRow:hover::before {
+    transform: scaleY(1);
+  }
+
+  .caseRow:hover .caseLabel,
+  .caseRow:hover p {
+    translate: 0.45rem 0;
+  }
 }
 
 .caseRow:first-child {
@@ -497,11 +497,6 @@
   .project[data-project='mgc'] .media[data-project-slot='4'],
   .project[data-project='mgc'] .media[data-project-slot='5'] {
     display: none;
-  }
-
-  .annotation {
-    left: var(--margin);
-    top: 29%;
   }
 
   .comptoirMedia > div:first-child {

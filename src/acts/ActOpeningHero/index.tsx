@@ -58,6 +58,7 @@ export function ActOpeningHero({ content, locale }: Props) {
           const lines = q<HTMLElement>('.line-mask > *');
           const nameLines = q<HTMLElement>('[data-name-line]');
           const notebookDetails = q<HTMLElement>('[data-notebook-detail]');
+          const handoffDetails = q<HTMLElement>('[data-handoff-detail]');
           const heroFrameEl = q<HTMLElement>(`.${styles.heroFrame}`)[0];
           const heroVerticalEl = q<HTMLElement>(`.${styles.heroVertical}`)[0];
           const heroSharedVisual = q<HTMLElement>('[data-hero-shared-visual]')[0];
@@ -127,10 +128,11 @@ export function ActOpeningHero({ content, locale }: Props) {
           gsap.set(metas, { autoAlpha: 0 });
           gsap.set(disciplines, { autoAlpha: 0 });
           gsap.set(notebookDetails, { autoAlpha: 0, y: 14 });
+          gsap.set(handoffDetails, { autoAlpha: 0, y: 16 });
           gsap.set(spread, { autoAlpha: 0, scale: 0.82, rotation: -1.2 });
           gsap.set(openingFrame, { autoAlpha: 0, scaleX: 0.16, scaleY: 0.72 });
           gsap.set(handoffSurface, {
-            clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)',
+            clipPath: 'inset(0% 50% 0% 50%)',
           });
 
           // Médias persistants : état d'ouverture = décalage relatif vers le centre.
@@ -294,27 +296,38 @@ export function ActOpeningHero({ content, locale }: Props) {
             .to(
               handoffSurface,
               {
-                clipPath: 'polygon(0 0%, 100% 0%, 100% 100%, 0 100%)',
-                duration: 0.82,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                duration: 0.9,
               },
-              0.12,
+              0.04,
+            )
+            .to(
+              handoffDetails,
+              { autoAlpha: 1, y: 0, stagger: 0.035, duration: 0.34 },
+              0.38,
             )
             .to(
               heroFrameEl,
-              { xPercent: -138, yPercent: -14, autoAlpha: 0, duration: 0.7 },
-              0.06,
+              {
+                xPercent: -92,
+                yPercent: -8,
+                clipPath: 'inset(0% 100% 0% 0%)',
+                autoAlpha: 0,
+                duration: 0.62,
+              },
+              0.04,
             )
             .to(
               [first, last],
               {
-                xPercent: (i: number) => (i === 0 ? -8 : 8),
-                scale: 0.78,
+                xPercent: (i: number) => (i === 0 ? -12 : 12),
+                scale: 0.84,
                 autoAlpha: 0,
-                duration: 0.78,
+                duration: 0.72,
               },
-              0,
+              0.06,
             )
-            .to(tagline, { xPercent: -28, autoAlpha: 0, duration: 0.62 }, 0.06)
+            .to(tagline, { xPercent: -18, autoAlpha: 0, duration: 0.54 }, 0.08)
             .to(
               heroVerticalEl,
               {
@@ -342,7 +355,17 @@ export function ActOpeningHero({ content, locale }: Props) {
             )
             .to(ruleH, { scaleX: 0, autoAlpha: 0, duration: 0.7 }, 0.08)
             .to(ruleV, { scaleY: 0, autoAlpha: 0, duration: 0.62 }, 0.1)
-            .to(spread, { scale: 0.9, rotation: -0.5, autoAlpha: 0, duration: 0.72 }, 0)
+            .to(
+              spread,
+              {
+                clipPath: 'inset(0% 50% 0% 50%)',
+                scale: 0.96,
+                rotation: 0,
+                autoAlpha: 0,
+                duration: 0.76,
+              },
+              0.02,
+            )
             .to(
               [...metas, ...notebookDetails, disciplines],
               { autoAlpha: 0, duration: 0.48 },
@@ -403,8 +426,18 @@ export function ActOpeningHero({ content, locale }: Props) {
 
         <span className={styles.ruleH} aria-hidden="true" />
         <span className={styles.ruleV} aria-hidden="true" />
-        <span className={`${styles.spread} paper-card`} aria-hidden="true" />
-        <span className={styles.handoffSurface} data-hero-handoff aria-hidden="true" />
+        <span className={styles.spread} aria-hidden="true" />
+        <div className={styles.handoffSurface} data-hero-handoff aria-hidden="true">
+          <span className={styles.handoffIndex} data-handoff-detail>
+            02
+          </span>
+          <span className={`${styles.handoffKicker} micro`} data-handoff-detail>
+            01 → 02 / {content.social.heading}
+          </span>
+          <span className={`${styles.handoffStatement} lead`} data-handoff-detail>
+            {content.social.statement}
+          </span>
+        </div>
 
         <div className={styles.openingFrame} data-opening-frame aria-hidden="true">
           <span className={`${styles.openingCount} micro`}>00 / 09</span>
@@ -437,7 +470,6 @@ export function ActOpeningHero({ content, locale }: Props) {
         </div>
         <div className={`${styles.media} ${styles.heroFrame}`}>
           <Media item={heroFrame} locale={locale} index={2} total={4} sizes="16vw" />
-          <span className={`${styles.tape} paper-tape`} data-notebook-detail aria-hidden="true" />
         </div>
 
         <span className={`${styles.handNote} hand-note`} data-notebook-detail aria-hidden="true">
