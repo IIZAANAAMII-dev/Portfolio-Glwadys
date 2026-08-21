@@ -78,9 +78,9 @@ export function ActJourney({ content, locale }: Props) {
 
           gsap.set(progressBar, { scaleY: 0, transformOrigin: 'center top' });
           gsap.set(handoff, {
-            clipPath: 'inset(0 49.5% 0 49.5%)',
+            clipPath: 'inset(0 100% 0 0)',
             scale: 1.008,
-            transformOrigin: 'center center',
+            transformOrigin: 'left center',
           });
           updateFocus();
 
@@ -111,7 +111,7 @@ export function ActJourney({ content, locale }: Props) {
               0,
             )
             .to(driver, { value: 1, duration: 0.8, onUpdate: updateFocus }, 0)
-            .to(handoff, { clipPath: 'inset(0 0% 0 0)', scale: 1, duration: 0.25 }, 0.7)
+            .to(handoff, { clipPath: 'inset(0 0% 0 0)', scale: 1, duration: 0.25 }, 0.55)
             .to(
               q<HTMLElement>('[data-journey-chrome]'),
               { autoAlpha: 0, y: -8, duration: 0.12 },

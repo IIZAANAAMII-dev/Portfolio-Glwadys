@@ -187,8 +187,8 @@
     transparent calc(7.5% + 1px)
   );
   color: var(--ink);
-  clip-path: inset(0 49.5%);
-  will-change: clip-path, transform;
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
 }
 
 @media (max-width: 1023px) {

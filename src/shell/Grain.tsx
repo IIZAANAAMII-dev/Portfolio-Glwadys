@@ -4,9 +4,7 @@ import styles from './Grain.module.css';
 export function Grain() {
   return (
     <div className={styles.grain} aria-hidden="true">
-      <span className={styles.coarse} />
-      <span className={styles.fiber} />
-      <span className={styles.fine} />
+      <span className={styles.paper} />
     </div>
   );
 }

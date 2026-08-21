@@ -56,10 +56,16 @@ export function ActContact({ content, locale }: Props) {
 
           manifestoTl
             .fromTo(
+              q<HTMLElement>('[data-manifesto-page]'),
+              { clipPath: 'inset(0 100% 0 0)' },
+              { clipPath: 'inset(0 0% 0 0)', duration: 0.22 },
+              0,
+            )
+            .fromTo(
               q<HTMLElement>('[data-manifesto-line]'),
               { yPercent: 112 },
               { yPercent: 0, duration: 0.42, stagger: STAGGER.tight },
-              0,
+              0.08,
             )
             .fromTo(
               q<HTMLElement>('[data-manifesto-rule]'),
@@ -86,10 +92,16 @@ export function ActContact({ content, locale }: Props) {
 
           contactTl
             .fromTo(
+              q<HTMLElement>('[data-contact-page]'),
+              { clipPath: 'inset(0 100% 0 0)' },
+              { clipPath: 'inset(0 0% 0 0)', duration: DUR.editorial },
+              0,
+            )
+            .fromTo(
               q<HTMLElement>('[data-contact-name]'),
               { yPercent: 110 },
               { yPercent: 0, duration: DUR.editorial, stagger: STAGGER.base },
-              0,
+              0.12,
             )
             .fromTo(
               q<HTMLElement>('[data-contact-rule]'),
@@ -116,7 +128,7 @@ export function ActContact({ content, locale }: Props) {
       <section ref={manifestoSection} className={styles.manifestoSection} aria-labelledby="manifesto-title">
         <div className={styles.manifestoStage}>
           <CreativeDesk locale={locale} />
-          <div className={`${styles.manifestoPage} paper-card`}>
+          <div className={`${styles.manifestoPage} paper-card`} data-manifesto-page>
             <span className={`${styles.manifestoEyebrow} micro`}>{content.manifesto.eyebrow}</span>
             <span className={`${styles.manifestoEdition} micro`}>Glwadys Dalleau / 2026</span>
 
@@ -141,7 +153,7 @@ export function ActContact({ content, locale }: Props) {
       <section ref={contactSection} className={styles.contactSection} aria-labelledby="contact-title">
         <div className={styles.stage}>
           <CreativeDesk locale={locale} />
-          <div className={`${styles.lastPage} paper-card`}>
+          <div className={`${styles.lastPage} paper-card`} data-contact-page>
             <span className={`${styles.chapter} micro`}>09 / {content.contact.heading}</span>
             <span className={`${styles.edition} micro`}>Portfolio 2026</span>
 

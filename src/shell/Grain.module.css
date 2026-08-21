@@ -1,4 +1,4 @@
-/* Trois trames statiques : grain imprimé large, fibre orientée et irrégularité fine. */
+/* Texture papier statique, générée pour le projet. */
 .grain {
   position: fixed;
   inset: 0;
@@ -9,45 +9,19 @@
   contain: strict;
 }
 
-.grain span {
+.paper {
   position: absolute;
   inset: -4%;
   display: block;
+  background-image: url('/media/textures/paper-light.webp');
   background-repeat: repeat;
-}
-
-.coarse {
-  opacity: 0.58;
-  mix-blend-mode: soft-light;
-  filter: contrast(1.58);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='coarse'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.075' numOctaves='2' seed='31' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23coarse)' opacity='.96'/%3E%3C/svg%3E");
-  background-size: 320px 320px;
-  background-position: -41px 23px;
-}
-
-.fiber {
-  opacity: 0.42;
+  background-size: 256px 256px;
+  filter: grayscale(100%) contrast(1.2);
   mix-blend-mode: overlay;
-  filter: contrast(1.32);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512'%3E%3Cfilter id='fiber'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.009 .19' numOctaves='3' seed='19' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23fiber)' opacity='.9'/%3E%3C/svg%3E");
-  background-size: 512px 512px;
-  background-position: 67px -29px;
-}
-
-.fine {
-  opacity: 0.54;
-  mix-blend-mode: overlay;
-  filter: contrast(1.18);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='148' height='148'%3E%3Cfilter id='fine'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='148' height='148' filter='url(%23fine)' opacity='.94'/%3E%3C/svg%3E");
-  background-size: 148px 148px;
 }
 
 @media (max-width: 767px) {
-  .coarse {
-    background-size: 280px 280px;
-  }
-
-  .fiber {
-    opacity: 0.34;
+  .paper {
+    background-size: 180px 180px;
   }
 }

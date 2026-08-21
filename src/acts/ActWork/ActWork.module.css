@@ -29,6 +29,8 @@
 .project {
   position: relative;
   overflow: clip;
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
 }
 
 .projectVisual {
@@ -286,6 +288,8 @@
   padding: clamp(5rem, 9vw, 9rem) var(--margin) clamp(4rem, 7vw, 7rem);
   border-top: 1px solid currentColor;
   overflow: hidden;
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
 }
 
 .project[data-project='yuna'] .dossier {

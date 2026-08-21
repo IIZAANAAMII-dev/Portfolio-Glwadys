@@ -344,7 +344,8 @@ function Strategy({ content, locale }: Props) {
       const strategyContent = q<HTMLElement>('[data-strategy-content]');
       const handoff = q<HTMLElement>('[data-work-handoff]');
       const handoffRule = q<HTMLElement>('[data-work-handoff-rule]')[0];
-      if (!campaign || !handoffRule) return;
+      const handoffPanel = q<HTMLElement>('[data-work-handoff-panel]')[0];
+      if (!campaign || !handoffRule || !handoffPanel) return;
 
       const mm = gsap.matchMedia();
       mm.add(
@@ -360,6 +361,7 @@ function Strategy({ content, locale }: Props) {
 
           gsap.set(rows, { autoAlpha: 0, y: 12, x: 0 });
           gsap.set(campaign, { clipPath: 'inset(100% 0% 0% 0%)', scale: 0.94 });
+          gsap.set(handoffPanel, { clipPath: 'inset(0 100% 0 0)' });
           gsap.set(handoff, { autoAlpha: 0, y: 12 });
           gsap.set(handoffRule, { scaleY: 0, transformOrigin: 'center top' });
 
@@ -411,6 +413,7 @@ function Strategy({ content, locale }: Props) {
             .to(strategyContent, { autoAlpha: 0, yPercent: -3, duration: 0.14 }, 0.7)
             .to(stageEl, { backgroundColor: 'var(--wood-brown)', color: 'var(--ivory)', duration: 0.18 }, 0.71)
             .to(campaign, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.2 }, 0.74)
+            .to(handoffPanel, { clipPath: 'inset(0 0% 0 0)', duration: 0.22 }, 0.77)
             .to(handoffRule, { scaleY: 1, duration: 0.15 }, 0.79)
             .to(handoff, { autoAlpha: 1, y: 0, stagger: 0.035, duration: 0.14 }, 0.8);
         },
@@ -444,7 +447,7 @@ function Strategy({ content, locale }: Props) {
           <Media item={yunaMedia[0]!} locale={locale} sizes="26vw" />
         </div>
 
-        <div className={styles.workHandoff} aria-hidden="true">
+        <div className={styles.workHandoff} data-work-handoff-panel aria-hidden="true">
           <span className={`${styles.workIndex} micro`} data-work-handoff>
             06 / Portfolio
           </span>

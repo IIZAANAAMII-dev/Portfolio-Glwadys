@@ -86,10 +86,16 @@ function ProjectSection({
 
           tl
             .fromTo(
+              rootEl,
+              { clipPath: 'inset(0 100% 0 0)' },
+              { clipPath: 'inset(0 0% 0 0)', duration: 0.22 },
+              0,
+            )
+            .fromTo(
               q<HTMLElement>('[data-project-name]'),
               { yPercent: 38, autoAlpha: 0 },
               { yPercent: 0, autoAlpha: 1, duration: 0.22 },
-              0,
+              0.08,
             )
             .to(
               mediaEls,
@@ -154,10 +160,16 @@ function ProjectSection({
 
           dossierTl
             .fromTo(
+              dossier,
+              { clipPath: 'inset(0 100% 0 0)' },
+              { clipPath: 'inset(0 0% 0 0)', duration: 0.32 },
+              0,
+            )
+            .fromTo(
               q<HTMLElement>('[data-case-heading]'),
               { yPercent: 55, autoAlpha: 0 },
               { yPercent: 0, autoAlpha: 1, duration: 0.24 },
-              0,
+              0.1,
             )
             .fromTo(
               q<HTMLElement>('[data-case-row]'),
