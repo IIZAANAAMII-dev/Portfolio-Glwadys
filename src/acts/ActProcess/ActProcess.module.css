@@ -99,13 +99,26 @@
   background: var(--rule);
 }
 
+.sheetHandoff {
+  position: absolute;
+  inset: 0;
+  z-index: calc(var(--z-sticky) - 1);
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, transparent 0 50%, rgb(var(--ink-rgb) / 0.07) 50% calc(50% + 1px), transparent calc(50% + 1px)),
+    var(--paper);
+  transform-origin: left center;
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
+}
+
 .systemSection {
   background: var(--paper);
 }
 
 .systemSection,
 .strategySection {
-  margin-top: -55svh;
+  margin-top: -100svh;
 }
 
 .systemStage {
@@ -190,6 +203,16 @@
 
 .boardItem:first-child {
   border-left: 0;
+}
+
+.brandMethodHandoff {
+  position: absolute;
+  inset: 0;
+  z-index: calc(var(--z-sticky) + 1);
+  overflow: hidden;
+  background: var(--ivory);
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
 }
 
 .boardLabel {
@@ -510,6 +533,15 @@
 }
 
 @media (max-width: 1023px) {
+  .sheetHandoff {
+    display: none;
+  }
+
+  .systemSection,
+  .strategySection {
+    margin-top: 0;
+  }
+
   .railSection,
   .railSection .stage {
     min-height: auto;
@@ -660,6 +692,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .sheetHandoff,
+  .brandMethodHandoff {
+    display: none;
+  }
+
   .railSection,
   .systemSection,
   .strategySection,

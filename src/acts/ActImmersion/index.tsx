@@ -88,6 +88,15 @@ export function ActImmersion({ content, locale }: Props) {
                 progress.current = self.progress;
                 window.dispatchEvent(new Event(IMMERSION_PROGRESS_EVENT));
               },
+              onEnter: () => gsap.set(stageEl, { autoAlpha: 1 }),
+              onEnterBack: () => gsap.set(stageEl, { autoAlpha: 1 }),
+              onLeave: () => gsap.set(stageEl, { autoAlpha: 0 }),
+              onLeaveBack: () => gsap.set(stageEl, { autoAlpha: 0 }),
+              onRefresh: (self) => {
+                gsap.set(stageEl, {
+                  autoAlpha: self.scroll() >= self.start && self.scroll() < self.end ? 1 : 0,
+                });
+              },
             },
           });
 
@@ -101,15 +110,15 @@ export function ActImmersion({ content, locale }: Props) {
                 scrub: SCRUB.narrative,
               },
             })
-            .to('[data-immersion-entry]', { autoAlpha: 0, duration: 0.14 }, 0.08)
+            .to('[data-immersion-entry]', { autoAlpha: 0, duration: 0.12 }, 0.14)
             .fromTo(
               q<HTMLElement>('[data-immersion-meta]'),
               { autoAlpha: 0, y: 10 },
               { autoAlpha: 1, y: 0, duration: 0.16 },
-              0.13,
+              0.2,
             )
-            .fromTo('[data-immersion-heading]', { yPercent: 108 }, { yPercent: 0, duration: 0.22 }, 0.2)
-            .fromTo('[data-immersion-copy]', { yPercent: 12, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.24 }, 0.35)
+            .fromTo('[data-immersion-heading]', { yPercent: 108 }, { yPercent: 0, duration: 0.2 }, 0.26)
+            .fromTo('[data-immersion-copy]', { yPercent: 12, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.22 }, 0.39)
             .to('[data-immersion-copy]', { yPercent: -10, autoAlpha: 0, duration: 0.17 }, 0.68)
             .to(q<HTMLElement>('[data-immersion-meta]'), { autoAlpha: 0, duration: 0.15 }, 0.71)
             .to(
@@ -117,7 +126,7 @@ export function ActImmersion({ content, locale }: Props) {
               { backgroundColor: 'var(--ivory)', duration: 0.2 },
               0.72,
             )
-            .to('[data-immersion-heading]', { yPercent: -106, duration: 0.18 }, 0.69);
+            .to('[data-immersion-heading]', { yPercent: -106, duration: 0.12 }, 0.69);
         },
       );
     },

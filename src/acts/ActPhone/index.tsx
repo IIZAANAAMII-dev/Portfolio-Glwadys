@@ -7,6 +7,11 @@ import type { Locale } from '@/content/locales';
 import { heroVertical, phoneFeed, phoneStory, socialPortal } from '@/content/media';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
+import {
+  storyRectForPhoneScreen,
+  viewportClip,
+  type SharedStoryRefs,
+} from '@/lib/sharedStory';
 import { Media } from '@/ui/Media';
 
 import styles from './ActPhone.module.css';
@@ -14,9 +19,10 @@ import styles from './ActPhone.module.css';
 interface Props {
   content: Content;
   locale: Locale;
+  sharedStory: SharedStoryRefs;
 }
 
-export function ActPhone({ content, locale }: Props) {
+export function ActPhone({ content, locale, sharedStory }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
 
@@ -24,7 +30,9 @@ export function ActPhone({ content, locale }: Props) {
     () => {
       const rootEl = root.current;
       const stageEl = stage.current;
-      if (!rootEl || !stageEl) return;
+      const sharedMask = sharedStory.mask.current;
+      const sharedPlane = sharedStory.plane.current;
+      if (!rootEl || !stageEl || !sharedMask || !sharedPlane) return;
 
       const q = gsap.utils.selector(stageEl);
       const mm = gsap.matchMedia();
@@ -40,7 +48,8 @@ export function ActPhone({ content, locale }: Props) {
 
           const device = q<HTMLElement>('[data-phone]')[0];
           const screen = q<HTMLElement>('[data-phone-screen]')[0];
-          const hero = q<HTMLElement>('[data-phone-hero]')[0];
+          const heroSlot = q<HTMLElement>('[data-phone-hero]')[0];
+          const hero = sharedPlane;
           const feed = q<HTMLElement>('[data-phone-feed]')[0];
           const focus = q<HTMLElement>('[data-phone-focus]')[0];
           const story = q<HTMLElement>('[data-phone-story]')[0];
@@ -50,7 +59,7 @@ export function ActPhone({ content, locale }: Props) {
           if (
             !device ||
             !screen ||
-            !hero ||
+            !heroSlot ||
             !feed ||
             !focus ||
             !story ||
@@ -138,6 +147,15 @@ export function ActPhone({ content, locale }: Props) {
               scrub: SCRUB.narrative,
               anticipatePin: 1,
               invalidateOnRefresh: true,
+              onEnter: () => gsap.set(stageEl, { autoAlpha: 1 }),
+              onEnterBack: () => gsap.set(stageEl, { autoAlpha: 1 }),
+              onLeave: () => gsap.set(stageEl, { autoAlpha: 0 }),
+              onLeaveBack: () => gsap.set(stageEl, { autoAlpha: 0 }),
+              onRefresh: (self) => {
+                gsap.set(stageEl, {
+                  autoAlpha: self.scroll() >= self.start && self.scroll() < self.end ? 1 : 0,
+                });
+              },
             },
           });
 
@@ -152,6 +170,30 @@ export function ActPhone({ content, locale }: Props) {
           };
 
           tl
+            .to(
+              hero,
+              {
+                left: () => storyRectForPhoneScreen(isDesktop).left,
+                top: () => storyRectForPhoneScreen(isDesktop).top,
+                width: () => storyRectForPhoneScreen(isDesktop).width,
+                height: () => storyRectForPhoneScreen(isDesktop).height,
+                x: 0,
+                y: 0,
+                scale: 1,
+                duration: 0.16,
+              },
+              0,
+            )
+            .to(
+              sharedMask,
+              {
+                autoAlpha: 1,
+                clipPath: () =>
+                  viewportClip(storyRectForPhoneScreen(isDesktop), isDesktop ? 34 : 30),
+                duration: 0.16,
+              },
+              0,
+            )
             .to(entries, { autoAlpha: 1, y: 0, stagger: 0.025, duration: 0.1 }, 0.015)
             .to(details, { autoAlpha: 1, y: 0, stagger: 0.03, duration: 0.12 }, 0.07)
             .to(
@@ -169,6 +211,7 @@ export function ActPhone({ content, locale }: Props) {
             .to(q<HTMLElement>('[data-phone-meter]'), { scaleY: 1, duration: 0.92 }, 0.04)
             .to(hero, { yPercent: -101, duration: 0.13 }, 0.18)
             .to(feed, { yPercent: 0, duration: 0.13 }, 0.18)
+            .to(sharedMask, { autoAlpha: 0, duration: 0.045 }, 0.285)
             .to(feed, { yPercent: -25, duration: 0.15 }, 0.28)
             .to(focus, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.13 }, 0.38)
             .to(q<HTMLElement>('[data-focus-image]'), { scale: 1.055, duration: 0.14 }, 0.4)
@@ -281,7 +324,11 @@ export function ActPhone({ content, locale }: Props) {
               <span>•••</span>
             </div>
 
-            <div className={styles.screenHero} data-phone-hero>
+            <div
+              className={styles.screenHero}
+              data-phone-hero
+              data-shared-story-local
+            >
               <Media
                 item={heroVertical}
                 locale={locale}

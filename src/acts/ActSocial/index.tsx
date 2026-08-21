@@ -7,6 +7,11 @@ import type { Locale } from '@/content/locales';
 import { behindMedia, heroVertical, socialSatellites } from '@/content/media';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
+import {
+  storyRectForPhone,
+  viewportClip,
+  type SharedStoryRefs,
+} from '@/lib/sharedStory';
 import { Media } from '@/ui/Media';
 
 import styles from './ActSocial.module.css';
@@ -14,9 +19,10 @@ import styles from './ActSocial.module.css';
 interface Props {
   content: Content;
   locale: Locale;
+  sharedStory: SharedStoryRefs;
 }
 
-export function ActSocial({ content, locale }: Props) {
+export function ActSocial({ content, locale, sharedStory }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
 
@@ -24,7 +30,9 @@ export function ActSocial({ content, locale }: Props) {
     () => {
       const rootEl = root.current;
       const stageEl = stage.current;
-      if (!rootEl || !stageEl) return;
+      const sharedMask = sharedStory.mask.current;
+      const sharedPlane = sharedStory.plane.current;
+      if (!rootEl || !stageEl || !sharedMask || !sharedPlane) return;
 
       const q = gsap.utils.selector(stageEl);
       const mm = gsap.matchMedia();
@@ -38,7 +46,8 @@ export function ActSocial({ content, locale }: Props) {
           };
           if (isReduced) return;
 
-          const dominant = q<HTMLElement>('[data-social-dominant]')[0];
+          const dominantSlot = q<HTMLElement>('[data-social-dominant]')[0];
+          const dominant = sharedPlane;
           const behind = q<HTMLElement>('[data-behind]')[0];
           const satellites = q<HTMLElement>('[data-social-satellite]');
           const behindMediaEls = q<HTMLElement>('[data-behind-media]');
@@ -46,7 +55,7 @@ export function ActSocial({ content, locale }: Props) {
           const frontCopy = q<HTMLElement>('[data-front-copy]');
           const behindCopy = q<HTMLElement>('[data-behind-copy]');
           const firstSatellite = satellites[0];
-          if (!dominant || !behind || !firstSatellite) return;
+          if (!dominantSlot || !behind || !firstSatellite) return;
 
           gsap.set(satellites, {
             autoAlpha: 0,
@@ -74,6 +83,15 @@ export function ActSocial({ content, locale }: Props) {
               scrub: SCRUB.narrative,
               anticipatePin: 1,
               invalidateOnRefresh: true,
+              onEnter: () => gsap.set(stageEl, { autoAlpha: 1 }),
+              onEnterBack: () => gsap.set(stageEl, { autoAlpha: 1 }),
+              onLeave: () => gsap.set(stageEl, { autoAlpha: 0 }),
+              onLeaveBack: () => gsap.set(stageEl, { autoAlpha: 0 }),
+              onRefresh: (self) => {
+                gsap.set(stageEl, {
+                  autoAlpha: self.scroll() >= self.start && self.scroll() < self.end ? 1 : 0,
+                });
+              },
             },
           });
 
@@ -136,20 +154,21 @@ export function ActSocial({ content, locale }: Props) {
             .to(
               dominant,
               {
-                x: () => {
-                  const rect = dominant.getBoundingClientRect();
-                  return window.innerWidth / 2 - (rect.left + rect.width / 2);
-                },
-                y: () => {
-                  const rect = dominant.getBoundingClientRect();
-                  return window.innerHeight / 2 - (rect.top + rect.height / 2);
-                },
-                scale: () => {
-                  const targetWidth = isDesktop
-                    ? Math.min(window.innerWidth * 0.22, 17 * 16)
-                    : Math.min(window.innerWidth * 0.58, 16 * 16);
-                  return targetWidth / dominant.offsetWidth;
-                },
+                left: () => storyRectForPhone(isDesktop).left,
+                top: () => storyRectForPhone(isDesktop).top,
+                width: () => storyRectForPhone(isDesktop).width,
+                height: () => storyRectForPhone(isDesktop).height,
+                x: 0,
+                y: 0,
+                scale: 1,
+                duration: 0.28,
+              },
+              0.73,
+            )
+            .to(
+              sharedMask,
+              {
+                clipPath: () => viewportClip(storyRectForPhone(isDesktop)),
                 duration: 0.28,
               },
               0.73,
@@ -180,7 +199,7 @@ export function ActSocial({ content, locale }: Props) {
           </span>
         </div>
 
-        <div className={styles.dominant} data-social-dominant>
+        <div className={styles.dominant} data-social-dominant data-shared-story-local>
           <Media item={heroVertical} locale={locale} index={1} total={4} sizes="24vw" preload={false} />
         </div>
 

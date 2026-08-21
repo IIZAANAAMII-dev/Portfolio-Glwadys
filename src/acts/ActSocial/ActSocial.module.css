@@ -61,6 +61,7 @@
   top: 16%;
   z-index: var(--z-persistent);
   width: min(18vw, 17rem);
+  aspect-ratio: 9 / 16;
   filter: drop-shadow(0 2rem 3.5rem rgb(var(--ink-rgb) / 0.34));
 }
 

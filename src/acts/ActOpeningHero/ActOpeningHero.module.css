@@ -264,6 +264,7 @@
   left: 65%;
   top: 25%;
   width: min(18vw, 17rem);
+  aspect-ratio: 9 / 16;
   z-index: var(--z-persistent);
 }
 

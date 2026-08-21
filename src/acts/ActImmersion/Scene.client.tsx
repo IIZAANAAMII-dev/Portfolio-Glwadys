@@ -36,20 +36,14 @@ const FRAGMENT = `
   varying vec2 vUv;
   varying float vLift;
 
-  float grain(vec2 p) {
-    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
-  }
-
   void main() {
     vec4 texel = texture2D(uMap, vUv);
     float edgeDistance = min(min(vUv.x, 1.0 - vUv.x), min(vUv.y, 1.0 - vUv.y));
     float border = 1.0 - smoothstep(0.0, 0.009, edgeDistance);
     float edgeLight = smoothstep(0.0, 0.08, edgeDistance);
     float movingLight = smoothstep(0.0, 0.42, 1.0 - abs(vUv.x - uSheen) * 2.4);
-    float fiber = (grain(vUv * 720.0) - 0.5) * 0.014;
-
     vec3 color = texel.rgb * mix(0.78, 1.02, edgeLight);
-    color += vec3(0.035, 0.018, 0.006) + fiber;
+    color += vec3(0.035, 0.018, 0.006);
     color += movingLight * vLift * vec3(0.055, 0.038, 0.022);
     color = mix(color, vec3(0.815, 0.678, 0.447), border * 0.44);
 
@@ -133,20 +127,25 @@ function DepthPlane({ index, progress, mobile, texture }: PlaneProps) {
     if (!node || !liveMaterial || !layout) return;
 
     const p = progress.current;
-    const open = THREE.MathUtils.smoothstep(p, 0.07, 0.37);
-    const reveal = index === 0 ? 1 : THREE.MathUtils.smoothstep(p, 0.12 + index * 0.035, 0.38);
-    const travel = THREE.MathUtils.smoothstep(p, 0.32, 0.76);
+    const open = THREE.MathUtils.smoothstep(p, 0.2, 0.45);
+    const reveal = index === 0 ? 1 : THREE.MathUtils.smoothstep(p, 0.22 + index * 0.035, 0.46);
+    const travel = THREE.MathUtils.smoothstep(p, 0.38, 0.76);
     const flatten = THREE.MathUtils.smoothstep(p, 0.7, 0.92);
     const exit = 1 - THREE.MathUtils.smoothstep(p, index === 0 ? 0.88 : 0.8, 1);
     const declutter = index === 0 ? 1 : 1 - THREE.MathUtils.smoothstep(p, 0.68, 0.84);
     const visibleCount = mobile ? 3 : 4;
     const aspect = ASPECTS[index] ?? 4 / 5;
     const [coverWidth, coverHeight] = coverSize(size.width, size.height, ASPECTS[0]);
+    const portalFocusShift = (size.width - coverWidth) * (0.32 - 0.5);
     const targetWidth = size.width * layout.width;
     const targetHeight = targetWidth / aspect;
 
     node.visible = index < visibleCount && exit > 0.001;
-    node.position.x = THREE.MathUtils.lerp(index === 0 ? 0 : layout.x * size.width, layout.x * size.width, open);
+    node.position.x = THREE.MathUtils.lerp(
+      index === 0 ? portalFocusShift : layout.x * size.width,
+      layout.x * size.width,
+      open,
+    );
     node.position.y = THREE.MathUtils.lerp(index === 0 ? 0 : layout.y * size.height, layout.y * size.height, open);
     node.position.z = THREE.MathUtils.lerp(
       layout.depth + travel * (index % 2 === 0 ? 18 : 9),

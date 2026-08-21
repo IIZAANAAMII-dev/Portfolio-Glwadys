@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
 import { contactSheet, yunaMedia } from '@/content/media';
-import { gsap, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
 import { Media } from '@/ui/Media';
 
@@ -14,6 +14,21 @@ import styles from './ActProcess.module.css';
 interface Props {
   content: Content;
   locale: Locale;
+}
+
+function prepareStageOwnership(root: HTMLElement, stage: HTMLElement) {
+  gsap.set(stage, { autoAlpha: 0 });
+  ScrollTrigger.create({
+    trigger: root,
+    start: 'top top',
+    end: 'bottom top',
+    onEnter: () => gsap.set(stage, { autoAlpha: 1 }),
+    onEnterBack: () => gsap.set(stage, { autoAlpha: 1 }),
+    onLeaveBack: () => gsap.set(stage, { autoAlpha: 0 }),
+    onRefresh: (self) => {
+      gsap.set(stage, { autoAlpha: self.scroll() >= self.start ? 1 : 0 });
+    },
+  });
 }
 
 function ContactSheetRail({ content, locale }: Props) {
@@ -37,9 +52,18 @@ function ContactSheetRail({ content, locale }: Props) {
             isDesktop: boolean;
             isReduced: boolean;
           };
-          if (!isDesktop || isReduced) return;
+          if (isReduced) return;
+
+          prepareStageOwnership(rootEl, stageEl);
+          if (!isDesktop) return;
 
           const railItems = q<HTMLElement>('[data-sheet-item]');
+          const handoff = q<HTMLElement>('[data-sheet-handoff]')[0];
+          const handoffCopy = q<HTMLElement>('[data-sheet-handoff-copy]');
+          if (!handoff) return;
+
+          gsap.set(handoff, { clipPath: 'inset(0% 100% 0% 0%)' });
+          gsap.set(handoffCopy, { autoAlpha: 0, y: 12 });
 
           gsap
             .timeline({
@@ -57,7 +81,13 @@ function ContactSheetRail({ content, locale }: Props) {
             .to(railEl, { x: () => -(railEl.scrollWidth - window.innerWidth), duration: 1 }, 0)
             .to(q<HTMLElement>('[data-sheet-copy]'), { autoAlpha: 0, y: -10, duration: 0.12 }, 0.8)
             .to(railItems, { autoAlpha: 0, yPercent: -5, stagger: 0.012, duration: 0.16 }, 0.81)
-            .to(stageEl, { backgroundColor: 'var(--paper)', duration: 0.16 }, 0.8);
+            .to(stageEl, { backgroundColor: 'var(--paper)', duration: 0.16 }, 0.8)
+            .to(handoff, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.2 }, 0.78)
+            .to(
+              handoffCopy,
+              { autoAlpha: 1, y: 0, stagger: 0.025, duration: 0.14 },
+              0.84,
+            );
         },
       );
     },
@@ -80,6 +110,19 @@ function ContactSheetRail({ content, locale }: Props) {
               <Media item={item} locale={locale} index={index + 1} total={8} sizes="28vw" />
             </figure>
           ))}
+        </div>
+        <div className={styles.sheetHandoff} data-sheet-handoff aria-hidden="true">
+          <span className={`${styles.kicker} micro`} data-sheet-handoff-copy>
+            05.2 / {content.process.moodboard}
+          </span>
+          <div className={styles.systemTitleMask}>
+            <span className={`${styles.systemTitle} display`} data-sheet-handoff-copy>
+              {content.process.system}
+            </span>
+          </div>
+          <p className={styles.systemManifesto} data-sheet-handoff-copy>
+            {content.strategy.sentence}
+          </p>
         </div>
         <span className={styles.railRule} aria-hidden="true" />
       </div>
@@ -158,7 +201,7 @@ function MethodOpening({ content, locale }: Props) {
   );
 }
 
-function BrandSystem({ content }: Props) {
+function BrandSystem({ content, locale }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
 
@@ -185,11 +228,16 @@ function BrandSystem({ content }: Props) {
           };
           if (isReduced) return;
 
+          prepareStageOwnership(rootEl, stageEl);
+
           gsap.set(title, { yPercent: 0 });
           gsap.set(manifesto, { autoAlpha: 1, yPercent: 0 });
           gsap.set(items, { autoAlpha: 0, yPercent: 20 });
           gsap.set(artifacts, { scale: 0.82, autoAlpha: 0 });
           gsap.set(axes, { scaleX: 0, transformOrigin: 'left center' });
+          const methodHandoff = q<HTMLElement>('[data-brand-method-handoff]')[0];
+          if (!methodHandoff) return;
+          gsap.set(methodHandoff, { clipPath: 'inset(0% 100% 0% 0%)' });
 
           gsap
             .timeline({
@@ -221,7 +269,12 @@ function BrandSystem({ content }: Props) {
               { autoAlpha: 0.42, yPercent: -2, duration: 0.16 },
               0.84,
             )
-            .to(stageEl, { backgroundColor: 'var(--ivory)', duration: 0.2 }, 0.76);
+            .to(stageEl, { backgroundColor: 'var(--ivory)', duration: 0.2 }, 0.76)
+            .to(
+              methodHandoff,
+              { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.24 },
+              0.74,
+            );
         },
       );
     },
@@ -262,6 +315,14 @@ function BrandSystem({ content }: Props) {
           ))}
         </div>
 
+        <div
+          className={styles.brandMethodHandoff}
+          data-brand-method-handoff
+          aria-hidden="true"
+        >
+          <MethodOpening content={content} locale={locale} />
+        </div>
+
       </div>
     </section>
   );
@@ -295,7 +356,9 @@ function Strategy({ content, locale }: Props) {
           };
           if (isReduced) return;
 
-          gsap.set(rows, { autoAlpha: 0.72, y: 8, x: 0 });
+          prepareStageOwnership(rootEl, stageEl);
+
+          gsap.set(rows, { autoAlpha: 0, y: 12, x: 0 });
           gsap.set(campaign, { clipPath: 'inset(100% 0% 0% 0%)', scale: 0.94 });
           gsap.set(handoff, { autoAlpha: 0, y: 12 });
           gsap.set(handoffRule, { scaleY: 0, transformOrigin: 'center top' });
@@ -314,7 +377,7 @@ function Strategy({ content, locale }: Props) {
           });
 
           tl
-            .to(rows, { y: 0, stagger: 0.025, duration: 0.14 }, 0.03)
+            .to(rows, { y: 0, autoAlpha: 0.72, stagger: 0.025, duration: 0.14 }, 0.03)
             .to(methodMedia.slice(0, 1), { yPercent: -3, scale: 1.018, duration: 0.68 }, 0)
             .to(methodMedia.slice(1, 2), { yPercent: 4, duration: 0.68 }, 0);
 

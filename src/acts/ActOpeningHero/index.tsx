@@ -8,6 +8,7 @@ import { heroFrame, heroVertical, openingMedia } from '@/content/media';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { DUR, EASE, MQ, SCROLL, SCRUB, STAGGER, scrollLength } from '@/lib/motion';
 import { emitReady, lockScroll, unlockScroll } from '@/lib/scrollControl';
+import { rectFromElement, viewportClip, type SharedStoryRefs } from '@/lib/sharedStory';
 import { Media } from '@/ui/Media';
 
 import styles from './ActOpeningHero.module.css';
@@ -15,6 +16,7 @@ import styles from './ActOpeningHero.module.css';
 interface Props {
   content: Content;
   locale: Locale;
+  sharedStory: SharedStoryRefs;
 }
 
 /** Place `el` de sorte que son coin haut-gauche atteigne (left, top), à `scale`.
@@ -24,14 +26,16 @@ function placeAt(el: HTMLElement, left: number, top: number, scale: number) {
   gsap.set(el, { x: left - rect.left, y: top - rect.top, scale });
 }
 
-export function ActOpeningHero({ content, locale }: Props) {
+export function ActOpeningHero({ content, locale, sharedStory }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const stageEl = stage.current;
-      if (!stageEl) return;
+      const sharedMask = sharedStory.mask.current;
+      const sharedPlane = sharedStory.plane.current;
+      if (!stageEl || !sharedMask || !sharedPlane) return;
 
       const q = gsap.utils.selector(stageEl);
       const first = q<HTMLElement>(`.${styles.nameFirst}`)[0];
@@ -53,22 +57,20 @@ export function ActOpeningHero({ content, locale }: Props) {
           };
 
           const transient = q<HTMLElement>(`.${styles.transient}`);
-          const media = q<HTMLElement>(`.${styles.media}`);
           const metas = q<HTMLElement>('[data-meta]');
           const lines = q<HTMLElement>('.line-mask > *');
           const nameLines = q<HTMLElement>('[data-name-line]');
           const notebookDetails = q<HTMLElement>('[data-notebook-detail]');
           const handoffDetails = q<HTMLElement>('[data-handoff-detail]');
           const heroFrameEl = q<HTMLElement>(`.${styles.heroFrame}`)[0];
-          const heroVerticalEl = q<HTMLElement>(`.${styles.heroVertical}`)[0];
-          const heroSharedVisual = q<HTMLElement>('[data-hero-shared-visual]')[0];
+          const heroSlot = q<HTMLElement>(`.${styles.heroVertical}`)[0];
+          const heroVerticalEl = sharedPlane;
           const ruleH = q<HTMLElement>(`.${styles.ruleH}`)[0];
           const ruleV = q<HTMLElement>(`.${styles.ruleV}`)[0];
           const disciplines = q<HTMLElement>(`.${styles.disciplines}`)[0];
           if (
             !heroFrameEl ||
-            !heroVerticalEl ||
-            !heroSharedVisual ||
+            !heroSlot ||
             !ruleH ||
             !ruleV ||
             !disciplines
@@ -92,6 +94,7 @@ export function ActOpeningHero({ content, locale }: Props) {
              Calculé à partir de la position Hero, donc recalculé
              automatiquement par matchMedia à chaque changement de contexte. */
           const stageRect = stageEl.getBoundingClientRect();
+          const heroSlotRect = rectFromElement(heroSlot);
           const cx = stageRect.left + stageRect.width / 2;
           const cy = stageRect.top + stageRect.height / 2;
           const NAME_SCALE = isDesktop ? 0.42 : 0.62;
@@ -134,9 +137,17 @@ export function ActOpeningHero({ content, locale }: Props) {
           gsap.set(handoffSurface, {
             clipPath: 'inset(0% 50% 0% 50%)',
           });
+          gsap.set(sharedMask, {
+            autoAlpha: 1,
+            clipPath: 'inset(0px 0px 0px 0px)',
+          });
 
           // Médias persistants : état d'ouverture = décalage relatif vers le centre.
           gsap.set(heroVerticalEl, {
+            left: heroSlotRect.left,
+            top: heroSlotRect.top,
+            width: heroSlotRect.width,
+            height: heroSlotRect.height,
             xPercent: isDesktop ? -62 : 0,
             yPercent: isDesktop ? 8 : 14,
             scale: 0.82,
@@ -151,6 +162,7 @@ export function ActOpeningHero({ content, locale }: Props) {
             clipPath: 'inset(100% 0 0 0)',
           });
           gsap.set(transient, { autoAlpha: 0, scale: 0.9, clipPath: 'inset(100% 0 0 0)' });
+          const media = [heroFrameEl, heroVerticalEl];
 
           /* ---------- TIMELINE MAÎTRESSE ----------
              Un acte = une timeline. ~2.8 s, déverrouillage à 2.4 s. */
@@ -261,6 +273,11 @@ export function ActOpeningHero({ content, locale }: Props) {
             )
 
             // 7. Le scroll est rendu AVANT la fin perçue : l'attente n'est pas subie.
+            .set(
+              sharedMask,
+              { clipPath: () => viewportClip(rectFromElement(heroSlot)) },
+              2.08,
+            )
             .add(() => unlockScroll(), 2.12)
             .add(() => emitReady(), 2.34);
 
@@ -277,6 +294,23 @@ export function ActOpeningHero({ content, locale }: Props) {
               pinSpacing: true,
               scrub: SCRUB.narrative,
               invalidateOnRefresh: true,
+              onRefreshInit: (self) => {
+                if (self.progress < 0.001) {
+                  const rect = rectFromElement(heroSlot);
+                  gsap.set(sharedMask, { clipPath: viewportClip(rect) });
+                  gsap.set(heroVerticalEl, {
+                    left: rect.left,
+                    top: rect.top,
+                    width: rect.width,
+                    height: rect.height,
+                    x: 0,
+                    y: 0,
+                    xPercent: 0,
+                    yPercent: 0,
+                    scale: 1,
+                  });
+                }
+              },
             },
           });
 
@@ -331,24 +365,23 @@ export function ActOpeningHero({ content, locale }: Props) {
             .to(
               heroVerticalEl,
               {
-                x: () => {
-                  const target = socialTarget();
-                  const scaledLeft = heroVerticalEl.offsetLeft + (heroVerticalEl.offsetWidth - target.width) / 2;
-                  return target.left - scaledLeft;
-                },
-                y: () => {
-                  const target = socialTarget();
-                  const scaledTop = heroVerticalEl.offsetTop + (heroVerticalEl.offsetHeight - target.height) / 2;
-                  return target.top - scaledTop;
-                },
+                left: () => socialTarget().left,
+                top: () => socialTarget().top,
+                width: () => socialTarget().width,
+                height: () => socialTarget().height,
+                x: 0,
+                y: 0,
+                xPercent: 0,
+                yPercent: 0,
+                scale: 1,
                 duration: 1,
               },
               0,
             )
             .to(
-              heroSharedVisual,
+              sharedMask,
               {
-                scale: () => socialTarget().width / heroVerticalEl.offsetWidth,
+                clipPath: () => viewportClip(socialTarget()),
                 duration: 1,
               },
               0,
@@ -463,9 +496,20 @@ export function ActOpeningHero({ content, locale }: Props) {
           ))}
         </ul>
 
-        <div className={`${styles.media} ${styles.heroVertical}`} data-persistent="hero-vertical">
+        <div
+          className={`${styles.media} ${styles.heroVertical}`}
+          data-persistent="hero-vertical"
+          data-shared-story-local
+        >
           <div className={styles.heroSharedVisual} data-hero-shared-visual>
-            <Media item={heroVertical} locale={locale} index={1} total={4} sizes="20vw" />
+            <Media
+              item={heroVertical}
+              locale={locale}
+              index={1}
+              total={4}
+              sizes="20vw"
+              preload={false}
+            />
           </div>
         </div>
         <div className={`${styles.media} ${styles.heroFrame}`}>
