@@ -39,6 +39,8 @@ function ContactSheetRail({ content, locale }: Props) {
           };
           if (!isDesktop || isReduced) return;
 
+          const railItems = q<HTMLElement>('[data-sheet-item]');
+
           gsap
             .timeline({
               defaults: { ease: EASE.scrub },
@@ -53,8 +55,9 @@ function ContactSheetRail({ content, locale }: Props) {
               },
             })
             .to(railEl, { x: () => -(railEl.scrollWidth - window.innerWidth), duration: 1 }, 0)
-            .to(q<HTMLElement>('[data-sheet-copy]'), { autoAlpha: 0, y: -10, duration: 0.1 }, 0.88)
-            .to(stageEl, { backgroundColor: 'var(--paper)', duration: 0.12 }, 0.88);
+            .to(q<HTMLElement>('[data-sheet-copy]'), { autoAlpha: 0, y: -10, duration: 0.12 }, 0.8)
+            .to(railItems, { autoAlpha: 0, yPercent: -5, stagger: 0.012, duration: 0.16 }, 0.81)
+            .to(stageEl, { backgroundColor: 'var(--paper)', duration: 0.16 }, 0.8);
         },
       );
     },
@@ -72,7 +75,7 @@ function ContactSheetRail({ content, locale }: Props) {
         </div>
         <div ref={rail} className={styles.rail}>
           {contactSheet.map((item, index) => (
-            <figure className={styles.railItem} key={item.id}>
+            <figure className={styles.railItem} data-sheet-item key={item.id}>
               <span className={`${styles.railIndex} micro`}>{String(index + 1).padStart(2, '0')}</span>
               <Media item={item} locale={locale} index={index + 1} total={8} sizes="28vw" />
             </figure>
@@ -129,7 +132,33 @@ function TokenArtifact({ index }: { index: number }) {
   );
 }
 
-function BrandSystem({ content }: Pick<Props, 'content'>) {
+function MethodOpening({ content, locale }: Props) {
+  return (
+    <div className={styles.methodOpening} data-method-opening>
+      <figure className={styles.methodPrimary} data-method-media>
+        <Media item={contactSheet[0]!} locale={locale} sizes="24vw" />
+        <figcaption className={`${styles.methodCaption} micro`}>01 / Mood &amp; intention</figcaption>
+      </figure>
+
+      <figure className={styles.methodSecondary} data-method-media>
+        <Media item={contactSheet[2]!} locale={locale} compact sizes="14vw" />
+        <figcaption className={`${styles.methodCaption} micro`}>02 / Notes &amp; structure</figcaption>
+      </figure>
+
+      <div className={styles.methodCopy} data-method-copy>
+        <span className={`${styles.methodKicker} micro`}>05.3 / {content.strategy.heading}</span>
+        <p className={styles.methodTitle}>{content.strategy.heading}</p>
+        <p className={styles.methodStatement}>{content.strategy.sentence}</p>
+      </div>
+
+      <span className={`${styles.methodFolio} micro`} aria-hidden="true">
+        Observe / Frame / Compose
+      </span>
+    </div>
+  );
+}
+
+function BrandSystem({ content }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
 
@@ -156,8 +185,8 @@ function BrandSystem({ content }: Pick<Props, 'content'>) {
           };
           if (isReduced) return;
 
-          gsap.set(title, { yPercent: 112 });
-          gsap.set(manifesto, { autoAlpha: 0, yPercent: 24 });
+          gsap.set(title, { yPercent: 0 });
+          gsap.set(manifesto, { autoAlpha: 1, yPercent: 0 });
           gsap.set(items, { autoAlpha: 0, yPercent: 20 });
           gsap.set(artifacts, { scale: 0.82, autoAlpha: 0 });
           gsap.set(axes, { scaleX: 0, transformOrigin: 'left center' });
@@ -175,26 +204,24 @@ function BrandSystem({ content }: Pick<Props, 'content'>) {
                 invalidateOnRefresh: true,
               },
             })
-            .to(title, { yPercent: 0, duration: 0.16 }, 0.04)
-            .to(manifesto, { autoAlpha: 1, yPercent: 0, duration: 0.2 }, 0.12)
-            .to(axes, { scaleX: 1, stagger: 0.05, duration: 0.2 }, 0.2)
+            .to(axes, { scaleX: 1, stagger: 0.05, duration: 0.2 }, 0.12)
             .to(
               items,
               { autoAlpha: 1, yPercent: 0, stagger: 0.045, duration: 0.28 },
-              0.22,
+              0.16,
             )
             .to(
               artifacts,
               { autoAlpha: 1, scale: 1, stagger: 0.04, duration: 0.22 },
-              0.34,
+              0.28,
             )
             .to(items, { yPercent: (index: number) => (index % 2 === 0 ? -3 : 3), duration: 0.28 }, 0.58)
             .to(
               [...items, manifesto, title, ...q<HTMLElement>('[data-system-meta]')],
-              { autoAlpha: 0, yPercent: -8, duration: 0.16 },
+              { autoAlpha: 0.42, yPercent: -2, duration: 0.16 },
               0.84,
             )
-            .to(stageEl, { backgroundColor: 'var(--ivory)', duration: 0.16 }, 0.82);
+            .to(stageEl, { backgroundColor: 'var(--ivory)', duration: 0.2 }, 0.76);
         },
       );
     },
@@ -234,6 +261,7 @@ function BrandSystem({ content }: Pick<Props, 'content'>) {
             </article>
           ))}
         </div>
+
       </div>
     </section>
   );
@@ -249,8 +277,8 @@ function Strategy({ content, locale }: Props) {
       const stageEl = stage.current;
       if (!rootEl || !stageEl) return;
       const q = gsap.utils.selector(stageEl);
-      const words = q<HTMLElement>('[data-strategy-word]');
       const rows = q<HTMLElement>('[data-strategy-line]');
+      const methodMedia = q<HTMLElement>('[data-method-media]');
       const campaign = q<HTMLElement>('[data-campaign-reveal]')[0];
       const strategyContent = q<HTMLElement>('[data-strategy-content]');
       const handoff = q<HTMLElement>('[data-work-handoff]');
@@ -267,8 +295,7 @@ function Strategy({ content, locale }: Props) {
           };
           if (isReduced) return;
 
-          gsap.set(words, { yPercent: 110, autoAlpha: 0 });
-          gsap.set(rows, { autoAlpha: 0.38, x: 0 });
+          gsap.set(rows, { autoAlpha: 0.72, y: 8, x: 0 });
           gsap.set(campaign, { clipPath: 'inset(100% 0% 0% 0%)', scale: 0.94 });
           gsap.set(handoff, { autoAlpha: 0, y: 12 });
           gsap.set(handoffRule, { scaleY: 0, transformOrigin: 'center top' });
@@ -286,29 +313,43 @@ function Strategy({ content, locale }: Props) {
             },
           });
 
-          const start = 0.05;
-          const beat = 0.105;
-          words.forEach((word, index) => {
+          tl
+            .to(rows, { y: 0, stagger: 0.025, duration: 0.14 }, 0.03)
+            .to(methodMedia.slice(0, 1), { yPercent: -3, scale: 1.018, duration: 0.68 }, 0)
+            .to(methodMedia.slice(1, 2), { yPercent: 4, duration: 0.68 }, 0);
+
+          const start = 0.12;
+          const beat = 0.095;
+          rows.forEach((row, index) => {
             const at = start + index * beat;
-            const row = rows[index];
-            if (index > 0 && words[index - 1]) {
-              tl.to(words[index - 1]!, { yPercent: -105, autoAlpha: 0, duration: 0.055 }, at - 0.025);
+            const previousRow = rows[index - 1];
+            if (previousRow) {
+              tl.to(
+                previousRow,
+                { autoAlpha: 0.74, x: 0, color: 'var(--ink)', duration: 0.07 },
+                at - 0.02,
+              );
             }
-            tl.to(word, { yPercent: 0, autoAlpha: 1, duration: 0.07 }, at);
             if (row) {
-              tl.to(row, { autoAlpha: 1, x: isDesktop ? -10 : 0, color: 'var(--rich-wine)', duration: 0.07 }, at);
-              if (index < rows.length - 1) {
-                tl.to(row, { autoAlpha: 0.42, x: 0, color: 'var(--ink)', duration: 0.06 }, at + 0.075);
-              }
+              tl.to(
+                row,
+                {
+                  autoAlpha: 1,
+                  x: isDesktop ? -6 : 0,
+                  color: 'var(--rich-wine)',
+                  duration: 0.08,
+                },
+                at,
+              );
             }
           });
 
           tl
-            .to(strategyContent, { autoAlpha: 0, yPercent: -6, duration: 0.14 }, 0.72)
-            .to(stageEl, { backgroundColor: 'var(--wood-brown)', color: 'var(--ivory)', duration: 0.17 }, 0.73)
-            .to(campaign, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.18 }, 0.76)
-            .to(handoffRule, { scaleY: 1, duration: 0.14 }, 0.8)
-            .to(handoff, { autoAlpha: 1, y: 0, stagger: 0.035, duration: 0.14 }, 0.81);
+            .to(strategyContent, { autoAlpha: 0, yPercent: -3, duration: 0.14 }, 0.7)
+            .to(stageEl, { backgroundColor: 'var(--wood-brown)', color: 'var(--ivory)', duration: 0.18 }, 0.71)
+            .to(campaign, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.2 }, 0.74)
+            .to(handoffRule, { scaleY: 1, duration: 0.15 }, 0.79)
+            .to(handoff, { autoAlpha: 1, y: 0, stagger: 0.035, duration: 0.14 }, 0.8);
         },
       );
     },
@@ -318,20 +359,12 @@ function Strategy({ content, locale }: Props) {
   return (
     <section ref={root} className={styles.strategySection} aria-labelledby="strategy-title">
       <div ref={stage} className={styles.stage}>
-        <div data-strategy-content>
-          <span className={`${styles.kicker} micro`}>05.3 / {content.strategy.heading}</span>
+        <div className={styles.strategyContent} data-strategy-content>
           <h3 id="strategy-title" className="visually-hidden">
             {content.strategy.heading}
           </h3>
 
-          <div className={styles.strategyWords} aria-hidden="true">
-            {content.strategy.steps.map((step, index) => (
-              <span className={styles.strategyWord} data-strategy-word key={step.term}>
-                <small>{String(index + 1).padStart(2, '0')}</small>
-                {step.term}
-              </span>
-            ))}
-          </div>
+          <MethodOpening content={content} locale={locale} />
 
           <ol className={styles.strategyLine}>
             {content.strategy.steps.map((step, index) => (
@@ -366,7 +399,7 @@ export function ActProcess(props: Props) {
   return (
     <div className={`act surface-paper ${styles.act}`}>
       <ContactSheetRail {...props} />
-      <BrandSystem content={props.content} />
+      <BrandSystem {...props} />
       <Strategy {...props} />
     </div>
   );

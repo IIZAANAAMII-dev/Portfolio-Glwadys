@@ -77,7 +77,11 @@ export function ActJourney({ content, locale }: Props) {
           };
 
           gsap.set(progressBar, { scaleY: 0, transformOrigin: 'center top' });
-          gsap.set(handoff, { clipPath: 'inset(0 100% 0 0)' });
+          gsap.set(handoff, {
+            clipPath: 'inset(0 49.5% 0 49.5%)',
+            scale: 1.008,
+            transformOrigin: 'center center',
+          });
           updateFocus();
 
           const tl = gsap.timeline({
@@ -102,16 +106,16 @@ export function ActJourney({ content, locale }: Props) {
               {
                 x: isDesktop ? () => -(trackEl.scrollWidth - window.innerWidth * 0.72) : 0,
                 y: isDesktop ? 0 : () => -(trackEl.scrollHeight - window.innerHeight * 0.76),
-                duration: 0.82,
+                duration: 0.8,
               },
               0,
             )
-            .to(driver, { value: 1, duration: 0.82, onUpdate: updateFocus }, 0)
-            .to(handoff, { clipPath: 'inset(0 0% 0 0)', duration: 0.18 }, 0.82)
+            .to(driver, { value: 1, duration: 0.8, onUpdate: updateFocus }, 0)
+            .to(handoff, { clipPath: 'inset(0 0% 0 0)', scale: 1, duration: 0.25 }, 0.7)
             .to(
               q<HTMLElement>('[data-journey-chrome]'),
               { autoAlpha: 0, y: -8, duration: 0.12 },
-              0.82,
+              0.76,
             );
 
           return () => {
@@ -159,7 +163,7 @@ export function ActJourney({ content, locale }: Props) {
         <span className={`${styles.caption} editorial-stamp`} data-journey-chrome>
           {content.contact.axis}
         </span>
-        <span className={styles.handoff} data-journey-handoff aria-hidden="true" />
+        <div className={styles.handoff} data-journey-handoff aria-hidden="true" />
       </div>
     </section>
   );

@@ -27,26 +27,26 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       <div id="act-social">
         <ActSocial content={content} locale={locale} />
       </div>
-      <div id="act-phone">
+      <div id="act-phone" className="act-handoff-overlap act-handoff-overlap--exact">
         <ActPhone content={content} locale={locale} />
       </div>
-      <div id="act-immersion">
+      <div id="act-immersion" className="act-handoff-overlap act-handoff-overlap--exact">
         <ActImmersion content={content} locale={locale} />
       </div>
-      <div id="act-process">
+      <div id="act-process" className="act-handoff-overlap">
         <ActProcess content={content} locale={locale} />
       </div>
-      <div id="act-work">
+      <div id="act-work" className="act-handoff-overlap">
         <ActWork content={content} locale={locale} />
       </div>
       <div id="act-journey">
         <ActJourney content={content} locale={locale} />
       </div>
-      <div id="act-expertise">
-        <ActExpertise content={content} />
+      <div id="act-expertise" className="act-handoff-overlap">
+        <ActExpertise content={content} locale={locale} />
       </div>
-      <div id="act-contact">
-        <ActContact content={content} />
+      <div id="act-contact" className="act-handoff-overlap">
+        <ActContact content={content} locale={locale} />
       </div>
       <BottomNav content={content} locale={locale} />
     </>

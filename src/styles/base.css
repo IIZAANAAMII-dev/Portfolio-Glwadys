@@ -252,6 +252,17 @@ a {
   overflow: hidden;
 }
 
+/* Un pin ajoute naturellement un viewport de sortie. Les actes qui disposent
+   d'un handoff dédié réoccupent ce viewport afin que les deux frames coïncident. */
+.act-handoff-overlap {
+  position: relative;
+  margin-top: -55svh;
+}
+
+.act-handoff-overlap--exact {
+  margin-top: -100svh;
+}
+
 /* ---------- FILET ---------- */
 
 .rule {
@@ -305,6 +316,9 @@ html[data-scroll-locked='true'] body {
      seule la mise en mouvement est neutralisée. */
   [data-reveal='lines'] .line-mask > * {
     transform: none;
+  }
+  .act-handoff-overlap {
+    margin-top: 0;
   }
   html[data-scroll-locked='true'] body {
     overflow: visible;

@@ -64,9 +64,9 @@ export const SCROLL = {
   immersion: 240,
   contactSheet: 200,
   moodboard: 200,
-  strategy: 230,
-  journey: 160,
-  expertise: 100,
+  strategy: 270,
+  journey: 180,
+  expertise: 120,
 } as const;
 
 /** Le mobile recompose et raccourcit : ~70 % du budget desktop. */

@@ -57,9 +57,9 @@ const FRAGMENT = `
   }
 `;
 
-const ASPECTS = [16 / 9, 9 / 16, 1, 16 / 9, 4 / 5, 9 / 16] as const;
+const ASPECTS = [16 / 9, 9 / 16, 1, 16 / 9] as const;
 
-const DEPTH_TEXTURE_PATHS = depthMedia.map(({ id, src }) => {
+const DEPTH_TEXTURE_PATHS = depthMedia.slice(0, 4).map(({ id, src }) => {
   if (!src) throw new Error(`Missing generated source for immersion media "${id}".`);
   return src;
 });
@@ -74,12 +74,10 @@ interface PlaneLayout {
 }
 
 const LAYOUTS: readonly PlaneLayout[] = [
-  { x: -0.29, y: 0.08, width: 0.29, depth: -10, tiltY: 0.2, tiltZ: -0.018 },
-  { x: 0.02, y: 0.19, width: 0.19, depth: -26, tiltY: -0.16, tiltZ: -0.012 },
-  { x: 0.31, y: 0.11, width: 0.23, depth: -44, tiltY: -0.29, tiltZ: 0.014 },
-  { x: -0.18, y: -0.24, width: 0.19, depth: -20, tiltY: 0.25, tiltZ: 0.012 },
-  { x: 0.13, y: -0.24, width: 0.27, depth: -53, tiltY: -0.13, tiltZ: -0.008 },
-  { x: 0.38, y: -0.21, width: 0.13, depth: -70, tiltY: -0.32, tiltZ: 0.018 },
+  { x: -0.27, y: 0.08, width: 0.34, depth: -8, tiltY: 0.12, tiltZ: -0.012 },
+  { x: 0.02, y: 0.18, width: 0.17, depth: -24, tiltY: -0.1, tiltZ: -0.008 },
+  { x: 0.29, y: 0.06, width: 0.22, depth: -39, tiltY: -0.16, tiltZ: 0.01 },
+  { x: 0.12, y: -0.25, width: 0.28, depth: -19, tiltY: 0.1, tiltZ: 0.008 },
 ] as const;
 
 interface PlaneProps {
@@ -135,12 +133,13 @@ function DepthPlane({ index, progress, mobile, texture }: PlaneProps) {
     if (!node || !liveMaterial || !layout) return;
 
     const p = progress.current;
-    const open = THREE.MathUtils.smoothstep(p, 0.055, 0.29);
-    const reveal = index === 0 ? 1 : THREE.MathUtils.smoothstep(p, 0.1 + index * 0.018, 0.32);
-    const travel = THREE.MathUtils.smoothstep(p, 0.27, 0.72);
-    const flatten = THREE.MathUtils.smoothstep(p, 0.73, 0.94);
-    const exit = 1 - THREE.MathUtils.smoothstep(p, 0.93, 1);
-    const visibleCount = mobile ? 4 : 6;
+    const open = THREE.MathUtils.smoothstep(p, 0.07, 0.37);
+    const reveal = index === 0 ? 1 : THREE.MathUtils.smoothstep(p, 0.12 + index * 0.035, 0.38);
+    const travel = THREE.MathUtils.smoothstep(p, 0.32, 0.76);
+    const flatten = THREE.MathUtils.smoothstep(p, 0.7, 0.92);
+    const exit = 1 - THREE.MathUtils.smoothstep(p, index === 0 ? 0.88 : 0.8, 1);
+    const declutter = index === 0 ? 1 : 1 - THREE.MathUtils.smoothstep(p, 0.68, 0.84);
+    const visibleCount = mobile ? 3 : 4;
     const aspect = ASPECTS[index] ?? 4 / 5;
     const [coverWidth, coverHeight] = coverSize(size.width, size.height, ASPECTS[0]);
     const targetWidth = size.width * layout.width;
@@ -149,7 +148,11 @@ function DepthPlane({ index, progress, mobile, texture }: PlaneProps) {
     node.visible = index < visibleCount && exit > 0.001;
     node.position.x = THREE.MathUtils.lerp(index === 0 ? 0 : layout.x * size.width, layout.x * size.width, open);
     node.position.y = THREE.MathUtils.lerp(index === 0 ? 0 : layout.y * size.height, layout.y * size.height, open);
-    node.position.z = THREE.MathUtils.lerp(layout.depth + travel * (index % 2 === 0 ? 18 : 9), 0, flatten);
+    node.position.z = THREE.MathUtils.lerp(
+      layout.depth + travel * (index % 2 === 0 ? 18 : 9),
+      index * -0.45,
+      flatten,
+    );
     node.rotation.x = THREE.MathUtils.lerp((index % 2 === 0 ? -1 : 1) * 0.025, 0, flatten);
     node.rotation.y = THREE.MathUtils.lerp(layout.tiltY, 0, flatten);
     node.rotation.z = THREE.MathUtils.lerp(layout.tiltZ, 0, flatten);
@@ -158,9 +161,9 @@ function DepthPlane({ index, progress, mobile, texture }: PlaneProps) {
     const height = index === 0 ? THREE.MathUtils.lerp(coverHeight, targetHeight, open) : targetHeight;
     node.scale.set(width, height, 1);
 
-    const curve = Math.sin(Math.PI * THREE.MathUtils.clamp((p - 0.24) / 0.55, 0, 1));
-    liveMaterial.uniforms.uOpacity!.value = reveal * exit;
-    liveMaterial.uniforms.uBend!.value = mobile ? 0 : curve * Math.min(18, targetWidth * 0.045);
+    const curve = Math.sin(Math.PI * THREE.MathUtils.clamp((p - 0.3) / 0.5, 0, 1));
+    liveMaterial.uniforms.uOpacity!.value = reveal * exit * declutter;
+    liveMaterial.uniforms.uBend!.value = mobile ? 0 : curve * Math.min(7.5, targetWidth * 0.022);
     liveMaterial.uniforms.uSheen!.value = THREE.MathUtils.lerp(-0.25, 1.25, travel);
   });
 
@@ -181,10 +184,10 @@ function ArchiveFrame({ index, progress }: { index: number; progress: MutableRef
     const node = group.current;
     if (!node) return;
     const p = progress.current;
-    const reveal = THREE.MathUtils.smoothstep(p, 0.12 + index * 0.035, 0.3 + index * 0.025);
-    const travel = THREE.MathUtils.smoothstep(p, 0.28, 0.72);
-    const exit = 1 - THREE.MathUtils.smoothstep(p, 0.74, 0.9);
-    const opacity = reveal * exit * (0.21 - index * 0.024);
+    const reveal = THREE.MathUtils.smoothstep(p, 0.14 + index * 0.05, 0.34 + index * 0.03);
+    const travel = THREE.MathUtils.smoothstep(p, 0.32, 0.76);
+    const exit = 1 - THREE.MathUtils.smoothstep(p, 0.78, 0.94);
+    const opacity = reveal * exit * (0.16 - index * 0.028);
 
     node.visible = opacity > 0.001;
     node.position.set((index - 1) * size.width * 0.018, 0, -8 - index * 28 + travel * 12);
@@ -234,9 +237,9 @@ function Rig({ progress }: Props) {
   useFrame(() => {
     const p = progress.current;
     const camera = cameraRef.current;
-    const travel = THREE.MathUtils.smoothstep(p, 0.28, 0.72);
-    const flatten = THREE.MathUtils.smoothstep(p, 0.73, 0.94);
-    const paperReveal = THREE.MathUtils.smoothstep(p, 0.79, 1);
+    const travel = THREE.MathUtils.smoothstep(p, 0.32, 0.76);
+    const flatten = THREE.MathUtils.smoothstep(p, 0.7, 0.92);
+    const paperReveal = THREE.MathUtils.smoothstep(p, 0.7, 0.94);
 
     backdrop.lerpColors(wood, ivory, paperReveal);
     gl.setClearColor(backdrop, 1);
@@ -289,13 +292,13 @@ function Rig({ progress }: Props) {
   return (
     <>
       <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 0, 100]} near={0.1} far={320} />
-      {Array.from({ length: 3 }, (_, index) => (
+      {Array.from({ length: 2 }, (_, index) => (
         <ArchiveFrame key={`archive-frame-${index}`} index={index} progress={progress} />
       ))}
       <group>
-        {Array.from({ length: 6 }, (_, index) => (
+        {DEPTH_TEXTURE_PATHS.map((path, index) => (
           <DepthPlane
-            key={DEPTH_TEXTURE_PATHS[index]}
+            key={path}
             index={index}
             progress={progress}
             mobile={mobile}

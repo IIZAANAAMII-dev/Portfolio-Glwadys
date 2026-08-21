@@ -3,17 +3,20 @@
 import { useRef } from 'react';
 
 import type { Content } from '@/content';
+import type { Locale } from '@/content/locales';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { DUR, EASE, MQ, SCRUB, STAGGER } from '@/lib/motion';
 import { emitContact } from '@/lib/scrollControl';
+import { CreativeDesk } from '@/ui/CreativeDesk';
 
 import styles from './ActContact.module.css';
 
 interface Props {
   content: Content;
+  locale: Locale;
 }
 
-export function ActContact({ content }: Props) {
+export function ActContact({ content, locale }: Props) {
   const root = useRef<HTMLElement>(null);
   const manifestoSection = useRef<HTMLElement>(null);
   const contactSection = useRef<HTMLElement>(null);
@@ -112,6 +115,7 @@ export function ActContact({ content }: Props) {
     <footer ref={root} className={`act surface-wood ${styles.act}`}>
       <section ref={manifestoSection} className={styles.manifestoSection} aria-labelledby="manifesto-title">
         <div className={styles.manifestoStage}>
+          <CreativeDesk locale={locale} />
           <div className={`${styles.manifestoPage} paper-card`}>
             <span className={`${styles.manifestoEyebrow} micro`}>{content.manifesto.eyebrow}</span>
             <span className={`${styles.manifestoEdition} micro`}>Glwadys Dalleau / 2026</span>
@@ -136,6 +140,7 @@ export function ActContact({ content }: Props) {
 
       <section ref={contactSection} className={styles.contactSection} aria-labelledby="contact-title">
         <div className={styles.stage}>
+          <CreativeDesk locale={locale} />
           <div className={`${styles.lastPage} paper-card`}>
             <span className={`${styles.chapter} micro`}>09 / {content.contact.heading}</span>
             <span className={`${styles.edition} micro`}>Portfolio 2026</span>

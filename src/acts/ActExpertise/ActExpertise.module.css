@@ -15,6 +15,7 @@
 .sheet {
   position: absolute;
   inset: 0;
+  z-index: var(--z-media);
   overflow: hidden;
   background-color: var(--ivory);
   background-image:
@@ -23,6 +24,29 @@
   background-size: 100% 100%, 12px 12px;
   color: var(--ink);
   transform-origin: center;
+  border: 1px solid rgb(var(--ink-rgb) / 0.12);
+  box-shadow: 0 2rem 6rem rgb(var(--ink-rgb) / 0.38);
+  will-change: transform;
+}
+
+.bookFolio {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-sticky);
+  pointer-events: none;
+}
+
+.bookFolio span {
+  position: absolute;
+  top: var(--margin);
+}
+
+.bookFolio span:first-child {
+  left: var(--margin);
+}
+
+.bookFolio span:last-child {
+  right: var(--margin);
 }
 
 .chapter,
@@ -159,6 +183,10 @@
   .aside {
     display: none;
   }
+
+  .bookFolio span:last-child {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -176,6 +204,10 @@
     position: relative;
     min-height: auto;
     padding: var(--space-act) var(--margin);
+  }
+
+  .bookFolio {
+    display: none;
   }
 
   .chapter,

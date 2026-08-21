@@ -103,6 +103,11 @@
   background: var(--paper);
 }
 
+.systemSection,
+.strategySection {
+  margin-top: -55svh;
+}
+
 .systemStage {
   background:
     linear-gradient(90deg, transparent 0 50%, rgb(var(--ink-rgb) / 0.07) 50% calc(50% + 1px), transparent calc(50% + 1px)),
@@ -332,60 +337,121 @@
   background: var(--ivory);
 }
 
-.strategyWords {
+.strategyContent {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-sticky);
+}
+
+.methodOpening {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, transparent 0 52%, rgb(var(--ink-rgb) / 0.11) 52% calc(52% + 1px), transparent calc(52% + 1px)),
+    radial-gradient(circle at 18% 72%, rgb(var(--oxblood-rgb) / 0.045), transparent 24%),
+    var(--ivory);
+  color: var(--ink);
+}
+
+.methodCopy {
   position: absolute;
   left: var(--margin);
-  top: 28%;
-  z-index: var(--z-media);
-  width: 58vw;
-  height: 44%;
-  pointer-events: none;
+  top: 50%;
+  z-index: var(--z-sticky);
+  width: min(27vw, 28rem);
+  padding: 1.2rem 2.2rem 1.2rem 0;
+  translate: 0 -50%;
+  background: linear-gradient(90deg, var(--ivory) 0 76%, rgb(var(--ivory-rgb) / 0.82) 88%, transparent);
 }
 
-.strategyWord {
-  position: absolute;
-  left: 0;
-  top: 16%;
-  max-width: 100%;
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 9.4vw, 10.5rem);
-  font-style: italic;
-  line-height: 0.84;
-  letter-spacing: -0.05em;
-  white-space: nowrap;
-}
-
-.strategyWord small {
+.methodKicker {
   display: block;
-  margin: 0 0 1rem 0.35rem;
+  margin-bottom: clamp(1.25rem, 3vh, 2.25rem);
   color: var(--rich-wine);
-  font-family: var(--font-sans);
-  font-size: var(--t-micro);
-  font-style: normal;
-  letter-spacing: var(--tr-micro);
+}
+
+.methodTitle {
+  max-width: 6ch;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 6.6vw, 7.5rem);
+  font-style: italic;
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+}
+
+.methodStatement {
+  max-width: 29ch;
+  margin: clamp(1.25rem, 3vh, 2.25rem) 0 0;
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
+  line-height: 1.48;
+}
+
+.methodPrimary,
+.methodSecondary {
+  position: absolute;
+  z-index: var(--z-media);
+  margin: 0;
+  will-change: transform;
+}
+
+.methodPrimary {
+  left: 28%;
+  top: 8vh;
+  width: min(22vw, 21rem);
+}
+
+.methodSecondary {
+  left: var(--margin);
+  bottom: 7vh;
+  width: min(12vw, 11rem);
+  padding: 0.42rem;
+  background: var(--paper);
+  box-shadow: var(--paper-shadow);
+  rotate: -1.4deg;
+}
+
+.methodCaption {
+  display: block;
+  margin-top: 0.55rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
+  color: var(--rich-wine);
+}
+
+.methodFolio {
+  position: absolute;
+  left: calc(52% - 1.2rem);
+  bottom: var(--margin);
+  z-index: var(--z-sticky);
+  color: var(--rich-wine);
+  writing-mode: vertical-rl;
 }
 
 .strategyLine {
   position: absolute;
+  left: 58%;
   right: var(--margin);
-  top: 17vh;
+  top: 50%;
   z-index: var(--z-sticky);
   display: grid;
-  width: min(32vw, 31rem);
+  width: auto;
   margin: 0;
   padding: 0;
   border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
   list-style: none;
+  translate: 0 -50%;
 }
 
 .strategyLineItem {
   display: grid;
-  grid-template-columns: 2.5rem minmax(5rem, 0.7fr) 1.3fr;
-  gap: 0.8rem;
+  grid-template-columns: 2.5rem minmax(6rem, 0.72fr) 1.28fr;
+  gap: clamp(0.7rem, 1.2vw, 1.25rem);
   align-items: baseline;
-  padding-block: 0.92rem;
+  padding-block: clamp(0.82rem, 1.65vh, 1.15rem);
   border-bottom: 1px solid rgb(var(--ink-rgb) / 0.13);
-  font-size: 0.78rem;
+  font-size: clamp(0.78rem, 0.82vw, 0.9rem);
 }
 
 .strategyIndex {
@@ -394,7 +460,7 @@
 
 .strategyLineItem strong {
   font-family: var(--font-display);
-  font-size: clamp(1.05rem, 1.45vw, 1.45rem);
+  font-size: clamp(1.15rem, 1.55vw, 1.6rem);
   font-style: italic;
   font-weight: 400;
 }
@@ -525,31 +591,58 @@
     right: 0.75rem;
   }
 
-  .strategyWords {
-    left: var(--margin);
-    right: var(--margin);
-    top: 17vh;
-    width: auto;
-    height: 28vh;
+  .methodOpening {
+    background:
+      linear-gradient(180deg, transparent 0 48%, rgb(var(--ink-rgb) / 0.1) 48% calc(48% + 1px), transparent calc(48% + 1px)),
+      var(--ivory);
   }
 
-  .strategyWord {
-    top: 13%;
-    font-size: clamp(3.2rem, 14vw, 6rem);
-    white-space: normal;
+  .methodPrimary {
+    left: auto;
+    right: var(--margin);
+    top: 8vh;
+    width: min(46vw, 19rem);
+  }
+
+  .methodSecondary {
+    left: var(--margin);
+    top: 26vh;
+    bottom: auto;
+    width: min(24vw, 9rem);
+  }
+
+  .methodCopy {
+    top: 25vh;
+    width: min(72vw, 28rem);
+    padding-right: 2rem;
+  }
+
+  .methodTitle {
+    font-size: clamp(2.8rem, 13vw, 5.5rem);
+  }
+
+  .methodStatement {
+    max-width: 25ch;
+    font-size: 0.9rem;
+  }
+
+  .methodCaption,
+  .methodFolio {
+    display: none;
   }
 
   .strategyLine {
     left: var(--margin);
     right: var(--margin);
-    top: 49vh;
+    top: 52vh;
     width: auto;
+    translate: none;
   }
 
   .strategyLineItem {
     grid-template-columns: 2rem 0.72fr 1.28fr;
     gap: 0.5rem;
-    padding-block: 0.65rem;
+    padding-block: clamp(0.48rem, 1.1vh, 0.65rem);
     font-size: 0.75rem;
   }
 
@@ -582,9 +675,13 @@
     padding: var(--space-act) var(--margin);
   }
 
+  .systemSection,
+  .strategySection {
+    margin-top: 0;
+  }
+
   .rail,
   .board,
-  .strategyWords,
   .strategyLine,
   .campaignReveal {
     position: relative;
@@ -611,26 +708,16 @@
     min-height: 18rem;
   }
 
-  .strategyWords {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    height: auto;
-    margin-block: 4rem;
-  }
-
-  .strategyWord {
+  .strategyContent,
+  .methodOpening {
     position: relative;
     inset: auto;
-    font-size: var(--t-title);
-  }
-
-  .strategyWord small {
-    display: none;
+    min-height: 78svh;
   }
 
   .strategyLine {
     margin-bottom: 3rem;
+    translate: none;
   }
 
   .campaignReveal {

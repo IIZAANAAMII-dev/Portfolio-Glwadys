@@ -101,23 +101,23 @@ export function ActImmersion({ content, locale }: Props) {
                 scrub: SCRUB.narrative,
               },
             })
-            .to('[data-immersion-entry]', { autoAlpha: 0, duration: 0.11 }, 0.075)
+            .to('[data-immersion-entry]', { autoAlpha: 0, duration: 0.14 }, 0.08)
             .fromTo(
               q<HTMLElement>('[data-immersion-meta]'),
               { autoAlpha: 0, y: 10 },
               { autoAlpha: 1, y: 0, duration: 0.16 },
-              0.11,
+              0.13,
             )
-            .fromTo('[data-immersion-heading]', { yPercent: 115 }, { yPercent: 0, duration: 0.2 }, 0.18)
-            .fromTo('[data-immersion-copy]', { yPercent: 16, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.22 }, 0.32)
-            .to('[data-immersion-copy]', { yPercent: -20, autoAlpha: 0, duration: 0.2 }, 0.72)
-            .to(q<HTMLElement>('[data-immersion-meta]'), { autoAlpha: 0, duration: 0.16 }, 0.75)
+            .fromTo('[data-immersion-heading]', { yPercent: 108 }, { yPercent: 0, duration: 0.22 }, 0.2)
+            .fromTo('[data-immersion-copy]', { yPercent: 12, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.24 }, 0.35)
+            .to('[data-immersion-copy]', { yPercent: -10, autoAlpha: 0, duration: 0.17 }, 0.68)
+            .to(q<HTMLElement>('[data-immersion-meta]'), { autoAlpha: 0, duration: 0.15 }, 0.71)
             .to(
               [stageEl, ...q<HTMLElement>(`.${styles.portal}`)],
               { backgroundColor: 'var(--ivory)', duration: 0.2 },
-              0.8,
+              0.72,
             )
-            .to('[data-immersion-heading]', { yPercent: -110, duration: 0.18 }, 0.78);
+            .to('[data-immersion-heading]', { yPercent: -106, duration: 0.18 }, 0.69);
         },
       );
     },
@@ -140,9 +140,9 @@ export function ActImmersion({ content, locale }: Props) {
 
         <div className={styles.fallback} aria-hidden={showCanvas}>
           <div className={styles.portal} />
-          {depthMedia.map((item, index) => (
+          {depthMedia.slice(0, 4).map((item, index) => (
             <div className={styles.plane} data-depth-plane key={item.id}>
-              <Media item={item} locale={locale} index={index + 1} total={6} compact sizes="28vw" />
+              <Media item={item} locale={locale} index={index + 1} total={4} compact sizes="32vw" />
             </div>
           ))}
         </div>

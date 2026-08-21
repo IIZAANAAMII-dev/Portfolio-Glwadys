@@ -240,7 +240,21 @@
 }
 
 .project[data-project='comptoir'] .name {
-  top: 24vh;
+  top: 14vh;
+  max-width: 9ch;
+  padding-top: clamp(0.75rem, 1.5vh, 1.25rem);
+  color: var(--ivory);
+  text-shadow: 0 0.18em 0.8em rgb(var(--ink-rgb) / 0.3);
+}
+
+.project[data-project='comptoir'] .name::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: min(19rem, 30vw);
+  height: 1px;
+  background: rgb(var(--champagne-rgb) / 0.72);
 }
 
 .project[data-project='comptoir'] .summary {
@@ -505,6 +519,11 @@
 
   .comptoirMedia > div:last-child {
     width: 38vw;
+  }
+
+  .project[data-project='comptoir'] .name {
+    top: 13vh;
+    max-width: 8ch;
   }
 
   .dossier {

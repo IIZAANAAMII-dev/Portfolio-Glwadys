@@ -53,7 +53,11 @@ export function ActSocial({ content, locale }: Props) {
             clipPath: 'inset(100% 0% 0% 0%)',
             yPercent: 14,
           });
-          gsap.set(behind, { clipPath: 'inset(0% 0% 0% 100%)' });
+          gsap.set(behind, {
+            clipPath: 'inset(0% 49.5% 0% 49.5%)',
+            scale: 1.012,
+            transformOrigin: 'center center',
+          });
           gsap.set(behindMediaEls, {
             clipPath: 'inset(0% 0% 100% 0%)',
             yPercent: 8,
@@ -87,20 +91,28 @@ export function ActSocial({ content, locale }: Props) {
             )
             .to(dominant, { scale: 1.055, duration: 0.24 }, 0.08)
             .to(firstSatellite, { yPercent: -7, duration: 0.2 }, 0.2)
-            .to(frontCopy, { autoAlpha: 0, yPercent: -22, duration: 0.16 }, 0.34)
+            .to(frontCopy, { autoAlpha: 0, yPercent: -16, duration: 0.17 }, 0.31)
+            .to(
+              behind,
+              {
+                clipPath: 'inset(0% 0% 0% 0%)',
+                scale: 1,
+                duration: 0.31,
+              },
+              0.3,
+            )
             .to(
               satellites,
               {
                 autoAlpha: 0,
-                xPercent: (index: number) => (index % 2 === 0 ? -16 : 16),
-                clipPath: 'inset(0% 0% 100% 0%)',
+                yPercent: (index: number) => (index % 2 === 0 ? -8 : 8),
+                clipPath: 'inset(0% 0% 92% 0%)',
                 stagger: 0.025,
-                duration: 0.2,
+                duration: 0.21,
               },
-              0.35,
+              0.37,
             )
-            .to(behind, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.32 }, 0.36)
-            .to(dominant, { scale: 0.9, duration: 0.22 }, 0.42)
+            .to(dominant, { scale: 0.92, duration: 0.24 }, 0.4)
             .to(
               behindMediaEls,
               {
@@ -109,12 +121,12 @@ export function ActSocial({ content, locale }: Props) {
                 stagger: 0.055,
                 duration: 0.18,
               },
-              0.44,
+              0.41,
             )
             .to(
               [...behindCopy, ...behindDetails],
               { autoAlpha: 1, y: 0, stagger: 0.025, duration: 0.11 },
-              0.49,
+              0.48,
             )
             .to(
               behindMediaEls,

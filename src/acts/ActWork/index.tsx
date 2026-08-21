@@ -137,9 +137,9 @@ function ProjectSection({
             tl.fromTo(
               q<HTMLElement>('[data-comptoir-macro]'),
               { scale: 1 },
-              { scale: 1.18, duration: 1 },
+              { scale: 1.12, duration: 1 },
               0,
-            ).to(q<HTMLElement>('[data-project-name]'), { yPercent: -12, duration: 1 }, 0);
+            ).to(q<HTMLElement>('[data-project-name]'), { yPercent: -4, duration: 1 }, 0);
           }
 
           const dossierTl = gsap.timeline({

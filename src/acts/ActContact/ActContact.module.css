@@ -25,9 +25,12 @@
 .manifestoPage,
 .lastPage {
   position: absolute;
-  inset: clamp(1rem, 3vw, 2.75rem);
+  inset: var(--book-inset-y) var(--book-inset-x);
+  z-index: var(--z-media);
   overflow: hidden;
   color: var(--ink);
+  border: 1px solid rgb(var(--ink-rgb) / 0.12);
+  box-shadow: 0 2rem 6rem rgb(var(--ink-rgb) / 0.38);
 }
 
 .manifestoPage::before,
@@ -246,11 +249,6 @@
 }
 
 @media (max-width: 1023px) {
-  .manifestoPage,
-  .lastPage {
-    inset: 0.75rem;
-  }
-
   .manifestoTitle {
     top: 25%;
     font-size: clamp(3rem, 13.4vw, 6.5rem);

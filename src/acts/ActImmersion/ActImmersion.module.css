@@ -87,21 +87,9 @@
 }
 
 .plane:nth-child(5) {
-  left: 22%;
-  bottom: 7%;
-  width: 15vw;
-}
-
-.plane:nth-child(6) {
-  right: 28%;
+  right: 24%;
   bottom: 5%;
-  width: 23vw;
-}
-
-.plane:nth-child(7) {
-  right: 5%;
-  bottom: 12%;
-  width: 11vw;
+  width: 27vw;
 }
 
 .copy {
@@ -163,7 +151,7 @@
     bottom: auto;
   }
 
-  .plane:nth-child(n + 6) {
+  .plane:nth-child(n + 5) {
     display: none;
   }
 

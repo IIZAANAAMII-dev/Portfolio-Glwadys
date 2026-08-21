@@ -1,0 +1,169 @@
+.desk {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base);
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    linear-gradient(96deg, rgb(var(--paper-rgb) / 0.025), transparent 38% 64%, rgb(var(--ink-rgb) / 0.11)),
+    radial-gradient(circle at 48% 42%, rgb(var(--champagne-rgb) / 0.1), transparent 43%),
+    var(--wood-brown);
+}
+
+.desk::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(88deg, transparent 0 58px, rgb(var(--paper-rgb) / 0.018) 59px 60px),
+    linear-gradient(180deg, rgb(0 0 0 / 0.08), transparent 12% 84%, rgb(0 0 0 / 0.16));
+}
+
+.object {
+  position: absolute;
+  margin: 0;
+  filter: drop-shadow(0 1rem 1.4rem rgb(var(--ink-rgb) / 0.28));
+}
+
+.object figcaption {
+  padding: 0.45rem 0.55rem 0.55rem;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.printOne {
+  left: -2.6rem;
+  top: 7vh;
+  width: clamp(10rem, 16vw, 15rem);
+  padding: 0.45rem;
+  rotate: -7deg;
+  background: var(--paper);
+}
+
+.printTwo {
+  right: -2.2rem;
+  top: 29vh;
+  width: clamp(9rem, 15vw, 14rem);
+  padding: 0.42rem;
+  rotate: 6deg;
+  background: var(--paper);
+}
+
+.materialSample {
+  left: -1.8rem;
+  bottom: 5vh;
+  width: clamp(7rem, 12vw, 11rem);
+  rotate: 4deg;
+}
+
+.typeProof {
+  right: 1.2rem;
+  bottom: 3.8vh;
+  display: grid;
+  width: clamp(7.5rem, 11vw, 10rem);
+  padding: 0.75rem;
+  rotate: -4deg;
+  border: 1px solid rgb(var(--ink-rgb) / 0.18);
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+.typeProof span {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 5vw, 5.5rem);
+  font-style: italic;
+  line-height: 0.82;
+}
+
+.typeProof small {
+  margin-top: 0.8rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
+}
+
+.swatches {
+  left: 40%;
+  top: 1.1rem;
+  display: grid;
+  grid-template-columns: repeat(4, 2.2rem);
+  height: 2.2rem;
+  padding: 0.35rem;
+  rotate: 1deg;
+  background: var(--paper);
+}
+
+.swatches i:nth-child(1) {
+  background: var(--ivory);
+}
+
+.swatches i:nth-child(2) {
+  background: var(--champagne);
+}
+
+.swatches i:nth-child(3) {
+  background: var(--rich-wine);
+}
+
+.swatches i:nth-child(4) {
+  background: var(--ink);
+}
+
+.pencil {
+  right: 2.2rem;
+  top: 11vh;
+  width: clamp(7rem, 12vw, 11rem);
+  height: 0.55rem;
+  rotate: -12deg;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #c99551, #8b5c2f);
+}
+
+.pencil::before {
+  content: '';
+  position: absolute;
+  right: -1.4rem;
+  top: 0;
+  border-top: 0.275rem solid transparent;
+  border-bottom: 0.275rem solid transparent;
+  border-left: 1.5rem solid #d9b783;
+}
+
+.pencil i {
+  position: absolute;
+  left: 0.6rem;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: rgb(var(--ink-rgb) / 0.4);
+}
+
+.tape {
+  left: 5.8rem;
+  top: 4.7vh;
+  width: 4.6rem;
+  height: 1.35rem;
+  rotate: -14deg;
+  background: rgb(var(--champagne-rgb) / 0.36);
+  filter: none;
+}
+
+@media (max-width: 1023px) {
+  .printOne {
+    left: -8rem;
+    top: 12vh;
+  }
+
+  .printTwo,
+  .materialSample,
+  .typeProof,
+  .swatches,
+  .tape {
+    display: none;
+  }
+
+  .pencil {
+    right: -5rem;
+    top: auto;
+    bottom: 8vh;
+  }
+}

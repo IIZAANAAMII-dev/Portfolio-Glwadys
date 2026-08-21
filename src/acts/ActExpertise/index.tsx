@@ -3,16 +3,19 @@
 import { useRef } from 'react';
 
 import type { Content } from '@/content';
+import type { Locale } from '@/content/locales';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
+import { CreativeDesk } from '@/ui/CreativeDesk';
 
 import styles from './ActExpertise.module.css';
 
 interface Props {
   content: Content;
+  locale: Locale;
 }
 
-export function ActExpertise({ content }: Props) {
+export function ActExpertise({ content, locale }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLOListElement>(null);
@@ -25,7 +28,8 @@ export function ActExpertise({ content }: Props) {
       if (!rootEl || !stageEl || !listEl) return;
       const q = gsap.utils.selector(stageEl);
       const sheet = q<HTMLElement>('[data-expertise-sheet]')[0];
-      if (!sheet) return;
+      const bookFolio = q<HTMLElement>('[data-book-folio]');
+      if (!sheet || bookFolio.length === 0) return;
 
       const mm = gsap.matchMedia();
       mm.add(
@@ -36,6 +40,8 @@ export function ActExpertise({ content }: Props) {
             isReduced: boolean;
           };
           if (isReduced) return;
+
+          gsap.set(bookFolio, { autoAlpha: 0, y: 10 });
 
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
@@ -58,34 +64,35 @@ export function ActExpertise({ content }: Props) {
                   const viewport = listEl.parentElement;
                   return viewport ? -(listEl.scrollHeight - viewport.clientHeight) : 0;
                 },
-                duration: 0.8,
+                duration: 0.78,
               },
               0,
             )
             .to(
               q<HTMLElement>('[data-expertise-content]'),
               { autoAlpha: 0, y: -10, duration: 0.12 },
-              0.8,
+              0.78,
             )
             .to(
               sheet,
               {
                 scaleX: () => {
                   const inset = isDesktop
-                    ? Math.min(Math.max(window.innerWidth * 0.03, 16), 44)
+                    ? Math.min(Math.max(window.innerWidth * 0.07, 56), 128)
                     : 12;
                   return (window.innerWidth - inset * 2) / window.innerWidth;
                 },
                 scaleY: () => {
                   const inset = isDesktop
-                    ? Math.min(Math.max(window.innerWidth * 0.03, 16), 44)
+                    ? Math.min(Math.max(window.innerHeight * 0.06, 40), 72)
                     : 12;
                   return (window.innerHeight - inset * 2) / window.innerHeight;
                 },
-                duration: 0.2,
+                duration: 0.22,
               },
-              0.8,
-            );
+              0.78,
+            )
+            .to(bookFolio, { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.13 }, 0.84);
         },
       );
     },
@@ -95,6 +102,7 @@ export function ActExpertise({ content }: Props) {
   return (
     <section ref={root} className={`act surface-paper ${styles.act}`} aria-labelledby="expertise-title">
       <div ref={stage} className={styles.stage}>
+        <CreativeDesk locale={locale} />
         <div className={styles.sheet} data-expertise-sheet>
           <span className={`${styles.chapter} micro`} data-expertise-content>
             08 / Index
@@ -116,6 +124,15 @@ export function ActExpertise({ content }: Props) {
           <p className={`${styles.aside} hand-note`} data-expertise-content>
             {content.strategy.sentence}
           </p>
+
+          <div className={styles.bookFolio} aria-hidden="true">
+            <span className="micro" data-book-folio>
+              {content.manifesto.eyebrow}
+            </span>
+            <span className="micro" data-book-folio>
+              Glwadys Dalleau / 2026
+            </span>
+          </div>
         </div>
       </div>
     </section>

@@ -80,6 +80,8 @@
   --space-related: 1.25rem;
   --space-block: 4rem;
   --space-act: clamp(6rem, 12vh, 11rem);
+  --book-inset-x: clamp(3.5rem, 7vw, 8rem);
+  --book-inset-y: clamp(2.5rem, 6vh, 4.5rem);
 
   /* ---------- GRILLE ---------- */
   --cols: 12;
@@ -109,7 +111,7 @@
   --ease-handoff: cubic-bezier(0.65, 0, 0.35, 1); /* ≈ power2.inOut */
 
   /* ---------- MATIÈRE ---------- */
-  --grain-opacity: 0.076;
+  --grain-opacity: 0.11;
   --paper-shadow: 0 1.4rem 4.5rem rgb(var(--wood-rgb) / 0.2),
     0 0.2rem 0.7rem rgb(var(--wood-rgb) / 0.12);
   --paper-edge: rgb(var(--ink-rgb) / 0.13);
@@ -150,4 +152,11 @@
   --surface: var(--wood-brown);
   --on-surface: var(--ivory);
   --on-surface-rgb: var(--ivory-rgb);
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --book-inset-x: 0.75rem;
+    --book-inset-y: 0.75rem;
+  }
 }
