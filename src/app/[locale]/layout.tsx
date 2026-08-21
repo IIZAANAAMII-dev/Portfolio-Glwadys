@@ -90,8 +90,8 @@ export default async function LocaleLayout({
   const fontVars = [bodoni.variable, interTight.variable, kalam.variable, notoKR.variable].join(' ');
 
   return (
-    <html lang={htmlLang[typed]} className={fontVars}>
-      <body data-locale={typed}>
+    <html lang={htmlLang[typed]} className={fontVars} suppressHydrationWarning>
+      <body data-locale={typed} suppressHydrationWarning>
         <a className="skip-link" href="#main">
           {content.a11y.skipToContent}
         </a>

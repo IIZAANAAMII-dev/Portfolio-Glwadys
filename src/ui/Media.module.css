@@ -23,6 +23,7 @@
   height: 100%;
   object-fit: cover;
   object-position: var(--focus, 50% 50%);
+  filter: sepia(0.06) contrast(1.02) saturate(0.92);
 }
 
 /* WebKit peut afficher un filet clair autour des images lazy-loadées. */

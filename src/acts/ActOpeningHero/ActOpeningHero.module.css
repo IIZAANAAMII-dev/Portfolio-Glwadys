@@ -23,6 +23,20 @@
   box-shadow: 0 2rem 7rem rgb(var(--wood-rgb) / 0.42);
 }
 
+.stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='.9'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
 .stage::after {
   content: '';
   position: absolute;
@@ -98,12 +112,12 @@
   z-index: var(--z-base);
   transform-origin: center center;
   overflow: hidden;
-  border: 1px solid rgb(var(--ivory-rgb) / 0.13);
+  border: 1px solid var(--rule);
   background:
     linear-gradient(90deg, transparent 49.9%, rgb(var(--champagne-rgb) / 0.15) 50%, transparent 50.1%),
-    linear-gradient(145deg, rgb(var(--ivory-rgb) / 0.085), rgb(var(--ivory-rgb) / 0.018));
+    var(--ivory);
   box-shadow:
-    0 2.5rem 7rem rgb(var(--ink-rgb) / 0.22),
+    0 2.5rem 7rem rgb(var(--wood-rgb) / 0.22),
     inset 0 0 0 1px rgb(var(--ink-rgb) / 0.08);
 }
 
@@ -123,7 +137,7 @@
   position: absolute;
   right: 0.035em;
   bottom: -0.18em;
-  color: rgb(var(--ivory-rgb) / 0.035);
+  color: rgb(var(--ink-rgb) / 0.05);
   font-family: var(--font-display);
   font-size: clamp(8rem, 21vw, 23rem);
   font-style: italic;
@@ -286,15 +300,15 @@
 }
 
 .handNote {
-  left: 73%;
-  top: 63%;
+  left: 44%;
+  top: 35%;
   color: var(--rich-wine);
   rotate: -4deg;
 }
 
 .folio {
   right: 8%;
-  bottom: 14%;
+  bottom: 4%;
   color: var(--champagne);
   opacity: 0.72;
 }
@@ -398,7 +412,7 @@
 
   .folio {
     right: calc(var(--margin) + 0.5rem);
-    bottom: 16%;
+    bottom: 6%;
   }
 
   .disciplines {

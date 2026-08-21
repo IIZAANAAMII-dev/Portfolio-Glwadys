@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  allowedDevOrigins: ['127.0.0.1', 'localhost'],
   // Le badge de dev pollue les captures de QA visuel.
   devIndicators: false,
   images: {
