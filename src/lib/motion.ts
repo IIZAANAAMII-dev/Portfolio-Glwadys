@@ -58,10 +58,10 @@ export const MQ = {
  * reste tenue. Le sens de correction par défaut est vers le bas.
  */
 export const SCROLL = {
-  hero: 120,
-  social: 230,
-  phone: 320,
-  immersion: 240,
+  hero: 180,
+  social: 368,
+  phone: 576,
+  immersion: 408,
   contactSheet: 200,
   moodboard: 200,
   strategy: 230,
