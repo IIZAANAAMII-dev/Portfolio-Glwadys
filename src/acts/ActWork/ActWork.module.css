@@ -2,30 +2,6 @@
   position: relative;
 }
 
-.workHeader {
-  position: relative;
-  min-height: 100svh;
-  padding: var(--space-act) var(--margin);
-  background:
-    linear-gradient(90deg, transparent 0 50%, rgb(var(--ivory-rgb) / 0.055) 50% calc(50% + 1px), transparent calc(50% + 1px)),
-    var(--wood-brown);
-  color: var(--ivory);
-  border-bottom: 1px solid rgb(var(--paper-rgb) / 0.14);
-}
-
-.workTitle {
-  position: relative;
-  z-index: var(--z-sticky);
-  margin-top: 12vh;
-  max-width: 9ch;
-}
-
-.workIndex {
-  position: absolute;
-  top: var(--margin);
-  left: var(--margin);
-}
-
 .project {
   position: relative;
   overflow: clip;
@@ -42,26 +18,76 @@
   color: var(--ink);
 }
 
-.workPreview {
+.yunaHandoff {
   position: absolute;
+  inset: 0;
+  z-index: calc(var(--z-sticky) + 1);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 73% 43%, rgb(var(--champagne-rgb) / 0.08), transparent 31%),
+    linear-gradient(90deg, transparent 0 50%, rgb(var(--ivory-rgb) / 0.09) 50% calc(50% + 1px), transparent calc(50% + 1px)),
+    var(--wood-brown);
+  color: var(--ivory);
+  pointer-events: none;
+  will-change: clip-path;
+}
+
+.handoffIndex,
+.handoffTitle,
+.handoffRule,
+.handoffStatement,
+.handoffProof {
+  position: absolute;
+}
+
+.handoffIndex {
+  left: var(--margin);
+  top: var(--margin);
+}
+
+.handoffTitle {
+  left: var(--margin);
+  top: 22vh;
+  max-width: 8ch;
+}
+
+.handoffStatement {
+  left: var(--margin);
+  bottom: 15vh;
+  max-width: 22ch;
+  color: var(--champagne);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.6vw, 3rem);
+  font-style: italic;
+  line-height: 1.05;
+}
+
+.handoffRule {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgb(var(--ivory-rgb) / 0.17);
+}
+
+.handoffProof {
   right: 8vw;
-  top: 14vh;
-  z-index: var(--z-media);
+  top: 13vh;
   width: min(29vw, 30rem);
   padding: 0.65rem 0.65rem 2.35rem;
   background: var(--ivory);
-  box-shadow: 0 2rem 5.5rem rgb(0 0 0 / 0.28);
+  box-shadow: 0 2rem 5.5rem rgb(0 0 0 / 0.3);
   color: var(--ink);
 }
 
-.previewStamp {
+.handoffStamp {
   position: absolute;
   left: 0.75rem;
   bottom: 0.72rem;
   color: var(--rich-wine);
 }
 
-.previewCrop {
+.handoffCrop {
   position: absolute;
   inset: 0.4rem 0.4rem 2.05rem;
   pointer-events: none;
@@ -447,14 +473,18 @@
 }
 
 @media (max-width: 1023px) {
-  .workHeader {
-    min-height: 100svh;
+  .handoffTitle {
+    top: 15vh;
   }
 
-  .workPreview {
+  .handoffRule {
+    left: var(--margin);
+  }
+
+  .handoffProof {
     right: var(--margin);
-    top: 18vh;
-    width: min(52vw, 23rem);
+    top: 31vh;
+    width: min(58vw, 23rem);
   }
 
   .projectVisual {
@@ -582,6 +612,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .yunaHandoff {
+    display: none;
+  }
+
   .projectVisual {
     min-height: 100svh;
   }

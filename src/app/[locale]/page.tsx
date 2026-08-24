@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       <div id="act-process">
         <ActProcess content={content} locale={locale} />
       </div>
-      <div id="act-work">
+      <div data-act-work-content>
         <ActWork content={content} locale={locale} />
       </div>
       <div id="act-journey">

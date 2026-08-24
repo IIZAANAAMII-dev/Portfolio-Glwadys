@@ -1,41 +1,78 @@
 .act {
   position: relative;
+  overflow: clip;
   background: var(--ivory);
   color: var(--ink);
 }
 
-.railSection,
-.systemSection,
-.strategySection {
-  position: relative;
-  min-height: 100svh;
-  overflow: clip;
+.workMarker {
+  position: absolute;
+  left: 0;
+  top: var(--work-marker-top);
+  width: 1px;
+  height: calc(100% - var(--work-marker-top));
+  opacity: 0;
+  pointer-events: none;
 }
 
-.railSection {
-  background: var(--ivory);
-}
-
-.stage,
-.systemStage {
+.stage {
   position: relative;
   height: 100vh;
   height: 100svh;
   overflow: hidden;
-}
-
-.stage {
   background: var(--ivory);
 }
 
-.kicker {
+.motionProcess {
+  position: absolute;
+  inset: 0;
+}
+
+.reducedProcess {
+  display: none;
+}
+
+.entryPlate {
+  z-index: 7;
+  background: var(--ivory);
+}
+
+.contactScene,
+.intentionScene,
+.systemScene,
+.methodScene,
+.workScene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.contactScene {
+  z-index: 1;
+  background:
+    linear-gradient(90deg, transparent 0 50%, rgb(var(--ink-rgb) / 0.045) 50% calc(50% + 1px), transparent calc(50% + 1px)),
+    var(--ivory);
+}
+
+.processChrome {
   position: absolute;
   top: var(--margin);
   left: var(--margin);
+  right: var(--margin);
   z-index: var(--z-sticky);
+  display: flex;
+  justify-content: space-between;
 }
 
-.sectionTitle {
+.processSequence {
+  max-width: 58vw;
+  overflow: hidden;
+  color: var(--rich-wine);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contactTitle {
   position: absolute;
   left: var(--margin);
   top: 15vh;
@@ -43,166 +80,269 @@
   max-width: 8ch;
 }
 
-.rail {
+.contactNote {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: var(--margin);
+  bottom: 12vh;
+  z-index: var(--z-sticky);
+  max-width: 14ch;
+  color: var(--rich-wine);
+  rotate: -3deg;
+}
+
+.contactRail {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: var(--z-media);
   display: flex;
   align-items: center;
   gap: clamp(2.5rem, 5.5vw, 6.5rem);
   width: max-content;
   height: 100%;
-  padding-inline: 42vw 14vw;
-  z-index: 1;
+  padding-inline: 42vw 16vw;
 }
 
-.entryPlate {
-  z-index: 2;
-}
-
-.railItem {
+.contactCard {
   position: relative;
   flex: 0 0 auto;
   margin: 0;
+  transform-origin: center;
 }
 
-.railItem:nth-child(4n + 1) {
+.contactCard > div {
+  box-shadow: 0 1.2rem 3.4rem rgb(var(--wood-rgb) / 0.17);
+}
+
+.contactCard figcaption {
+  margin-top: 0.5rem;
+  color: rgb(var(--ink-rgb) / 0.54);
+}
+
+.contactCard:nth-child(4n + 1) {
   width: 21vw;
   translate: 0 8vh;
 }
 
-.railItem:nth-child(4n + 2) {
+.contactCard:nth-child(4n + 2) {
   width: 14vw;
   translate: 0 -14vh;
 }
 
-.railItem:nth-child(4n + 3) {
+.contactCard:nth-child(4n + 3) {
   width: 25vw;
   translate: 0 2vh;
 }
 
-.railItem:nth-child(4n) {
+.contactCard:nth-child(4n) {
   width: 17vw;
   translate: 0 15vh;
 }
 
-.railIndex {
+.contactIndex {
   position: absolute;
   left: 0;
-  top: -1.4rem;
+  top: -1.35rem;
   color: var(--rich-wine);
 }
 
-.railRule {
+.contactRule {
   position: absolute;
   left: var(--margin);
   right: var(--margin);
   bottom: var(--margin);
-  height: 1px;
-  background: var(--rule);
-}
-
-.systemSection {
-  background: var(--paper);
-}
-
-.systemStage {
-  background:
-    linear-gradient(90deg, transparent 0 50%, rgb(var(--ink-rgb) / 0.07) 50% calc(50% + 1px), transparent calc(50% + 1px)),
-    var(--paper);
-}
-
-.systemGhost {
-  position: absolute;
-  right: -0.03em;
-  top: -0.22em;
-  color: rgb(var(--oxblood-rgb) / 0.045);
-  font-family: var(--font-display);
-  font-size: clamp(10rem, 25vw, 28rem);
-  font-style: italic;
-  line-height: 1;
-}
-
-.boardState {
-  position: absolute;
-  top: var(--margin);
-  right: var(--margin);
   z-index: var(--z-sticky);
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.16);
+}
+
+/* Intention : les épreuves se regroupent sur une planche réellement composée. */
+.intentionScene {
+  z-index: 2;
+  background:
+    linear-gradient(90deg, transparent 0 8%, rgb(var(--oxblood-rgb) / 0.1) 8% calc(8% + 1px), transparent calc(8% + 1px)),
+    rgb(var(--ivory-rgb) / 0.965);
+  color: var(--ink);
+}
+
+.sceneChapter {
+  position: absolute;
+  left: var(--margin);
+  top: var(--margin);
+  z-index: var(--z-sticky);
+}
+
+.intentionTitle {
+  position: absolute;
+  left: var(--margin);
+  top: 14vh;
+  z-index: var(--z-sticky);
+}
+
+.intentionStatement {
+  position: absolute;
+  right: var(--margin);
+  top: 15vh;
+  z-index: var(--z-sticky);
+  width: min(34vw, 32rem);
+  color: var(--rich-wine);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.6vw, 4rem);
+  font-style: italic;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+.intentionNote {
+  position: absolute;
+  right: 9%;
+  bottom: 10vh;
+  z-index: var(--z-sticky);
+  max-width: 18ch;
+  color: var(--rich-wine);
+  rotate: 2deg;
+}
+
+.intentionAxis {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  top: 39vh;
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.15);
+}
+
+.intentionMedia {
+  position: absolute;
+  z-index: var(--z-media);
+  margin: 0;
+  padding: 0.45rem 0.45rem 1.75rem;
+  background: var(--ivory);
+  box-shadow: var(--paper-shadow);
+  transform-origin: center;
+  will-change: transform, clip-path;
+}
+
+.intentionMedia figcaption {
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.48rem;
   color: var(--rich-wine);
 }
 
-.systemTitleMask {
+.intentionMedia[data-intention-slot='1'] {
+  left: 8%;
+  top: 37%;
+  width: 22vw;
+  rotate: -1.5deg;
+}
+
+.intentionMedia[data-intention-slot='2'] {
+  left: 35%;
+  top: 44%;
+  width: 25vw;
+  rotate: 1deg;
+}
+
+.intentionMedia[data-intention-slot='3'] {
+  right: 7%;
+  top: 39%;
+  width: 13vw;
+  rotate: 2.2deg;
+}
+
+.intentionMedia[data-intention-slot='4'] {
+  left: 27%;
+  top: 21%;
+  width: 10vw;
+  rotate: -2.4deg;
+}
+
+/* Système : la planche conserve sa matière, mais la grille prend le pouvoir. */
+.systemScene {
+  z-index: 3;
+  color: var(--ink);
+  transform-origin: center;
+}
+
+.systemScene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent 0 50%, rgb(var(--ink-rgb) / 0.06) 50% calc(50% + 1px), transparent calc(50% + 1px)),
+    rgb(var(--paper-rgb) / 0.94);
+}
+
+.systemTitle {
   position: absolute;
   left: var(--margin);
   top: 13vh;
   z-index: var(--z-sticky);
 }
 
-.systemTitle {
-  max-width: 7ch;
-}
-
-.systemManifesto {
+.systemStatement {
   position: absolute;
   right: var(--margin);
   top: 16vh;
   z-index: var(--z-sticky);
-  width: min(34vw, 34rem);
+  width: min(31vw, 30rem);
   color: var(--rich-wine);
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3.7vw, 4.2rem);
+  font-size: clamp(1.8rem, 3.2vw, 3.6rem);
   font-style: italic;
-  line-height: 0.98;
-  letter-spacing: -0.035em;
+  line-height: 1;
 }
 
-.systemAxis {
+.systemLine {
   position: absolute;
   left: var(--margin);
   right: var(--margin);
-  top: 39vh;
+  top: 38vh;
+  z-index: var(--z-sticky);
   height: 1px;
   background: rgb(var(--ink-rgb) / 0.2);
 }
 
-.board {
+.systemBoard {
   position: absolute;
   left: var(--margin);
   right: var(--margin);
-  top: 43vh;
-  bottom: 9vh;
+  top: 42vh;
+  bottom: 11vh;
+  z-index: var(--z-media);
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
-  border-bottom: 1px solid rgb(var(--ink-rgb) / 0.18);
+  border-block: 1px solid rgb(var(--ink-rgb) / 0.18);
 }
 
-.boardItem {
+.systemToken {
   position: relative;
   min-width: 0;
-  padding: 1.1rem;
+  padding: 0.9rem;
   border-left: 1px solid rgb(var(--ink-rgb) / 0.14);
-  background: rgb(var(--ivory-rgb) / 0.18);
-  transform-origin: center;
+  background: rgb(var(--ivory-rgb) / 0.2);
 }
 
-.boardItem:first-child {
+.systemToken:first-child {
   border-left: 0;
 }
 
-.boardLabel {
+.tokenIndex {
   color: var(--rich-wine);
 }
 
-.boardValue {
+.systemToken > p {
   position: absolute;
-  left: 1.1rem;
-  right: 1.1rem;
-  bottom: 1.1rem;
+  left: 0.9rem;
+  right: 0.9rem;
+  bottom: 0.9rem;
+  overflow: hidden;
   font-family: var(--font-display);
-  font-size: clamp(1.45rem, 2.25vw, 2.5rem);
+  font-size: clamp(1.25rem, 2.05vw, 2.25rem);
   font-style: italic;
   line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .swatches,
@@ -211,10 +351,10 @@
 .quoteMark,
 .cropFrame {
   position: absolute;
-  left: 1.1rem;
-  right: 1.1rem;
-  top: 24%;
-  height: 44%;
+  left: 0.9rem;
+  right: 0.9rem;
+  top: 25%;
+  height: 42%;
   transform-origin: center;
 }
 
@@ -223,17 +363,9 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
-.swatches i:nth-child(1) {
-  background: var(--ink);
-}
-
-.swatches i:nth-child(2) {
-  background: var(--rich-wine);
-}
-
-.swatches i:nth-child(3) {
-  background: var(--champagne);
-}
+.swatches i:nth-child(1) { background: var(--ink); }
+.swatches i:nth-child(2) { background: var(--rich-wine); }
+.swatches i:nth-child(3) { background: var(--champagne); }
 
 .typeSpecimen {
   display: grid;
@@ -243,16 +375,16 @@
 
 .typeSpecimen strong {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 5vw, 6rem);
+  font-size: clamp(2.6rem, 4.6vw, 5.4rem);
   font-style: italic;
   font-weight: 400;
   line-height: 0.8;
 }
 
 .typeSpecimen small {
-  margin-top: 0.8rem;
-  font-size: 0.55rem;
-  letter-spacing: 0.16em;
+  margin-top: 0.65rem;
+  font-size: 0.5rem;
+  letter-spacing: 0.14em;
 }
 
 .toneSignal {
@@ -268,25 +400,17 @@
 }
 
 .toneSignal i:nth-child(2),
-.toneSignal i:nth-child(6) {
-  height: 48%;
-}
-
+.toneSignal i:nth-child(6) { height: 48%; }
 .toneSignal i:nth-child(3),
-.toneSignal i:nth-child(5) {
-  height: 72%;
-}
-
-.toneSignal i:nth-child(4) {
-  height: 100%;
-}
+.toneSignal i:nth-child(5) { height: 72%; }
+.toneSignal i:nth-child(4) { height: 100%; }
 
 .quoteMark {
   display: grid;
   place-items: center;
   color: var(--rich-wine);
   font-family: var(--font-display);
-  font-size: clamp(5rem, 8vw, 9rem);
+  font-size: clamp(4.5rem, 7vw, 8rem);
   font-style: italic;
   line-height: 1;
 }
@@ -307,127 +431,205 @@
   border-style: solid;
 }
 
-.cropFrame::before {
-  left: -1px;
-  top: -1px;
-  border-width: 2px 0 0 2px;
+.cropFrame::before { left: -1px; top: -1px; border-width: 2px 0 0 2px; }
+.cropFrame::after { right: -1px; top: -1px; border-width: 2px 2px 0 0; }
+.cropFrame i::before { left: -1px; bottom: -1px; border-width: 0 0 2px 2px; }
+.cropFrame i::after { right: -1px; bottom: -1px; border-width: 0 2px 2px 0; }
+
+/* Méthode : liste descendue, nette ; un seul mot et un seul visuel actifs. */
+.methodScene {
+  z-index: 4;
+  background:
+    linear-gradient(90deg, transparent 0 7.5%, rgb(var(--oxblood-rgb) / 0.08) 7.5% calc(7.5% + 1px), transparent calc(7.5% + 1px)),
+    rgb(var(--ivory-rgb) / 0.975);
+  color: var(--ink);
 }
 
-.cropFrame::after {
-  right: -1px;
-  top: -1px;
-  border-width: 2px 2px 0 0;
-}
-
-.cropFrame i::before {
-  left: -1px;
-  bottom: -1px;
-  border-width: 0 0 2px 2px;
-}
-
-.cropFrame i::after {
-  right: -1px;
-  bottom: -1px;
-  border-width: 0 2px 2px 0;
-}
-
-.strategySection {
-  background: var(--ivory);
-}
-
-.strategyWords {
+.methodCounter {
   position: absolute;
-  left: var(--margin);
-  top: 28%;
-  z-index: var(--z-media);
-  width: 58vw;
-  height: 44%;
+  right: var(--margin);
+  top: var(--margin);
+  z-index: var(--z-sticky);
+  color: var(--rich-wine);
+}
+
+.methodWords {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base);
   pointer-events: none;
 }
 
-.strategyWord {
+.methodWords > span {
   position: absolute;
-  left: 0;
-  top: 16%;
-  max-width: 100%;
+  left: calc(var(--margin) - 0.04em);
+  top: 31%;
+  max-width: 70vw;
+  overflow: hidden;
+  color: var(--rich-wine);
   font-family: var(--font-display);
-  font-size: clamp(4rem, 9.4vw, 10.5rem);
+  font-size: clamp(4.5rem, 9.6vw, 10.8rem);
   font-style: italic;
   line-height: 0.84;
   letter-spacing: -0.05em;
+  text-overflow: clip;
   white-space: nowrap;
 }
 
-.strategyWord small {
+.methodWords small {
   display: block;
-  margin: 0 0 1rem 0.35rem;
-  color: var(--rich-wine);
+  margin: 0 0 0.8rem 0.3rem;
   font-family: var(--font-sans);
   font-size: var(--t-micro);
   font-style: normal;
   letter-spacing: var(--tr-micro);
 }
 
-.strategyLine {
+.methodVisuals {
   position: absolute;
-  right: var(--margin);
-  top: 17vh;
-  z-index: var(--z-sticky);
-  display: grid;
-  width: min(32vw, 31rem);
+  inset: 0;
+  z-index: var(--z-media);
+  pointer-events: none;
+}
+
+.methodVisuals figure {
+  position: absolute;
+  left: 8%;
+  top: 29%;
+  width: min(25vw, 25rem);
   margin: 0;
-  padding: 0;
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
-  list-style: none;
+  padding: 0.55rem 0.55rem 2.45rem;
+  background: var(--ivory);
+  box-shadow: 0 1.8rem 5rem rgb(var(--wood-rgb) / 0.22);
+  transform-origin: center;
+  will-change: transform, clip-path;
 }
 
-.strategyLineItem {
-  display: grid;
-  grid-template-columns: 2.5rem minmax(5rem, 0.7fr) 1.3fr;
-  gap: 0.8rem;
+.methodVisuals figcaption {
+  position: absolute;
+  left: 0.65rem;
+  right: 0.65rem;
+  bottom: 0.55rem;
+  display: flex;
+  justify-content: space-between;
   align-items: baseline;
-  padding-block: 0.92rem;
-  border-bottom: 1px solid rgb(var(--ink-rgb) / 0.13);
-  font-size: 0.78rem;
-}
-
-.strategyIndex {
   color: var(--rich-wine);
 }
 
-.strategyLineItem strong {
+.methodVisuals figcaption strong {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.methodList {
+  position: absolute;
+  right: var(--margin);
+  top: 22vh;
+  z-index: var(--z-sticky);
+  display: grid;
+  width: min(39vw, 36rem);
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.2);
+  list-style: none;
+}
+
+.methodList li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(6rem, 0.75fr) 1.25fr;
+  gap: 0.8rem;
+  align-items: baseline;
+  min-height: 4.8rem;
+  padding-block: 0.8rem;
+  border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14);
+}
+
+.methodList li > span {
+  color: var(--rich-wine);
+}
+
+.methodList strong {
   font-family: var(--font-display);
   font-size: clamp(1.05rem, 1.45vw, 1.45rem);
   font-style: italic;
   font-weight: 400;
 }
 
-.strategyNote {
-  line-height: 1.45;
-  opacity: 0.76;
+.methodList p {
+  font-size: 0.78rem;
+  line-height: 1.4;
 }
 
-.campaignReveal {
+/* La seule introduction du Portfolio. */
+.workScene {
+  z-index: 8;
+  background:
+    radial-gradient(circle at 73% 43%, rgb(var(--champagne-rgb) / 0.08), transparent 31%),
+    linear-gradient(90deg, transparent 0 50%, rgb(var(--ivory-rgb) / 0.09) 50% calc(50% + 1px), transparent calc(50% + 1px)),
+    var(--wood-brown);
+  color: var(--ivory);
+  will-change: clip-path;
+}
+
+.workIndex,
+.workTitle,
+.workStatement,
+.workRule,
+.workProof {
   position: absolute;
+}
+
+.workIndex {
+  left: var(--margin);
+  top: var(--margin);
+}
+
+.workTitle {
+  left: var(--margin);
+  top: 22vh;
+  max-width: 8ch;
+}
+
+.workStatement {
+  left: var(--margin);
+  bottom: 15vh;
+  max-width: 22ch;
+  color: var(--champagne);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.6vw, 3rem);
+  font-style: italic;
+  line-height: 1.05;
+}
+
+.workRule {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgb(var(--ivory-rgb) / 0.17);
+}
+
+.workProof {
   right: 8vw;
-  top: 14vh;
-  z-index: var(--z-media);
+  top: 13vh;
   width: min(29vw, 30rem);
   padding: 0.65rem 0.65rem 2.35rem;
   background: var(--ivory);
-  box-shadow: 0 2rem 5.5rem rgb(0 0 0 / 0.28);
+  box-shadow: 0 2rem 5.5rem rgb(0 0 0 / 0.3);
+  color: var(--ink);
   transform-origin: center;
-  will-change: transform, clip-path;
 }
 
-.campaignStamp {
+.proofStamp {
   position: absolute;
   left: 0.75rem;
   bottom: 0.72rem;
   color: var(--rich-wine);
 }
 
-.campaignCrop {
+.proofCrop {
   position: absolute;
   inset: 0.4rem 0.4rem 2.05rem;
   pointer-events: none;
@@ -443,110 +645,112 @@
   opacity: 0.72;
 }
 
-.workHandoff {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-sticky);
-  pointer-events: none;
-}
-
-.workIndex {
-  position: absolute;
-  top: var(--margin);
-  left: var(--margin);
-}
-
-.workTitle {
-  position: absolute;
-  left: var(--margin);
-  top: calc(var(--space-act) + 12vh);
-  max-width: 9ch;
-}
-
-.workRule {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: rgb(var(--ivory-rgb) / 0.18);
-}
-
 @media (max-width: 1023px) {
-  .entryPlate {
+  .workMarker {
+    top: var(--work-marker-mobile-top);
+    height: calc(100% - var(--work-marker-mobile-top));
+  }
+
+  .processSequence,
+  .contactNote,
+  .intentionMedia[data-intention-slot='4'] {
     display: none;
   }
 
-  .railSection,
-  .railSection .stage {
-    min-height: auto;
-    height: auto;
+  .contactTitle {
+    top: 13vh;
+    max-width: 7ch;
   }
 
-  .railSection {
-    padding: var(--space-act) var(--margin);
+  .contactRail {
+    gap: 2.5rem;
+    padding-inline: 48vw 20vw;
   }
 
-  .railSection .kicker,
-  .railSection .sectionTitle {
-    position: relative;
-    inset: auto;
+  .contactCard:nth-child(n) {
+    width: 48vw;
+    translate: 0 5vh;
   }
 
-  .railSection .sectionTitle {
-    margin-top: 2rem;
+  .contactCard:nth-child(even) {
+    width: 34vw;
+    translate: 0 -12vh;
   }
 
-  .rail {
-    position: relative;
-    inset: auto;
-    display: grid;
-    width: 100%;
-    height: auto;
-    margin-top: 4rem;
-    padding: 0;
-    gap: 3rem;
+  .intentionTitle {
+    top: 12vh;
   }
 
-  .railItem:nth-child(n) {
-    width: min(78vw, 28rem);
-    translate: none;
-  }
-
-  .railItem:nth-child(even) {
-    justify-self: end;
-  }
-
-  .systemManifesto {
+  .intentionStatement {
     left: var(--margin);
     right: auto;
-    top: 25vh;
-    width: min(82vw, 33rem);
-    font-size: clamp(2rem, 8.5vw, 3.6rem);
+    top: 23vh;
+    width: min(82vw, 31rem);
+    font-size: clamp(1.8rem, 8vw, 3.3rem);
   }
 
-  .systemAxis {
+  .intentionAxis {
     top: 42vh;
   }
 
-  .board {
-    top: 45vh;
-    bottom: 7vh;
+  .intentionMedia[data-intention-slot='1'] {
+    left: var(--margin);
+    top: 47%;
+    width: 43vw;
+  }
+
+  .intentionMedia[data-intention-slot='2'] {
+    left: auto;
+    right: var(--margin);
+    top: 52%;
+    width: 47vw;
+  }
+
+  .intentionMedia[data-intention-slot='3'] {
+    right: 8%;
+    top: 38%;
+    width: 26vw;
+  }
+
+  .intentionNote {
+    right: var(--margin);
+    bottom: 10vh;
+  }
+
+  .systemTitle {
+    top: 12vh;
+  }
+
+  .systemStatement {
+    left: var(--margin);
+    right: auto;
+    top: 23vh;
+    width: 82vw;
+    font-size: clamp(1.7rem, 7vw, 3rem);
+  }
+
+  .systemLine {
+    top: 39vh;
+  }
+
+  .systemBoard {
+    top: 42vh;
+    bottom: 9vh;
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .boardItem {
-    padding: 0.75rem;
+  .systemToken {
+    padding: 0.55rem;
   }
 
-  .boardItem:nth-child(5) {
+  .systemToken:nth-child(5) {
     grid-column: 1 / -1;
   }
 
-  .boardValue {
-    left: 0.75rem;
-    bottom: 0.75rem;
-    font-size: clamp(1.1rem, 4.8vw, 1.7rem);
+  .systemToken > p {
+    left: 0.55rem;
+    bottom: 0.55rem;
+    font-size: clamp(1rem, 4.5vw, 1.55rem);
   }
 
   .swatches,
@@ -554,126 +758,221 @@
   .toneSignal,
   .quoteMark,
   .cropFrame {
-    left: 0.75rem;
-    right: 0.75rem;
+    left: 0.55rem;
+    right: 0.55rem;
+    top: 24%;
+    height: 38%;
   }
 
-  .strategyWords {
-    left: var(--margin);
-    right: var(--margin);
-    top: 17vh;
-    width: auto;
-    height: 28vh;
+  .methodCounter {
+    display: none;
   }
 
-  .strategyWord {
-    top: 13%;
+  .methodWords > span {
+    top: 18vh;
+    max-width: 94vw;
     font-size: clamp(3.2rem, 14vw, 6rem);
     white-space: normal;
   }
 
-  .strategyLine {
+  .methodVisuals figure {
+    left: var(--margin);
+    top: 24vh;
+    width: min(43vw, 18rem);
+    padding: 0.4rem 0.4rem 1.85rem;
+  }
+
+  .methodVisuals figcaption {
+    left: 0.45rem;
+    right: 0.45rem;
+    bottom: 0.38rem;
+  }
+
+  .methodVisuals figcaption strong {
+    display: none;
+  }
+
+  .methodList {
     left: var(--margin);
     right: var(--margin);
-    top: 49vh;
+    top: 50vh;
     width: auto;
   }
 
-  .strategyLineItem {
-    grid-template-columns: 2rem 0.72fr 1.28fr;
-    gap: 0.5rem;
-    padding-block: 0.65rem;
-    font-size: 0.75rem;
+  .methodList li {
+    grid-template-columns: 1.8rem 0.75fr 1.25fr;
+    gap: 0.45rem;
+    min-height: 0;
+    padding-block: 0.52rem;
   }
 
-  .strategyLineItem strong {
-    font-size: 1rem;
+  .methodList strong {
+    font-size: 0.95rem;
   }
 
-  .campaignReveal {
-    right: var(--margin);
-    top: 18vh;
-    width: min(52vw, 23rem);
+  .methodList p {
+    font-size: 0.69rem;
   }
 
   .workTitle {
-    top: calc(var(--space-act) + 12vh);
+    top: 15vh;
+  }
+
+  .workStatement {
+    bottom: 15vh;
+  }
+
+  .workRule {
+    left: var(--margin);
+  }
+
+  .workProof {
+    right: var(--margin);
+    top: 31vh;
+    width: min(58vw, 23rem);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .railSection,
-  .systemSection,
-  .strategySection,
-  .stage,
-  .systemStage {
-    min-height: auto;
+  .workMarker {
+    top: 75%;
+    height: 25%;
+  }
+
+  .stage {
     height: auto;
+    overflow: visible;
   }
 
-  .railSection,
-  .systemSection,
-  .strategySection {
-    padding: var(--space-act) var(--margin);
+  .motionProcess {
+    display: none;
   }
 
-  .rail,
-  .board,
-  .strategyWords,
-  .strategyLine,
-  .campaignReveal {
+  .reducedProcess {
+    display: block;
+  }
+
+  .reducedPanel {
     position: relative;
-    inset: auto;
+    display: grid;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: var(--space-act) var(--margin) max(8rem, 16vh);
+    overflow: hidden;
+    border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14);
+    background: var(--ivory);
   }
 
-  .systemSection .kicker,
-  .systemTitleMask,
-  .systemManifesto {
-    position: relative;
-    inset: auto;
+  .reducedPanel > h2 {
+    margin-top: 2rem;
+    max-width: 9ch;
   }
 
-  .systemTitleMask,
-  .systemManifesto {
+  .reducedPanel > p {
+    align-self: end;
     margin-top: 2rem;
   }
 
-  .board {
+  .reducedMediaGrid {
+    align-self: end;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gutter);
     margin-top: 4rem;
   }
 
-  .boardItem {
-    min-height: 18rem;
+  .reducedTokens {
+    align-self: end;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    margin-top: 4rem;
+    border-block: 1px solid rgb(var(--ink-rgb) / 0.18);
   }
 
-  .strategyWords {
-    display: flex;
-    flex-wrap: wrap;
+  .reducedTokens > span {
+    display: grid;
+    min-height: 10rem;
+    padding: 0.8rem;
+    border-left: 1px solid rgb(var(--ink-rgb) / 0.14);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2vw, 2rem);
+    font-style: italic;
+  }
+
+  .reducedTokens small {
+    color: var(--rich-wine);
+  }
+
+  .reducedMethod {
+    align-self: end;
+    margin: 4rem 0 0;
+    padding: 0;
+    border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
+    list-style: none;
+  }
+
+  .reducedMethod li {
+    display: grid;
+    grid-template-columns: 2.5rem 0.7fr 1.3fr;
     gap: 1rem;
-    height: auto;
-    margin-block: 4rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14);
   }
 
-  .strategyWord {
-    position: relative;
-    inset: auto;
-    font-size: var(--t-title);
+  .reducedMethod strong {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-style: italic;
+    font-weight: 400;
   }
 
-  .strategyWord small {
-    display: none;
+  .reducedSelection {
+    background: var(--wood-brown);
+    color: var(--ivory);
   }
 
-  .strategyLine {
-    margin-bottom: 3rem;
+  .reducedProof {
+    position: absolute;
+    right: var(--margin);
+    top: 19vh;
+    width: min(32vw, 25rem);
+    padding: 0.55rem;
+    background: var(--ivory);
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .reducedPanel {
+    min-height: auto;
+    padding-block: 5rem 8rem;
   }
 
-  .campaignReveal {
-    width: min(60vw, 22rem);
-    clip-path: none;
+  .reducedMediaGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .workHandoff {
-    display: none;
+  .reducedTokens {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .reducedTokens > span:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .reducedMethod li {
+    grid-template-columns: 2rem 1fr;
+  }
+
+  .reducedMethod p {
+    grid-column: 2;
+  }
+
+  .reducedSelection {
+    min-height: 90svh;
+  }
+
+  .reducedProof {
+    top: 34%;
+    width: 58vw;
   }
 }

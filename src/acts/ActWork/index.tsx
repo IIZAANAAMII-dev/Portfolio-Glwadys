@@ -32,11 +32,15 @@ function ProjectSection({
   locale,
   labels,
   index,
+  selection,
+  bridgeStatement,
 }: {
   project: Project;
   locale: Locale;
   labels: CaseLabels;
   index: number;
+  selection: string;
+  bridgeStatement: string;
 }) {
   const root = useRef<HTMLElement>(null);
   const media =
@@ -53,6 +57,7 @@ function ProjectSection({
       const q = gsap.utils.selector(rootEl);
       const visual = q<HTMLElement>('[data-project-visual]')[0];
       const dossier = q<HTMLElement>('[data-project-dossier]')[0];
+      const yunaHandoff = q<HTMLElement>('[data-yuna-handoff]')[0];
       if (!visual || !dossier) return;
       const mm = gsap.matchMedia();
 
@@ -72,6 +77,18 @@ function ProjectSection({
             yPercent: 12,
           });
 
+          if (project.id === 'mgc') {
+            gsap.set(mediaEls, {
+              rotation: (mediaIndex: number) => [-3.2, 2.4, -4.4, 3.1, -1.8][mediaIndex] ?? 0,
+              xPercent: (mediaIndex: number) => [-4, 5, -3, 4, 0][mediaIndex] ?? 0,
+              yPercent: (mediaIndex: number) => [10, 17, 8, 14, 11][mediaIndex] ?? 12,
+            });
+          }
+
+          if (yunaHandoff) {
+            gsap.set(yunaHandoff, { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)' });
+          }
+
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
             scrollTrigger: {
@@ -86,6 +103,11 @@ function ProjectSection({
           });
 
           tl
+            .to(
+              yunaHandoff ?? [],
+              { clipPath: 'inset(0% 0% 100% 0%)', autoAlpha: 0, duration: 0.24 },
+              0,
+            )
             .fromTo(
               q<HTMLElement>('[data-project-name]'),
               { yPercent: 38, autoAlpha: 0 },
@@ -181,6 +203,20 @@ function ProjectSection({
   return (
     <section ref={root} className={styles.project} data-project={project.id} aria-labelledby={`${project.id}-title`}>
       <div className={styles.projectVisual} data-project-visual>
+        {project.id === 'yuna' && (
+          <div className={styles.yunaHandoff} data-yuna-handoff aria-hidden="true">
+            <span className={`${styles.handoffIndex} micro`}>06 / Portfolio</span>
+            <span className={`${styles.handoffTitle} display`}>{selection}</span>
+            <span className={styles.handoffRule} />
+            <span className={styles.handoffStatement}>{bridgeStatement}</span>
+            <div className={styles.handoffProof}>
+              <Media item={yunaMedia[0]!} locale={locale} preload sizes="29vw" />
+              <span className={`${styles.handoffStamp} micro`}>Campaign / Yuna Bijoux</span>
+              <span className={styles.handoffCrop} />
+            </div>
+          </div>
+        )}
+
         {project.id === 'comptoir' && (
           <div className={styles.macro} data-comptoir-macro>
             <Media item={comptoirTexture} locale={locale} className="fill-frame" sizes="100vw" />
@@ -290,22 +326,16 @@ function ProjectSection({
 
 export function ActWork({ content, locale }: Props) {
   return (
-    <div className={styles.act}>
-      <header className={styles.workHeader}>
-        <span className={`${styles.workIndex} micro`}>06 / Portfolio</span>
-        <h2 className={`${styles.workTitle} display`}>{content.work.heading}</h2>
-        <div className={styles.workPreview} aria-hidden="true">
-          <Media item={yunaMedia[0]!} locale={locale} sizes="26vw" />
-          <span className={`${styles.previewStamp} micro`}>Selected proof / 01</span>
-          <span className={styles.previewCrop} />
-        </div>
-      </header>
+    <div className={styles.act} aria-labelledby="work-title">
+      <h2 id="work-title" className="visually-hidden">{content.work.heading}</h2>
       {content.work.projects.map((project, index) => (
         <ProjectSection
           project={project}
           locale={locale}
           labels={content.work.caseLabels}
           index={index}
+          selection={content.work.heading}
+          bridgeStatement={content.strategy.sentence}
           key={project.id}
         />
       ))}

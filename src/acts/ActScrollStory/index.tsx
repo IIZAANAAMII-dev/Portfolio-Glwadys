@@ -63,11 +63,11 @@ const T = {
   phoneIn: 4.15,
   montage: 4.65,
   compress: 6.72,
-  burst: 7.45,
-  gallery: 7.68,
-  flatten: 9.2,
-  handoff: 9.46,
-  end: 9.82,
+  burst: 7.2,
+  gallery: 7.48,
+  flatten: 9.0,
+  handoff: 9.32,
+  end: 9.58,
 } as const;
 
 /** Longueur totale du pin, en % de viewport. Dérivée de la partition. */
@@ -119,6 +119,50 @@ function markerStyle(index: number): ActMarkerStyle {
 function placeAt(el: HTMLElement, left: number, top: number, scale: number) {
   const rect = el.getBoundingClientRect();
   gsap.set(el, { x: left - rect.left, y: top - rect.top, scale });
+}
+
+function LayerArtifact({ index }: { index: number }) {
+  if (index === 0) {
+    return (
+      <span className={`${styles.layerObject} ${styles.layerCollage}`} data-layer-object aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </span>
+    );
+  }
+
+  if (index === 1) {
+    return (
+      <span className={`${styles.layerObject} ${styles.layerPlanning}`} data-layer-object aria-hidden="true">
+        {Array.from({ length: 5 }, (_, row) => <i key={row} />)}
+      </span>
+    );
+  }
+
+  if (index === 2) {
+    return (
+      <span className={`${styles.layerObject} ${styles.layerCopy}`} data-layer-object aria-hidden="true">
+        <strong>Aa</strong>
+        <i />
+        <i />
+      </span>
+    );
+  }
+
+  if (index === 3) {
+    return (
+      <span className={`${styles.layerObject} ${styles.layerCalendar}`} data-layer-object aria-hidden="true">
+        {Array.from({ length: 12 }, (_, cell) => <i key={cell} />)}
+      </span>
+    );
+  }
+
+  return (
+    <span className={`${styles.layerObject} ${styles.layerDirection}`} data-layer-object aria-hidden="true">
+      <i />
+    </span>
+  );
 }
 
 function ReducedStory({ content, locale }: Props) {
@@ -222,6 +266,7 @@ export function ActScrollStory({ content, locale }: Props) {
           const behind = one('[data-behind]');
           const behindMediaEls = q<HTMLElement>('[data-behind-media]');
           const behindBits = q<HTMLElement>('[data-behind-detail], [data-behind-copy]');
+          const behindArtifacts = q<HTMLElement>('[data-layer-object]');
 
           const phoneUi = q<HTMLElement>('[data-phone-entry], [data-phone-detail]');
           const phoneBeats = q<HTMLElement>('[data-phone-beat]');
@@ -326,6 +371,7 @@ export function ActScrollStory({ content, locale }: Props) {
           gsap.set(behind, { autoAlpha: 0, scale: 0.94 });
           gsap.set(behindMediaEls, { clipPath: 'inset(0% 0% 100% 0%)', yPercent: 6 });
           gsap.set(behindBits, { autoAlpha: 0, y: 14 });
+          gsap.set(behindArtifacts, { autoAlpha: 0, scale: 0.82, transformOrigin: 'center' });
 
           gsap.set(phoneUi, { autoAlpha: 0, y: 10 });
           gsap.set(phoneBeats, { yPercent: 110, autoAlpha: 0 });
@@ -406,34 +452,6 @@ export function ActScrollStory({ content, locale }: Props) {
              Définie AVANT la partition : ScrollTrigger appelle `onUpdate` dès
              l'initialisation, et `driveBurst` doit déjà pouvoir s'exécuter.
              ================================================================ */
-          const burstTl = gsap.timeline({ paused: true });
-          burstTl
-            .to(burstValue, {
-              current: 1,
-              duration: 0.42,
-              ease: 'power4.out',
-              onUpdate: () => requestRenderRef.current?.(),
-            })
-            .to(
-              portalFrame,
-              { scale: 1.08, autoAlpha: 0, duration: 0.34, ease: 'power3.out' },
-              0.06,
-            );
-
-          let fired = false;
-          const driveBurst = (t: number) => {
-            if (t >= T.burst && !fired) {
-              fired = true;
-              burstTl.play();
-            } else if (t < T.burst - 0.08 && fired) {
-              fired = false;
-              burstTl.reverse();
-            }
-            // A fast wheel/touch jump must never arrive in the corridor while
-            // the autonomous burst is still showing an empty compressed stack.
-            if (t >= T.gallery && fired && burstTl.progress() < 1) burstTl.progress(1);
-          };
-
           /* ================================================================
              PARTITION SCROLLÉE
              ================================================================ */
@@ -459,9 +477,13 @@ export function ActScrollStory({ content, locale }: Props) {
                   1,
                   (t - T.gallery) / (T.handoff - T.gallery),
                 );
+                burstValue.current = gsap.utils.clamp(
+                  0,
+                  1,
+                  (t - T.burst) / (T.gallery - T.burst),
+                );
                 // Le canvas ne rend que quand la scène bouge réellement.
                 if (t > T.burst - 0.4) requestRenderRef.current?.();
-                driveBurst(t);
               },
             },
           });
@@ -598,7 +620,12 @@ export function ActScrollStory({ content, locale }: Props) {
               { clipPath: 'inset(0% 0% 0% 0%)', yPercent: 0, stagger: 0.13, duration: 0.44 },
               T.behindIn + 0.26,
             )
-            .to(behindBits, { autoAlpha: 1, y: 0, stagger: 0.05, duration: 0.32 }, T.behindIn + 0.4);
+            .to(behindBits, { autoAlpha: 1, y: 0, stagger: 0.05, duration: 0.32 }, T.behindIn + 0.4)
+            .to(
+              behindArtifacts,
+              { autoAlpha: 1, scale: 1, stagger: 0.055, duration: 0.3 },
+              T.behindIn + 0.48,
+            );
 
           /* ---------------------------------------------------------------
              SECTION 3 — LE CONTENU EN SITUATION
@@ -607,6 +634,13 @@ export function ActScrollStory({ content, locale }: Props) {
           const phoneW = () => window.innerHeight * (isDesktop ? 0.4 : 0.34);
           const bezel = isDesktop ? 10 : 8;
           const radius = isDesktop ? 44 : 36;
+          const portalInset = () => {
+            const width = phoneW();
+            const height = width * (19.5 / 9);
+            const insetX = Math.max(0, (window.innerWidth - width) / 2);
+            const insetY = Math.max(0, (window.innerHeight - height) / 2);
+            return `inset(${insetY}px ${insetX}px ${insetY}px ${insetX}px round ${radius}px)`;
+          };
 
           tl.to(
             [behind, ...behindMediaEls, ...behindBits],
@@ -679,32 +713,54 @@ export function ActScrollStory({ content, locale }: Props) {
           });
 
           /* ---------------------------------------------------------------
-             COMPRESSION — le contrat visuel se rompt.
-             Le plein cadre s'OUVRE par clip-path (jamais par un scale non
-             uniforme : c'est ce qui écrasait l'image de 3,5× auparavant),
-             le device s'efface, puis la composition se comprime.
+             TÉLÉPHONE → MONDE.
+             Le portail commence exactement dans la géométrie de l'écran. Le
+             bezel s'efface pendant que ce même contenu devient le viewport.
              --------------------------------------------------------------- */
-          tl.to(
-            portalFrame,
-            { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.54, ease: 'power2.inOut' },
-            T.compress,
-          )
-            .to(phoneUi, { autoAlpha: 0, duration: 0.3 }, T.compress)
-            .to(phoneBeats, { autoAlpha: 0, duration: 0.2 }, T.compress)
-            .to(device, { autoAlpha: 0, duration: 0.34 }, T.compress + 0.34)
+          tl.set(portalFrame, { clipPath: portalInset }, T.compress - 0.01)
+            .to(portalFrame, { autoAlpha: 1, duration: 0.08 }, T.compress)
+            .to(
+              portalFrame,
+              {
+                clipPath: 'inset(0px 0px 0px 0px round 0px)',
+                duration: 0.56,
+                ease: 'power2.inOut',
+              },
+              T.compress,
+            )
+            .to(phoneUi, { autoAlpha: 0, y: -8, duration: 0.24 }, T.compress)
+            .to(phoneBeats, { autoAlpha: 0, duration: 0.18 }, T.compress)
+            .to(
+              device,
+              {
+                width: '100vw',
+                '--device-ar': () => `${window.innerWidth} / ${window.innerHeight}`,
+                '--phone-bezel': '0px',
+                '--phone-radius': '0px',
+                borderColor: 'transparent',
+                backgroundColor: 'transparent',
+                duration: 0.56,
+                ease: 'power2.inOut',
+              },
+              T.compress,
+            )
+            .set(device, { autoAlpha: 0 }, T.compress + 0.56)
             .to(
               [behind, ...satellites, frontCopy],
               { autoAlpha: 0, duration: 0.2 },
               T.compress,
             )
-            // Le sol sombre monte pendant que le plein cadre couvre déjà tout.
-            .to(sceneGround, { autoAlpha: 1, duration: 0.3 }, T.compress + 0.42)
-            // Anticipation : la composition se resserre juste avant la rupture.
-            .to(portalFrame, { scale: 0.955, duration: 0.24, ease: 'power2.in' }, T.burst - 0.24);
+            .to(sceneGround, { autoAlpha: 1, duration: 0.28 }, T.compress + 0.28)
+            .to(portalFrame, { scale: 1.025, duration: T.burst - T.compress }, T.compress);
 
-          // Le canvas prend le relais ; le DOM reste jusqu'à ce que la 3D soit là.
-          tl.to(immersion, { autoAlpha: 1, duration: 0.12 }, T.burst)
-            .to(immersionBits, { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.46 }, T.gallery + 0.12)
+          // Le plan WebGL identique prend le relais avant la disparition du DOM.
+          tl.to(immersion, { autoAlpha: 1, duration: 0.1 }, T.burst)
+            .to(
+              portalFrame,
+              { autoAlpha: 0, scale: 1.045, duration: T.gallery - T.burst },
+              T.burst,
+            )
+            .to(immersionBits, { autoAlpha: 1, y: 0, stagger: 0.07, duration: 0.4 }, T.gallery + 0.18)
             .to(
               immersionNarrative,
               { autoAlpha: 0, y: -10, duration: 0.24 },
@@ -731,10 +787,7 @@ export function ActScrollStory({ content, locale }: Props) {
           // Verrou de durée : la partition vaut exactement T.end.
           tl.to({}, { duration: 0.01 }, T.end - 0.01);
 
-          return () => {
-            burstTl.kill();
-            unlockScroll();
-          };
+          return () => unlockScroll();
         },
       );
 
@@ -849,6 +902,10 @@ export function ActScrollStory({ content, locale }: Props) {
           <span className={`${styles.frontCount} micro`} aria-hidden="true">
             Front / 01—04
           </span>
+          <span className={styles.moodboardAxis} aria-hidden="true" />
+          <span className={`${styles.moodboardNote} hand-note`} aria-hidden="true">
+            mood · matière · rythme
+          </span>
         </div>
 
         {/* ---------- ÉLÉMENT PERSISTANT ----------
@@ -875,19 +932,37 @@ export function ActScrollStory({ content, locale }: Props) {
             </div>
 
             <div className={styles.feed}>
-              <span className={`${styles.feedTitle} micro`}>Selected / Content</span>
+              <div className={styles.feedProfile} aria-hidden="true">
+                <span>GD</span>
+                <strong>Studio / contenu</strong>
+                <small>Marseille · aujourd’hui</small>
+              </div>
+              <span className={`${styles.feedTitle} micro`}>Feed / 12 posts</span>
               {phoneFeed.concat(phoneFeed).map((m, i) => (
                 <div className={styles.feedItem} key={`${m.id}-${i}`}>
                   <Media item={m} locale={locale} compact sizes="12vh" />
                 </div>
               ))}
+              <span className={styles.feedTabs} aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
             </div>
 
             <div className={styles.focus}>
               <div className={styles.layerImage} data-focus-image>
                 <Media item={phoneFeed[2]!} locale={locale} className={styles.fillMedia} sizes="28vh" />
               </div>
-              <span className={`${styles.screenCaption} micro`}>Focus / Direction</span>
+              <span className={`${styles.reelLabel} micro`}>Reel / Cut 00:14</span>
+              <span className={styles.reelPlay} aria-hidden="true">▶</span>
+              <span className={styles.reelTimeline} aria-hidden="true">
+                <i />
+                <i />
+                <i />
+                <i />
+              </span>
+              <span className={`${styles.screenCaption} micro`}>Focus / Montage</span>
             </div>
 
             <div className={styles.story}>
@@ -895,6 +970,11 @@ export function ActScrollStory({ content, locale }: Props) {
                 <Media item={phoneStory} locale={locale} className={styles.fillMedia} sizes="28vh" />
               </div>
               <span className={styles.storyProgress} aria-hidden="true" />
+              <span className={styles.storySticker} aria-hidden="true">
+                <small>Votre mood ?</small>
+                <strong>Jour</strong>
+                <strong>Nuit</strong>
+              </span>
               <span className={`${styles.screenCaption} micro`}>Story / Marseille</span>
             </div>
 
@@ -902,7 +982,14 @@ export function ActScrollStory({ content, locale }: Props) {
               <div className={styles.layerImage} data-campaign-image>
                 <Media item={socialPortal} locale={locale} className={styles.fillMedia} sizes="32vh" />
               </div>
+              <span className={`${styles.campaignMeta} micro`}>Carousel 04 / 04 · publié</span>
               <span className={styles.campaignWord}>{content.phone.beats[3] ?? ''}</span>
+              <span className={styles.carouselDots} aria-hidden="true">
+                <i />
+                <i />
+                <i />
+                <i />
+              </span>
             </div>
 
             <span className={styles.reflection} data-phone-detail aria-hidden="true" />
@@ -950,8 +1037,9 @@ export function ActScrollStory({ content, locale }: Props) {
             <ul className={`${styles.layers} micro`}>
               {content.social.layers.map((layer, i) => (
                 <li key={layer}>
-                  <span>{String(i + 1).padStart(2, '0')}</span>
-                  {layer}
+                  <span className={styles.layerIndex}>{String(i + 1).padStart(2, '0')}</span>
+                  <LayerArtifact index={i} />
+                  <strong>{layer}</strong>
                 </li>
               ))}
             </ul>
