@@ -17,6 +17,7 @@ import { EditorialZoom } from '@/ui/EditorialZoom';
 import { Media } from '@/ui/Media';
 
 import styles from './ActWork.module.css';
+import { WorkJourneyBridge } from './WorkJourneyBridge';
 
 interface Props {
   content: Content;
@@ -295,6 +296,8 @@ export function ActWork({ content, locale }: Props) {
         <h2 className={`${styles.workTitle} display`}>{content.work.heading}</h2>
         <div className={styles.workPreview} aria-hidden="true">
           <Media item={yunaMedia[0]!} locale={locale} sizes="26vw" />
+          <span className={`${styles.previewStamp} micro`}>Selected proof / 01</span>
+          <span className={styles.previewCrop} />
         </div>
       </header>
       {content.work.projects.map((project, index) => (
@@ -306,6 +309,7 @@ export function ActWork({ content, locale }: Props) {
           key={project.id}
         />
       ))}
+      <WorkJourneyBridge content={content} locale={locale} />
     </div>
   );
 }

@@ -26,7 +26,7 @@ générées sans packaging ou identité de marque existante.
 ## Prompt set par fichier
 
 | Fichier intégré | Ratio | Demande principale ajoutée à la direction commune |
-|---|---:|---|
+| --- | ---: | --- |
 | `editorial/hero-vertical.jpg` | 9:16 | Nature morte sculpturale : bague argentée, miroir, papiers ivoire, ruban bordeaux et noyer ; image de couverture. |
 | `editorial/hero-frame.jpg` | 4:5 | Macro d'une table de direction créative : tirage sans texte, pince champagne et papier bordeaux. |
 | `social/social-campaign.jpg` | 4:5 | Deux mains organisant des tirages vierges et un posemètre pour préparer une production de contenu. |

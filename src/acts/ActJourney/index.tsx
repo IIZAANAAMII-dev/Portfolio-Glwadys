@@ -45,7 +45,9 @@ export function ActJourney({ content, locale }: Props) {
           const progressBar = q<HTMLElement>('[data-journey-progress]')[0];
           const counter = q<HTMLElement>('[data-journey-counter]')[0];
           const handoff = q<HTMLElement>('[data-journey-handoff]')[0];
-          if (!progressBar || !counter || !handoff || entries.length === 0) return;
+          const handoffCopy = q<HTMLElement>('[data-journey-handoff-copy]');
+          const handoffLine = q<HTMLElement>('[data-journey-handoff-line]')[0];
+          if (!progressBar || !counter || !handoff || !handoffLine || entries.length === 0) return;
 
           const driver = { value: 0 };
           let activeIndex = -1;
@@ -78,6 +80,10 @@ export function ActJourney({ content, locale }: Props) {
 
           gsap.set(progressBar, { scaleY: 0, transformOrigin: 'center top' });
           gsap.set(handoff, { clipPath: 'inset(0 100% 0 0)' });
+          // The page is already typeset behind its reveal mask. This keeps the
+          // handoff readable even when someone scrolls through it quickly.
+          gsap.set(handoffCopy, { autoAlpha: 1, y: 0 });
+          gsap.set(handoffLine, { scaleY: 0, transformOrigin: 'center top' });
           updateFocus();
 
           const tl = gsap.timeline({
@@ -108,6 +114,7 @@ export function ActJourney({ content, locale }: Props) {
             )
             .to(driver, { value: 1, duration: 0.82, onUpdate: updateFocus }, 0)
             .to(handoff, { clipPath: 'inset(0 0% 0 0)', duration: 0.18 }, 0.82)
+            .to(handoffLine, { scaleY: 1, duration: 0.14 }, 0.84)
             .to(
               q<HTMLElement>('[data-journey-chrome]'),
               { autoAlpha: 0, y: -8, duration: 0.12 },
@@ -159,7 +166,18 @@ export function ActJourney({ content, locale }: Props) {
         <span className={`${styles.caption} editorial-stamp`} data-journey-chrome>
           {content.contact.axis}
         </span>
-        <span className={styles.handoff} data-journey-handoff aria-hidden="true" />
+        <div className={styles.handoff} data-journey-handoff aria-hidden="true">
+          <span className={styles.handoffMargin} data-journey-handoff-line />
+          <span className={`${styles.handoffChapter} micro`} data-journey-handoff-copy>
+            08 / Index
+          </span>
+          <span className={`${styles.handoffTitle} title`} data-journey-handoff-copy>
+            {content.expertise.heading}
+          </span>
+          <span className={`${styles.handoffPreview} micro`} data-journey-handoff-copy>
+            {content.expertise.entries.slice(0, 3).map((entry) => entry.term).join(' · ')}
+          </span>
+        </div>
       </div>
     </section>
   );

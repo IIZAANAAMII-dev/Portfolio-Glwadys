@@ -25,7 +25,9 @@ export function ActExpertise({ content }: Props) {
       if (!rootEl || !stageEl || !listEl) return;
       const q = gsap.utils.selector(stageEl);
       const sheet = q<HTMLElement>('[data-expertise-sheet]')[0];
-      if (!sheet) return;
+      const fold = q<HTMLElement>('[data-expertise-fold]')[0];
+      const handoff = q<HTMLElement>('[data-expertise-handoff]')[0];
+      if (!sheet || !fold || !handoff) return;
 
       const mm = gsap.matchMedia();
       mm.add(
@@ -36,6 +38,12 @@ export function ActExpertise({ content }: Props) {
             isReduced: boolean;
           };
           if (isReduced) return;
+
+          gsap.set(fold, { scale: 0, transformOrigin: 'right top' });
+          gsap.set(handoff, {
+            autoAlpha: 0,
+            clipPath: 'inset(0 0 100% 0)',
+          });
 
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
@@ -85,6 +93,12 @@ export function ActExpertise({ content }: Props) {
                 duration: 0.2,
               },
               0.8,
+            )
+            .to(fold, { scale: 1, duration: 0.16 }, 0.82)
+            .to(
+              handoff,
+              { autoAlpha: 1, clipPath: 'inset(0 0 0% 0)', duration: 0.2 },
+              0.79,
             );
         },
       );
@@ -116,6 +130,20 @@ export function ActExpertise({ content }: Props) {
           <p className={`${styles.aside} hand-note`} data-expertise-content>
             {content.strategy.sentence}
           </p>
+          <span className={styles.sheetFold} data-expertise-fold aria-hidden="true" />
+          <div className={styles.handoffLayer} data-expertise-handoff aria-hidden="true">
+            <div className={styles.handoffMeta}>
+              <span className="micro">{content.manifesto.eyebrow}</span>
+              <span className="micro">Glwadys Dalleau / 2026</span>
+            </div>
+            <p className={styles.handoffTitle}>
+              <span>{content.manifesto.lineOne}</span>
+              <span>{content.manifesto.lineTwo}</span>
+            </p>
+            <span className={styles.handoffRule} />
+            <span className={`${styles.handoffNote} hand-note`}>{content.manifesto.note}</span>
+            <span className={`${styles.handoffAxis} micro`}>{content.contact.axis}</span>
+          </div>
         </div>
       </div>
     </section>

@@ -52,6 +52,85 @@
   rotate: -2deg;
 }
 
+.sheetFold {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  z-index: var(--z-sticky);
+  width: clamp(2.5rem, 5vw, 5rem);
+  aspect-ratio: 1;
+  background:
+    linear-gradient(225deg, var(--wood-brown) 0 49%, rgb(var(--ink-rgb) / 0.12) 50% 51%, transparent 52%);
+  pointer-events: none;
+}
+
+.handoffLayer {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-sticky);
+  pointer-events: none;
+}
+
+.handoffMeta {
+  position: absolute;
+  top: var(--margin);
+  left: var(--margin);
+  right: calc(var(--margin) + clamp(2.5rem, 5vw, 5rem));
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink);
+}
+
+.handoffTitle {
+  position: absolute;
+  top: 24%;
+  left: var(--margin);
+  right: var(--margin);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 8.2vw, 9.75rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+
+.handoffTitle > span {
+  display: block;
+  margin-bottom: -0.1em;
+  padding-bottom: 0.1em;
+}
+
+.handoffTitle > span:last-child {
+  padding-left: 10vw;
+  color: var(--rich-wine);
+  text-align: right;
+}
+
+.handoffRule {
+  position: absolute;
+  right: var(--margin);
+  bottom: 21%;
+  left: var(--margin);
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.2);
+}
+
+.handoffNote {
+  position: absolute;
+  bottom: 11%;
+  left: 48%;
+  max-width: 17ch;
+  color: var(--rich-wine);
+  rotate: -3deg;
+}
+
+.handoffAxis {
+  position: absolute;
+  right: var(--margin);
+  bottom: var(--margin);
+}
+
 .listViewport {
   position: absolute;
   left: var(--margin);
@@ -131,6 +210,22 @@
 }
 
 @media (max-width: 1023px) {
+  .handoffTitle {
+    top: 25%;
+    font-size: clamp(3rem, 13.4vw, 6.5rem);
+    line-height: 0.96;
+  }
+
+  .handoffTitle > span:last-child {
+    margin-top: 0.3em;
+    padding-left: 0;
+    text-align: left;
+  }
+
+  .handoffRule {
+    bottom: 24%;
+  }
+
   .listViewport {
     top: 15vh;
     bottom: 14vh;
@@ -189,5 +284,10 @@
   .listViewport {
     margin-top: 4rem;
     overflow: visible;
+  }
+
+  .sheetFold,
+  .handoffLayer {
+    display: none;
   }
 }

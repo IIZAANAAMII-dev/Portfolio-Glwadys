@@ -572,34 +572,67 @@
 .satellite {
   position: absolute;
   z-index: var(--z-plate);
+  margin: 0;
+  transform-origin: center;
+}
+
+.satelliteImage {
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: 0 1.1rem 2.8rem rgb(var(--wood-rgb) / 0.14);
+  transform-origin: center;
+}
+
+.satelliteCaption {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.55rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
+  color: rgb(var(--ink-rgb) / 0.62);
+  font-size: 0.57rem;
 }
 
 .satellite[data-social-slot='1'] {
-  left: 6%;
-  top: 52%;
-  width: 16vw;
+  left: 5%;
+  top: 51%;
+  width: 15vw;
 }
 
 .satellite[data-social-slot='2'] {
-  right: 6%;
-  top: 18%;
-  width: 17vw;
+  right: 4%;
+  top: 17%;
+  width: 20vw;
 }
 
 .satellite[data-social-slot='3'] {
   right: 26%;
   bottom: 7%;
-  width: 9.5vw;
+  width: 10vw;
 }
 
-/* Le format Story qui traverse la composition devant le dominant. */
+.satellite[data-social-slot='4'] {
+  left: 7.5%;
+  top: 31%;
+  width: 14vw;
+}
+
+.satellite[data-social-slot='5'] {
+  right: 15.5%;
+  top: 49%;
+  width: 11vw;
+}
+
+/* Le format Story reste ancré à la grille : seul son masque se déplace. */
 .crossing {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 59%;
+  top: 58%;
   z-index: var(--z-copy);
-  width: 13vw;
-  translate: -50% -50%;
+  width: 10vw;
+  padding: 0.35rem;
+  background: var(--ivory);
+  box-shadow: var(--paper-shadow);
   pointer-events: none;
 }
 
@@ -879,6 +912,9 @@
   .ruleV,
   .disciplines,
   .satellite[data-social-slot='3'],
+  .satellite[data-social-slot='4'],
+  .satellite[data-social-slot='5'],
+  .crossing,
   .sequenceRail,
   .progressTrack,
   .beat {

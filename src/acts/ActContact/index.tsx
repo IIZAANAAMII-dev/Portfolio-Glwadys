@@ -25,6 +25,9 @@ export function ActContact({ content }: Props) {
       const contactEl = contactSection.current;
       if (!rootEl || !manifestoEl || !contactEl) return;
       const q = gsap.utils.selector(rootEl);
+      const manifestoPage = q<HTMLElement>('[data-manifesto-page]')[0];
+      const manifestoFold = q<HTMLElement>('[data-manifesto-fold]')[0];
+      if (!manifestoPage || !manifestoFold) return;
       const mm = gsap.matchMedia();
 
       mm.add(
@@ -41,6 +44,8 @@ export function ActContact({ content }: Props) {
 
           if (isReduced) return;
 
+          gsap.set(manifestoFold, { scale: 1, transformOrigin: 'right top' });
+
           const manifestoTl = gsap.timeline({
             defaults: { ease: EASE.scrub },
             scrollTrigger: {
@@ -52,6 +57,7 @@ export function ActContact({ content }: Props) {
           });
 
           manifestoTl
+            .to(manifestoFold, { scale: 0, duration: 0.24 }, 0.02)
             .fromTo(
               q<HTMLElement>('[data-manifesto-line]'),
               { yPercent: 112 },
@@ -70,7 +76,12 @@ export function ActContact({ content }: Props) {
               { yPercent: 0, autoAlpha: 1, duration: 0.28 },
               0.38,
             )
-            .to(q<HTMLElement>('[data-manifesto-copy]'), { yPercent: -5, duration: 0.3 }, 0.7);
+            .to(q<HTMLElement>('[data-manifesto-copy]'), { yPercent: -5, duration: 0.3 }, 0.7)
+            .to(
+              manifestoPage,
+              { scale: 0.97, yPercent: -1.8, rotation: -0.35, autoAlpha: 0.82, duration: 0.2 },
+              0.8,
+            );
 
           const contactTl = gsap.timeline({
             defaults: { ease: EASE.reveal },
@@ -112,9 +123,10 @@ export function ActContact({ content }: Props) {
     <footer ref={root} className={`act surface-wood ${styles.act}`}>
       <section ref={manifestoSection} className={styles.manifestoSection} aria-labelledby="manifesto-title">
         <div className={styles.manifestoStage}>
-          <div className={`${styles.manifestoPage} paper-card`}>
+          <div className={`${styles.manifestoPage} paper-card`} data-manifesto-page>
             <span className={`${styles.manifestoEyebrow} micro`}>{content.manifesto.eyebrow}</span>
             <span className={`${styles.manifestoEdition} micro`}>Glwadys Dalleau / 2026</span>
+            <span className={styles.manifestoFold} data-manifesto-fold aria-hidden="true" />
 
             <h2 id="manifesto-title" className={styles.manifestoTitle} data-manifesto-copy>
               <span className={`${styles.manifestoLine} line-mask`}>

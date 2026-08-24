@@ -356,6 +356,10 @@ function Strategy({ content, locale }: Props) {
 
         <div className={styles.campaignReveal} data-campaign-reveal aria-hidden="true">
           <Media item={yunaMedia[0]!} locale={locale} sizes="26vw" />
+          <span className={`${styles.campaignStamp} micro`} data-work-handoff>
+            Selected proof / 01
+          </span>
+          <span className={styles.campaignCrop} aria-hidden="true" />
         </div>
 
         <div className={styles.workHandoff} aria-hidden="true">

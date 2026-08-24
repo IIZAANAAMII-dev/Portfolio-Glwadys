@@ -215,6 +215,8 @@ export function ActScrollStory({ content, locale }: Props) {
           const heroFrameEl = one(`.${styles.heroFrame}`);
           const frontCopy = one('[data-front-copy]');
           const satellites = q<HTMLElement>('[data-social-satellite]');
+          const satelliteImages = q<HTMLElement>('[data-social-image]');
+          const satelliteCaptions = q<HTMLElement>('[data-social-caption]');
           const crossing = one('[data-social-crossing]');
 
           const behind = one('[data-behind]');
@@ -316,8 +318,10 @@ export function ActScrollStory({ content, locale }: Props) {
           });
 
           gsap.set([frontCopy, crossing], { autoAlpha: 0 });
-          gsap.set(satellites, { autoAlpha: 0, clipPath: 'inset(100% 0% 0% 0%)', yPercent: 12 });
-          gsap.set(crossing, { xPercent: -140, yPercent: 40, rotation: -8 });
+          gsap.set(satellites, { autoAlpha: 0, clipPath: 'inset(100% 0% 0% 0%)' });
+          gsap.set(satelliteImages, { scale: 1.075 });
+          gsap.set(satelliteCaptions, { autoAlpha: 0, y: 6 });
+          gsap.set(crossing, { clipPath: 'inset(0% 100% 0% 0%)' });
 
           gsap.set(behind, { autoAlpha: 0, scale: 0.94 });
           gsap.set(behindMediaEls, { clipPath: 'inset(0% 0% 100% 0%)', yPercent: 6 });
@@ -537,39 +541,41 @@ export function ActScrollStory({ content, locale }: Props) {
               {
                 autoAlpha: 1,
                 clipPath: 'inset(0% 0% 0% 0%)',
-                yPercent: 0,
-                stagger: 0.11,
-                duration: 0.46,
+                stagger: 0.075,
+                duration: 0.42,
               },
               T.socialIn + 0.14,
             )
-            // Trois plans de profondeur, jamais une grille d'égaux.
             .to(
-              satellites,
-              {
-                yPercent: (i: number) => [-6, 3, -2][i] ?? 0,
-                duration: 0.8,
-              },
-              T.socialIn + 0.6,
+              satelliteImages,
+              { scale: 1, stagger: 0.075, duration: 0.56 },
+              T.socialIn + 0.16,
+            )
+            .to(
+              satelliteCaptions,
+              { autoAlpha: 1, y: 0, stagger: 0.055, duration: 0.28 },
+              T.socialIn + 0.34,
             );
 
-          // BEAT — un format Story traverse DEVANT le média dominant.
+          // Un format Story s'ouvre dans un emplacement fixe. Le rythme vient
+          // des masques et de la hiérarchie, jamais de cartes flottantes.
           tl.to(
             crossing,
             {
               autoAlpha: 1,
-              xPercent: 130,
-              yPercent: -30,
-              rotation: 6,
-              duration: 0.86,
-              ease: 'power1.inOut',
+              clipPath: 'inset(0% 0% 0% 0%)',
+              duration: 0.42,
             },
             T.storyCross,
-          ).to(crossing, { autoAlpha: 0, duration: 0.2 }, T.storyCross + 0.7);
+          ).to(
+            crossing,
+            { autoAlpha: 0, clipPath: 'inset(0% 0% 100% 0%)', duration: 0.32 },
+            T.storyCross + 0.5,
+          );
 
           // BEAT — la hiérarchie s'inverse : le dominant recule.
-          tl.to(device, { scale: 0.84, duration: 0.4 }, T.invert)
-            .to(satellites[1] ?? [], { scale: 1.12, duration: 0.4 }, T.invert)
+          tl.to(device, { scale: 0.86, duration: 0.4 }, T.invert)
+            .to(satellites[1] ?? [], { scale: 1.045, duration: 0.4 }, T.invert)
             .to(satellites[1] ?? [], { scale: 1, duration: 0.34 }, T.behindIn);
 
           // BEAT — FRONT → BEHIND. Les contenus finis se referment,
@@ -579,11 +585,9 @@ export function ActScrollStory({ content, locale }: Props) {
               satellites,
               {
                 clipPath: 'inset(0% 0% 100% 0%)',
-                xPercent: (i: number) => (i % 2 === 0 ? -9 : 9),
-                rotation: (i: number) => (i % 2 === 0 ? -1.6 : 1.6),
                 autoAlpha: 0,
-                stagger: 0.07,
-                duration: 0.44,
+                stagger: 0.055,
+                duration: 0.4,
               },
               T.behindIn + 0.04,
             )
@@ -905,15 +909,20 @@ export function ActScrollStory({ content, locale }: Props) {
           </div>
         </div>
 
-        {socialSatellites.slice(0, 3).map((m, i) => (
-          <div
+        {socialSatellites.map((m, i) => (
+          <figure
             className={styles.satellite}
             data-social-satellite
             data-social-slot={i + 1}
             key={m.id}
           >
-            <Media item={m} locale={locale} compact sizes="20vw" />
-          </div>
+            <div className={styles.satelliteImage} data-social-image>
+              <Media item={m} locale={locale} compact sizes="22vw" />
+            </div>
+            <figcaption className={`${styles.satelliteCaption} micro`} data-social-caption>
+              {String(i + 1).padStart(2, '0')} / {m.role}
+            </figcaption>
+          </figure>
         ))}
 
         <div className={styles.crossing} data-social-crossing aria-hidden="true">

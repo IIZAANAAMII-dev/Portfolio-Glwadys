@@ -42,6 +42,18 @@
   pointer-events: none;
 }
 
+.manifestoFold {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  z-index: var(--z-sticky);
+  width: clamp(2.5rem, 5vw, 5rem);
+  aspect-ratio: 1;
+  background:
+    linear-gradient(225deg, var(--wood-brown) 0 49%, rgb(var(--ink-rgb) / 0.12) 50% 51%, transparent 52%);
+  pointer-events: none;
+}
+
 .manifestoEyebrow,
 .manifestoEdition,
 .manifestoAxis,
@@ -357,5 +369,9 @@
   .manifestoStage,
   .stage {
     position: relative;
+  }
+
+  .manifestoFold {
+    display: none;
   }
 }

@@ -133,6 +133,33 @@ const PHOTO = {
     },
     '50% 44%',
   ),
+  creativeDirector: generated(
+    'social/creative-director-studio-v2.jpg',
+    {
+      fr: 'Directrice créative composant un mur d’images dans un atelier marseillais.',
+      en: 'Creative director composing an image wall in a Marseille studio.',
+      ko: '마르세유 스튜디오에서 이미지 월을 구성하는 크리에이티브 디렉터.',
+    },
+    '52% 50%',
+  ),
+  editorialTools: generated(
+    'social/editorial-tools-detail-v2.jpg',
+    {
+      fr: 'Crayon bordeaux, règle de cadrage, fil et papiers ivoire sur une table sombre.',
+      en: 'Oxblood pencil, crop ruler, thread and ivory papers on a dark table.',
+      ko: '어두운 테이블 위의 버건디 연필, 크롭 자, 실과 아이보리 종이.',
+    },
+    '50% 52%',
+  ),
+  contactEditorial: generated(
+    'process/contact-sheet-editorial-v2.jpg',
+    {
+      fr: 'Deux mains sélectionnent une planche-contact et des épreuves translucides.',
+      en: 'Two hands select a contact sheet and translucent layout proofs.',
+      ko: '두 손이 콘택트 시트와 반투명 레이아웃 교정본을 고르는 모습.',
+    },
+    '50% 50%',
+  ),
   moodboard: generated('process/moodboard.jpg', {
     fr: 'Moodboard tactile composé de tirages, papiers, nuances bordeaux et règle métallique.',
     en: 'Tactile moodboard of prints, papers, burgundy swatches and a metal ruler.',
@@ -170,6 +197,15 @@ const PHOTO = {
     },
     '50% 57%',
   ),
+  yunaCampaign: generated(
+    'yuna/yuna-campaign-v2.jpg',
+    {
+      fr: 'Geste éditorial autour d’une bague et d’un pendentif argentés sculpturaux.',
+      en: 'Editorial gesture featuring a sculptural silver ring and pendant.',
+      ko: '조각적인 실버 반지와 펜던트를 담은 에디토리얼 제스처.',
+    },
+    '50% 46%',
+  ),
   mgcCommunity: generated(
     'mgc/mgc-community.jpg',
     {
@@ -198,6 +234,15 @@ const PHOTO = {
     en: 'Ivory papers and burgundy ribbon crossed by moving water reflections.',
     ko: '물결 빛이 스치는 아이보리 종이와 버건디 리본.',
   }),
+  mgcEditorialWall: generated(
+    'mgc/mgc-editorial-wall-v2.jpg',
+    {
+      fr: 'Cinq femmes composent ensemble un mur photographique dans une cour marseillaise.',
+      en: 'Five women build a photographic wall together in a Marseille courtyard.',
+      ko: '마르세유 안뜰에서 다섯 여성이 함께 포토 월을 만드는 모습.',
+    },
+    '58% 48%',
+  ),
   comptoirTexture: generated(
     'comptoir/comptoir-texture.jpg',
     {
@@ -221,6 +266,24 @@ const PHOTO = {
     en: 'Merchandising table with chocolate, jars and papers in a warm gourmet shop.',
     ko: '따뜻한 식료품점의 초콜릿, 유리병, 종이로 꾸민 상품 진열대.',
   }),
+  comptoirCraft: generated(
+    'comptoir/comptoir-craft-v2.jpg',
+    {
+      fr: 'Mains enveloppant une tablette de chocolat artisanal de papier ivoire et bordeaux.',
+      en: 'Hands wrapping an artisan chocolate bar in ivory and oxblood paper.',
+      ko: '수제 초콜릿 바를 아이보리와 버건디 종이로 포장하는 손.',
+    },
+    '61% 50%',
+  ),
+  portfolioThread: generated(
+    'finale/portfolio-thread-v2.jpg',
+    {
+      fr: 'Folio d’archives reliant trois tirages photographiques par un fil bordeaux.',
+      en: 'Archive folio connecting three photographic prints with an oxblood thread.',
+      ko: '버건디 실로 세 장의 사진을 잇는 아카이브 폴리오.',
+    },
+    '50% 50%',
+  ),
 } as const;
 
 /* ---------- ACT 00 — fragments d'ouverture (aucun visage) ----------
@@ -246,23 +309,24 @@ export const heroFrame: MediaItem = item('hero-frame', 'campaign', '4:5', 'blush
 
 /* ---------- ACT 02 — monde social ---------- */
 export const socialSatellites: MediaItem[] = [
-  item('social-01', 'social', '1:1', 'paper-deep', PHOTO.socialCommunity),
-  item('social-02', 'campaign', '4:5', 'blush', PHOTO.socialCampaign),
-  item('social-03', 'reel', '9:16', 'graphite', PHOTO.socialReel),
-  item('social-04', 'social', '1:1', 'graphite', PHOTO.socialObject),
+  item('social-01', 'portrait', '4:5', 'paper-deep', PHOTO.creativeDirector),
+  item('social-02', 'campaign', '3:2', 'blush', PHOTO.contactEditorial),
+  item('social-03', 'note', '1:1', 'graphite', PHOTO.editorialTools),
+  item('social-04', 'social', '3:2', 'paper', PHOTO.mgcEditorialWall),
+  item('social-05', 'campaign', '4:5', 'blush', PHOTO.socialCampaign),
 ];
 
 /** Les strates révélées par le Front → Behind. */
 export const behindMedia: MediaItem[] = [
-  item('behind-moodboard', 'moodboard', '3:2', 'paper-deep', PHOTO.moodboard),
+  item('behind-moodboard', 'moodboard', '3:2', 'paper-deep', PHOTO.contactEditorial),
   item('behind-planning', 'planning', '4:5', 'paper', PHOTO.planning),
 ];
 
 /* ---------- ACT 03 — téléphone ---------- */
 export const phoneFeed: MediaItem[] = [
-  item('phone-feed-01', 'social', '1:1', 'graphite', PHOTO.socialObject),
-  item('phone-feed-02', 'social', '1:1', 'blush', PHOTO.socialCommunity),
-  item('phone-feed-03', 'social', '1:1', 'paper-deep', PHOTO.socialCampaign),
+  item('phone-feed-01', 'note', '1:1', 'graphite', PHOTO.editorialTools),
+  item('phone-feed-02', 'portrait', '1:1', 'blush', PHOTO.creativeDirector),
+  item('phone-feed-03', 'social', '1:1', 'paper-deep', PHOTO.contactEditorial),
   item('phone-feed-04', 'social', '1:1', 'graphite', PHOTO.yunaProduct),
 ];
 export const phoneStory: MediaItem = item('phone-story', 'story', '9:16', 'bordeaux', PHOTO.socialReel);
@@ -290,33 +354,33 @@ export const depthMedia: MediaItem[] = [
 
 /* ---------- ACT 05 — planche contact ---------- */
 export const contactSheet: MediaItem[] = [
-  item('sheet-01', 'moodboard', '4:5', 'paper-deep', PHOTO.moodboard),
-  item('sheet-02', 'note', '1:1', 'paper', PHOTO.heroFrame),
+  item('sheet-01', 'moodboard', '4:5', 'paper-deep', PHOTO.contactEditorial),
+  item('sheet-02', 'note', '1:1', 'paper', PHOTO.editorialTools),
   item('sheet-03', 'planning', '3:2', 'paper-deep', PHOTO.planning),
-  item('sheet-04', 'social', '9:16', 'blush', PHOTO.socialReel),
+  item('sheet-04', 'portrait', '9:16', 'blush', PHOTO.creativeDirector),
   item('sheet-05', 'macro', '1:1', 'graphite', PHOTO.yunaMacro),
-  item('sheet-06', 'note', '4:5', 'paper', PHOTO.planning),
-  item('sheet-07', 'campaign', '3:2', 'blush', PHOTO.mgcEvent),
-  item('sheet-08', 'texture', '1:1', 'paper-deep', PHOTO.mgcShared),
+  item('sheet-06', 'note', '4:5', 'paper', PHOTO.moodboard),
+  item('sheet-07', 'campaign', '3:2', 'blush', PHOTO.mgcEditorialWall),
+  item('sheet-08', 'note', '1:1', 'paper-deep', PHOTO.portfolioThread),
 ];
 
 /* ---------- ACT 06 — projets ---------- */
 export const yunaMedia: MediaItem[] = [
-  item('yuna-macro', 'macro', '4:5', 'graphite', { ...PHOTO.yunaMacro, project: 'yuna' }),
-  item('yuna-product', 'product', '1:1', 'blush', { ...PHOTO.yunaProduct, project: 'yuna' }),
-  item('yuna-social', 'social', '9:16', 'graphite', { ...PHOTO.yunaSocial, project: 'yuna' }),
+  item('yuna-campaign', 'campaign', '4:5', 'graphite', { ...PHOTO.yunaCampaign, project: 'yuna' }),
+  item('yuna-macro', 'macro', '1:1', 'blush', { ...PHOTO.yunaMacro, project: 'yuna' }),
+  item('yuna-product', 'product', '1:1', 'graphite', { ...PHOTO.yunaProduct, project: 'yuna' }),
 ];
 /** Média du handoff Yuna → MGC : change de ratio et de palette. */
 export const yunaShared: MediaItem = item('yuna-shared', 'campaign', '4:5', 'blush', {
-  ...PHOTO.yunaMacro,
+  ...PHOTO.yunaSocial,
   project: 'yuna',
 });
 
 export const mgcMedia: MediaItem[] = [
   item('mgc-community', 'social', '1:1', 'paper-deep', PHOTO.mgcCommunity),
-  item('mgc-event', 'campaign', '3:2', 'blush', PHOTO.mgcEvent),
-  item('mgc-ugc-01', 'social', '4:5', 'paper', PHOTO.mgcUgc),
-  item('mgc-ugc-02', 'social', '4:5', 'paper-deep', PHOTO.socialCommunity),
+  item('mgc-event', 'campaign', '3:2', 'blush', PHOTO.mgcEditorialWall),
+  item('mgc-ugc-01', 'social', '4:5', 'paper', PHOTO.mgcEvent),
+  item('mgc-ugc-02', 'social', '4:5', 'paper-deep', PHOTO.mgcUgc),
 ].map((m) => ({ ...m, project: 'mgc' as const }));
 /** Média du handoff MGC → Comptoir : plein cadre puis glissement vers bordeaux. */
 export const mgcShared: MediaItem = item('mgc-shared', 'texture', '16:9', 'paper-deep', {
@@ -326,7 +390,7 @@ export const mgcShared: MediaItem = item('mgc-shared', 'texture', '16:9', 'paper
 
 export const comptoirMedia: MediaItem[] = [
   item('comptoir-product', 'product', '4:5', 'bordeaux', PHOTO.comptoirProduct),
-  item('comptoir-shop', 'campaign', '3:2', 'bordeaux', PHOTO.comptoirShop),
+  item('comptoir-shop', 'campaign', '3:2', 'bordeaux', PHOTO.comptoirCraft),
 ].map((m) => ({ ...m, project: 'comptoir' as const }));
 /** Support du seul zoom macro lent de l'acte. */
 export const comptoirTexture: MediaItem = item('comptoir-texture', 'texture', '16:9', 'bordeaux', {
@@ -335,13 +399,21 @@ export const comptoirTexture: MediaItem = item('comptoir-texture', 'texture', '1
 });
 
 /* ---------- ACT 07 — parcours ---------- */
+export const portfolioThread: MediaItem = item(
+  'portfolio-thread',
+  'note',
+  '4:5',
+  'paper-deep',
+  PHOTO.portfolioThread,
+);
+
 const journeyPhotos = [
-  PHOTO.moodboard,
-  PHOTO.yunaMacro,
-  PHOTO.yunaSocial,
-  PHOTO.comptoirShop,
-  PHOTO.mgcCommunity,
-  PHOTO.heroVertical,
+  PHOTO.contactEditorial,
+  PHOTO.yunaCampaign,
+  PHOTO.editorialTools,
+  PHOTO.comptoirCraft,
+  PHOTO.mgcEditorialWall,
+  PHOTO.creativeDirector,
 ];
 
 export const journeyMedia: MediaItem[] = [
@@ -378,6 +450,7 @@ export const allMedia: MediaItem[] = [
   mgcShared,
   ...comptoirMedia,
   comptoirTexture,
+  portfolioThread,
   ...journeyMedia,
 ];
 

@@ -5,7 +5,6 @@
 > [`creative-notebook-direction.md`](creative-notebook-direction.md) : feuille
 > qui glisse, tirage qui se superpose, note qui se range et archive qui s’aplatit.
 > Aucun effet de page-turn ou simulateur de livre n’est autorisé.
-
 > Phase 8 du brief. Un langage d'animation **limité et cohérent**.
 > Une grammaire courte appliquée avec rigueur produit une sensation de studio.
 > Vingt-cinq familles d'effets produisent une sensation de démo.
@@ -17,7 +16,7 @@
 Aucun mouvement du site n'a le droit d'être en dehors de cette liste.
 
 | # | Famille | Propriétés | Usage |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 1 | **MASK** | conteneur `overflow:hidden` + `translateY` de l'enfant | Révélation de texte par ligne. Le geste de base du site. |
 | 2 | **CLIP** | `clip-path: inset()` / `polygon()` | Ouverture et fermeture d'images, Front→Behind. |
 | 3 | **SCALE** | `scale` | Changement d'échelle du cadre, portail, recul de hiérarchie. |
@@ -42,7 +41,7 @@ texte circulaire · typewriter · ressorts par défaut · `fade-up` seul.
 Un jeu court. Chaque easing a un rôle, on ne l'utilise pas ailleurs.
 
 | Token | GSAP | Rôle |
-|---|---|---|
+| --- | --- | --- |
 | `EASE.reveal` | `expo.out` | Révélations : rapide, décidé, atterrissage net. |
 | `EASE.move` | `power3.out` | Déplacements et entrées standard. |
 | `EASE.handoff` | `power2.inOut` | Transitions entre actes, symétriques. |
@@ -61,7 +60,7 @@ Les animations molles sont proscrites.
 ## 3. Durées et staggers
 
 | Token | Valeur | Usage |
-|---|---|---|
+| --- | --- | --- |
 | `DUR.snap` | `0.35s` | Micro-interactions, MGC, curseur. |
 | `DUR.base` | `0.6s` | Défaut. |
 | `DUR.editorial` | `0.9s` | Révélations importantes, Yuna. |
@@ -93,7 +92,7 @@ gsap.ticker.lagSmoothing(0);
 **Valeurs de `scrub`**
 
 | Contexte | Valeur | Pourquoi |
-|---|---|---|
+| --- | --- | --- |
 | Séquences narratives | `0.6` | Lissage suffisant, pas de flottement. |
 | Portail et raccord WebGL | `true` | Liaison 1:1 : l'exactitude prime. |
 | Rails horizontaux | `0.5` | Réactivité directe. |
@@ -112,6 +111,7 @@ Expertise. Les case studies (ACT 06) et le Contact ne sont **pas** pinnés — i
 respirent, et ce contraste est ce qui rend les pins perceptibles.
 
 Règles :
+
 - `pinSpacing: true` sauf raison explicite.
 - `invalidateOnRefresh: true` sur tout pin dont les valeurs dépendent du viewport.
 - `anticipatePin: 1` sur les pins qui suivent une longue section fluide.
@@ -153,7 +153,8 @@ paint à chaque frame de scroll, et le coût est multiplié par le nombre de tic
 
 `will-change` : posé **au début** de l'animation, retiré à la fin. Jamais permanent.
 
-**Architecture GSAP**
+### Architecture GSAP
+
 - Un acte = **une** timeline = **un** `useGSAP` scopé. Jamais trois `useEffect`
   pour une même séquence (cause documentée des conflits dans l'historique du repo).
 - `useGSAP(() => {...}, { scope: containerRef })` systématique : le scope empêche
@@ -182,7 +183,7 @@ mm.add('(prefers-reduced-motion: reduce)',           () => { /* calme   */ });
 Le mobile n'est pas le desktop en `scale(.5)`.
 
 | | Desktop | Mobile |
-|---|---|---|
+| --- | --- | --- |
 | Opening | 4 fragments, parallaxe pointeur | 2 fragments, aucun parallaxe |
 | Hero | débord large des deux mots | débord d'un seul côté |
 | Social | 5 médias, 3 plans de profondeur | 3 médias, 1 plan |

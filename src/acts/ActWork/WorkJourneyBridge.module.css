@@ -1,0 +1,184 @@
+.bridge {
+  position: relative;
+  min-height: 220svh;
+  overflow: clip;
+  background: var(--wood-brown);
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 54% 48%, rgb(var(--champagne-rgb) / 0.09), transparent 38%),
+    var(--wood-brown);
+  color: var(--ivory);
+}
+
+.colorField {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base);
+  background:
+    linear-gradient(135deg, rgb(var(--paper-rgb) / 0.035), transparent 42%),
+    var(--bordeaux);
+}
+
+.thread {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  z-index: var(--z-persistent);
+  width: 1px;
+  background: var(--champagne);
+  box-shadow: 0 0 1.4rem rgb(var(--champagne-rgb) / 0.28);
+  pointer-events: none;
+}
+
+.thread::before {
+  content: '';
+  position: absolute;
+  top: 12vh;
+  left: 50%;
+  width: 0.62rem;
+  height: 0.62rem;
+  border: 1px solid currentColor;
+  background: var(--wood-brown);
+  translate: -50% -50%;
+  rotate: 45deg;
+}
+
+.archiveChrome {
+  position: absolute;
+  top: var(--margin);
+  left: var(--margin);
+  right: var(--margin);
+  z-index: var(--z-sticky);
+  display: flex;
+  justify-content: space-between;
+  color: var(--champagne);
+}
+
+.folio {
+  position: absolute;
+  left: 50%;
+  top: 12vh;
+  z-index: var(--z-media);
+  width: min(30vw, 27rem);
+  padding: 0.65rem;
+  background: var(--ivory);
+  box-shadow: 0 2.2rem 6rem rgb(0 0 0 / 0.34);
+  transform-origin: center;
+}
+
+.projectIndex {
+  position: absolute;
+  left: var(--margin);
+  bottom: var(--margin);
+  z-index: var(--z-sticky);
+  width: min(39vw, 34rem);
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgb(var(--ivory-rgb) / 0.28);
+  list-style: none;
+}
+
+.projectIndex li {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding-block: 0.85rem;
+  border-bottom: 1px solid rgb(var(--ivory-rgb) / 0.18);
+}
+
+.projectIndex strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.journeyChapter,
+.journeyTitle,
+.years {
+  position: absolute;
+  z-index: var(--z-sticky);
+}
+
+.journeyChapter {
+  top: var(--margin);
+  left: var(--margin);
+}
+
+.journeyTitle {
+  left: 28%;
+  top: var(--margin);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--t-title);
+  font-weight: 400;
+  line-height: var(--lh-title);
+}
+
+.years {
+  left: calc(28% + 2rem);
+  right: var(--margin);
+  bottom: 12vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--champagne);
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 3.4rem);
+  font-style: italic;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 1023px) {
+  .bridge {
+    min-height: 190svh;
+  }
+
+  .folio {
+    left: auto;
+    right: var(--margin);
+    top: 16vh;
+    width: min(58vw, 22rem);
+  }
+
+  .projectIndex {
+    width: calc(100% - var(--margin) * 2);
+  }
+
+  .projectIndex li {
+    grid-template-columns: 2rem 1fr;
+  }
+
+  .projectIndex li > span:last-child {
+    display: none;
+  }
+
+  .journeyTitle {
+    left: auto;
+    right: var(--margin);
+  }
+
+  .years {
+    left: calc(var(--margin) + 1.5rem);
+    bottom: 14vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem 1.4rem;
+    font-size: clamp(1.4rem, 8vw, 2.6rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bridge {
+    display: none;
+  }
+}

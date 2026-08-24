@@ -60,13 +60,14 @@ C'est le mécanisme central du brief (« réutiliser un élément d'une section 
 point de départ de la suivante »). Quatre approches existent :
 
 | Technique | Fonctionnement | Quand |
-|---|---|---|
+| --- | --- | --- |
 | **GSAP Flip + `data-flip-id`** | Deux nœuds DOM distincts partagent le même id ; Flip anime le second depuis les bornes enregistrées du premier | Changement de conteneur / de parent |
 | **Élément unique persistant** | Un seul nœud traverse plusieurs ScrollTriggers, animé en continu | Handoff **scrubé** au scroll |
 | **Clip-path re-crop** | L'image ne bouge pas, le cadrage change | Changement de ratio |
 | **Fixed swap** | `position: fixed` aux valeurs du `getBoundingClientRect()`, puis reparent | Cas limites |
 
 **Pièges documentés :**
+
 - L'ordre est impératif : `Flip.getState()` **avant** la mutation DOM, `Flip.from()` après.
 - `data-flip-id` doit être posé **avant** `getState()`.
 - `absolute: true` sort les éléments du flux → les frères sautent à leur position
@@ -188,6 +189,7 @@ Justifié pour du contenu **séquentiel ou comparatif** (pellicule, chronologie,
 étapes). Injustifié pour une grille de projets ou du texte long.
 
 Règles techniques :
+
 - Le tween horizontal **doit** être en `ease: "none"`, sinon la position à l'écran
   ne correspond pas à la position de scroll. C'est l'erreur la plus fréquente.
 - Distance : `end: "+=N * 100vh"` pour N panneaux (75vh = plus rapide,

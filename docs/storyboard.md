@@ -4,11 +4,9 @@
 > narrative. Leurs surfaces, accessoires et traitements visuels suivent
 > désormais [`creative-notebook-direction.md`](creative-notebook-direction.md),
 > qui prévaut sur toute mention pré-presse ci-dessous.
-
 > Phase 7 du brief. Neuf **actes narratifs**, pas neuf `<section>` indépendantes.
 > Chaque acte est décrit par : START FRAME · USER ACTION · MOTION · FOCAL ELEMENT ·
 > HANDOFF · END FRAME.
->
 > Règle structurante : **ACTE → TRANSFORMATION → ACTE → HANDOFF → ACTE.**
 > Quand un acte se termine, un élément survit et devient le point de départ du
 > suivant. C'est ce mécanisme, et non l'accumulation d'effets, qui produit le récit.
@@ -22,7 +20,7 @@ La longueur excessive est la pénalité la plus fréquente relevée en recherche
 chaque acte doit tenir dedans.
 
 | Acte | Séquence | Scroll | Pin |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 00 | Opening | `0` (auto, verrouillé) | — |
 | 01 | Hero + transformation | `+=100vh` | oui |
 | 02 | Social World + Front→Behind | `+=180vh` | oui |
@@ -337,7 +335,8 @@ pas de page projet générique. Tout se joue dans le scroll continu — c'est ce
 rend les transitions partagées possibles.
 
 ### 06a — YUNA BIJOUX
-*Social Media & Communication (alternance) · Brest · sept. 2022 – juil. 2023*
+
+#### *Social Media & Communication (alternance) · Brest · sept. 2022 – juil. 2023*
 
 Joaillerie, premium, précision, silence. Fond `--ink`.
 
@@ -350,7 +349,8 @@ Yuna change de ratio (`4:5 → 1:1`), se recadre, change de palette
 (`--ink → --paper-deep`) et **devient** le premier élément MGC.
 
 ### 06b — MARSEILLE GIRLS CLUB
-*Community & Communication (CDI temps partiel) · Marseille / hybride · avr. 2025 – avr. 2026*
+
+#### *Community & Communication (CDI temps partiel) · Marseille / hybride · avr. 2025 – avr. 2026*
 
 Communauté, social, scrapbook, énergie, UGC, collage. Fond `--paper-deep`.
 
@@ -363,7 +363,8 @@ enfantin** : le collage est tenu par la grille en arrière-plan.
 devient plein cadre, et sa teinte glisse vers `--bordeaux`.
 
 ### 06c — LE COMPTOIR DE MATHILDE
-*Expérience Client & Support Vente (CDD) · Marseille · oct. 2024 – aujourd'hui*
+
+#### *Expérience Client & Support Vente (CDD) · Marseille · oct. 2024 – aujourd'hui*
 
 Épicerie fine artisanale. Calme, chaleureux, art de vivre, merchandising,
 matière. Fond `--bordeaux`.
@@ -451,7 +452,7 @@ Contenu : `glwadys.dalleau29@gmail.com` · `linkedin.com/in/glwadysdalleau`.
 
 Chaque acte possède un cycle de vie explicite, sans exception :
 
-```
+```text
 BEFORE ENTER  → hors layout ou masqué, aucun trigger actif
 ENTER         → révélation chorégraphiée
 ACTIVE        → transformation pilotée par le scroll
@@ -467,7 +468,7 @@ Les overlaps ne sont autorisés que **chorégraphiés**.
 
 C'est l'épine dorsale du récit. Un seul élément à la fois traverse une frontière :
 
-```
+```text
 nom (00→01) → réservation 9:16 (01→02) → format vertical (02→03)
 → écran du téléphone (03→04) → composition plate (04→05)
 → dernier élément du rail (05a→05b) → mot CAMPAIGN (05c→06a)

@@ -8,7 +8,7 @@
 ## 1. Stack
 
 | Rôle | Choix | Version | Pourquoi |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Framework | **Next.js** App Router | `16.3.0` | Routes localisées statiques, `next/font` (auto-hébergement des polices, zéro requête tierce, zéro CLS), `next/image`, import dynamique pour isoler le WebGL. |
 | Langage | **TypeScript** | `6.0.3` | Le contenu et les médias sont typés : une réservation média mal formée est une erreur de compilation. |
 | UI | **React** | `19.2.8` | Requis par R3F 9. |
@@ -75,7 +75,7 @@ Le contenu est un dictionnaire typé, statique, connu à la compilation. `next-i
 apporterait du middleware, du negotiation de locale et une surface de
 configuration dont un site mono-page n'a pas besoin.
 
-```
+```text
 src/app/[locale]/page.tsx     → generateStaticParams: fr | en | ko
 src/content/                  → dictionnaires typés
 ```
@@ -89,6 +89,7 @@ type Dictionary = Record<Locale, Content>;
 ```
 
 Règles :
+
 - **La logique motion ne connaît jamais une chaîne traduite.** Les timelines
   ciblent des `data-*` et des refs, jamais du texte. Changer de langue ne peut
   donc pas casser une animation.
@@ -133,6 +134,7 @@ export interface MediaItem {
 ```
 
 Un composant unique, `<Media />`, consomme un `MediaItem` :
+
 - `src` absent → **réservation** (aplat tonal, repères de coupe, légende, index) ;
 - `src` présent → `next/image` avec le même `aspect-ratio` et le même `focus`.
 
@@ -148,7 +150,7 @@ Pas de store global. C'est le correctif principal de l'échec précédent : un s
 `currentChapter` dupliquait une information que le scroll possède déjà, et les
 deux divergeaient.
 
-```
+```text
 Lenis  →  gsap.ticker  →  ScrollTrigger.update
                               ↓
                     une timeline par acte
@@ -226,7 +228,7 @@ la mesure).
 
 ## 8. Arborescence
 
-```
+```text
 src/
   app/
     layout.tsx                  racine, <html lang>, fonts, grain
@@ -278,7 +280,7 @@ transition entre deux montages.
 Cible : **60 fps** sur desktop moderne, fluide sur laptop moyen et mobile.
 
 | Poste | Budget |
-|---|---|
+| --- | --- |
 | JS initial (hors WebGL) | `< 180 KB` gzip |
 | Chunk WebGL (chargé à la demande) | `< 320 KB` gzip |
 | Polices | 3 variables, `woff2`, sous-ensembles latin (+ coréen sur `/ko` seul) |

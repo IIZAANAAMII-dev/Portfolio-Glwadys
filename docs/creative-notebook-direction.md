@@ -22,7 +22,7 @@ La narration alterne les formes au lieu de déguiser chaque section en page :
 ## Palette testée
 
 | Token | Valeur active | Usage |
-|---|---:|---|
+| --- | ---: | --- |
 | Ivory | `#F3EDE3` | pages principales, lumière |
 | Paper | `#E8DED1` | contre-pages, fonds secondaires |
 | Warm taupe | `#BCA991` | tirages chauds, accents mats |
@@ -64,7 +64,7 @@ expliquer un état de travail ; ils ne sont jamais ajoutés comme stickers.
 ## Storyboard par acte
 
 | Acte | Forme | Fonction narrative | Geste tactile principal |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 00–01 Opening/Hero | couverture sombre puis spread ivoire | fragments → identité | page centrale + ruban |
 | 02 Social | digital au-dessus d’un dossier papier | front → préparation | onglet de dossier |
 | 03 Phone | objet digital sur table éditoriale | contenu en situation | note manuscrite |
@@ -93,4 +93,3 @@ appartient à l’acte Immersion, porte un type de média, occupe une profondeur
 nommée et suit la transition ouverture → circulation → mise à plat. La lumière
 est simulée dans le shader pour garder six feuilles peu coûteuses, avec vignette
 chaude et ombre de bord. Aucun objet 3D sans fonction narrative.
-

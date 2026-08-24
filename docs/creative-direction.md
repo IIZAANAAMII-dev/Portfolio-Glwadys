@@ -4,7 +4,6 @@
 > [`creative-notebook-direction.md`](creative-notebook-direction.md). Les règles
 > ci-dessous documentent l’ancienne piste pré-presse et ne doivent plus guider
 > de nouvelles décisions visuelles.
-
 > Phase 4 du brief. Ce document est opposable : tout ce qui est construit doit
 > pouvoir se justifier ici, et tout ce qui ne s'y justifie pas doit être supprimé.
 
@@ -62,7 +61,7 @@ Et quand les vrais médias arriveront, ils prendront la place des réservations
 
 ## 3. Registre
 
-```
+```text
 EDITORIAL LUXURY  ×  FASHION MAGAZINE  ×  CONTEMPORARY DIGITAL  ×  STUDIO
 ```
 
@@ -87,7 +86,7 @@ Palette courte. Le luxe vient du contraste d'échelle et du vide, pas du nombre
 de couleurs.
 
 | Token | Valeur | Rôle |
-|---|---|---|
+| --- | --- | --- |
 | `--paper` | `#F2EDE4` | Ivoire chaud. Fond des actes clairs. |
 | `--paper-deep` | `#E5DCCE` | Second ivoire. Réservations, aplats, respirations. |
 | `--ink` | `#0E0D0C` | Noir encre légèrement chaud. Fond des actes sombres, texte sur ivoire. |
@@ -110,7 +109,7 @@ Règles opposables :
 
 **Partition chromatique** (elle signale les chapitres sans étiquette) :
 
-```
+```text
 00 Opening      ink
 01 Hero         ink
 02 Social       ink ────────────► paper      (bascule au Front→Behind)
@@ -137,7 +136,7 @@ Deux familles, plus une pour le coréen. Trois au total, conformément à la rè
 « rarement plus de trois ».
 
 | Famille | Rôle |
-|---|---|
+| --- | --- |
 | **Bodoni Moda** (variable, axe `opsz`) | Display. Didone à très fort contraste : registre haute couture. |
 | **Inter Tight** (variable) | Sans suisse. Méta, labels, corps, chiffres. |
 | **Noto Sans KR** | Version coréenne uniquement. |
@@ -159,7 +158,7 @@ et ses déliés maigres disparaissent sur écran basse densité. D'où les règl
 **Échelle et tracking** (les valeurs viennent des relevés de sites de mode) :
 
 | Token | Taille | Tracking | Line-height |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `--t-monument` | `clamp(4.5rem, 17vw, 20rem)` | `-0.045em` | `0.82` |
 | `--t-display` | `clamp(2.75rem, 8vw, 8.5rem)` | `-0.03em` | `0.92` |
 | `--t-title` | `clamp(1.75rem, 3.6vw, 3.25rem)` | `-0.02em` | `1.05` |
@@ -172,6 +171,7 @@ Le rapport `--t-monument` / `--t-micro` atteint ~28:1. **C'est ce contraste
 d'échelle qui produit le luxe**, pas l'ornement.
 
 Autres règles :
+
 - `text-wrap: balance` sur les titres, `pretty` sur les descriptions, aucun des
   deux sur le texte long.
 - Mesure plafonnée à 60–75 caractères (`max-width: 34ch` sur le lead).
@@ -224,6 +224,7 @@ Son rôle : donner une matière de papier et unifier ivoire et encre.
 Une réservation n'est pas un placeholder : c'est une **fenêtre cotée**.
 
 Elle est composée de :
+
 - un aplat tonal issu de la palette (jamais un gris neutre) ;
 - des **repères de coupe** aux quatre angles : filets 1 px, longueur ~14 px ;
 - une légende en `--t-micro` : rôle + ratio, ex. `CAMPAIGN · 4:5` ;

@@ -409,12 +409,38 @@
 
 .campaignReveal {
   position: absolute;
-  right: var(--margin);
-  top: 18vh;
+  right: 8vw;
+  top: 14vh;
   z-index: var(--z-media);
-  width: 22vw;
+  width: min(29vw, 30rem);
+  padding: 0.65rem 0.65rem 2.35rem;
+  background: var(--ivory);
+  box-shadow: 0 2rem 5.5rem rgb(0 0 0 / 0.28);
   transform-origin: center;
   will-change: transform, clip-path;
+}
+
+.campaignStamp {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.72rem;
+  color: var(--rich-wine);
+}
+
+.campaignCrop {
+  position: absolute;
+  inset: 0.4rem 0.4rem 2.05rem;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--rich-wine), var(--rich-wine)) left top / 1.2rem 1px no-repeat,
+    linear-gradient(var(--rich-wine), var(--rich-wine)) left top / 1px 1.2rem no-repeat,
+    linear-gradient(var(--rich-wine), var(--rich-wine)) right top / 1.2rem 1px no-repeat,
+    linear-gradient(var(--rich-wine), var(--rich-wine)) right top / 1px 1.2rem no-repeat,
+    linear-gradient(var(--rich-wine), var(--rich-wine)) left bottom / 1.2rem 1px no-repeat,
+    linear-gradient(var(--rich-wine), var(--rich-wine)) left bottom / 1px 1.2rem no-repeat,
+    linear-gradient(var(--rich-wine), var(--rich-wine)) right bottom / 1.2rem 1px no-repeat,
+    linear-gradient(var(--rich-wine), var(--rich-wine)) right bottom / 1px 1.2rem no-repeat;
+  opacity: 0.72;
 }
 
 .workHandoff {
@@ -565,7 +591,9 @@
   }
 
   .campaignReveal {
-    width: 42vw;
+    right: var(--margin);
+    top: 18vh;
+    width: min(52vw, 23rem);
   }
 
   .workTitle {
