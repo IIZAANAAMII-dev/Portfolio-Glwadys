@@ -9,6 +9,7 @@ export default defineConfig([
     '.next/**',
     'node_modules/**',
     'docs/qa/**',
+    'qa*.js',
     'next-env.d.ts',
   ]),
 ]);

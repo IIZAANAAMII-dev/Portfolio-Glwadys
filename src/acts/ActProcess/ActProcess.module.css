@@ -13,9 +13,7 @@
 }
 
 .railSection {
-  background:
-    linear-gradient(90deg, transparent 0 9%, rgb(var(--oxblood-rgb) / 0.1) 9% calc(9% + 1px), transparent calc(9% + 1px)),
-    var(--ivory);
+  background: var(--ivory);
 }
 
 .stage,
@@ -55,6 +53,11 @@
   width: max-content;
   height: 100%;
   padding-inline: 42vw 14vw;
+  z-index: 1;
+}
+
+.entryPlate {
+  z-index: 2;
 }
 
 .railItem {
@@ -444,6 +447,10 @@
 }
 
 @media (max-width: 1023px) {
+  .entryPlate {
+    display: none;
+  }
+
   .railSection,
   .railSection .stage {
     min-height: auto;

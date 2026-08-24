@@ -10,7 +10,8 @@
  *   node scripts/qa.mjs reduced            variante prefers-reduced-motion
  *   node scripts/qa.mjs reverse            scroll inverse (détection d'états cassés)
  *
- * Options : --url=… --locale=fr|en|ko --out=nom --steps=N --console
+ * Options : --url=… --locale=fr|en|ko --out=nom --steps=N --from=vh
+ *           --vh=vh --fast --reverse --console
  */
 
 import { chromium } from 'playwright';
@@ -47,14 +48,14 @@ const VIEWPORTS = [
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /** Scroll piloté par Lenis : on attend que la position se stabilise. */
-async function scrollTo(page, y) {
+async function scrollTo(page, y, settle = 700) {
   await page.evaluate((target) => window.scrollTo({ top: target, behavior: 'instant' }), y);
   await page.waitForFunction(
     (target) => Math.abs(window.scrollY - target) < 4 || window.scrollY >= document.body.scrollHeight - window.innerHeight - 4,
     y,
     { timeout: 4000 },
   ).catch(() => {});
-  await sleep(700); // laisser les scrubs converger
+  await sleep(settle); // laisser les scrubs converger (ou capturer leur retard)
 }
 
 async function pageHeight(page) {
@@ -138,6 +139,33 @@ async function run() {
     for (let i = steps - 1; i >= 0; i--) {
       await scrollTo(page, Math.round((max * i) / steps));
       await shot(page, `up-${String(steps - i).padStart(2, '0')}`);
+    }
+    await context.close();
+  } else if (preset === 'chapter') {
+    // Le chapitre 1 est pinné : on échantillonne en *hauteurs de viewport*,
+    // ce qui correspond exactement à l'unité de la partition (index.tsx).
+    const mobile = has('mobile');
+    const viewport = mobile ? MOBILE : DESKTOP;
+    const { context, page } = await makePage(viewport);
+    await page.goto(URL, { waitUntil: 'load' });
+    await sleep(3400);
+    const from = Number(flag('from', 0));
+    const span = Number(flag('vh', 9.82));
+    const steps = Number(flag('steps', 24));
+    const settle = has('fast') ? 90 : 700;
+    await scrollTo(page, Math.round(from * viewport.height), settle);
+    await shot(page, `00-${from === 0 ? 'cover' : `${from.toFixed(2)}vh`}`);
+    for (let i = 1; i <= steps; i++) {
+      const vh = from + ((span - from) * i) / steps;
+      await scrollTo(page, Math.round(vh * viewport.height), settle);
+      await shot(page, `${String(i).padStart(2, '0')}-${vh.toFixed(2)}vh`);
+    }
+    if (has('reverse')) {
+      for (let i = steps - 1; i >= 0; i--) {
+        const vh = from + ((span - from) * i) / steps;
+        await scrollTo(page, Math.round(vh * viewport.height), settle);
+        await shot(page, `reverse-${String(steps - i).padStart(2, '0')}-${vh.toFixed(2)}vh`);
+      }
     }
     await context.close();
   } else {

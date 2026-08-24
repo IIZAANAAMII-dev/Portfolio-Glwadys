@@ -7,6 +7,7 @@ import type { Locale } from '@/content/locales';
 import { contactSheet, yunaMedia } from '@/content/media';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
+import { ArchivePlate } from '@/ui/ArchivePlate';
 import { Media } from '@/ui/Media';
 
 import styles from './ActProcess.module.css';
@@ -28,6 +29,7 @@ function ContactSheetRail({ content, locale }: Props) {
       const railEl = rail.current;
       if (!rootEl || !stageEl || !railEl) return;
       const q = gsap.utils.selector(stageEl);
+      const entryPlate = q<HTMLElement>('[data-archive-plate="process-entry"]')[0];
 
       const mm = gsap.matchMedia();
       mm.add(
@@ -38,6 +40,8 @@ function ContactSheetRail({ content, locale }: Props) {
             isReduced: boolean;
           };
           if (!isDesktop || isReduced) return;
+
+          if (!entryPlate) return;
 
           gsap
             .timeline({
@@ -52,7 +56,12 @@ function ContactSheetRail({ content, locale }: Props) {
                 invalidateOnRefresh: true,
               },
             })
-            .to(railEl, { x: () => -(railEl.scrollWidth - window.innerWidth), duration: 1 }, 0)
+            .to(entryPlate, { autoAlpha: 0, duration: 0.12 }, 0.08)
+            .to(
+              railEl,
+              { x: () => -(railEl.scrollWidth - window.innerWidth), duration: 0.82 },
+              0.18,
+            )
             .to(q<HTMLElement>('[data-sheet-copy]'), { autoAlpha: 0, y: -10, duration: 0.1 }, 0.88)
             .to(stageEl, { backgroundColor: 'var(--paper)', duration: 0.12 }, 0.88);
         },
@@ -70,6 +79,7 @@ function ContactSheetRail({ content, locale }: Props) {
             {content.process.sheet}
           </h2>
         </div>
+        <ArchivePlate className={styles.entryPlate} locale={locale} marker="process-entry" />
         <div ref={rail} className={styles.rail}>
           {contactSheet.map((item, index) => (
             <figure className={styles.railItem} key={item.id}>

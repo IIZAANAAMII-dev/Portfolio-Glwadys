@@ -1,0 +1,80 @@
+.plate {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--ink);
+}
+
+.eyebrow,
+.title,
+.card,
+.rule {
+  position: absolute;
+}
+
+.eyebrow {
+  left: var(--margin);
+  top: var(--margin);
+  z-index: 2;
+}
+
+.title {
+  left: var(--margin);
+  top: 15vh;
+  z-index: 2;
+  max-width: 8ch;
+  text-wrap: balance;
+}
+
+.card {
+  left: var(--flat-left);
+  top: var(--flat-top);
+  z-index: 1;
+  width: var(--flat-width);
+  margin: 0;
+  aspect-ratio: var(--flat-aspect);
+}
+
+.card > div {
+  height: 100%;
+  border: 0;
+  box-shadow: none;
+}
+
+.card img {
+  filter: none;
+}
+
+.index {
+  position: absolute;
+  left: 0;
+  top: -1.35rem;
+  color: var(--rich-wine);
+}
+
+.rule {
+  left: var(--margin);
+  right: var(--margin);
+  bottom: var(--margin);
+  height: 1px;
+  background: var(--rule);
+}
+
+@media (max-width: 1023px) {
+  .card {
+    left: var(--flat-mobile-left);
+    top: var(--flat-mobile-top);
+    width: var(--flat-mobile-width);
+    aspect-ratio: var(--flat-mobile-aspect);
+  }
+
+  .title {
+    top: 13vh;
+    max-width: 7ch;
+  }
+
+  .index {
+    top: -1.1rem;
+  }
+}

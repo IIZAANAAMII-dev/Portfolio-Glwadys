@@ -1,69 +1,110 @@
 /* ============================================================
-   ACT SCROLL STORY — HERO + SOCIAL + PHONE (un seul canvas pinné)
+   CHAPITRE 1 — COUVERTURE · CONTENU · SITUATION · IMMERSION
+   Une seule scène pinnée. Voir la partition dans index.tsx.
    ============================================================ */
 
 .act {
   position: relative;
 }
 
+/* Repères géométriques pour BottomNav. Ils remplissent les intervalles réels
+   de la partition sans participer au rendu ni intercepter les interactions. */
+.actMarkers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.actMarker {
+  position: absolute;
+  top: var(--marker-top);
+  left: 0;
+  width: 1px;
+  height: var(--marker-height);
+  opacity: 0;
+  pointer-events: none;
+}
+
 .stage {
+  /* ---------- EMPILEMENT LOCAL ----------
+     Échelle nommée, propre à l'acte. Le point clé : la typographie monumentale
+     est SOUS les médias, pour que le nom puisse passer derrière eux. */
+  --z-page: 1;
+  --z-type: 2;
+  --z-behind: 3;
+  --z-plate: 5;
+  --z-device: 6;
+  --z-copy: 8;
+  --z-ground: 11;
+  --z-scene: 12;
+  --z-portal: 14;
+  --z-scene-copy: 16;
+  --z-flat: 18;
+
   position: relative;
   height: 100vh;
   height: 100svh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 68% 43%, rgb(var(--champagne-rgb) / 0.105), transparent 31%),
+    radial-gradient(circle at 68% 43%, rgb(var(--champagne-rgb) / 0.1), transparent 31%),
     linear-gradient(112deg, rgb(var(--ink-rgb) / 0.08), transparent 52%),
     var(--wood-brown);
   color: var(--ivory);
+}
+
+.motionStory {
+  position: absolute;
+  inset: 0;
+}
+
+.reducedStory {
+  display: none;
+}
+
+/* ---------- SURFACES ---------- */
+
+/* La page ivoire. Elle est repliée derrière le média de la couverture puis se
+   déplie jusqu'au plein cadre : le fond ne « change pas de couleur », une page
+   a grandi. C'est l'origine exigée pour tout changement de surface. */
+.pageSurface {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-page);
+  pointer-events: none;
   transform-origin: center center;
-  box-shadow: 0 2rem 7rem rgb(var(--wood-rgb) / 0.42);
-}
-
-.stage::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.15;
-  mix-blend-mode: overlay;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='.9'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 200px 200px;
-}
-
-.stage::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  box-shadow: inset 0 0 0 1px rgb(var(--ivory-rgb) / 0.08);
-}
-
-/* ---------- FONDS DE SCÈNE ---------- */
-
-.bgSocial,
-.bgPhone {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.bgSocial {
   background:
-    radial-gradient(circle at 50% 38%, rgb(var(--champagne-rgb) / 0.06), transparent 27%),
-    var(--charcoal);
-}
-
-.bgPhone {
-  background:
-    linear-gradient(90deg, transparent 0 11.9%, rgb(var(--oxblood-rgb) / 0.12) 11.9% calc(11.9% + 1px), transparent calc(11.9% + 1px)),
-    radial-gradient(circle at 50% 46%, rgb(var(--champagne-rgb) / 0.12), transparent 29%),
+    radial-gradient(circle at 50% 42%, rgb(var(--champagne-rgb) / 0.055), transparent 34%),
     var(--ivory);
-  color: var(--ink);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.2, 0.5);
+  will-change: transform, opacity;
+}
+
+/* Le sol sombre de la scène immersive. Il ne se révèle jamais à nu : il monte
+   pendant que le plein cadre opaque recouvre déjà le viewport. */
+.sceneGround {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-ground);
+  pointer-events: none;
+  background: var(--ink);
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Tranche de page, derrière le média de couverture. Annonce l'ivoire. */
+.flatPaper {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-ground);
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 54% 46%, rgb(var(--champagne-rgb) / 0.06), transparent 36%),
+    var(--ivory);
+  opacity: 0;
+  visibility: hidden;
+  will-change: clip-path, opacity;
 }
 
 /* ---------- MÉTA ---------- */
@@ -72,7 +113,30 @@
 .axis,
 .disciplines {
   position: absolute;
+  z-index: var(--z-copy);
   opacity: 0.72;
+}
+
+/* Paint-safe defaults. GSAP reveals these after it has established the opening
+   geometry; the first browser frame can no longer flash the finished Hero. */
+.edition,
+.axis,
+.disciplines,
+.tagline,
+.heroFrame,
+.handNote,
+.folio,
+.transient,
+.device,
+.frontComposition,
+.satellite,
+.crossing,
+.behind,
+.portalFrame,
+.immersion,
+.flatHandoff {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .edition {
@@ -84,12 +148,7 @@
   top: var(--margin);
   right: var(--margin);
   color: var(--champagne);
-  background-color: var(--wood-brown);
   opacity: 1;
-}
-
-.axis [data-meta-line] {
-  background-color: var(--wood-brown);
 }
 
 .disciplines {
@@ -108,73 +167,41 @@
   top: 30%;
   left: var(--margin);
   right: var(--margin);
+  z-index: var(--z-type);
   height: 1px;
   background: var(--rule);
   transform-origin: left center;
+  transform: scaleX(0);
 }
 
 .ruleV {
   position: absolute;
   left: 34%;
   top: 32%;
+  z-index: var(--z-type);
   width: 1px;
   height: 32%;
   background: rgb(var(--champagne-rgb) / 0.45);
   transform-origin: center top;
-}
-
-.spread {
-  position: absolute;
-  left: 38%;
-  right: 6%;
-  top: 23%;
-  bottom: 11%;
-  z-index: var(--z-base);
-  transform-origin: center center;
-  overflow: hidden;
-  border: 1px solid var(--rule);
-  background:
-    linear-gradient(90deg, transparent 49.9%, rgb(var(--champagne-rgb) / 0.15) 50%, transparent 50.1%),
-    var(--ivory);
-  box-shadow:
-    0 2.5rem 7rem rgb(var(--wood-rgb) / 0.22),
-    inset 0 0 0 1px rgb(var(--ink-rgb) / 0.08);
-}
-
-.spread::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: linear-gradient(to bottom, transparent, rgb(var(--champagne-rgb) / 0.18), transparent);
-  box-shadow: -10px 0 24px rgb(var(--ink-rgb) / 0.1);
-}
-
-.spread::after {
-  content: '01';
-  position: absolute;
-  right: 0.035em;
-  bottom: -0.18em;
-  color: rgb(var(--ink-rgb) / 0.05);
-  font-family: var(--font-display);
-  font-size: clamp(8rem, 21vw, 23rem);
-  font-style: italic;
-  line-height: 1;
+  opacity: 0;
+  visibility: hidden;
+  transform: scaleY(0);
 }
 
 .openingFrame {
   position: absolute;
   left: 50%;
   top: 50%;
+  z-index: var(--z-copy);
   width: clamp(18rem, 42vw, 39rem);
   aspect-ratio: 1.75;
-  z-index: var(--z-persistent);
   border: 1px solid rgb(var(--champagne-rgb) / 0.72);
   translate: -50% -50%;
   transform-origin: center;
   pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.16, 0.72);
 }
 
 .openingFrame::before,
@@ -217,24 +244,25 @@
   bottom: -1px;
 }
 
-/* ---------- HERO — état de repos ---------- */
+/* ---------- SECTION 1 — COUVERTURE ---------- */
 
 .nameFirst,
 .nameLast {
   position: absolute;
+  /* SOUS les médias : le nom sort en passant derrière l'image. */
+  z-index: var(--z-type);
   white-space: nowrap;
-  z-index: var(--z-sticky);
   color: var(--ivory);
   text-shadow: 0 0.08em 0.35em rgb(var(--wood-rgb) / 0.18);
 }
 
 .nameFirst {
-  top: 9vh;
+  top: 8vh;
   left: calc(var(--margin) - 0.055em);
 }
 
 .nameLast {
-  bottom: 11vh;
+  bottom: 10vh;
   right: calc(var(--margin) - 0.055em);
   color: var(--rich-wine);
 }
@@ -242,10 +270,10 @@
 .tagline {
   position: absolute;
   left: var(--margin);
-  top: 39%;
-  width: min(31ch, 25%);
+  top: 40%;
+  z-index: var(--z-copy);
+  width: min(30ch, 24%);
   opacity: 0.88;
-  z-index: var(--z-sticky);
 }
 
 .media {
@@ -253,22 +281,22 @@
 }
 
 .heroFrame {
-  left: 44%;
-  top: 43%;
-  width: min(13vw, 12rem);
-  z-index: var(--z-media);
+  left: 41%;
+  top: 45%;
+  z-index: var(--z-plate);
+  width: min(12vw, 11rem);
 }
 
 .handNote,
 .folio {
   position: absolute;
-  z-index: var(--z-sticky);
+  z-index: var(--z-copy);
 }
 
 .handNote {
-  left: 44%;
-  top: 35%;
-  color: var(--rich-wine);
+  left: 41%;
+  top: 36%;
+  color: var(--champagne);
   rotate: -4deg;
 }
 
@@ -281,93 +309,102 @@
 
 .transient {
   position: absolute;
-  z-index: var(--z-media);
+  z-index: var(--z-plate);
 }
 
 .transient01 {
-  left: 26%;
-  bottom: 13%;
+  left: 24%;
+  bottom: 14%;
   width: 9vw;
 }
 
 .transient02 {
-  right: 24%;
+  right: 22%;
   top: 11%;
-  width: 11vw;
+  width: 10vw;
 }
 
-/* ---------- DEVICE / HERO VERTICAL / PHONE ---------- */
+/* ---------- ÉLÉMENT PERSISTANT ----------
+   Couverture 9:16 → dominant social → écran du téléphone.
+   Un seul nœud DOM. L'écran est l'intérieur exact du device et n'est JAMAIS
+   transformé indépendamment : c'est ce qui garantit qu'ils ne se
+   désolidarisent pas. */
 
 .device {
   --device-ar: 9 / 16;
   --phone-bezel: 0px;
   --phone-radius: 0px;
-  --phone-island: 0px;
-  --phone-screen-radius: 0px;
-  --device-w: 18vw;
   position: absolute;
-  left: 65%;
-  top: 25%;
-  width: var(--device-w);
-  max-width: 17rem;
+  left: 62%;
+  top: 23%;
+  z-index: var(--z-device);
+  width: 17vw;
   aspect-ratio: var(--device-ar);
+  box-sizing: border-box;
   padding: var(--phone-bezel);
-  z-index: var(--z-persistent);
   border: 1px solid transparent;
   border-radius: var(--phone-radius);
   background: transparent;
   color: var(--ivory);
   transform-origin: center center;
+  clip-path: inset(100% 0 0 0);
   will-change: transform;
-  box-shadow: none;
 }
 
 .screen {
   position: relative;
+  isolation: isolate;
   width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
   overflow: hidden;
-  border-radius: var(--phone-screen-radius);
+  /* Le rayon de l'écran est CALCULÉ, jamais fixé. C'est ce détail qui rend le
+     device crédible au lieu de ressembler à un mockup posé. */
+  border-radius: max(0px, calc(var(--phone-radius) - var(--phone-bezel)));
   background: transparent;
+  contain: paint;
 }
 
-.screenHero {
+.screenHero,
+.feed,
+.focus,
+.story,
+.campaign,
+.layerImage {
   position: absolute;
   inset: 0;
-  z-index: var(--z-base);
-  will-change: transform;
 }
 
-.sharedHero {
+.sharedHero,
+.fillMedia,
+.portalMedia {
   position: absolute !important;
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
   aspect-ratio: auto !important;
   border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
   border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-.sharedHero img,
-.sharedHero .image {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
+.portalMedia img {
+  filter: none;
 }
 
 .island {
   position: absolute;
-  top: calc(var(--phone-bezel) + 0.5rem);
+  top: calc(var(--phone-bezel, 0px) + 0.5rem);
   left: 50%;
-  z-index: calc(var(--z-sticky) + 1);
-  width: var(--phone-island);
+  z-index: var(--z-copy);
+  width: 0;
   height: 1.05rem;
   translate: -50% 0;
   border-radius: 999px;
   background: #080706;
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.035);
 }
 
 .sideButton {
@@ -394,7 +431,7 @@
   left: 0.75rem;
   right: 0.75rem;
   top: 0.55rem;
-  z-index: var(--z-sticky);
+  z-index: var(--z-copy);
   display: flex;
   justify-content: space-between;
   color: rgb(var(--ivory-rgb) / 0.72);
@@ -403,24 +440,6 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.screenHero,
-.feed,
-.focus,
-.story,
-.campaign,
-.layerImage {
-  position: absolute;
-  inset: 0;
-}
-
-.fillMedia,
-.portalMedia {
-  height: 100%;
-  aspect-ratio: auto;
-  border: 0;
-  box-shadow: none;
 }
 
 .feed {
@@ -436,7 +455,7 @@
   position: absolute;
   left: 0.75rem;
   top: 2.05rem;
-  z-index: var(--z-sticky);
+  z-index: var(--z-copy);
   color: var(--ink);
   font-size: 0.48rem;
 }
@@ -447,29 +466,32 @@
 
 .focus,
 .story {
-  z-index: var(--z-media);
+  z-index: var(--z-plate);
   overflow: hidden;
   background: var(--graphite);
   will-change: clip-path;
 }
 
 .campaign {
-  z-index: var(--z-canvas);
+  z-index: var(--z-device);
   overflow: hidden;
   background: var(--graphite);
-  transform-origin: center center;
-  will-change: transform;
+  will-change: clip-path;
 }
 
-.layerImage {
-  transform-origin: center;
+.campaign::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 38%, rgb(var(--ink-rgb) / 0.52));
+  pointer-events: none;
 }
 
 .screenCaption {
   position: absolute;
   left: 0.75rem;
   bottom: 0.75rem;
-  z-index: var(--z-sticky);
+  z-index: var(--z-copy);
   color: var(--ivory);
   font-size: 0.48rem;
   text-shadow: 0 1px 0.8rem rgb(0 0 0 / 0.55);
@@ -480,28 +502,19 @@
   left: 0.75rem;
   right: 0.75rem;
   top: 2.15rem;
-  z-index: var(--z-sticky);
+  z-index: var(--z-copy);
   height: 1px;
   background: linear-gradient(90deg, var(--ivory) 0 68%, rgb(var(--ivory-rgb) / 0.32) 68%);
-}
-
-.campaign::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-media);
-  background: linear-gradient(180deg, transparent 38%, rgb(var(--ink-rgb) / 0.52));
-  pointer-events: none;
 }
 
 .campaignWord {
   position: absolute;
   left: 50%;
   bottom: 12%;
-  z-index: var(--z-sticky);
+  z-index: var(--z-copy);
   color: var(--ivory);
   font-family: var(--font-display);
-  font-size: clamp(1.55rem, 2.2vw, 2.35rem);
+  font-size: clamp(1.35rem, 1.9vw, 2rem);
   font-style: italic;
   letter-spacing: -0.04em;
   translate: -50% 0;
@@ -511,27 +524,27 @@
 .reflection {
   position: absolute;
   inset: 0;
-  z-index: var(--z-sticky);
+  z-index: var(--z-copy);
   pointer-events: none;
   background: linear-gradient(112deg, transparent 21%, rgb(var(--paper-rgb) / 0.11) 48%, transparent 72%);
   mix-blend-mode: screen;
   opacity: 0.46;
 }
 
-/* ---------- SOCIAL FRONT ---------- */
+/* ---------- SECTION 2 — FRONT ---------- */
 
 .frontComposition {
   position: absolute;
   inset: 0;
-  z-index: var(--z-sticky);
+  z-index: var(--z-copy);
   pointer-events: none;
+  color: var(--ink);
 }
 
 .frontChapter,
 .frontLabel,
 .frontCount {
   position: absolute;
-  z-index: var(--z-sticky);
 }
 
 .frontChapter {
@@ -541,65 +554,75 @@
 
 .frontLabel {
   left: var(--margin);
-  top: 18%;
-  max-width: 7ch;
+  top: 17%;
+  max-width: 6ch;
   font-family: var(--font-display);
   font-size: var(--t-title);
   font-style: italic;
   line-height: var(--lh-title);
+  text-wrap: balance;
 }
 
 .frontCount {
   right: var(--margin);
   top: var(--margin);
-  color: var(--champagne);
+  color: var(--rich-wine);
 }
 
 .satellite {
   position: absolute;
-  z-index: var(--z-media);
+  z-index: var(--z-plate);
 }
 
 .satellite[data-social-slot='1'] {
-  left: 7%;
-  top: 51%;
-  width: 17vw;
+  left: 6%;
+  top: 52%;
+  width: 16vw;
 }
 
 .satellite[data-social-slot='2'] {
-  right: 7%;
-  top: 19%;
-  width: 18vw;
+  right: 6%;
+  top: 18%;
+  width: 17vw;
 }
 
 .satellite[data-social-slot='3'] {
-  right: 27%;
-  bottom: 6%;
-  width: 10vw;
+  right: 26%;
+  bottom: 7%;
+  width: 9.5vw;
 }
 
-/* ---------- SOCIAL BEHIND ---------- */
+/* Le format Story qui traverse la composition devant le dominant. */
+.crossing {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: var(--z-copy);
+  width: 13vw;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+/* ---------- SECTION 2 — BEHIND ----------
+   La strate n'arrive pas de la gauche : elle AVANCE depuis le fond, pendant
+   que les contenus finis se referment. */
 
 .behind {
   position: absolute;
   inset: 0;
-  z-index: var(--z-base);
+  z-index: var(--z-behind);
   overflow: hidden;
-  background:
-    linear-gradient(90deg, transparent 0 59.8%, rgb(var(--ink-rgb) / 0.1) 59.8% calc(59.8% + 1px), transparent calc(59.8% + 1px)),
-    var(--ivory);
   color: var(--ink);
-  will-change: clip-path;
+  transform-origin: center center;
 }
 
 .behindWord {
   position: absolute;
   right: -0.04em;
-  bottom: -0.18em;
-  z-index: var(--z-base);
-  color: rgb(var(--oxblood-rgb) / 0.055);
+  bottom: -0.1em;
+  color: rgb(var(--oxblood-rgb) / 0.035);
   font-family: var(--font-display);
-  font-size: clamp(8rem, 22vw, 24rem);
+  font-size: clamp(8rem, 17.5vw, 19rem);
   font-style: italic;
   line-height: 1;
   white-space: nowrap;
@@ -609,7 +632,7 @@
   position: absolute;
   left: var(--margin);
   right: var(--margin);
-  top: 13vh;
+  top: 11vh;
   height: 1px;
   background: rgb(var(--ink-rgb) / 0.16);
 }
@@ -617,56 +640,48 @@
 .behindPrimary,
 .behindSecondary {
   position: absolute;
-  z-index: var(--z-media);
   margin: 0;
   will-change: transform, clip-path;
 }
 
 .behindPrimary {
   left: var(--margin);
-  top: 18vh;
-  width: min(44vw, 44rem);
+  top: 17vh;
+  width: min(34vw, 34rem);
 }
 
 .behindSecondary {
-  left: 43%;
-  top: 49%;
-  width: min(15vw, 14rem);
-  padding: 0.55rem;
+  left: 64%;
+  top: 16%;
+  width: min(14vw, 13rem);
+  padding: 0.5rem;
   background: var(--paper);
   box-shadow: var(--paper-shadow);
-}
-
-.mediaCaption {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.65rem;
-  padding-top: 0.6rem;
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
-  color: var(--rich-wine);
 }
 
 .behindCopy {
   position: absolute;
   right: var(--margin);
-  top: 22vh;
-  z-index: var(--z-sticky);
-  width: min(30vw, 29rem);
+  top: 44%;
+  width: min(28vw, 27rem);
 }
 
 .behindLabel {
   display: block;
-  margin-bottom: clamp(2rem, 6vh, 5rem);
+  margin-bottom: 1.4rem;
   color: var(--rich-wine);
 }
 
 .statement {
-  max-width: 31ch;
+  max-width: 26ch;
+  text-wrap: pretty;
 }
 
 .layers {
   display: grid;
-  margin: clamp(2.5rem, 7vh, 5.5rem) 0 0;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 1.2rem;
+  margin: 1.6rem 0 0;
   padding: 0;
   border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
   list-style: none;
@@ -674,8 +689,8 @@
 
 .layers li {
   display: grid;
-  grid-template-columns: 3.25rem 1fr;
-  padding-block: 0.8rem;
+  grid-template-columns: 2.4rem 1fr;
+  padding-block: 0.55rem;
   border-bottom: 1px solid rgb(var(--ink-rgb) / 0.12);
 }
 
@@ -684,27 +699,29 @@
   font-variant-numeric: tabular-nums;
 }
 
-.behindFolio {
-  position: absolute;
-  right: var(--margin);
-  bottom: var(--margin);
-  z-index: var(--z-sticky);
-  color: var(--rich-wine);
-}
-
-/* ---------- INTERFACE PHONE ---------- */
+/* ---------- SECTION 3 — HABILLAGE ---------- */
 
 .interface {
   position: absolute;
   inset: 0;
-  z-index: var(--z-sticky);
+  z-index: var(--z-copy);
   pointer-events: none;
+  color: var(--ink);
+}
+
+.interface [data-phone-entry],
+.interface [data-phone-detail],
+.interface [data-phone-beat] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.interface [data-phone-beat] {
+  transform: translateY(110%);
 }
 
 .chapter,
 .counter,
-.contextWord,
-.note,
 .beat,
 .sequenceRail,
 .progressTrack {
@@ -722,31 +739,10 @@
   color: var(--rich-wine);
 }
 
-.contextWord {
-  left: 14%;
-  top: 13vh;
-  z-index: var(--z-base);
-  width: 72%;
-  color: rgb(var(--oxblood-rgb) / 0.09);
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 8.8vw, 10rem);
-  font-style: italic;
-  line-height: 0.84;
-  letter-spacing: -0.045em;
-  text-align: center;
-}
-
-.note {
-  right: var(--margin);
-  top: 56%;
-  width: min(25vw, 25rem);
-  translate: 0 -50%;
-}
-
 .beat {
   left: var(--margin);
-  bottom: max(13vh, 7.5rem);
-  width: min(34vw, 31rem);
+  bottom: max(14vh, 8rem);
+  width: min(28vw, 26rem);
   height: 0.9em;
   font-family: var(--font-display);
   font-size: var(--t-title);
@@ -762,9 +758,9 @@
 
 .sequenceRail {
   left: var(--margin);
-  top: 32%;
+  top: 30%;
   display: grid;
-  width: min(18vw, 13rem);
+  width: min(15vw, 11.5rem);
   margin: 0;
   padding: 0;
   border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
@@ -773,8 +769,8 @@
 
 .sequenceRail li {
   display: grid;
-  grid-template-columns: 2.6rem 1fr;
-  padding-block: 0.65rem;
+  grid-template-columns: 2.4rem 1fr;
+  padding-block: 0.6rem;
   border-bottom: 1px solid rgb(var(--ink-rgb) / 0.12);
   font-size: var(--t-micro);
   letter-spacing: var(--tr-micro);
@@ -786,10 +782,10 @@
 }
 
 .progressTrack {
-  left: calc(var(--margin) - 0.5rem);
-  top: 32%;
+  left: calc(var(--margin) - 0.6rem);
+  top: 30%;
   width: 1px;
-  height: 10rem;
+  height: 9rem;
   background: rgb(var(--ink-rgb) / 0.14);
 }
 
@@ -801,188 +797,92 @@
   transform-origin: center top;
 }
 
-/* ---------- ACT 04 — IMMERSION ---------- */
+/* ---------- RACCORD ----------
+   Dernière frame DOM = première frame WebGL. Même image, même cadrage, même
+   colorimétrie : la bascule ne peut pas se voir. */
+
+.portalFrame {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-portal);
+  overflow: hidden;
+  pointer-events: none;
+  transform-origin: center center;
+  will-change: transform, clip-path;
+}
+
+/* ---------- SECTION 4 — IMMERSION ---------- */
 
 .immersion {
   position: absolute;
   inset: 0;
-  z-index: var(--z-sticky);
+  z-index: var(--z-scene);
   pointer-events: none;
   color: var(--ivory);
-  overflow: visible;
 }
 
-.immersionScene {
+.immersionCanvas {
   position: absolute;
   inset: 0;
-  z-index: var(--z-canvas);
-  perspective: 1200px;
-  transform-style: preserve-3d;
-  transform-origin: center center;
+  z-index: var(--z-scene);
 }
 
 .immersionCopy {
   position: absolute;
   inset: 0;
-  z-index: var(--z-sticky);
-  transform: translateZ(80px);
-  transform-style: preserve-3d;
+  z-index: var(--z-scene-copy);
+  pointer-events: none;
 }
 
 .immersionChapter {
   position: absolute;
   top: var(--margin);
   left: var(--margin);
+  text-shadow: 0 0.1em 0.6em rgb(var(--ink-rgb) / 0.7);
 }
 
 .immersionHeading {
   position: absolute;
   left: var(--margin);
-  bottom: max(14vh, 7.5rem);
-  max-width: 8ch;
-  text-shadow: 0 0.12em 0.55em rgb(var(--ink-rgb) / 0.32);
+  bottom: max(15vh, 8rem);
+  max-width: 7ch;
+  text-shadow: 0 0.12em 0.55em rgb(var(--ink-rgb) / 0.62);
 }
 
 .immersionStatement {
   position: absolute;
   right: var(--margin);
-  top: 50%;
-  width: min(29ch, 28vw);
-  translate: 0 -50%;
-  text-shadow: 0 0.1em 0.7em rgb(var(--ink-rgb) / 0.48);
+  bottom: max(15vh, 8rem);
+  width: min(24ch, 24vw);
+  text-align: right;
+  text-shadow: 0 0.1em 0.7em rgb(var(--ink-rgb) / 0.72);
+  text-wrap: pretty;
 }
 
-.immersionAxis {
-  position: absolute;
-  right: var(--margin);
-  bottom: max(10vh, 5.5rem);
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.immersionAxis::before {
-  content: '';
-  width: 5rem;
-  height: 1px;
-  background: rgb(var(--paper-rgb) / 0.28);
-}
-
-.immersionArchive {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-base);
-  transform-style: preserve-3d;
-}
-
-.immersionPlane {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--w, 14vw);
-  --x: 0vw;
-  --y: 0vh;
-  --z: 0px;
-  --rx: 0deg;
-  --ry: 0deg;
-  --s: 1;
-  transform: translate3d(calc(-50% + var(--x)), calc(-50% + var(--y)), var(--z)) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--s));
-  transform-origin: center center;
-  transform-style: preserve-3d;
-  will-change: transform;
-  backface-visibility: hidden;
-}
-
-.immersionPlaneMedia {
-  aspect-ratio: auto !important;
-  height: 100% !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* central campaign / socialPortal starts full-bleed and shrinks into the gallery */
-.immersionPlane[data-immersion-slot='0'] {
-  --w: 100vw;
-  --x: 0vw;
-  --y: 0vh;
-  --z: 0px;
-  --rx: 0deg;
-  --ry: 0deg;
-  --s: 1;
-  height: 100vh;
-}
-
-.immersionPlane[data-immersion-slot='1'] {
-  --w: 16vw;
-  --x: -30vw;
-  --y: -20vh;
-  --z: -160px;
-  --rx: 4deg;
-  --ry: -10deg;
-  --s: 0.88;
-}
-
-.immersionPlane[data-immersion-slot='2'] {
-  --w: 12vw;
-  --x: 4vw;
-  --y: -22vh;
-  --z: -240px;
-  --rx: 2deg;
-  --ry: 8deg;
-  --s: 0.82;
-}
-
-.immersionPlane[data-immersion-slot='3'] {
-  --w: 14vw;
-  --x: 28vw;
-  --y: -14vh;
-  --z: -120px;
-  --rx: -3deg;
-  --ry: -12deg;
-  --s: 0.92;
-}
-
-.immersionPlane[data-immersion-slot='4'] {
-  --w: 15vw;
-  --x: -24vw;
-  --y: 18vh;
-  --z: -200px;
-  --rx: -5deg;
-  --ry: 14deg;
-  --s: 0.9;
-}
-
-.immersionPlane[data-immersion-slot='5'] {
-  --w: 10vw;
-  --x: 10vw;
-  --y: 22vh;
-  --z: -280px;
-  --rx: 6deg;
-  --ry: -6deg;
-  --s: 0.78;
-}
-
-.immersionCanvas {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-canvas);
+.flatHandoff {
+  z-index: var(--z-flat);
+  background: var(--ivory);
+  color: var(--ink);
 }
 
 /* ============================================================
-   MOBILE — recomposition
+   MOBILE — recomposition, pas réduction
    ============================================================ */
 
 @media (max-width: 1023px) {
-  .transient,
-  .ruleV {
-    display: none;
+  .actMarker {
+    top: var(--marker-mobile-top);
+    height: var(--marker-mobile-height);
   }
 
-  .spread {
-    left: var(--margin);
-    right: var(--margin);
-    top: 31%;
-    bottom: 14%;
+  .transient,
+  .ruleV,
+  .disciplines,
+  .satellite[data-social-slot='3'],
+  .sequenceRail,
+  .progressTrack,
+  .beat {
+    display: none;
   }
 
   .openingFrame {
@@ -991,12 +891,12 @@
   }
 
   .nameFirst {
-    top: 14vh;
+    top: 13vh;
     font-size: clamp(3.7rem, 17vw, 6.3rem);
   }
 
   .nameLast {
-    bottom: 14vh;
+    bottom: 13vh;
     font-size: clamp(3.7rem, 17vw, 6.3rem);
   }
 
@@ -1005,8 +905,7 @@
   }
 
   .tagline {
-    top: 24vh;
-    bottom: auto;
+    top: 23vh;
     width: min(28ch, 82%);
   }
 
@@ -1014,14 +913,13 @@
     left: auto;
     right: var(--margin);
     top: 36%;
-    --device-w: 44vw;
-    max-width: 17rem;
+    width: 42vw;
   }
 
   .heroFrame {
     left: var(--margin);
-    top: 51%;
-    width: min(29vw, 10.5rem);
+    top: 52%;
+    width: min(28vw, 10rem);
   }
 
   .handNote {
@@ -1037,200 +935,210 @@
     bottom: 6%;
   }
 
-  .disciplines {
-    display: none;
+  .frontLabel {
+    top: 13%;
+    max-width: 8ch;
   }
 
-  .behind {
-    background:
-      linear-gradient(90deg, transparent 0 74%, rgb(var(--ink-rgb) / 0.09) 74% calc(74% + 1px), transparent calc(74% + 1px)),
-      var(--ivory);
+  .satellite[data-social-slot='1'] {
+    left: var(--margin);
+    top: 56%;
+    width: 30vw;
+  }
+
+  .satellite[data-social-slot='2'] {
+    right: var(--margin);
+    top: 15%;
+    width: 28vw;
+  }
+
+  .crossing {
+    width: 30vw;
   }
 
   .behindRule {
-    top: 11vh;
+    top: 10vh;
   }
 
   .behindPrimary {
     left: var(--margin);
-    top: 15vh;
-    width: 70vw;
+    top: 13vh;
+    width: 66vw;
   }
 
   .behindSecondary {
     left: auto;
     right: var(--margin);
-    top: 42%;
-    width: 31vw;
+    top: 38%;
+    width: 30vw;
   }
 
   .behindCopy {
     left: var(--margin);
     right: auto;
     top: auto;
-    bottom: 10vh;
+    bottom: 9vh;
     width: min(78vw, 30rem);
   }
 
-  .behindLabel {
-    margin-bottom: 1.25rem;
-  }
-
   .statement {
-    max-width: 27ch;
-  }
-
-  .layers {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0 1rem;
-    margin-top: 1.7rem;
-  }
-
-  .layers li {
-    grid-template-columns: 2.25rem 1fr;
-    min-width: 0;
-  }
-
-  .behindFolio {
-    display: none;
-  }
-
-  .frontLabel {
-    top: 14%;
-  }
-
-  .satellite[data-social-slot='1'] {
-    left: var(--margin);
-    top: 52%;
-    width: 31vw;
-  }
-
-  .satellite[data-social-slot='2'] {
-    right: var(--margin);
-    top: 57%;
-    width: 29vw;
-  }
-
-  .satellite[data-social-slot='3'] {
-    display: none;
-  }
-
-  .contextWord {
-    left: 8%;
-    top: 16vh;
-    width: 84%;
-    font-size: clamp(3.6rem, 15vw, 6.5rem);
-  }
-
-  .device {
-    --device-w: 58vw;
-    max-width: 16rem;
-  }
-
-  .note {
-    display: none;
-  }
-
-  .sequenceRail,
-  .progressTrack {
-    display: none;
-  }
-
-  .beat {
-    display: none;
+    max-width: 24ch;
   }
 
   .campaignWord {
-    font-size: clamp(1.55rem, 7.2vw, 2.15rem);
-  }
-
-  .immersionStatement {
-    top: auto;
-    bottom: 18vh;
-    width: min(28ch, 72vw);
-    translate: none;
+    font-size: clamp(1.3rem, 6vw, 1.9rem);
   }
 
   .immersionHeading {
-    top: 15vh;
+    left: var(--margin);
+    top: 14vh;
     bottom: auto;
+    max-width: 8ch;
   }
 
-  .immersionPlane[data-immersion-slot='3'],
-  .immersionPlane[data-immersion-slot='4'],
-  .immersionPlane[data-immersion-slot='5'] {
-    display: none;
-  }
-
-  .immersionPlane[data-immersion-slot='0'] {
-    --w: 100vw;
-    --x: 0vw;
-    --y: 0vh;
-    --z: 0px;
-    --rx: 0deg;
-    --ry: 0deg;
-    --s: 1;
-    height: 100vh;
-  }
-
-  .immersionPlane[data-immersion-slot='1'] {
-    --w: 28vw;
-    --x: -22vw;
-    --y: -16vh;
-    --z: -120px;
-    --rx: 3deg;
-    --ry: -8deg;
-    --s: 0.92;
-  }
-
-  .immersionPlane[data-immersion-slot='2'] {
-    --w: 34vw;
-    --x: 18vw;
-    --y: 14vh;
-    --z: -180px;
-    --rx: -2deg;
-    --ry: 6deg;
-    --s: 0.86;
+  .immersionStatement {
+    left: var(--margin);
+    right: var(--margin);
+    bottom: 16vh;
+    width: auto;
+    text-align: left;
   }
 }
 
 /* ============================================================
-   REDUCED MOTION — composition finale immédiate
+   REDUCED MOTION — composition posée, contenu intégralement lisible
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .transient,
-  .openingFrame,
-  .bgSocial,
-  .bgPhone,
-  .beat,
-  .sequenceRail,
-  .progressTrack,
-  .contextWord,
-  .sideButton,
-  .island,
-  .phoneChrome,
-  .feed,
-  .focus,
-  .campaign,
-  .frontComposition,
-  .satellite {
+  .actMarker {
+    height: 25%;
+  }
+
+  .actMarker:nth-child(1) {
+    top: 0;
+  }
+
+  .actMarker:nth-child(2) {
+    top: 25%;
+  }
+
+  .actMarker:nth-child(3) {
+    top: 50%;
+  }
+
+  .actMarker:nth-child(4) {
+    top: 75%;
+  }
+
+  .stage {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    background: var(--ivory);
+    color: var(--ink);
+  }
+
+  .motionStory {
     display: none;
   }
 
-  .device {
-    --phone-bezel: 8px;
-    --phone-radius: 38px;
-    --phone-island: 72px;
-    --device-ar: 9 / 19.5;
-    left: 50% !important;
-    top: 50% !important;
-    translate: -50% -50%;
-    padding: var(--phone-bezel);
-    background: #0d0c0a;
+  .reducedStory {
+    display: block;
   }
 
-  .story {
-    clip-path: none;
+  .reducedPanel {
+    position: relative;
+    display: grid;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: var(--margin);
+    overflow: hidden;
+    border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14);
+    background: var(--ivory);
+  }
+
+  .reducedPanel > h2 {
+    align-self: start;
+    max-width: 10ch;
+    margin-top: 10vh;
+    text-wrap: balance;
+  }
+
+  .reducedPanel > p {
+    align-self: end;
+    max-width: 34ch;
+    margin-bottom: 6vh;
+    text-wrap: pretty;
+  }
+
+  .reducedName {
+    font-size: clamp(3.8rem, 13vw, 9.5rem);
+    line-height: 0.82;
+  }
+
+  .reducedName em {
+    display: block;
+    color: var(--rich-wine);
+  }
+
+  .reducedHeroMedia {
+    position: absolute;
+    right: var(--margin);
+    top: 22%;
+    width: min(28vw, 18rem);
+  }
+
+  .reducedMediaPair {
+    align-self: end;
+    display: grid;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: clamp(1rem, 4vw, 4rem);
+    width: min(68vw, 62rem);
+    margin: 0 0 6vh auto;
+  }
+
+  .reducedPhoneMedia {
+    position: absolute;
+    right: 13vw;
+    top: 13vh;
+    width: min(25vw, 15rem);
+  }
+
+  .reducedImmersion {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  .reducedImmersion > h2,
+  .reducedImmersion > p {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .reducedPanel {
+    min-height: 88svh;
+  }
+
+  .reducedPanel > h2 {
+    margin-top: 6vh;
+  }
+
+  .reducedHeroMedia {
+    right: var(--margin);
+    top: 42%;
+    width: 38vw;
+  }
+
+  .reducedMediaPair {
+    grid-template-columns: 1fr 0.7fr;
+    width: 88vw;
+  }
+
+  .reducedPhoneMedia {
+    right: var(--margin);
+    top: 35%;
+    width: 44vw;
   }
 }

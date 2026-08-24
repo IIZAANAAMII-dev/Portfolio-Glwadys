@@ -4,7 +4,7 @@
 > installer ce qui sert, **lire** ce qui est installé, et distinguer honnêtement
 > « installé » de « réellement utile ».
 
-Registry utilisé : `npx skills find` (https://skills.sh/), via le skill `find-skills`.
+Registry utilisé : `npx skills find` ([skills.sh](https://skills.sh/)), via le skill `find-skills`.
 Installation : niveau projet, dans `.agents/skills/` (+ symlink `.claude/skills/`).
 L'installation globale a été refusée par le CLI dans cet environnement
 (`PromptScript does not support global skill installation`).
@@ -34,34 +34,34 @@ ce dont dépend l'architecture (ScrollTrigger, timelines, Flip, SplitText,
 
 ## 3. Installés
 
-| Skill | Installs | Pourquoi |
+|Skill|Installs|Pourquoi|
 |---|---|---|
-| `vercel-labs/agent-skills@web-design-guidelines` | 558.5K | Officiel Vercel. Grille de revue UI/UX/a11y, utilisée en phase QA. |
-| `enzed/r3f-skills@r3f-fundamentals` | 1.2K | Setup Canvas, `frameloop`, disposal, fuites de contexte WebGL. |
-| `enzed/r3f-skills@r3f-textures` | 1.1K | `colorSpace` sRGB, anisotropy, mipmaps, cover-fit : critique pour afficher des photos sans les dénaturer. |
-| `enzed/r3f-skills@r3f-animation` | 1.2K | `useFrame`, damping, pilotage depuis une valeur externe sans re-render React. |
-| `enzed/r3f-skills@r3f-shaders` | 1.2K | `shaderMaterial`, uniforms sans re-render, cover UV. Pour l'effet signature. |
-| `enzed/r3f-skills@r3f-lighting` | 1.1K | Lu pour **confirmer qu'on n'en a pas besoin** (voir §5). Conclusion utile. |
-| `freshtechbro/claudedesignskills@web3d-integration-patterns` | 2.1K | Ciblé par le brief. Valeur réelle moyenne (voir §6). |
-| `freshtechbro/claudedesignskills@modern-web-design` | 2.1K | Checklists accessibilité + performance. |
-| `jakubkrehel/skills@better-typography` | 9.8K | Le meilleur skill du lot pour ce projet. Règles typographiques précises. |
-| `devmartinese/awwwards-animations-skill@awwwards-animations` | 2.2K | Ciblé par le brief. Bon sur l'intégration Lenis↔ScrollTrigger. |
+|`vercel-labs/agent-skills@web-design-guidelines`|558.5K|Officiel Vercel. Grille de revue UI/UX/a11y, utilisée en phase QA.|
+|`enzed/r3f-skills@r3f-fundamentals`|1.2K|Setup Canvas, `frameloop`, disposal, fuites de contexte WebGL.|
+|`enzed/r3f-skills@r3f-textures`|1.1K|`colorSpace` sRGB, anisotropy, mipmaps, cover-fit : critique pour afficher des photos sans les dénaturer.|
+|`enzed/r3f-skills@r3f-animation`|1.2K|`useFrame`, damping, pilotage depuis une valeur externe sans re-render React.|
+|`enzed/r3f-skills@r3f-shaders`|1.2K|`shaderMaterial`, uniforms sans re-render, cover UV. Pour l'effet signature.|
+|`enzed/r3f-skills@r3f-lighting`|1.1K|Lu pour **confirmer qu'on n'en a pas besoin** (voir §5). Conclusion utile.|
+|`freshtechbro/claudedesignskills@web3d-integration-patterns`|2.1K|Ciblé par le brief. Valeur réelle moyenne (voir §6).|
+|`freshtechbro/claudedesignskills@modern-web-design`|2.1K|Checklists accessibilité + performance.|
+|`jakubkrehel/skills@better-typography`|9.8K|Le meilleur skill du lot pour ce projet. Règles typographiques précises.|
+|`devmartinese/awwwards-animations-skill@awwwards-animations`|2.2K|Ciblé par le brief. Bon sur l'intégration Lenis↔ScrollTrigger.|
 
 ---
 
 ## 4. Écartés délibérément
 
-| Skill | Raison |
+|Skill|Raison|
 |---|---|
-| `locomotive-scroll` | On utilise Lenis. Locomotive v5 est de toute façon bâti sur Lenis. |
-| `motion-framer`, `react-spring-physics` | Le brief interdit explicitement les « animations Framer Motion génériques ». Une seule bibliothèque d'animation : GSAP. Éviter deux libs qui animent la même propriété. |
-| `babylonjs`, `playcanvas`, `aframe-webxr`, `spline-interactive`, `rive-interactive`, `lottie-animations`, `pixijs-2d` | Hors stack. |
-| `r3f-physics`, `r3f-geometry`, `r3f-loaders`, `r3f-postprocessing` | Pas de physique, pas de modèles GLTF, géométrie = plans. Post-processing non justifié au vu du budget perf. |
-| `blender-web-pipeline`, `substance-3d-texturing` | Aucun asset 3D à produire. |
-| `barba-js` | Site mono-page, pas de transitions inter-pages. |
-| `scroll-reveal-libraries` | « fade-up systématique » est un anti-pattern du brief. |
-| Les ~10 autres skills « awwwards-* » | 3 à 35 installs, auteurs inconnus. En dessous du seuil de confiance recommandé par `find-skills` (< 100 installs = prudence). |
-| `playwright-visual-testing` | Playwright est utilisé directement. Le skill n'apportait pas de méthode supérieure. |
+|`locomotive-scroll`|On utilise Lenis. Locomotive v5 est de toute façon bâti sur Lenis.|
+|`motion-framer`, `react-spring-physics`|Le brief interdit explicitement les « animations Framer Motion génériques ». Une seule bibliothèque d'animation : GSAP. Éviter deux libs qui animent la même propriété.|
+|`babylonjs`, `playcanvas`, `aframe-webxr`, `spline-interactive`, `rive-interactive`, `lottie-animations`, `pixijs-2d`|Hors stack.|
+|`r3f-physics`, `r3f-geometry`, `r3f-loaders`, `r3f-postprocessing`|Pas de physique, pas de modèles GLTF, géométrie = plans. Post-processing non justifié au vu du budget perf.|
+|`blender-web-pipeline`, `substance-3d-texturing`|Aucun asset 3D à produire.|
+|`barba-js`|Site mono-page, pas de transitions inter-pages.|
+|`scroll-reveal-libraries`|« fade-up systématique » est un anti-pattern du brief.|
+|Les ~10 autres skills « awwwards-* »|3 à 35 installs, auteurs inconnus. En dessous du seuil de confiance recommandé par `find-skills` (< 100 installs = prudence).|
+|`playwright-visual-testing`|Playwright est utilisé directement. Le skill n'apportait pas de méthode supérieure.|
 
 ---
 
