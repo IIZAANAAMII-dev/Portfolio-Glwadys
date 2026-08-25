@@ -19,7 +19,7 @@ interface Props {
 const TARGETS = [
   { key: 'home', id: 'act-opening' },
   { key: 'work', id: 'act-work' },
-  { key: 'journey', id: 'act-journey' },
+  { key: 'journey', id: 'act-journey-scene' },
   { key: 'expertise', id: 'act-expertise' },
   { key: 'contact', id: 'act-contact' },
 ] as const;
@@ -41,7 +41,7 @@ export function BottomNav({ content, locale }: Props) {
       { id: 'act-immersion', label: content.immersion.heading, navKey: 'home' as const },
       { id: 'act-process', label: content.process.heading, navKey: 'home' as const },
       { id: 'act-work', label: content.work.heading, navKey: 'work' as const },
-      { id: 'act-journey', label: content.journey.heading, navKey: 'journey' as const },
+      { id: 'act-journey-handoff', label: content.journey.heading, navKey: 'journey' as const },
       { id: 'act-expertise', label: content.expertise.heading, navKey: 'expertise' as const },
       { id: 'act-contact', label: content.contact.heading, navKey: 'contact' as const },
     ],

@@ -44,6 +44,7 @@ export function ActContact({ content }: Props) {
 
           if (isReduced) return;
 
+          gsap.set(manifestoPage, { autoAlpha: 0 });
           gsap.set(manifestoFold, { scale: 1, transformOrigin: 'right top' });
 
           const manifestoTl = gsap.timeline({
@@ -57,6 +58,7 @@ export function ActContact({ content }: Props) {
           });
 
           manifestoTl
+            .to(manifestoPage, { autoAlpha: 1, duration: 0.18 }, 0)
             .to(manifestoFold, { scale: 0, duration: 0.24 }, 0.02)
             .fromTo(
               q<HTMLElement>('[data-manifesto-line]'),

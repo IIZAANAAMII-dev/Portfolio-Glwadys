@@ -96,6 +96,9 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0.5rem 0.85rem;
   border-radius: 999px;
   white-space: nowrap;
@@ -147,6 +150,11 @@
 }
 
 .lang {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0.5rem 0.5rem;
   border-radius: 999px;
   color: rgb(var(--paper-rgb) / 0.5);
@@ -161,7 +169,7 @@
 
 .contactCta {
   display: none;
-  min-height: 2.35rem;
+  min-height: 44px;
   align-items: center;
   justify-content: space-between;
   gap: 3rem;

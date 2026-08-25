@@ -32,15 +32,11 @@ function ProjectSection({
   locale,
   labels,
   index,
-  selection,
-  bridgeStatement,
 }: {
   project: Project;
   locale: Locale;
   labels: CaseLabels;
   index: number;
-  selection: string;
-  bridgeStatement: string;
 }) {
   const root = useRef<HTMLElement>(null);
   const media =
@@ -57,7 +53,6 @@ function ProjectSection({
       const q = gsap.utils.selector(rootEl);
       const visual = q<HTMLElement>('[data-project-visual]')[0];
       const dossier = q<HTMLElement>('[data-project-dossier]')[0];
-      const yunaHandoff = q<HTMLElement>('[data-yuna-handoff]')[0];
       if (!visual || !dossier) return;
       const mm = gsap.matchMedia();
 
@@ -85,10 +80,6 @@ function ProjectSection({
             });
           }
 
-          if (yunaHandoff) {
-            gsap.set(yunaHandoff, { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)' });
-          }
-
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
             scrollTrigger: {
@@ -102,13 +93,7 @@ function ProjectSection({
             },
           });
 
-          tl
-            .to(
-              yunaHandoff ?? [],
-              { clipPath: 'inset(0% 0% 100% 0%)', autoAlpha: 0, duration: 0.24 },
-              0,
-            )
-            .fromTo(
+          tl.fromTo(
               q<HTMLElement>('[data-project-name]'),
               { yPercent: 38, autoAlpha: 0 },
               { yPercent: 0, autoAlpha: 1, duration: 0.22 },
@@ -203,20 +188,6 @@ function ProjectSection({
   return (
     <section ref={root} className={styles.project} data-project={project.id} aria-labelledby={`${project.id}-title`}>
       <div className={styles.projectVisual} data-project-visual>
-        {project.id === 'yuna' && (
-          <div className={styles.yunaHandoff} data-yuna-handoff aria-hidden="true">
-            <span className={`${styles.handoffIndex} micro`}>06 / Portfolio</span>
-            <span className={`${styles.handoffTitle} display`}>{selection}</span>
-            <span className={styles.handoffRule} />
-            <span className={styles.handoffStatement}>{bridgeStatement}</span>
-            <div className={styles.handoffProof}>
-              <Media item={yunaMedia[0]!} locale={locale} preload sizes="29vw" />
-              <span className={`${styles.handoffStamp} micro`}>Campaign / Yuna Bijoux</span>
-              <span className={styles.handoffCrop} />
-            </div>
-          </div>
-        )}
-
         {project.id === 'comptoir' && (
           <div className={styles.macro} data-comptoir-macro>
             <Media item={comptoirTexture} locale={locale} className="fill-frame" sizes="100vw" />
@@ -334,8 +305,6 @@ export function ActWork({ content, locale }: Props) {
           locale={locale}
           labels={content.work.caseLabels}
           index={index}
-          selection={content.work.heading}
-          bridgeStatement={content.strategy.sentence}
           key={project.id}
         />
       ))}

@@ -57,9 +57,10 @@ export function ImmersionCanvas({
 
     const io = new IntersectionObserver(
       (entries) => {
-        // Unmount again once the pinned chapter is more than one viewport away.
-        // Re-entering while reverse-scrolling mounts a fresh, clean WebGL scene.
-        setMounted(entries.some((entry) => entry.isIntersecting));
+        // Once decoded, keep the demand-loop canvas alive for reverse scroll.
+        // It renders no frames offscreen and avoids a WebGL context teardown /
+        // texture re-upload cycle when the visitor revisits the raccord.
+        if (entries.some((entry) => entry.isIntersecting)) setMounted(true);
       },
       // Une hauteur de viewport d'avance : les textures sont décodées avant
       // l'entrée, sinon le raccord depuis le portail montre des plans vides.

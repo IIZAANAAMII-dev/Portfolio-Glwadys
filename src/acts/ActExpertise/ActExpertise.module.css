@@ -44,7 +44,7 @@
 
 .aside {
   right: var(--margin);
-  bottom: var(--margin);
+  bottom: max(17vh, 9.5rem);
   width: min(26ch, 24vw);
   text-align: right;
   color: var(--rich-wine);
@@ -83,7 +83,7 @@
 
 .handoffTitle {
   position: absolute;
-  top: 24%;
+  top: 18%;
   left: var(--margin);
   right: var(--margin);
   margin: 0;
@@ -136,7 +136,7 @@
   left: var(--margin);
   right: var(--margin);
   top: 18vh;
-  bottom: 12vh;
+  bottom: max(18vh, 10rem);
   overflow: hidden;
 }
 
@@ -168,7 +168,7 @@
   display: block;
   padding-block: 1.5vh;
   font-family: var(--font-display);
-  font-size: clamp(2.8rem, 6.3vw, 7.2rem);
+  font-size: clamp(2.7rem, 5.6vw, 6.2rem);
   font-style: italic;
   line-height: 0.95;
   letter-spacing: -0.035em;
@@ -182,7 +182,7 @@
   width: min(31ch, 28vw);
   translate: 0 -50%;
   text-align: right;
-  opacity: 0;
+  opacity: 0.46;
   transition: opacity var(--dur-snap) var(--ease-move);
 }
 
@@ -193,7 +193,7 @@
 
 .row:hover .context,
 .row:focus-within .context {
-  opacity: 0.72;
+  opacity: 0.78;
 }
 
 .row:hover::after,
@@ -211,7 +211,7 @@
 
 @media (max-width: 1023px) {
   .handoffTitle {
-    top: 25%;
+    top: 19%;
     font-size: clamp(3rem, 13.4vw, 6.5rem);
     line-height: 0.96;
   }
@@ -228,7 +228,7 @@
 
   .listViewport {
     top: 15vh;
-    bottom: 14vh;
+    bottom: max(15vh, 7.5rem);
   }
 
   .row {

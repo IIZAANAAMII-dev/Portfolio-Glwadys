@@ -19,6 +19,8 @@ interface MediaProps {
   sizes?: string;
   /** Permet de neutraliser le preload quand le même média réapparaît plus loin dans le film. */
   preload?: boolean;
+  /** Charge immédiatement un média de raccord sans créer un second preload global. */
+  loading?: 'eager' | 'lazy';
 }
 
 /**
@@ -41,6 +43,7 @@ export function Media({
   style,
   sizes = '(max-width: 1023px) 60vw, 30vw',
   preload,
+  loading,
 }: MediaProps) {
   const frameStyle = {
     '--ratio': ratioValue[item.ratio],
@@ -68,6 +71,7 @@ export function Media({
           fill
           sizes={sizes}
           preload={preload ?? item.priority}
+          loading={preload ?? item.priority ? undefined : loading}
         />
       </div>
     );

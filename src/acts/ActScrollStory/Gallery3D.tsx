@@ -9,7 +9,7 @@ import { galleryFlatSlots, galleryPlanes, type GalleryPlane } from './galleryLay
 interface Gallery3DProps {
   /** 0 -> 1 across the authored camera track. Written by GSAP, read by R3F. */
   progress: MutableRefObject<number>;
-  /** Autonomous signature burst, reversible when the visitor scrolls back. */
+  /** Scroll-driven separation of the campaign into depth planes. */
   burst: MutableRefObject<number>;
   /** Lets the scroll timeline request a frame from a demand-loop canvas. */
   requestRenderRef: MutableRefObject<(() => void) | null>;
@@ -17,7 +17,7 @@ interface Gallery3DProps {
 
 const FOV = 55;
 const FLAT_DISTANCE = 16;
-const FLATTEN_AT = 0.84;
+const FLATTEN_AT = 0.58;
 
 const CAMERA_TRACK: Array<{ p: number; z: number; x: number; y: number }> = [
   { p: 0, z: 8, x: 0, y: 0 },
@@ -71,20 +71,26 @@ const FRAGMENT = /* glsl */ `
   uniform float uPlaneAspect;
   uniform float uImageAspect;
   uniform float uAlpha;
+  uniform float uDepth;
+  uniform vec2 uFocus;
   varying vec2 vUv;
 
-  vec2 uvCover(vec2 uv, float planeAspect, float imageAspect) {
+  vec2 uvCover(vec2 uv, float planeAspect, float imageAspect, vec2 focus) {
     vec2 scale = planeAspect > imageAspect
       ? vec2(1.0, imageAspect / planeAspect)
       : vec2(planeAspect / imageAspect, 1.0);
-    return (uv - 0.5) * scale + 0.5;
+    return (uv - 0.5) * scale + focus;
   }
 
   void main() {
-    vec2 uv = uvCover(vUv, uPlaneAspect, uImageAspect);
+    vec2 uv = uvCover(vUv, uPlaneAspect, uImageAspect, uFocus);
     vec3 color = texture2D(uMap, uv).rgb;
     vec2 edgeDistance = abs(vUv - 0.5) * 2.0;
     float edge = 1.0 - smoothstep(0.87, 1.0, max(edgeDistance.x, edgeDistance.y)) * 0.13;
+    float sun = 1.0 - smoothstep(0.0, 0.82, distance(vUv, vec2(0.66, 0.7)));
+    float vignette = 1.0 - smoothstep(0.36, 0.92, distance(vUv, vec2(0.5)));
+    color *= mix(0.88, 1.04, vignette);
+    color += vec3(0.075, 0.038, 0.014) * sun * uDepth;
 
     gl_FragColor = vec4(color * edge, uAlpha);
     #include <tonemapping_fragment>
@@ -177,8 +183,10 @@ function Plane({
       uImageAspect: { value: imageAspect },
       uAlpha: { value: 0 },
       uBend: { value: 0 },
+      uDepth: { value: 0 },
+      uFocus: { value: new THREE.Vector2(...(plane.focus ?? [0.5, 0.5])) },
     }),
-    [imageAspect, texture],
+    [imageAspect, plane.focus, texture],
   );
 
   useFrame(() => {
@@ -188,7 +196,15 @@ function Plane({
     const p = progress.current;
     const cameraPoint = sampleTrack(p);
     const flatten = smoothstep((p - FLATTEN_AT) / (1 - FLATTEN_AT));
-    const burstProgress = smoothstep(burst.current);
+    const rawBurst = THREE.MathUtils.clamp(burst.current, 0, 1);
+    const spatialProgress = plane.depthLayer
+      ? smoothstep((rawBurst + 0.08) / 0.7)
+      : smoothstep((p - 0.06) / 0.32);
+    const revealProgress = plane.portal
+      ? 1
+      : plane.depthLayer
+        ? smoothstep((rawBurst + 0.05) / 0.5)
+        : smoothstep((p - 0.1) / 0.22);
 
     target.set(cameraPoint.x, cameraPoint.y, cameraPoint.z - FLAT_DISTANCE);
     const resolvedViewport = viewport.getCurrentViewport(camera, target);
@@ -226,18 +242,29 @@ function Plane({
 
     // Compression -> anticipation -> burst: all sheets begin in a shallow stack,
     // then regain their authored X/Y/Z positions as the autonomous burst runs.
-    const x = THREE.MathUtils.lerp(stagedX * 0.055, authoredX, burstProgress);
-    const y = THREE.MathUtils.lerp(stagedY * 0.055, authoredY, burstProgress);
-    const z = THREE.MathUtils.lerp(-1.5 + plane.z * 0.025, authoredZ, burstProgress);
+    const atmosphere =
+      Math.sin(p * Math.PI * 5 + Math.abs(plane.z) * 0.08) *
+      0.045 *
+      (1 - flatten) *
+      spatialProgress;
+    const x = plane.portal
+      ? authoredX
+      : THREE.MathUtils.lerp(stagedX * 0.055, authoredX, spatialProgress);
+    const y = plane.portal
+      ? authoredY
+      : THREE.MathUtils.lerp(stagedY * 0.055, authoredY, spatialProgress) + atmosphere;
+    const z = plane.portal
+      ? authoredZ
+      : THREE.MathUtils.lerp(-1.5 + plane.z * 0.025, authoredZ, spatialProgress);
 
     element.position.set(x, y, z);
     element.rotation.set(
-      THREE.MathUtils.degToRad(plane.rx) * (1 - flatten) * burstProgress,
-      THREE.MathUtils.degToRad(plane.ry) * (1 - flatten) * burstProgress,
+      THREE.MathUtils.degToRad(plane.rx) * (1 - flatten) * spatialProgress,
+      THREE.MathUtils.degToRad(plane.ry) * (1 - flatten) * spatialProgress,
       0,
     );
 
-    const burstScale = THREE.MathUtils.lerp(0.76, 1, burstProgress);
+    const burstScale = plane.portal ? 1 : THREE.MathUtils.lerp(0.82, 1, spatialProgress);
     element.scale.set(authoredW * burstScale, authoredH * burstScale, 1);
 
     const distance = cameraPoint.z - z;
@@ -246,13 +273,14 @@ function Plane({
     if (plane.flatSlot < 0) alpha *= 1 - flatten;
 
     const material = element.material as THREE.ShaderMaterial;
-    material.uniforms.uAlpha!.value = alpha * burstProgress;
+    material.uniforms.uAlpha!.value = alpha * revealProgress;
     material.uniforms.uPlaneAspect!.value = authoredH > 0 ? authoredW / authoredH : 1;
+    material.uniforms.uDepth!.value = plane.portal ? 0.18 : 0.45 + spatialProgress * 0.55;
     material.uniforms.uBend!.value = plane.portal
       ? 0
       : (smoothstep((p - 0.47) / 0.3) - smoothstep((p - 0.82) / 0.18)) * 0.085;
 
-    element.visible = alpha * burstProgress > 0.002;
+    element.visible = alpha * revealProgress > 0.002;
   });
 
   return (

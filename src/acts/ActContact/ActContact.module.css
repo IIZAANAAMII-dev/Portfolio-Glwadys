@@ -1,5 +1,8 @@
 .act {
   position: relative;
+  /* The contact sheet is the same physical page as Expertise's final frame.
+     Pulling it over that frame turns the duplicate into a DOM handoff. */
+  margin-top: -100svh;
   overflow: clip;
   background: var(--wood-brown);
   color: var(--ink);
@@ -25,9 +28,16 @@
 .manifestoPage,
 .lastPage {
   position: absolute;
-  inset: clamp(1rem, 3vw, 2.75rem);
   overflow: hidden;
   color: var(--ink);
+}
+
+.manifestoPage {
+  inset: 0 clamp(1rem, 3vw, 2.75rem);
+}
+
+.lastPage {
+  inset: clamp(1rem, 3vw, 2.75rem);
 }
 
 .manifestoPage::before,
@@ -85,7 +95,7 @@
   position: absolute;
   left: var(--margin);
   right: var(--margin);
-  top: 24%;
+  top: 18%;
   font-family: var(--font-display);
   font-size: clamp(3.2rem, 8.2vw, 9.75rem);
   font-style: italic;
@@ -200,6 +210,9 @@
 
 .email {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   max-width: 100%;
   font-family: var(--font-display);
   font-size: clamp(1.55rem, 3vw, 3.55rem);
@@ -254,17 +267,34 @@
 .backTop {
   right: var(--margin);
   bottom: var(--margin);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: var(--rich-wine);
+}
+
+.linkedin {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 @media (max-width: 1023px) {
   .manifestoPage,
   .lastPage {
-    inset: 0.75rem;
+    inset-inline: 0.75rem;
+  }
+
+  .manifestoPage {
+    inset-block: 0;
+  }
+
+  .lastPage {
+    inset-block: 0.75rem;
   }
 
   .manifestoTitle {
-    top: 25%;
+    top: 19%;
     font-size: clamp(3rem, 13.4vw, 6.5rem);
     line-height: 0.96;
   }
@@ -361,6 +391,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .act {
+    margin-top: 0;
+  }
+
   .manifestoSection,
   .contactSection {
     min-height: 100svh;

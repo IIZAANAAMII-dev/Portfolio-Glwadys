@@ -40,6 +40,10 @@ export interface GalleryPlane {
   mobile: boolean;
   /** The first WebGL frame matches the full-viewport DOM portal. */
   portal?: boolean;
+  /** Fast-reveal planes cut from the campaign image to establish depth immediately. */
+  depthLayer?: boolean;
+  /** Focal point used when a plane is a crop of a wider campaign image. */
+  focus?: readonly [number, number];
 }
 
 /**
@@ -82,6 +86,58 @@ export const galleryPlanes: GalleryPlane[] = [
     flatSlot: -1,
     mobile: true,
     portal: true,
+  },
+
+  // The campaign does not simply enlarge: three readings of the same frame
+  // separate into silhouette, street and Marseille light before the corridor.
+  {
+    id: 'campaign-foreground',
+    src: `${M}/social/social-portal-v2.jpg`,
+    w: 4.7,
+    h: 7.4,
+    x: -2.75,
+    y: -0.45,
+    mobileX: -1.45,
+    mobileY: -0.55,
+    z: -8,
+    rx: 0.7,
+    ry: 4.8,
+    flatSlot: -1,
+    mobile: true,
+    depthLayer: true,
+    focus: [0.32, 0.47],
+  },
+  {
+    id: 'campaign-midground',
+    src: `${M}/social/social-portal-v2.jpg`,
+    w: 8.8,
+    h: 4.9,
+    x: 2.45,
+    y: -0.7,
+    mobileX: 1.3,
+    mobileY: -0.72,
+    z: -14,
+    rx: -0.8,
+    ry: -4.2,
+    flatSlot: -1,
+    mobile: true,
+    depthLayer: true,
+    focus: [0.58, 0.37],
+  },
+  {
+    id: 'campaign-background',
+    src: `${M}/social/social-portal-v2.jpg`,
+    w: 10.8,
+    h: 5.4,
+    x: -0.25,
+    y: 1.35,
+    z: -19,
+    rx: 0.35,
+    ry: 1.6,
+    flatSlot: -1,
+    mobile: false,
+    depthLayer: true,
+    focus: [0.63, 0.67],
   },
 
   // Discovery: one large pass and one offset counter-plane.
@@ -156,7 +212,7 @@ export const galleryPlanes: GalleryPlane[] = [
   // Resolution: these four planes become the first four contact-sheet cards.
   {
     id: 'resolve-moodboard',
-    src: `${M}/process/moodboard.jpg`,
+    src: `${M}/process/contact-sheet-editorial-v2.jpg`,
     w: 3.7,
     h: 4.62,
     x: -8.8,
@@ -171,7 +227,7 @@ export const galleryPlanes: GalleryPlane[] = [
   },
   {
     id: 'resolve-frame',
-    src: `${M}/editorial/hero-frame.jpg`,
+    src: `${M}/social/editorial-tools-detail-v2.jpg`,
     w: 3.2,
     h: 3.2,
     x: 7.9,
@@ -201,7 +257,7 @@ export const galleryPlanes: GalleryPlane[] = [
   },
   {
     id: 'resolve-reel',
-    src: `${M}/social/social-reel.jpg`,
+    src: `${M}/social/creative-director-studio-v2.jpg`,
     w: 1.75,
     h: 3.12,
     x: 9.8,

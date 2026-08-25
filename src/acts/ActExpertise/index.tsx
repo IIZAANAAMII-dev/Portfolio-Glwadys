@@ -85,10 +85,7 @@ export function ActExpertise({ content }: Props) {
                   return (window.innerWidth - inset * 2) / window.innerWidth;
                 },
                 scaleY: () => {
-                  const inset = isDesktop
-                    ? Math.min(Math.max(window.innerWidth * 0.03, 16), 44)
-                    : 12;
-                  return (window.innerHeight - inset * 2) / window.innerHeight;
+                  return 1;
                 },
                 duration: 0.2,
               },
@@ -119,7 +116,7 @@ export function ActExpertise({ content }: Props) {
           <div className={styles.listViewport} data-expertise-content>
             <ol ref={list} className={styles.list}>
               {content.expertise.entries.map((entry, index) => (
-                <li className={styles.row} key={entry.term} tabIndex={0}>
+                <li className={styles.row} key={entry.term}>
                   <span className={`${styles.index} micro`}>{String(index + 1).padStart(2, '0')}</span>
                   <span className={styles.term}>{entry.term}</span>
                   <span className={`${styles.context} micro`}>{entry.context}</span>

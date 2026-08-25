@@ -105,6 +105,9 @@ function ReducedProcess({ content, locale }: Props) {
         <span className="micro">05.2 / {content.process.moodboard}</span>
         <h2 className="display">{content.process.system}</h2>
         <p className="lead">{content.strategy.sentence}</p>
+        <div className={styles.reducedSelected}>
+          <Media item={contactSheet[0]!} locale={locale} compact sizes="38vw" />
+        </div>
         <div className={styles.reducedTokens}>
           {content.process.systemTokens.map((token, index) => (
             <span key={token}>
@@ -170,6 +173,7 @@ export function ActProcess({ content, locale }: Props) {
       const methodRows = q<HTMLElement>('[data-method-row]');
       const methodWords = q<HTMLElement>('[data-method-word]');
       const methodVisuals = q<HTMLElement>('[data-method-visual]');
+      const finalMethodVisual = methodVisuals.at(-1) ?? null;
       const methodChrome = q<HTMLElement>('[data-method-copy]');
       const workScene = one('[data-process-work]');
       const workCopy = q<HTMLElement>('[data-work-copy]');
@@ -190,7 +194,7 @@ export function ActProcess({ content, locale }: Props) {
           gsap.set(intentionScene, { autoAlpha: 0 });
           gsap.set(intentionMedia, { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.06 });
           gsap.set(intentionCopy, { autoAlpha: 0, y: 12 });
-          gsap.set(systemScene, { autoAlpha: 0 });
+          gsap.set(systemScene, { autoAlpha: 0, clipPath: 'inset(0% 100% 0% 0%)' });
           gsap.set(systemTokens, { autoAlpha: 0, yPercent: 16 });
           gsap.set(systemArtifacts, { autoAlpha: 0, scale: 0.82 });
           gsap.set(systemLines, { scaleX: 0, transformOrigin: 'left center' });
@@ -238,7 +242,11 @@ export function ActProcess({ content, locale }: Props) {
             .addLabel('system', P.system)
             .to(intentionMedia, { scale: 0.82, autoAlpha: 0.16, stagger: 0.025, duration: 0.34 }, P.system - 0.16)
             .to(intentionCopy, { autoAlpha: 0, y: -8, duration: 0.18 }, P.system - 0.12)
-            .to(systemScene, { autoAlpha: 1, duration: 0.12 }, P.system - 0.08)
+            .to(
+              systemScene,
+              { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.24 },
+              P.system - 0.12,
+            )
             .to(systemLines, { scaleX: 1, stagger: 0.04, duration: 0.24 }, P.system)
             .to(systemCopy, { autoAlpha: 1, y: 0, stagger: 0.05, duration: 0.28 }, P.system + 0.04)
             .to(systemTokens, { autoAlpha: 1, yPercent: 0, stagger: 0.055, duration: 0.34 }, P.system + 0.1)
@@ -269,12 +277,42 @@ export function ActProcess({ content, locale }: Props) {
             if (row) tl.to(row, { autoAlpha: 1, x: isDesktop ? -10 : 0, color: 'var(--rich-wine)', duration: 0.1 }, at);
           });
 
+          if (finalMethodVisual) {
+            const targetWidth = () =>
+              isDesktop
+                ? Math.min(window.innerWidth * 0.29, 480)
+                : Math.min(window.innerWidth * 0.58, 368);
+            const alignX = () => {
+              const rect = finalMethodVisual.getBoundingClientRect();
+              const margin = Math.max(20, window.innerWidth * 0.04);
+              const targetLeft = window.innerWidth - margin - targetWidth();
+              return targetLeft + targetWidth() / 2 - (rect.left + rect.width / 2);
+            };
+            const alignY = () => {
+              const rect = finalMethodVisual.getBoundingClientRect();
+              const targetTop = window.innerHeight * (isDesktop ? 0.13 : 0.31);
+              return targetTop + (rect.height * targetWidth()) / rect.width / 2 - (rect.top + rect.height / 2);
+            };
+            tl.to(
+              finalMethodVisual,
+              {
+                x: alignX,
+                y: alignY,
+                scale: () => targetWidth() / finalMethodVisual.getBoundingClientRect().width,
+                rotation: 0,
+                duration: 0.24,
+                ease: EASE.handoff,
+              },
+              P.work - 0.22,
+            );
+          }
+
           tl.addLabel('work', P.work)
-            .to(workScene, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.3, ease: EASE.handoff }, P.work - 0.14)
-            .to([methodScene, systemScene], { autoAlpha: 0, duration: 0.16 }, P.work - 0.02)
+            .to(workScene, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.32, ease: EASE.handoff }, P.work - 0.1)
+            .to([methodScene, systemScene], { autoAlpha: 0, duration: 0.16 }, P.work + 0.02)
             .to(workRule, { scaleY: 1, duration: 0.2 }, P.work)
             .to(workCopy, { autoAlpha: 1, y: 0, stagger: 0.045, duration: 0.24 }, P.work + 0.02)
-            .to(workProof, { autoAlpha: 1, y: 0, rotation: 0, scale: 1, duration: 0.28 }, P.work + 0.04)
+            .to(workProof, { autoAlpha: 1, y: 0, rotation: 0, scale: 1, duration: 0.24 }, P.work - 0.01)
             .to({}, { duration: 0.01 }, P.end - 0.01);
 
           return () => {
@@ -319,13 +357,12 @@ export function ActProcess({ content, locale }: Props) {
             <span className={`${styles.sceneChapter} micro`} data-intention-copy>05.2 / {content.process.moodboard}</span>
             <h3 className={`${styles.intentionTitle} display`} data-intention-copy>{content.process.moodboard}</h3>
             <p className={styles.intentionStatement} data-intention-copy>{content.strategy.sentence}</p>
-            <span className={`${styles.intentionNote} hand-note`} data-intention-copy aria-hidden="true">choisir une tension, une matière, un rythme</span>
-            {[contactSheet[0]!, contactSheet[6]!, contactSheet[3]!, contactSheet[1]!].map((item, index) => (
-              <figure className={styles.intentionMedia} data-intention-media data-intention-slot={index + 1} key={`intention-${item.id}`}>
-                <Media item={item} locale={locale} compact sizes="32vw" />
-                <figcaption className="micro">0{index + 1} / {item.role}</figcaption>
-              </figure>
-            ))}
+            <span className={`${styles.intentionNote} hand-note`} data-intention-copy aria-hidden="true">un tirage retenu / le reste recule</span>
+            <figure className={styles.intentionMedia} data-intention-media>
+              <Media item={contactSheet[0]!} locale={locale} compact sizes="42vw" />
+              <figcaption className="micro">Selected 01 / {contactSheet[0]!.role}</figcaption>
+              <span className={styles.intentionCrop} aria-hidden="true" />
+            </figure>
             <span className={styles.intentionAxis} data-intention-copy aria-hidden="true" />
           </div>
 
@@ -356,8 +393,16 @@ export function ActProcess({ content, locale }: Props) {
             <div className={styles.methodVisuals} aria-hidden="true">
               {content.strategy.steps.map((step, index) => (
                 <figure data-method-visual key={`visual-${step.term}`}>
-                  <Media item={contactSheet[index % contactSheet.length]!} locale={locale} compact sizes="28vw" />
-                  <figcaption><span className="micro">0{index + 1} / Evidence</span><strong>{step.term}</strong></figcaption>
+                  <Media
+                    item={index === content.strategy.steps.length - 1 ? yunaMedia[0]! : contactSheet[index % contactSheet.length]!}
+                    locale={locale}
+                    compact
+                    sizes="28vw"
+                  />
+                  <figcaption>
+                    <span className="micro">0{index + 1} / {index === content.strategy.steps.length - 1 ? 'Campaign · Yuna' : 'Evidence'}</span>
+                    <strong>{step.term}</strong>
+                  </figcaption>
                 </figure>
               ))}
             </div>

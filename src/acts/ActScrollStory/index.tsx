@@ -62,12 +62,12 @@ const T = {
   behindIn: 2.72,
   phoneIn: 4.15,
   montage: 4.65,
-  compress: 6.72,
-  burst: 7.2,
-  gallery: 7.48,
-  flatten: 9.0,
-  handoff: 9.32,
-  end: 9.58,
+  compress: 6.58,
+  depthIn: 6.68,
+  gallery: 7.04,
+  flatten: 7.76,
+  handoff: 8.5,
+  end: 8.7,
 } as const;
 
 /** Longueur totale du pin, en % de viewport. Dérivée de la partition. */
@@ -85,7 +85,7 @@ const STORY_ACT_MARKERS = [
   { id: 'act-opening', start: T.heroHold },
   { id: 'act-social', start: T.socialIn },
   { id: 'act-phone', start: T.phoneIn },
-  { id: 'act-immersion', start: T.burst },
+  { id: 'act-immersion', start: T.depthIn },
 ] as const;
 
 type ActMarkerStyle = CSSProperties & {
@@ -280,6 +280,9 @@ export function ActScrollStory({ content, locale }: Props) {
           const screenHero = one('[data-screen-hero]');
 
           const portalFrame = one('[data-portal-frame]');
+          const portalMediaEl = one(`.${styles.portalMedia}`);
+          const portalLayers = q<HTMLElement>('[data-portal-depth]');
+          const portalGuides = q<HTMLElement>('[data-portal-guide]');
           const sceneGround = one('[data-scene-ground]');
           const immersion = one('[data-immersion]');
           const immersionBits = q<HTMLElement>('[data-immersion-bit]');
@@ -296,6 +299,7 @@ export function ActScrollStory({ content, locale }: Props) {
             !behind ||
             !frontCopy ||
             !portalFrame ||
+            !portalMediaEl ||
             !immersion ||
             !immersionChapter ||
             !flatPaper ||
@@ -363,7 +367,12 @@ export function ActScrollStory({ content, locale }: Props) {
           });
 
           gsap.set([frontCopy, crossing], { autoAlpha: 0 });
-          gsap.set(satellites, { autoAlpha: 0, clipPath: 'inset(100% 0% 0% 0%)' });
+          const boardRotations = [-1.8, 1.25, -2.15, 0.9, 1.65];
+          gsap.set(satellites, {
+            autoAlpha: 0,
+            clipPath: 'inset(100% 0% 0% 0%)',
+            rotation: (index: number) => boardRotations[index] ?? 0,
+          });
           gsap.set(satelliteImages, { scale: 1.075 });
           gsap.set(satelliteCaptions, { autoAlpha: 0, y: 6 });
           gsap.set(crossing, { clipPath: 'inset(0% 100% 0% 0%)' });
@@ -384,10 +393,12 @@ export function ActScrollStory({ content, locale }: Props) {
           gsap.set([focus, story, campaign], { clipPath: 'inset(100% 0% 0% 0%)' });
 
           gsap.set(portalFrame, { autoAlpha: 0, clipPath: 'inset(50% 0% 50% 0%)' });
+          gsap.set(portalLayers, { autoAlpha: 0, scale: 1 });
+          gsap.set(portalGuides, { autoAlpha: 0, scale: 0.9 });
           gsap.set(sceneGround, { autoAlpha: 0 });
           gsap.set(immersion, { autoAlpha: 0 });
           gsap.set(immersionBits, { autoAlpha: 0, y: 12 });
-          gsap.set(flatPaper, { autoAlpha: 0, clipPath: 'inset(50% 0% 50% 0%)' });
+          gsap.set(flatPaper, { autoAlpha: 0 });
           gsap.set(flatHandoff, { autoAlpha: 0 });
 
           /* ================================================================
@@ -444,16 +455,9 @@ export function ActScrollStory({ content, locale }: Props) {
             .add(() => emitReady(), 2.3);
 
           /* ================================================================
-             EXPLOSION — hybride.
-             Le scroll déclenche l'événement, l'explosion elle-même est
-             autonome (~700 ms), puis le contrôle revient au scroll.
-             Réversible : remonter la rembobine.
-
-             Définie AVANT la partition : ScrollTrigger appelle `onUpdate` dès
-             l'initialisation, et `driveBurst` doit déjà pouvoir s'exécuter.
-             ================================================================ */
-          /* ================================================================
              PARTITION SCROLLÉE
+             Chaque valeur dérivée (caméra et séparation des plans) dépend du
+             playhead parent : aucun sous-mouvement autonome à désynchroniser.
              ================================================================ */
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
@@ -467,23 +471,26 @@ export function ActScrollStory({ content, locale }: Props) {
               invalidateOnRefresh: true,
               onUpdate: (self) => {
                 const t = self.progress * T.end;
-                const shouldMountGallery = t >= T.compress - 0.45;
-                if (shouldMountGallery !== galleryMountState.current) {
-                  galleryMountState.current = shouldMountGallery;
-                  setGalleryActive(shouldMountGallery);
+                // Mount the dynamic chunk and start decoding every texture while
+                // the phone montage is still playing. The canvas remains hidden,
+                // but its first useful frame is ready before the campaign opens.
+                const shouldMountGallery = t >= T.phoneIn + 0.28;
+                if (shouldMountGallery && !galleryMountState.current) {
+                  galleryMountState.current = true;
+                  setGalleryActive(true);
                 }
                 galleryProgress.current = gsap.utils.clamp(
                   0,
                   1,
-                  (t - T.gallery) / (T.handoff - T.gallery),
+                  (t - T.depthIn) / (T.handoff - T.depthIn),
                 );
                 burstValue.current = gsap.utils.clamp(
                   0,
                   1,
-                  (t - T.burst) / (T.gallery - T.burst),
+                  (t - T.compress) / (T.gallery - T.compress),
                 );
                 // Le canvas ne rend que quand la scène bouge réellement.
-                if (t > T.burst - 0.4) requestRenderRef.current?.();
+                if (t > T.compress - 0.12) requestRenderRef.current?.();
               },
             },
           });
@@ -577,6 +584,15 @@ export function ActScrollStory({ content, locale }: Props) {
               satelliteCaptions,
               { autoAlpha: 1, y: 0, stagger: 0.055, duration: 0.28 },
               T.socialIn + 0.34,
+            )
+            .to(
+              satellites,
+              {
+                yPercent: (index: number) => [-2.4, 1.8, -1.6, 2.1, -1.2][index] ?? 0,
+                duration: 1.1,
+                ease: 'none',
+              },
+              T.socialIn + 0.42,
             );
 
           // Un format Story s'ouvre dans un emplacement fixe. Le rythme vient
@@ -596,9 +612,15 @@ export function ActScrollStory({ content, locale }: Props) {
           );
 
           // BEAT — la hiérarchie s'inverse : le dominant recule.
-          tl.to(device, { scale: 0.86, duration: 0.4 }, T.invert)
-            .to(satellites[1] ?? [], { scale: 1.045, duration: 0.4 }, T.invert)
-            .to(satellites[1] ?? [], { scale: 1, duration: 0.34 }, T.behindIn);
+          tl.to(device, { scale: 0.86, duration: 0.4 }, T.invert);
+          const focusSatellite = satellites[1];
+          if (focusSatellite) {
+            tl.to(focusSatellite, { scale: 1.045, duration: 0.4 }, T.invert).to(
+              focusSatellite,
+              { scale: 1, duration: 0.34 },
+              T.behindIn,
+            );
+          }
 
           // BEAT — FRONT → BEHIND. Les contenus finis se referment,
           // la strate qui les tient avance depuis le fond.
@@ -631,7 +653,7 @@ export function ActScrollStory({ content, locale }: Props) {
              SECTION 3 — LE CONTENU EN SITUATION
              Le device NAÎT autour du média. Il n'est pas posé : il pousse.
              --------------------------------------------------------------- */
-          const phoneW = () => window.innerHeight * (isDesktop ? 0.4 : 0.34);
+          const phoneW = () => window.innerHeight * (isDesktop ? 0.38 : 0.34);
           const bezel = isDesktop ? 10 : 8;
           const radius = isDesktop ? 44 : 36;
           const portalInset = () => {
@@ -641,12 +663,31 @@ export function ActScrollStory({ content, locale }: Props) {
             const insetY = Math.max(0, (window.innerHeight - height) / 2);
             return `inset(${insetY}px ${insetX}px ${insetY}px ${insetX}px round ${radius}px)`;
           };
+          const collectX = (_index: number, target: HTMLElement) => {
+            const rect = target.getBoundingClientRect();
+            return window.innerWidth / 2 - (rect.left + rect.width / 2);
+          };
+          const collectY = (_index: number, target: HTMLElement) => {
+            const rect = target.getBoundingClientRect();
+            return window.innerHeight / 2 - (rect.top + rect.height / 2);
+          };
 
-          tl.to(
-            [behind, ...behindMediaEls, ...behindBits],
-            { autoAlpha: 0, duration: 0.36, stagger: 0.02 },
-            T.phoneIn - 0.42,
-          )
+          tl.to(behindBits, { autoAlpha: 0, y: -8, duration: 0.24 }, T.phoneIn - 0.56)
+            // Les tirages de stratégie sont physiquement repris par l'écran :
+            // moodboard et planning deviennent les premières unités du feed.
+            .to(
+              behindMediaEls,
+              {
+                x: collectX,
+                y: collectY,
+                scale: isDesktop ? 0.17 : 0.24,
+                rotation: (index: number) => (index === 0 ? -2.4 : 2.2),
+                stagger: 0.045,
+                duration: 0.34,
+                ease: 'power2.inOut',
+              },
+              T.phoneIn - 0.5,
+            )
             .to(
               device,
               {
@@ -661,6 +702,8 @@ export function ActScrollStory({ content, locale }: Props) {
               },
               T.phoneIn - 0.4,
             )
+            .to(behindMediaEls, { autoAlpha: 0, duration: 0.16 }, T.phoneIn - 0.17)
+            .to(behind, { autoAlpha: 0, duration: 0.2 }, T.phoneIn - 0.14)
             // Naissance : le device pousse AUTOUR du média. Bezel puis rayon,
             // pilotés en variables CSS — le rayon de l'écran s'en déduit.
             .to(
@@ -673,16 +716,16 @@ export function ActScrollStory({ content, locale }: Props) {
                 duration: 0.3,
                 ease: 'power2.out',
               },
-              T.phoneIn,
+              T.phoneIn - 0.12,
             )
             .to(
               device,
               { '--phone-radius': `${radius}px`, duration: 0.34, ease: 'power2.out' },
-              T.phoneIn + 0.12,
+              T.phoneIn + 0.02,
             )
-            .to(phoneButtons, { scaleY: 1, duration: 0.22 }, T.phoneIn + 0.2)
-            .to(island, { width: isDesktop ? 88 : 70, duration: 0.26 }, T.phoneIn + 0.24)
-            .to(phoneUi, { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.3 }, T.phoneIn + 0.3)
+            .to(phoneButtons, { scaleY: 1, duration: 0.22 }, T.phoneIn + 0.1)
+            .to(island, { width: isDesktop ? 88 : 70, duration: 0.26 }, T.phoneIn + 0.12)
+            .to(phoneUi, { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.3 }, T.phoneIn + 0.16)
             .to(q<HTMLElement>('[data-phone-meter]'), { scaleY: 1, duration: 2.2 }, T.montage);
 
           // MONTAGE — le scroll est le chef de montage.
@@ -693,12 +736,12 @@ export function ActScrollStory({ content, locale }: Props) {
             .to(q<HTMLElement>('[data-focus-image]'), { scale: 1.06, duration: 0.6 }, T.montage + 0.64)
             .to(story, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.34 }, T.montage + 1.16)
             .to(q<HTMLElement>('[data-story-image]'), { scale: 1.05, duration: 0.6 }, T.montage + 1.18)
-            .to(campaign, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.38 }, T.montage + 1.56)
+            .to(campaign, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.28 }, T.montage + 1.39)
             .fromTo(
               q<HTMLElement>('[data-campaign-image]'),
               { scale: 1.1 },
               { scale: 1, duration: 0.6 },
-              T.montage + 1.56,
+              T.montage + 1.39,
             );
 
           content.phone.beats.forEach((_, i) => {
@@ -718,18 +761,29 @@ export function ActScrollStory({ content, locale }: Props) {
              bezel s'efface pendant que ce même contenu devient le viewport.
              --------------------------------------------------------------- */
           tl.set(portalFrame, { clipPath: portalInset }, T.compress - 0.01)
+            .set(
+              portalLayers,
+              { autoAlpha: (index: number) => [1, 0.92, 0.84][index] ?? 0.9 },
+              T.compress - 0.01,
+            )
             .to(portalFrame, { autoAlpha: 1, duration: 0.08 }, T.compress)
+            // Le WebGL est déjà rendu sous le raccord. Il devient visible dans
+            // les interstices des trois plans, jamais après un écran d'attente.
+            .set(immersion, { autoAlpha: 1 }, T.compress)
+            .to(sceneGround, { autoAlpha: 1, duration: 0.16 }, T.compress + 0.14)
             .to(
               portalFrame,
               {
                 clipPath: 'inset(0px 0px 0px 0px round 0px)',
-                duration: 0.56,
+                duration: 0.5,
                 ease: 'power2.inOut',
               },
               T.compress,
             )
             .to(phoneUi, { autoAlpha: 0, y: -8, duration: 0.24 }, T.compress)
             .to(phoneBeats, { autoAlpha: 0, duration: 0.18 }, T.compress)
+            .to(q<HTMLElement>('[data-campaign-ui]'), { autoAlpha: 0, duration: 0.2 }, T.compress)
+            .to(portalGuides, { autoAlpha: 0.9, scale: 1, duration: 0.18 }, T.compress + 0.02)
             .to(
               device,
               {
@@ -739,32 +793,48 @@ export function ActScrollStory({ content, locale }: Props) {
                 '--phone-radius': '0px',
                 borderColor: 'transparent',
                 backgroundColor: 'transparent',
-                duration: 0.56,
+                duration: 0.5,
                 ease: 'power2.inOut',
               },
               T.compress,
             )
-            .set(device, { autoAlpha: 0 }, T.compress + 0.56)
+            .to(
+              portalLayers,
+              {
+                xPercent: (index: number) => [-2.3, 1.6, 0.45][index] ?? 0,
+                yPercent: (index: number) => [2.6, -0.8, -1.8][index] ?? 0,
+                scale: (index: number) => [1.11, 1.055, 1.025][index] ?? 1,
+                stagger: 0.025,
+                duration: 0.34,
+                ease: 'power2.inOut',
+              },
+              T.compress + 0.08,
+            )
+            .to(portalMediaEl, { autoAlpha: 0.45, scale: 1.018, duration: 0.1 }, T.compress + 0.02)
+            .to(portalMediaEl, { autoAlpha: 0, duration: 0.12 }, T.depthIn + 0.02)
+            .set(device, { autoAlpha: 0 }, T.compress + 0.5)
             .to(
               [behind, ...satellites, frontCopy],
               { autoAlpha: 0, duration: 0.2 },
               T.compress,
             )
-            .to(sceneGround, { autoAlpha: 1, duration: 0.28 }, T.compress + 0.28)
-            .to(portalFrame, { scale: 1.025, duration: T.burst - T.compress }, T.compress);
-
-          // Le plan WebGL identique prend le relais avant la disparition du DOM.
-          tl.to(immersion, { autoAlpha: 1, duration: 0.1 }, T.burst)
             .to(
-              portalFrame,
-              { autoAlpha: 0, scale: 1.045, duration: T.gallery - T.burst },
-              T.burst,
+              portalLayers,
+              {
+                autoAlpha: 0,
+                scale: (index: number) => [1.16, 1.09, 1.045][index] ?? 1.05,
+                stagger: 0.035,
+                duration: 0.28,
+              },
+              T.depthIn + 0.04,
             )
-            .to(immersionBits, { autoAlpha: 1, y: 0, stagger: 0.07, duration: 0.4 }, T.gallery + 0.18)
+            .to(portalGuides, { autoAlpha: 0, scale: 1.04, duration: 0.2 }, T.depthIn + 0.12)
+            .to(portalFrame, { autoAlpha: 0, duration: 0.18 }, T.gallery - 0.1)
+            .to(immersionBits, { autoAlpha: 1, y: 0, stagger: 0.07, duration: 0.34 }, T.gallery + 0.08)
             .to(
               immersionNarrative,
               { autoAlpha: 0, y: -10, duration: 0.24 },
-              T.gallery + 0.56,
+              T.gallery + 0.66,
             )
             .to(immersionChapter, { autoAlpha: 0, duration: 0.22 }, T.flatten - 0.55)
             // The dark corridor resolves into a physical paper surface while
@@ -773,7 +843,6 @@ export function ActScrollStory({ content, locale }: Props) {
               flatPaper,
               {
                 autoAlpha: 1,
-                clipPath: 'inset(0% 0% 0% 0%)',
                 duration: T.handoff - T.flatten,
                 ease: 'power2.inOut',
               },
@@ -781,8 +850,16 @@ export function ActScrollStory({ content, locale }: Props) {
             )
             // One-frame twin: same sources and geometry, now in DOM. The canvas
             // can be removed without a color or position flash.
-            .set(flatHandoff, { autoAlpha: 1 }, T.handoff - 0.025)
-            .set(immersion, { autoAlpha: 0 }, T.handoff);
+            .to(
+              flatHandoff,
+              { autoAlpha: 1, duration: 0.24, ease: 'none' },
+              T.handoff - 0.24,
+            )
+            .to(
+              immersion,
+              { autoAlpha: 0, duration: 0.16, ease: 'none' },
+              T.handoff - 0.16,
+            );
 
           // Verrou de durée : la partition vaut exactement T.end.
           tl.to({}, { duration: 0.01 }, T.end - 0.01);
@@ -980,11 +1057,23 @@ export function ActScrollStory({ content, locale }: Props) {
 
             <div className={styles.campaign}>
               <div className={styles.layerImage} data-campaign-image>
-                <Media item={socialPortal} locale={locale} className={styles.fillMedia} sizes="32vh" />
+                <Media
+                  item={socialPortal}
+                  locale={locale}
+                  className={styles.fillMedia}
+                  loading="eager"
+                  sizes="32vh"
+                />
               </div>
-              <span className={`${styles.campaignMeta} micro`}>Carousel 04 / 04 · publié</span>
-              <span className={styles.campaignWord}>{content.phone.beats[3] ?? ''}</span>
-              <span className={styles.carouselDots} aria-hidden="true">
+              <span className={styles.cameraFocus} data-campaign-ui aria-hidden="true">
+                <i />
+                <i />
+                <i />
+                <i />
+              </span>
+              <span className={`${styles.campaignMeta} micro`} data-campaign-ui>Carousel 04 / 04 · publié</span>
+              <span className={styles.campaignWord} data-campaign-ui>{content.phone.beats[3] ?? ''}</span>
+              <span className={styles.carouselDots} data-campaign-ui aria-hidden="true">
                 <i />
                 <i />
                 <i />
@@ -1077,9 +1166,25 @@ export function ActScrollStory({ content, locale }: Props) {
           </span>
         </div>
 
-        {/* ---------- RACCORD — le plein cadre qui explose ---------- */}
+        {/* ---------- RACCORD — la campagne se sépare en profondeur ---------- */}
         <div className={styles.portalFrame} data-portal-frame aria-hidden="true">
-          <Media item={socialPortal} locale={locale} className={styles.portalMedia} sizes="100vw" />
+          <Media
+            item={socialPortal}
+            locale={locale}
+            className={styles.portalMedia}
+            loading="eager"
+            sizes="100vw"
+          />
+          <span className={styles.portalDepth} data-portal-depth data-depth="foreground" />
+          <span className={styles.portalDepth} data-portal-depth data-depth="midground" />
+          <span className={styles.portalDepth} data-portal-depth data-depth="background" />
+          <span className={styles.portalGuide} data-portal-guide>
+            <i />
+            <i />
+            <i />
+            <i />
+            <small className="micro">CAM / MRS · DEPTH 03</small>
+          </span>
         </div>
 
         {/* ---------- SECTION 4 — immersion ---------- */}
@@ -1111,7 +1216,6 @@ export function ActScrollStory({ content, locale }: Props) {
           locale={locale}
           marker="handoff"
           eyebrow={`05 / ${content.process.heading}`}
-          title={content.process.sheet}
         />
         </div>
 

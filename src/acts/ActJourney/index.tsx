@@ -47,6 +47,7 @@ export function ActJourney({ content, locale }: Props) {
           const handoff = q<HTMLElement>('[data-journey-handoff]')[0];
           const handoffCopy = q<HTMLElement>('[data-journey-handoff-copy]');
           const handoffLine = q<HTMLElement>('[data-journey-handoff-line]')[0];
+          const handoffRows = q<HTMLElement>('[data-journey-handoff-row]');
           if (!progressBar || !counter || !handoff || !handoffLine || entries.length === 0) return;
 
           const driver = { value: 0 };
@@ -84,6 +85,7 @@ export function ActJourney({ content, locale }: Props) {
           // handoff readable even when someone scrolls through it quickly.
           gsap.set(handoffCopy, { autoAlpha: 1, y: 0 });
           gsap.set(handoffLine, { scaleY: 0, transformOrigin: 'center top' });
+          gsap.set(handoffRows, { autoAlpha: 0, x: 16 });
           updateFocus();
 
           const tl = gsap.timeline({
@@ -115,6 +117,11 @@ export function ActJourney({ content, locale }: Props) {
             .to(driver, { value: 1, duration: 0.82, onUpdate: updateFocus }, 0)
             .to(handoff, { clipPath: 'inset(0 0% 0 0)', duration: 0.18 }, 0.82)
             .to(handoffLine, { scaleY: 1, duration: 0.14 }, 0.84)
+            .to(
+              handoffRows,
+              { autoAlpha: 1, x: 0, stagger: 0.025, duration: 0.14 },
+              0.845,
+            )
             .to(
               q<HTMLElement>('[data-journey-chrome]'),
               { autoAlpha: 0, y: -8, duration: 0.12 },
@@ -174,6 +181,14 @@ export function ActJourney({ content, locale }: Props) {
           <span className={`${styles.handoffTitle} title`} data-journey-handoff-copy>
             {content.expertise.heading}
           </span>
+          <div className={styles.handoffGrid}>
+            {content.expertise.entries.map((entry, index) => (
+              <span className={styles.handoffRow} data-journey-handoff-row key={entry.term}>
+                <i>{content.journey.entries[index]?.year ?? '→'}</i>
+                <strong>{entry.term}</strong>
+              </span>
+            ))}
+          </div>
           <span className={`${styles.handoffPreview} micro`} data-journey-handoff-copy>
             {content.expertise.entries.slice(0, 3).map((entry) => entry.term).join(' · ')}
           </span>

@@ -621,6 +621,31 @@
   bottom: 2.1rem;
 }
 
+.cameraFocus {
+  position: absolute;
+  inset: 12% 10%;
+  z-index: var(--z-copy);
+  pointer-events: none;
+}
+
+.cameraFocus i,
+.portalGuide i {
+  position: absolute;
+  width: clamp(0.65rem, 1.3vw, 1.2rem);
+  aspect-ratio: 1;
+  border-color: rgb(var(--ivory-rgb) / 0.78);
+  border-style: solid;
+}
+
+.cameraFocus i:nth-child(1),
+.portalGuide i:nth-child(1) { left: 0; top: 0; border-width: 1px 0 0 1px; }
+.cameraFocus i:nth-child(2),
+.portalGuide i:nth-child(2) { right: 0; top: 0; border-width: 1px 1px 0 0; }
+.cameraFocus i:nth-child(3),
+.portalGuide i:nth-child(3) { right: 0; bottom: 0; border-width: 0 1px 1px 0; }
+.cameraFocus i:nth-child(4),
+.portalGuide i:nth-child(4) { left: 0; bottom: 0; border-width: 0 0 1px 1px; }
+
 .carouselDots {
   position: absolute;
   left: 50%;
@@ -660,6 +685,17 @@
   z-index: var(--z-copy);
   pointer-events: none;
   color: var(--ink);
+}
+
+.frontComposition::after {
+  content: 'TABLE 02 / EDITS IN PROGRESS';
+  position: absolute;
+  right: var(--margin);
+  bottom: 8%;
+  color: rgb(var(--ink-rgb) / 0.5);
+  font-family: var(--font-sans);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tr-micro);
 }
 
 .frontChapter,
@@ -758,6 +794,36 @@
   transform-origin: center;
 }
 
+.satellite::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -0.42rem;
+  z-index: 3;
+  width: clamp(1.7rem, 3vw, 3rem);
+  height: 0.72rem;
+  border-inline: 1px solid rgb(var(--ink-rgb) / 0.08);
+  background: rgb(var(--paper-rgb) / 0.68);
+  box-shadow: 0 0.2rem 0.65rem rgb(var(--wood-rgb) / 0.08);
+  translate: -50% 0;
+  rotate: -2deg;
+  pointer-events: none;
+}
+
+.satellite::after {
+  content: 'PL. ' attr(data-social-slot) ' / CONTACT';
+  position: absolute;
+  right: 0.35rem;
+  top: 0.35rem;
+  z-index: 3;
+  padding: 0.18rem 0.24rem;
+  background: rgb(var(--ivory-rgb) / 0.82);
+  color: rgb(var(--ink-rgb) / 0.62);
+  font-family: var(--font-sans);
+  font-size: 0.48rem;
+  letter-spacing: 0.12em;
+}
+
 .moodboardAxis {
   left: 27%;
   top: 11%;
@@ -775,9 +841,14 @@
 
 .satelliteImage {
   overflow: hidden;
+  border: clamp(0.2rem, 0.4vw, 0.42rem) solid var(--ivory);
+  outline: 1px solid rgb(var(--ink-rgb) / 0.08);
   background: var(--paper);
   box-shadow: 0 1.1rem 2.8rem rgb(var(--wood-rgb) / 0.14);
   transform-origin: center;
+  transition:
+    translate var(--dur-base) var(--ease-move),
+    box-shadow var(--dur-base) var(--ease-move);
 }
 
 .satelliteCaption {
@@ -791,33 +862,40 @@
 }
 
 .satellite[data-social-slot='1'] {
-  left: 5%;
-  top: 51%;
-  width: 15vw;
+  left: 4%;
+  top: 49%;
+  width: 16.5vw;
 }
 
 .satellite[data-social-slot='2'] {
-  right: 4%;
-  top: 17%;
-  width: 20vw;
+  right: 3%;
+  top: 15%;
+  width: 21.5vw;
 }
 
 .satellite[data-social-slot='3'] {
-  right: 26%;
-  bottom: 7%;
-  width: 10vw;
+  right: 25%;
+  bottom: 5%;
+  width: 11.5vw;
 }
 
 .satellite[data-social-slot='4'] {
-  left: 7.5%;
-  top: 31%;
-  width: 14vw;
+  left: 6%;
+  top: 28%;
+  width: 15.5vw;
 }
 
 .satellite[data-social-slot='5'] {
-  right: 15.5%;
-  top: 49%;
-  width: 11vw;
+  right: 14%;
+  top: 47%;
+  width: 12.5vw;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .satellite:hover .satelliteImage {
+    translate: 0 -4px;
+    box-shadow: 0 1.55rem 3.8rem rgb(var(--wood-rgb) / 0.2);
+  }
 }
 
 /* Le format Story reste ancré à la grille : seul son masque se déplace. */
@@ -1141,9 +1219,57 @@
   overflow: hidden;
   pointer-events: none;
   transform-origin: center center;
-  background: var(--ink);
+  background: transparent;
   box-shadow: 0 0 0 1px rgb(var(--ivory-rgb) / 0.12);
   will-change: transform, clip-path;
+}
+
+.portalMedia {
+  z-index: 1;
+  transform-origin: center;
+}
+
+.portalDepth {
+  position: absolute;
+  inset: -2%;
+  background-image: url('/media/generated/social/social-portal-v2.jpg');
+  background-position: var(--focus, 50% 50%);
+  background-size: cover;
+  will-change: transform, opacity;
+}
+
+.portalDepth[data-depth='background'] {
+  z-index: 2;
+  clip-path: polygon(0 0, 100% 0, 100% 51%, 72% 55%, 50% 56%, 24% 53%, 0 58%);
+  filter: saturate(0.92) brightness(1.04);
+}
+
+.portalDepth[data-depth='midground'] {
+  z-index: 3;
+  clip-path: polygon(0 61%, 22% 52%, 48% 55%, 70% 49%, 100% 54%, 100% 100%, 0 100%);
+  filter: saturate(0.94) brightness(0.94);
+}
+
+.portalDepth[data-depth='foreground'] {
+  z-index: 4;
+  clip-path: polygon(18% 100%, 17% 78%, 22% 69%, 23% 49%, 26% 35%, 31% 24%, 37% 27%, 41% 46%, 51% 63%, 48% 73%, 43% 79%, 45% 100%);
+  filter: saturate(0.9) brightness(0.78);
+}
+
+.portalGuide {
+  position: absolute;
+  inset: clamp(1.25rem, 4vw, 4rem);
+  z-index: 5;
+  color: var(--ivory);
+  pointer-events: none;
+}
+
+.portalGuide small {
+  position: absolute;
+  right: 0;
+  bottom: -0.2rem;
+  color: rgb(var(--ivory-rgb) / 0.72);
+  text-shadow: 0 0.1rem 0.65rem rgb(0 0 0 / 0.72);
 }
 
 /* ---------- SECTION 4 — IMMERSION ---------- */
