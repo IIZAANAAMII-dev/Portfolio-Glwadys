@@ -1,0 +1,19 @@
+/* Couche WebGL persistante.
+   Fixe, jamais interactive : le DOM au-dessus garde tous les événements,
+   le focus et le texte. */
+
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+  opacity: 0;
+  /* Le passage de « rien » à « quelque chose » ne doit pas se voir : la couche
+     est allumée par l'acte bien avant que son premier plan ne soit visible. */
+  transition: opacity 180ms linear;
+  contain: strict;
+}
+
+.layer[data-stage-live] {
+  opacity: 1;
+}

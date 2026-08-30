@@ -15,13 +15,18 @@ import { Flip } from 'gsap/Flip';
 import { SplitText } from 'gsap/SplitText';
 import { useGSAP } from '@gsap/react';
 
-gsap.registerPlugin(ScrollTrigger, Flip, SplitText, useGSAP);
+/* `useGSAP` est un hook React, pas un plugin GSAP : le passer à
+   registerPlugin() est sans effet et masque les vraies erreurs
+   d'enregistrement. Il est simplement réexporté. */
+gsap.registerPlugin(ScrollTrigger, Flip, SplitText);
 
 /**
- * Défauts du site : toute animation part de la grammaire, pas des défauts GSAP.
- * `overwrite: 'auto'` évite que deux timelines se disputent la même propriété
- * lors d'un scroll rapide dans les deux sens.
+ * Aucun `ease` ni `duration` global : les timelines scrubées au scroll doivent
+ * rester en `ease: 'none'`, et un défaut global se glisse dans les tweens qui
+ * n'en déclarent pas — c'est ce qui produisait des décrochages au scroll rapide.
+ * Seul `overwrite: 'auto'` est un défaut sain : il évite que deux timelines se
+ * disputent la même propriété quand on scrolle dans les deux sens.
  */
-gsap.defaults({ ease: 'power3.out', duration: 0.6, overwrite: 'auto' });
+gsap.defaults({ overwrite: 'auto' });
 
 export { gsap, ScrollTrigger, Flip, SplitText, useGSAP };

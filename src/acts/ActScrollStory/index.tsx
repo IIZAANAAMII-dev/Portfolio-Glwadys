@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import { useRef, useState, type CSSProperties } from 'react';
+import { useRef, type CSSProperties } from 'react';
 
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
@@ -17,12 +17,11 @@ import {
 import { gsap, useGSAP } from '@/lib/gsap';
 import { DUR, EASE, MQ, STAGGER } from '@/lib/motion';
 import { emitReady, lockScroll, unlockScroll } from '@/lib/scrollControl';
+import { setStage, setStageAnchor, setStageLive } from '@/lib/stage';
 import { useReducedMotion } from '@/lib/useReducedMotion';
-import { ArchivePlate } from '@/ui/ArchivePlate';
 import { Media } from '@/ui/Media';
 
 import styles from './ActScrollStory.module.css';
-import { ImmersionCanvas } from './ImmersionCanvas';
 
 interface Props {
   content: Content;
@@ -57,18 +56,40 @@ interface Props {
 const T = {
   heroHold: 0.0,
   socialIn: 1.18,
-  storyCross: 2.0,
-  invert: 2.42,
-  behindIn: 2.72,
+  /** Les détails complémentaires : troisième niveau de la hiérarchie. */
+  detail: 2.02,
+  invert: 2.46,
+  behindIn: 2.76,
   phoneIn: 4.15,
-  montage: 4.65,
-  compress: 6.58,
-  depthIn: 6.68,
-  gallery: 7.04,
-  flatten: 7.76,
-  handoff: 8.5,
-  end: 8.7,
+  montage: 4.6,
+  /** Le dernier contenu s'immobilise, le téléphone se recentre. */
+  transfer: 6.32,
+  /** L'écran est devenu la surface plein cadre. */
+  screenFull: 7.0,
+  /** Les couches se sont détachées. */
+  separate: 7.76,
+  /** La caméra a traversé : la main passe au chapitre « Le processus ». */
+  corridor: 8.6,
+  end: 8.6,
 } as const;
+
+/**
+ * Correspondance scroll → chapitre du Canvas maître.
+ * Écrite ici, une fois : c'est le seul endroit du projet où la partition de
+ * scroll et la partition 3D se rencontrent.
+ */
+/**
+ * Les deux tirages secondaires retenus dans `socialSatellites`.
+ * Le choix est éditorial : une table de direction (00) et une main qui
+ * sélectionne (01). Le reste du catalogue reste disponible ailleurs.
+ */
+const SECONDARY_PLATES = [0, 1] as const;
+
+const STAGE_STEPS = [
+  { at: T.transfer, to: T.screenFull, chapter: 1 },
+  { at: T.screenFull, to: T.separate, chapter: 2 },
+  { at: T.separate, to: T.corridor, chapter: 3 },
+] as const;
 
 /** Longueur totale du pin, en % de viewport. Dérivée de la partition. */
 const SCROLL_VH = T.end * 100;
@@ -85,7 +106,7 @@ const STORY_ACT_MARKERS = [
   { id: 'act-opening', start: T.heroHold },
   { id: 'act-social', start: T.socialIn },
   { id: 'act-phone', start: T.phoneIn },
-  { id: 'act-immersion', start: T.depthIn },
+  { id: 'act-transfer', start: T.transfer },
 ] as const;
 
 type ActMarkerStyle = CSSProperties & {
@@ -121,52 +142,16 @@ function placeAt(el: HTMLElement, left: number, top: number, scale: number) {
   gsap.set(el, { x: left - rect.left, y: top - rect.top, scale });
 }
 
-function LayerArtifact({ index }: { index: number }) {
-  if (index === 0) {
-    return (
-      <span className={`${styles.layerObject} ${styles.layerCollage}`} data-layer-object aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </span>
-    );
-  }
-
-  if (index === 1) {
-    return (
-      <span className={`${styles.layerObject} ${styles.layerPlanning}`} data-layer-object aria-hidden="true">
-        {Array.from({ length: 5 }, (_, row) => <i key={row} />)}
-      </span>
-    );
-  }
-
-  if (index === 2) {
-    return (
-      <span className={`${styles.layerObject} ${styles.layerCopy}`} data-layer-object aria-hidden="true">
-        <strong>Aa</strong>
-        <i />
-        <i />
-      </span>
-    );
-  }
-
-  if (index === 3) {
-    return (
-      <span className={`${styles.layerObject} ${styles.layerCalendar}`} data-layer-object aria-hidden="true">
-        {Array.from({ length: 12 }, (_, cell) => <i key={cell} />)}
-      </span>
-    );
-  }
-
-  return (
-    <span className={`${styles.layerObject} ${styles.layerDirection}`} data-layer-object aria-hidden="true">
-      <i />
-    </span>
-  );
-}
-
+/**
+ * Composition posée pour `prefers-reduced-motion`.
+ *
+ * Rendue **à la place** de la version animée, jamais en plus : deux copies du
+ * même texte dans le DOM créent des doublons pour les lecteurs d'écran et pour
+ * l'indexation. Le hook renvoie `false` au premier rendu, donc le serveur émet
+ * toujours la version animée et le client retire l'une des deux.
+ */
 function ReducedStory({ content, locale }: Props) {
-  const { hero, opening, social, phone, immersion } = content;
+  const { hero, opening, social, phone } = content;
 
   return (
     <div className={styles.reducedStory}>
@@ -189,21 +174,22 @@ function ReducedStory({ content, locale }: Props) {
           <Media item={socialSatellites[1]!} locale={locale} sizes="44vw" />
           <Media item={behindMedia[0]!} locale={locale} sizes="44vw" />
         </div>
+        <ol className={styles.reducedLayers}>
+          {social.layers.map((layer, index) => (
+            <li key={layer}>
+              <span className="micro">{String(index + 1).padStart(2, '0')}</span>
+              {layer}
+            </li>
+          ))}
+        </ol>
       </article>
 
       <article className={styles.reducedPanel}>
         <span className="micro">03 / {phone.heading}</span>
-        <h2 className="display">{phone.beats.join(' / ')}</h2>
+        <h2 className="display">{phone.beats.join(' · ')}</h2>
         <div className={styles.reducedPhoneMedia}>
           <Media item={phoneStory} locale={locale} sizes="52vw" />
         </div>
-      </article>
-
-      <article className={`${styles.reducedPanel} ${styles.reducedImmersion}`}>
-        <span className="micro">04 / {immersion.heading}</span>
-        <h2 className="display">{immersion.heading}</h2>
-        <p className="lead">{immersion.statement}</p>
-        <ArchivePlate locale={locale} />
       </article>
     </div>
   );
@@ -212,11 +198,6 @@ function ReducedStory({ content, locale }: Props) {
 export function ActScrollStory({ content, locale }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const galleryProgress = useRef(0);
-  const burstValue = useRef(0);
-  const requestRenderRef = useRef<(() => void) | null>(null);
-  const galleryMountState = useRef(false);
-  const [galleryActive, setGalleryActive] = useState(false);
   const reduced = useReducedMotion();
 
   useGSAP(
@@ -258,15 +239,16 @@ export function ActScrollStory({ content, locale }: Props) {
           const disciplines = one(`.${styles.disciplines}`);
           const heroFrameEl = one(`.${styles.heroFrame}`);
           const frontCopy = one('[data-front-copy]');
+          const frontBits = q<HTMLElement>('[data-front-bit]');
           const satellites = q<HTMLElement>('[data-social-satellite]');
           const satelliteImages = q<HTMLElement>('[data-social-image]');
           const satelliteCaptions = q<HTMLElement>('[data-social-caption]');
-          const crossing = one('[data-social-crossing]');
+          const detailPlate = one('[data-social-detail]');
 
           const behind = one('[data-behind]');
           const behindMediaEls = q<HTMLElement>('[data-behind-media]');
           const behindBits = q<HTMLElement>('[data-behind-detail], [data-behind-copy]');
-          const behindArtifacts = q<HTMLElement>('[data-layer-object]');
+          const behindRows = q<HTMLElement>('[data-layer-row]');
 
           const phoneUi = q<HTMLElement>('[data-phone-entry], [data-phone-detail]');
           const phoneBeats = q<HTMLElement>('[data-phone-beat]');
@@ -278,34 +260,13 @@ export function ActScrollStory({ content, locale }: Props) {
           const story = one(`.${styles.story}`);
           const campaign = one(`.${styles.campaign}`);
           const screenHero = one('[data-screen-hero]');
+          const screenEl = one('[data-phone-screen]');
 
-          const portalFrame = one('[data-portal-frame]');
-          const portalMediaEl = one(`.${styles.portalMedia}`);
-          const portalLayers = q<HTMLElement>('[data-portal-depth]');
-          const portalGuides = q<HTMLElement>('[data-portal-guide]');
-          const sceneGround = one('[data-scene-ground]');
-          const immersion = one('[data-immersion]');
-          const immersionBits = q<HTMLElement>('[data-immersion-bit]');
-          const immersionChapter = one(`.${styles.immersionChapter}`);
-          const immersionNarrative = [
-            one(`.${styles.immersionHeading}`),
-            one(`.${styles.immersionStatement}`),
-          ].filter((element): element is HTMLElement => Boolean(element));
-          const flatPaper = one('[data-flat-paper]');
-          const flatHandoff = one('[data-archive-plate="handoff"]');
+          const stageGround = one('[data-stage-ground]');
+          const transferCopy = q<HTMLElement>('[data-transfer-bit]');
+          const screenGlass = one('[data-screen-glass]');
 
-          if (
-            !ruleH ||
-            !behind ||
-            !frontCopy ||
-            !portalFrame ||
-            !portalMediaEl ||
-            !immersion ||
-            !immersionChapter ||
-            !flatPaper ||
-            !flatHandoff
-          )
-            return;
+          if (!ruleH || !behind || !frontCopy || !screenEl || !stageGround) return;
 
           /* ================================================================
              REDUCED MOTION — pas « sans animation » : une composition posée.
@@ -366,8 +327,11 @@ export function ActScrollStory({ content, locale }: Props) {
             '--device-ar': '9 / 16',
           });
 
-          gsap.set([frontCopy, crossing], { autoAlpha: 0 });
-          const boardRotations = [-1.8, 1.25, -2.15, 0.9, 1.65];
+          gsap.set(frontCopy, { autoAlpha: 0 });
+          gsap.set(frontBits, { autoAlpha: 0, y: 12 });
+          /* Trois tirages seulement, très peu inclinés : une table de direction
+             artistique se lit, elle ne s'éparpille pas. */
+          const boardRotations = [-1.5, 1.1, -2];
           gsap.set(satellites, {
             autoAlpha: 0,
             clipPath: 'inset(100% 0% 0% 0%)',
@@ -375,16 +339,16 @@ export function ActScrollStory({ content, locale }: Props) {
           });
           gsap.set(satelliteImages, { scale: 1.075 });
           gsap.set(satelliteCaptions, { autoAlpha: 0, y: 6 });
-          gsap.set(crossing, { clipPath: 'inset(0% 100% 0% 0%)' });
+          gsap.set(detailPlate, { autoAlpha: 0, clipPath: 'inset(0% 0% 100% 0%)' });
 
           gsap.set(behind, { autoAlpha: 0, scale: 0.94 });
           gsap.set(behindMediaEls, { clipPath: 'inset(0% 0% 100% 0%)', yPercent: 6 });
           gsap.set(behindBits, { autoAlpha: 0, y: 14 });
-          gsap.set(behindArtifacts, { autoAlpha: 0, scale: 0.82, transformOrigin: 'center' });
+          gsap.set(behindRows, { autoAlpha: 0, x: -12 });
 
           gsap.set(phoneUi, { autoAlpha: 0, y: 10 });
           gsap.set(phoneBeats, { yPercent: 110, autoAlpha: 0 });
-          gsap.set(phoneRail, { autoAlpha: 0.26 });
+          gsap.set(phoneRail, { autoAlpha: 1 });
           gsap.set(phoneButtons, { scaleY: 0 });
           gsap.set(island, { width: 0 });
           gsap.set(q<HTMLElement>('[data-phone-meter]'), { scaleY: 0 });
@@ -392,14 +356,9 @@ export function ActScrollStory({ content, locale }: Props) {
           gsap.set(feed, { yPercent: 104 });
           gsap.set([focus, story, campaign], { clipPath: 'inset(100% 0% 0% 0%)' });
 
-          gsap.set(portalFrame, { autoAlpha: 0, clipPath: 'inset(50% 0% 50% 0%)' });
-          gsap.set(portalLayers, { autoAlpha: 0, scale: 1 });
-          gsap.set(portalGuides, { autoAlpha: 0, scale: 0.9 });
-          gsap.set(sceneGround, { autoAlpha: 0 });
-          gsap.set(immersion, { autoAlpha: 0 });
-          gsap.set(immersionBits, { autoAlpha: 0, y: 12 });
-          gsap.set(flatPaper, { autoAlpha: 0 });
-          gsap.set(flatHandoff, { autoAlpha: 0 });
+          gsap.set(stageGround, { autoAlpha: 0 });
+          gsap.set(transferCopy, { autoAlpha: 0, y: 14 });
+          gsap.set(screenGlass, { autoAlpha: 0 });
 
           /* ================================================================
              OUVERTURE (auto, ~2.4 s) — devient la Hero sans coupure.
@@ -459,6 +418,13 @@ export function ActScrollStory({ content, locale }: Props) {
              Chaque valeur dérivée (caméra et séparation des plans) dépend du
              playhead parent : aucun sous-mouvement autonome à désynchroniser.
              ================================================================ */
+          /* Le rectangle de l'écran est republié à chaque frame du raccord :
+             le plan WebGL naît donc dans la géométrie exacte du device, y
+             compris pendant que celui-ci grandit. C'est ce qui remplace le
+             fondu par une continuité. */
+          let stageOwned = false;
+          const publishScreen = () => setStageAnchor('screen', screenEl);
+
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
             scrollTrigger: {
@@ -471,26 +437,26 @@ export function ActScrollStory({ content, locale }: Props) {
               invalidateOnRefresh: true,
               onUpdate: (self) => {
                 const t = self.progress * T.end;
-                // Mount the dynamic chunk and start decoding every texture while
-                // the phone montage is still playing. The canvas remains hidden,
-                // but its first useful frame is ready before the campaign opens.
-                const shouldMountGallery = t >= T.phoneIn + 0.28;
-                if (shouldMountGallery && !galleryMountState.current) {
-                  galleryMountState.current = true;
-                  setGalleryActive(true);
+
+                /* Le Canvas est allumé (donc monté, donc en train de décoder
+                   ses textures) pendant que le montage du téléphone joue
+                   encore : sa première frame utile est prête avant d'être vue. */
+                const wantsStage = t >= T.phoneIn;
+                if (wantsStage !== stageOwned) {
+                  stageOwned = wantsStage;
+                  setStageLive(wantsStage);
                 }
-                galleryProgress.current = gsap.utils.clamp(
-                  0,
-                  1,
-                  (t - T.depthIn) / (T.handoff - T.depthIn),
-                );
-                burstValue.current = gsap.utils.clamp(
-                  0,
-                  1,
-                  (t - T.compress) / (T.gallery - T.compress),
-                );
-                // Le canvas ne rend que quand la scène bouge réellement.
-                if (t > T.compress - 0.12) requestRenderRef.current?.();
+                if (!wantsStage) return;
+
+                publishScreen();
+                if (t <= T.transfer) {
+                  setStage(0);
+                  return;
+                }
+                const step =
+                  STAGE_STEPS.find((s) => t < s.to) ?? STAGE_STEPS[STAGE_STEPS.length - 1]!;
+                const local = gsap.utils.clamp(0, 1, (t - step.at) / (step.to - step.at));
+                setStage(step.chapter - 1 + local);
               },
             },
           });
@@ -557,96 +523,87 @@ export function ActScrollStory({ content, locale }: Props) {
             );
 
           /* ---------------------------------------------------------------
-             SECTION 2 — LE CONTENU : hiérarchie, puis ce qui la tient
+             SECTION 2 — LA DOUBLE PAGE
+             Hiérarchie explicite et non négociable :
+               1. l'image principale (le média persistant) prend sa place ;
+               2. l'intention est écrite ;
+               3. deux tirages secondaires légendés arrivent ;
+               4. un détail complémentaire, seul, ferme la page ;
+               5. la page se retourne sur « ce qui le tient ».
+             Tout ce qui ne sert pas cette lecture a été retiré.
              --------------------------------------------------------------- */
           tl.to(
             device,
-            { left: isDesktop ? '38%' : '50%', top: '46%', duration: 0.5, ease: 'power2.inOut' },
+            { left: isDesktop ? '31%' : '50%', top: '48%', duration: 0.5, ease: 'power2.inOut' },
             T.socialIn,
           )
-            .to(frontCopy, { autoAlpha: 1, duration: 0.34 }, T.socialIn + 0.1)
+            .to(frontCopy, { autoAlpha: 1, duration: 0.3 }, T.socialIn + 0.06)
+            // 2 — l'intention, avant les images secondaires.
+            .to(
+              frontBits,
+              { autoAlpha: 1, y: 0, stagger: 0.07, duration: 0.34 },
+              T.socialIn + 0.12,
+            )
+            // 3 — deux tirages seulement, légendés et numérotés.
             .to(
               satellites,
               {
                 autoAlpha: 1,
                 clipPath: 'inset(0% 0% 0% 0%)',
-                stagger: 0.075,
-                duration: 0.42,
-              },
-              T.socialIn + 0.14,
-            )
-            .to(
-              satelliteImages,
-              { scale: 1, stagger: 0.075, duration: 0.56 },
-              T.socialIn + 0.16,
-            )
-            .to(
-              satelliteCaptions,
-              { autoAlpha: 1, y: 0, stagger: 0.055, duration: 0.28 },
-              T.socialIn + 0.34,
-            )
-            .to(
-              satellites,
-              {
-                yPercent: (index: number) => [-2.4, 1.8, -1.6, 2.1, -1.2][index] ?? 0,
-                duration: 1.1,
-                ease: 'none',
+                stagger: 0.13,
+                duration: 0.44,
               },
               T.socialIn + 0.42,
+            )
+            .to(satelliteImages, { scale: 1, stagger: 0.13, duration: 0.6 }, T.socialIn + 0.44)
+            .to(
+              satelliteCaptions,
+              { autoAlpha: 1, y: 0, stagger: 0.1, duration: 0.3 },
+              T.socialIn + 0.6,
             );
 
-          // Un format Story s'ouvre dans un emplacement fixe. Le rythme vient
-          // des masques et de la hiérarchie, jamais de cartes flottantes.
+          // 4 — un seul détail complémentaire. Il arrive après, pas en même temps.
           tl.to(
-            crossing,
-            {
-              autoAlpha: 1,
-              clipPath: 'inset(0% 0% 0% 0%)',
-              duration: 0.42,
-            },
-            T.storyCross,
-          ).to(
-            crossing,
-            { autoAlpha: 0, clipPath: 'inset(0% 0% 100% 0%)', duration: 0.32 },
-            T.storyCross + 0.5,
+            detailPlate,
+            { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.4 },
+            T.detail,
           );
 
-          // BEAT — la hiérarchie s'inverse : le dominant recule.
-          tl.to(device, { scale: 0.86, duration: 0.4 }, T.invert);
+          // La hiérarchie s'inverse : le dominant recule, le tirage retenu avance.
+          tl.to(device, { scale: 0.88, duration: 0.42 }, T.invert);
           const focusSatellite = satellites[1];
           if (focusSatellite) {
-            tl.to(focusSatellite, { scale: 1.045, duration: 0.4 }, T.invert).to(
+            tl.to(focusSatellite, { scale: 1.04, duration: 0.4 }, T.invert).to(
               focusSatellite,
               { scale: 1, duration: 0.34 },
               T.behindIn,
             );
           }
 
-          // BEAT — FRONT → BEHIND. Les contenus finis se referment,
-          // la strate qui les tient avance depuis le fond.
-          tl.to(frontCopy, { autoAlpha: 0, yPercent: -14, duration: 0.3 }, T.behindIn)
+          // 5 — FRONT → BEHIND : la page se retourne sur sa strate porteuse.
+          tl.to([frontCopy, detailPlate], { autoAlpha: 0, yPercent: -10, duration: 0.3 }, T.behindIn)
             .to(
               satellites,
               {
                 clipPath: 'inset(0% 0% 100% 0%)',
                 autoAlpha: 0,
-                stagger: 0.055,
+                stagger: 0.06,
                 duration: 0.4,
               },
               T.behindIn + 0.04,
             )
-            .to(device, { scale: 0.74, duration: 0.44 }, T.behindIn + 0.08)
+            .to(device, { scale: 0.72, duration: 0.44 }, T.behindIn + 0.08)
             .to(behind, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'power2.out' }, T.behindIn + 0.16)
             .to(
               behindMediaEls,
-              { clipPath: 'inset(0% 0% 0% 0%)', yPercent: 0, stagger: 0.13, duration: 0.44 },
+              { clipPath: 'inset(0% 0% 0% 0%)', yPercent: 0, stagger: 0.14, duration: 0.44 },
               T.behindIn + 0.26,
             )
-            .to(behindBits, { autoAlpha: 1, y: 0, stagger: 0.05, duration: 0.32 }, T.behindIn + 0.4)
+            .to(behindBits, { autoAlpha: 1, y: 0, stagger: 0.06, duration: 0.32 }, T.behindIn + 0.36)
             .to(
-              behindArtifacts,
-              { autoAlpha: 1, scale: 1, stagger: 0.055, duration: 0.3 },
-              T.behindIn + 0.48,
+              behindRows,
+              { autoAlpha: 1, x: 0, stagger: 0.06, duration: 0.3 },
+              T.behindIn + 0.54,
             );
 
           /* ---------------------------------------------------------------
@@ -656,13 +613,6 @@ export function ActScrollStory({ content, locale }: Props) {
           const phoneW = () => window.innerHeight * (isDesktop ? 0.38 : 0.34);
           const bezel = isDesktop ? 10 : 8;
           const radius = isDesktop ? 44 : 36;
-          const portalInset = () => {
-            const width = phoneW();
-            const height = width * (19.5 / 9);
-            const insetX = Math.max(0, (window.innerWidth - width) / 2);
-            const insetY = Math.max(0, (window.innerHeight - height) / 2);
-            return `inset(${insetY}px ${insetX}px ${insetY}px ${insetX}px round ${radius}px)`;
-          };
           const collectX = (_index: number, target: HTMLElement) => {
             const rect = target.getBoundingClientRect();
             return window.innerWidth / 2 - (rect.left + rect.width / 2);
@@ -728,143 +678,143 @@ export function ActScrollStory({ content, locale }: Props) {
             .to(phoneUi, { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.3 }, T.phoneIn + 0.16)
             .to(q<HTMLElement>('[data-phone-meter]'), { scaleY: 1, duration: 2.2 }, T.montage);
 
-          // MONTAGE — le scroll est le chef de montage.
-          tl.to(screenHero, { yPercent: -101, duration: 0.34 }, T.montage)
-            .to(feed, { yPercent: 0, duration: 0.34 }, T.montage)
-            .to(feed, { yPercent: -22, duration: 0.5 }, T.montage + 0.42)
-            .to(focus, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.34 }, T.montage + 0.62)
-            .to(q<HTMLElement>('[data-focus-image]'), { scale: 1.06, duration: 0.6 }, T.montage + 0.64)
-            .to(story, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.34 }, T.montage + 1.16)
-            .to(q<HTMLElement>('[data-story-image]'), { scale: 1.05, duration: 0.6 }, T.montage + 1.18)
-            .to(campaign, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.28 }, T.montage + 1.39)
+          /* MONTAGE — quatre étapes, une seule réellement active à la fois.
+             Le pas est de 0.44 vh au lieu de 0.5 : la séquence est raccourcie
+             d'environ 15 % sans qu'aucune étape ne soit sacrifiée. */
+          const BEAT = 0.44;
+          tl.to(screenHero, { yPercent: -101, duration: 0.32 }, T.montage)
+            .to(feed, { yPercent: 0, duration: 0.32 }, T.montage)
+            .to(feed, { yPercent: -22, duration: 0.46 }, T.montage + 0.38)
+            .to(focus, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.3 }, T.montage + BEAT)
+            .to(q<HTMLElement>('[data-focus-image]'), { scale: 1.06, duration: 0.56 }, T.montage + BEAT)
+            .to(story, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.3 }, T.montage + BEAT * 2)
+            .to(q<HTMLElement>('[data-story-image]'), { scale: 1.05, duration: 0.56 }, T.montage + BEAT * 2)
+            .to(campaign, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.28 }, T.montage + BEAT * 3)
             .fromTo(
               q<HTMLElement>('[data-campaign-image]'),
-              { scale: 1.1 },
-              { scale: 1, duration: 0.6 },
-              T.montage + 1.39,
+              { scale: 1.09 },
+              { scale: 1, duration: 0.56 },
+              T.montage + BEAT * 3,
             );
 
+          /* Le rail latéral et le grand mot de l'étape sont pilotés par le même
+             repère temporel : ils ne peuvent pas se désynchroniser. L'étape
+             quittée reste lisible (0.5) au lieu de disparaître. */
           content.phone.beats.forEach((_, i) => {
             const beat = phoneBeats[i];
             const rail = phoneRail[i];
             if (!beat || !rail) return;
-            const at = T.montage + 0.1 + i * 0.5;
-            tl.to(beat, { yPercent: 0, autoAlpha: 1, duration: 0.16 }, at)
-              .to(rail, { autoAlpha: 1, color: 'var(--rich-wine)', duration: 0.16 }, at)
-              .to(beat, { yPercent: -110, autoAlpha: 0, duration: 0.16 }, at + 0.42)
-              .to(rail, { autoAlpha: 0.26, color: 'var(--ink)', duration: 0.16 }, at + 0.42);
+            const at = T.montage + 0.06 + i * BEAT;
+            tl.to(beat, { yPercent: 0, autoAlpha: 1, duration: 0.14 }, at)
+              .to(rail, { autoAlpha: 1, duration: 0.14 }, at)
+              .set(rail, { attr: { 'data-active': 'true' } }, at)
+              .to(beat, { yPercent: -110, autoAlpha: 0, duration: 0.14 }, at + BEAT - 0.06)
+              .to(rail, { autoAlpha: 0.5, duration: 0.14 }, at + BEAT - 0.06)
+              .set(rail, { attr: { 'data-active': 'false' } }, at + BEAT - 0.06);
           });
 
-          /* ---------------------------------------------------------------
-             TÉLÉPHONE → MONDE.
-             Le portail commence exactement dans la géométrie de l'écran. Le
-             bezel s'efface pendant que ce même contenu devient le viewport.
-             --------------------------------------------------------------- */
-          tl.set(portalFrame, { clipPath: portalInset }, T.compress - 0.01)
-            .set(
-              portalLayers,
-              { autoAlpha: (index: number) => [1, 0.92, 0.84][index] ?? 0.9 },
-              T.compress - 0.01,
-            )
-            .to(portalFrame, { autoAlpha: 1, duration: 0.08 }, T.compress)
-            // Le WebGL est déjà rendu sous le raccord. Il devient visible dans
-            // les interstices des trois plans, jamais après un écran d'attente.
-            .set(immersion, { autoAlpha: 1 }, T.compress)
-            .to(sceneGround, { autoAlpha: 1, duration: 0.16 }, T.compress + 0.14)
+          /* ===============================================================
+             TÉLÉPHONE → UNIVERS 3D
+             Le grand raccord. Un seul mouvement, une seule surface.
+
+             1. le dernier contenu s'immobilise (le montage est fini) ;
+             2. le téléphone se recentre ;
+             3. la caméra se rapproche : le device grandit, l'écran avec lui —
+                le plan WebGL est ancré sur `[data-phone-screen]`, il grandit
+                donc *exactement* comme lui, sans un pixel d'écart ;
+             4. le cadre sort du champ : bezel, boutons et rayon s'annulent
+                pendant que le device dépasse le viewport ;
+             5. l'écran devient la surface plein cadre (chapitre 1) ;
+             6-8. les couches se détachent et avancent (chapitre 2) ;
+             9-10. la caméra traverse et la planche contact se résout
+                (chapitre 3, repris par l'acte « Le processus »).
+
+             Aucun `set()` d'opacité sur un calque entier, aucun flash : tout
+             est une interpolation continue, donc réversible.
+             =============================================================== */
+
+          /* Facteur d'approche : l'écran doit dépasser la hauteur du viewport
+             pour que le cadre du téléphone en soit chassé. */
+          const approachScale = () => {
+            const screenH = phoneW() * (19.5 / 9) - bezel * 2;
+            return Math.max(1, (window.innerHeight * 1.12) / screenH);
+          };
+
+          tl
+            // 1-2 — immobilisation et recentrage.
             .to(
-              portalFrame,
-              {
-                clipPath: 'inset(0px 0px 0px 0px round 0px)',
-                duration: 0.5,
-                ease: 'power2.inOut',
-              },
-              T.compress,
+              device,
+              { left: '50%', top: '50%', xPercent: -50, yPercent: -50, duration: 0.3 },
+              T.transfer - 0.3,
             )
-            .to(phoneUi, { autoAlpha: 0, y: -8, duration: 0.24 }, T.compress)
-            .to(phoneBeats, { autoAlpha: 0, duration: 0.18 }, T.compress)
-            .to(q<HTMLElement>('[data-campaign-ui]'), { autoAlpha: 0, duration: 0.2 }, T.compress)
-            .to(portalGuides, { autoAlpha: 0.9, scale: 1, duration: 0.18 }, T.compress + 0.02)
+            .to(
+              [...phoneUi, ...phoneBeats],
+              { autoAlpha: 0, y: -8, duration: 0.22 },
+              T.transfer - 0.24,
+            )
+            .to(q<HTMLElement>('[data-campaign-ui]'), { autoAlpha: 0, duration: 0.2 }, T.transfer - 0.2)
+            // Le fond passe au chocolat profond : la page devient un espace.
+            .to(stageGround, { autoAlpha: 1, duration: 0.5 }, T.transfer - 0.1)
+            // 3 — approche. Le device grandit, le plan WebGL est ancré sur lui.
+            .to(
+              device,
+              { scale: approachScale, duration: T.screenFull - T.transfer, ease: 'power2.in' },
+              T.transfer,
+            )
+            // Le contenu DOM de l'écran s'efface *sous* le plan WebGL qui le
+            // recouvre déjà : on ne voit donc rien s'éteindre.
+            .to(
+              [screenHero, feed, focus, story, campaign],
+              { autoAlpha: 0, duration: 0.18 },
+              T.transfer + 0.16,
+            )
+            .to(screenGlass, { autoAlpha: 1, duration: 0.2 }, T.transfer + 0.05)
+            // 4 — le cadre sort du champ.
             .to(
               device,
               {
-                width: '100vw',
-                '--device-ar': () => `${window.innerWidth} / ${window.innerHeight}`,
                 '--phone-bezel': '0px',
                 '--phone-radius': '0px',
                 borderColor: 'transparent',
                 backgroundColor: 'transparent',
-                duration: 0.5,
-                ease: 'power2.inOut',
-              },
-              T.compress,
-            )
-            .to(
-              portalLayers,
-              {
-                xPercent: (index: number) => [-2.3, 1.6, 0.45][index] ?? 0,
-                yPercent: (index: number) => [2.6, -0.8, -1.8][index] ?? 0,
-                scale: (index: number) => [1.11, 1.055, 1.025][index] ?? 1,
-                stagger: 0.025,
                 duration: 0.34,
-                ease: 'power2.inOut',
               },
-              T.compress + 0.08,
+              T.transfer + 0.22,
             )
-            .to(portalMediaEl, { autoAlpha: 0.45, scale: 1.018, duration: 0.1 }, T.compress + 0.02)
-            .to(portalMediaEl, { autoAlpha: 0, duration: 0.12 }, T.depthIn + 0.02)
-            .set(device, { autoAlpha: 0 }, T.compress + 0.5)
+            .to(phoneButtons, { scaleY: 0, duration: 0.2 }, T.transfer + 0.18)
+            .to(island, { width: 0, duration: 0.2 }, T.transfer + 0.18)
+            .to(screenGlass, { autoAlpha: 0, duration: 0.2 }, T.screenFull - 0.3)
+            .set(device, { autoAlpha: 0 }, T.screenFull - 0.02)
+            // Ce qui restait de la section 2 quitte la scène avant le plein cadre.
             .to(
-              [behind, ...satellites, frontCopy],
-              { autoAlpha: 0, duration: 0.2 },
-              T.compress,
+              [behind, ...satellites, frontCopy, detailPlate],
+              { autoAlpha: 0, duration: 0.24 },
+              T.transfer,
             )
+            // 6-10 — la légende du raccord, brève et lisible sur le fond sombre.
             .to(
-              portalLayers,
-              {
-                autoAlpha: 0,
-                scale: (index: number) => [1.16, 1.09, 1.045][index] ?? 1.05,
-                stagger: 0.035,
-                duration: 0.28,
-              },
-              T.depthIn + 0.04,
-            )
-            .to(portalGuides, { autoAlpha: 0, scale: 1.04, duration: 0.2 }, T.depthIn + 0.12)
-            .to(portalFrame, { autoAlpha: 0, duration: 0.18 }, T.gallery - 0.1)
-            .to(immersionBits, { autoAlpha: 1, y: 0, stagger: 0.07, duration: 0.34 }, T.gallery + 0.08)
-            .to(
-              immersionNarrative,
-              { autoAlpha: 0, y: -10, duration: 0.24 },
-              T.gallery + 0.66,
-            )
-            .to(immersionChapter, { autoAlpha: 0, duration: 0.22 }, T.flatten - 0.55)
-            // The dark corridor resolves into a physical paper surface while
-            // the surviving WebGL planes move into their DOM contact-sheet slots.
-            .to(
-              flatPaper,
-              {
-                autoAlpha: 1,
-                duration: T.handoff - T.flatten,
-                ease: 'power2.inOut',
-              },
-              T.flatten,
-            )
-            // One-frame twin: same sources and geometry, now in DOM. The canvas
-            // can be removed without a color or position flash.
-            .to(
-              flatHandoff,
-              { autoAlpha: 1, duration: 0.24, ease: 'none' },
-              T.handoff - 0.24,
+              transferCopy,
+              { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.3 },
+              T.screenFull + 0.34,
             )
             .to(
-              immersion,
-              { autoAlpha: 0, duration: 0.16, ease: 'none' },
-              T.handoff - 0.16,
+              transferCopy,
+              { autoAlpha: 0, y: -10, stagger: 0.05, duration: 0.24 },
+              T.separate + 0.42,
             );
 
           // Verrou de durée : la partition vaut exactement T.end.
           tl.to({}, { duration: 0.01 }, T.end - 0.01);
 
-          return () => unlockScroll();
+          const onResize = () => publishScreen();
+          window.addEventListener('resize', onResize);
+
+          return () => {
+            window.removeEventListener('resize', onResize);
+            setStageAnchor('screen', null);
+            setStageLive(false);
+            unlockScroll();
+          };
         },
       );
 
@@ -909,10 +859,9 @@ export function ActScrollStory({ content, locale }: Props) {
 
         {/* La page ivoire : elle naît du média et devient la surface du chapitre. */}
         <div className={styles.pageSurface} data-page-surface aria-hidden="true" />
-        {/* Le sol de la scène immersive : il monte derrière le plein cadre
-            opaque, donc on ne le voit jamais « changer ». */}
-        <div className={styles.sceneGround} data-scene-ground aria-hidden="true" />
-        <div className={styles.flatPaper} data-flat-paper aria-hidden="true" />
+        {/* Le sol du raccord : le chocolat profond monte sous le téléphone,
+            donc la page ne « change pas de couleur », elle s'enfonce. */}
+        <div className={styles.stageGround} data-stage-ground aria-hidden="true" />
 
         <span className={`${styles.edition} micro`} data-meta>
           <span className="line-mask">
@@ -972,15 +921,24 @@ export function ActScrollStory({ content, locale }: Props) {
           </div>
         ))}
 
-        {/* ---------- SECTION 2 — front ---------- */}
+        {/* ---------- SECTION 2 — LA DOUBLE PAGE ----------
+            Une grille éditoriale, un titre, une intention, des légendes.
+            L'espace négatif est un élément de composition, pas un oubli. */}
         <div className={styles.frontComposition} data-front-copy>
-          <span className={`${styles.frontChapter} micro`}>02 / {content.social.heading}</span>
-          <p className={styles.frontLabel}>{content.social.front}</p>
-          <span className={`${styles.frontCount} micro`} aria-hidden="true">
-            Front / 01—04
+          <span className={`${styles.frontChapter} micro`}>
+            <em>02</em> / {content.social.heading}
           </span>
-          <span className={styles.moodboardAxis} aria-hidden="true" />
-          <span className={`${styles.moodboardNote} hand-note`} aria-hidden="true">
+          <h2 className={styles.frontLabel} data-front-bit>
+            {content.social.front}
+          </h2>
+          <p className={`${styles.frontIntent} lead`} data-front-bit>
+            {content.social.statement}
+          </p>
+          <span className={`${styles.frontCount} micro`} data-front-bit>
+            Table 02 — direction artistique
+          </span>
+          <span className={styles.frontRule} data-front-bit aria-hidden="true" />
+          <span className={`${styles.frontNote} hand-note`} data-front-bit aria-hidden="true">
             mood · matière · rythme
           </span>
         </div>
@@ -1082,28 +1040,39 @@ export function ActScrollStory({ content, locale }: Props) {
             </div>
 
             <span className={styles.reflection} data-phone-detail aria-hidden="true" />
+            {/* Reflet d'approche : il signale que la caméra entre dans la
+                surface de verre, juste avant que le cadre ne sorte du champ. */}
+            <span className={styles.screenGlass} data-screen-glass aria-hidden="true" />
           </div>
         </div>
 
-        {socialSatellites.map((m, i) => (
+        {/* Deux tirages secondaires. Pas cinq : la hiérarchie est le sujet. */}
+        {SECONDARY_PLATES.map((slot, i) => (
           <figure
             className={styles.satellite}
             data-social-satellite
             data-social-slot={i + 1}
-            key={m.id}
+            key={socialSatellites[slot]!.id}
           >
             <div className={styles.satelliteImage} data-social-image>
-              <Media item={m} locale={locale} compact sizes="22vw" />
+              <Media item={socialSatellites[slot]!} locale={locale} compact sizes="24vw" />
             </div>
             <figcaption className={`${styles.satelliteCaption} micro`} data-social-caption>
-              {String(i + 1).padStart(2, '0')} / {m.role}
+              <span>
+                <em>{String(i + 2).padStart(2, '0')}</em> {socialSatellites[slot]!.role}
+              </span>
+              <span aria-hidden="true">Pl. {String(i + 2).padStart(2, '0')}</span>
             </figcaption>
           </figure>
         ))}
 
-        <div className={styles.crossing} data-social-crossing aria-hidden="true">
-          <Media item={phoneStory} locale={locale} compact sizes="14vw" />
-        </div>
+        {/* Le détail complémentaire : troisième et dernier niveau de lecture. */}
+        <figure className={styles.detailPlate} data-social-detail>
+          <Media item={socialSatellites[2]!} locale={locale} compact sizes="14vw" />
+          <figcaption className={`${styles.detailCaption} micro`}>
+            <em>04</em> {socialSatellites[2]!.role}
+          </figcaption>
+        </figure>
 
         {/* ---------- SECTION 2 — behind ---------- */}
         <div className={styles.behind} data-behind>
@@ -1121,27 +1090,33 @@ export function ActScrollStory({ content, locale }: Props) {
           </figure>
 
           <div className={styles.behindCopy} data-behind-copy>
-            <span className={`${styles.behindLabel} micro`}>{content.social.behind}</span>
+            <span className={`${styles.behindLabel} micro`}>
+              <em>02.2</em> / {content.social.behind}
+            </span>
+            <h3 className={`${styles.behindTitle} title`}>{content.social.behind}</h3>
             <p className={`${styles.statement} lead`}>{content.social.statement}</p>
-            <ul className={`${styles.layers} micro`}>
+            {/* Les cinq strates : une liste numérotée, contrastée, sans décor.
+                Les pictogrammes précédents rendaient la colonne illisible. */}
+            <ol className={styles.layers}>
               {content.social.layers.map((layer, i) => (
-                <li key={layer}>
-                  <span className={styles.layerIndex}>{String(i + 1).padStart(2, '0')}</span>
-                  <LayerArtifact index={i} />
+                <li key={layer} data-layer-row>
+                  <span className={`${styles.layerIndex} micro`}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
                   <strong>{layer}</strong>
                 </li>
               ))}
-            </ul>
+            </ol>
           </div>
         </div>
 
         {/* ---------- SECTION 3 — habillage ---------- */}
         <div className={styles.interface}>
           <span className={`${styles.chapter} micro`} data-phone-entry>
-            03 / {content.phone.heading}
+            <em>03</em> / {content.phone.heading}
           </span>
           <span className={`${styles.counter} micro`} data-phone-entry>
-            09 : 16 / 04 beats
+            04 étapes · format 9:16
           </span>
 
           <div className={styles.beat} aria-hidden="true">
@@ -1152,11 +1127,14 @@ export function ActScrollStory({ content, locale }: Props) {
             ))}
           </div>
 
+          {/* Le rail est la carte de la séquence : les quatre étapes restent
+              visibles et lisibles, une seule est active. */}
           <ol className={styles.sequenceRail} data-phone-detail aria-hidden="true">
             {content.phone.beats.map((b, i) => (
               <li data-phone-rail-item key={b}>
-                <span>{String(i + 1).padStart(2, '0')}</span>
-                {b}
+                <span className={styles.railIndex}>{String(i + 1).padStart(2, '0')}</span>
+                <span className={styles.railLabel}>{b}</span>
+                <i className={styles.railMark} />
               </li>
             ))}
           </ol>
@@ -1166,60 +1144,21 @@ export function ActScrollStory({ content, locale }: Props) {
           </span>
         </div>
 
-        {/* ---------- RACCORD — la campagne se sépare en profondeur ---------- */}
-        <div className={styles.portalFrame} data-portal-frame aria-hidden="true">
-          <Media
-            item={socialPortal}
-            locale={locale}
-            className={styles.portalMedia}
-            loading="eager"
-            sizes="100vw"
-          />
-          <span className={styles.portalDepth} data-portal-depth data-depth="foreground" />
-          <span className={styles.portalDepth} data-portal-depth data-depth="midground" />
-          <span className={styles.portalDepth} data-portal-depth data-depth="background" />
-          <span className={styles.portalGuide} data-portal-guide>
-            <i />
-            <i />
-            <i />
-            <i />
-            <small className="micro">CAM / MRS · DEPTH 03</small>
+        {/* ---------- RACCORD ----------
+            Le contenu réel du raccord est rendu par le Canvas maître. Ici, la
+            seule légende : elle nomme ce que le visiteur est en train de voir,
+            pour qu'aucun plan ne soit gratuit. */}
+        <div className={styles.transfer} aria-hidden="true">
+          <span className={`${styles.transferLabel} micro`} data-transfer-bit>
+            {content.immersion.heading}
           </span>
+          <p className={`${styles.transferStatement} lead`} data-transfer-bit>
+            {content.immersion.statement}
+          </p>
+        </div>
         </div>
 
-        {/* ---------- SECTION 4 — immersion ---------- */}
-        <div className={styles.immersion} data-immersion aria-labelledby="immersion-title">
-          <ImmersionCanvas
-            className={styles.immersionCanvas}
-            reduced={reduced}
-            active={galleryActive}
-            progress={galleryProgress}
-            burst={burstValue}
-            requestRenderRef={requestRenderRef}
-          />
-
-          <div className={styles.immersionCopy}>
-            <span className={`${styles.immersionChapter} micro`} data-immersion-bit>
-              04 / {content.immersion.heading}
-            </span>
-            <h2 id="immersion-title" className={`${styles.immersionHeading} display`} data-immersion-bit>
-              {content.immersion.heading}
-            </h2>
-            <p className={`${styles.immersionStatement} lead`} data-immersion-bit>
-              {content.immersion.statement}
-            </p>
-          </div>
-        </div>
-
-        <ArchivePlate
-          className={styles.flatHandoff}
-          locale={locale}
-          marker="handoff"
-          eyebrow={`05 / ${content.process.heading}`}
-        />
-        </div>
-
-        <ReducedStory content={content} locale={locale} />
+        {reduced && <ReducedStory content={content} locale={locale} />}
       </div>
     </section>
   );

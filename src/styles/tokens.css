@@ -39,8 +39,19 @@
   --surface: var(--ink);
   --on-surface: var(--paper);
   --on-surface-rgb: var(--paper-rgb);
-  --rule: rgb(var(--on-surface-rgb) / 0.14);
-  --rule-strong: rgb(var(--on-surface-rgb) / 0.32);
+  --rule: rgb(var(--on-surface-rgb) / 0.22);
+  --rule-strong: rgb(var(--on-surface-rgb) / 0.46);
+  /* Accent porteur de texte. Jamais --champagne ni --warm-taupe sur clair :
+     mesurés à ~2:1, ils sont illisibles. */
+  --accent-text: var(--champagne);
+
+  /* ---------- ÉCHELLE DE TEXTE ----------
+     Quatre niveaux seulement, tous ≥ 4.5:1 sur leur surface.
+     `faint` est réservé au décor : il ne porte jamais d'information. */
+  --text-strong: var(--on-surface);
+  --text-body: rgb(var(--on-surface-rgb) / 0.9);
+  --text-muted: rgb(var(--on-surface-rgb) / 0.72);
+  --text-faint: rgb(var(--on-surface-rgb) / 0.5);
 
   /* ---------- TYPOGRAPHIE ----------
      Rapport monument/micro ≈ 28:1. C'est ce contraste qui produit le luxe. */
@@ -129,11 +140,13 @@
   --surface: var(--ivory);
   --on-surface: var(--ink);
   --on-surface-rgb: var(--ink-rgb);
+  --accent-text: var(--rich-wine);
 }
 .surface-paper-deep {
   --surface: var(--paper-deep);
   --on-surface: var(--ink);
   --on-surface-rgb: var(--ink-rgb);
+  --accent-text: var(--rich-wine);
 }
 .surface-ink {
   --surface: var(--ink);
