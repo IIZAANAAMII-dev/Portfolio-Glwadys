@@ -90,6 +90,7 @@ function useProgressiveTextures(mobile: boolean, anisotropy: number) {
 
     const loadTier = async (tier: 0 | 1 | 2) => {
       const sources = sourcesForTier(tier, mobile);
+      console.warn(`[stage] loading tier ${tier}: ${sources.length} sources`, sources);
       // Charge en parallèle, mais pousse chaque texture dès qu'elle arrive :
       // l'écran du téléphone s'affiche immédiatement, les cadres de la galerie
       // arrivent au fur et à mesure.
@@ -107,9 +108,10 @@ function useProgressiveTextures(mobile: boolean, anisotropy: number) {
               store.set(src, texture);
               setTextures(new Map(store));
             }
-          } catch {
+          } catch (e) {
             /* Un asset manquant ne doit jamais faire tomber la scène : le plan
                concerné reste simplement absent, la narration DOM subsiste. */
+            console.error('[stage texture missing]', src, (e as Error).message);
           }
         }),
       );
@@ -119,10 +121,13 @@ function useProgressiveTextures(mobile: boolean, anisotropy: number) {
        textures des projets, mais elles sont prêtes bien avant leur chapitre. */
     void (async () => {
       await loadTier(0);
+      console.warn('[stage] tier 0 done', store.size);
       if (!alive) return;
       await loadTier(1);
+      console.warn('[stage] tier 1 done', store.size);
       if (!alive) return;
       await loadTier(2);
+      console.warn('[stage] tier 2 done', store.size);
     })();
 
     return () => {
@@ -221,7 +226,11 @@ function StagePlane({
   texture: THREE.Texture;
   geometry: THREE.PlaneGeometry;
 }) {
+  useEffect(() => {
+    console.warn('[StagePlane] created', plane.id);
+  }, []);
   const mesh = useRef<THREE.Mesh>(null);
+  const logged = useRef(false);
   const aspect = useThree((s) => s.viewport.aspect);
 
   const imageAspect = useMemo(() => {
@@ -279,6 +288,29 @@ function StagePlane({
     el.rotation.set(scratch.rx * DEG, scratch.ry * DEG, scratch.rz * DEG);
     el.scale.set(worldW, worldH, 1);
     el.visible = true;
+    if (!logged.current && plane.id.startsWith('gallery')) {
+      logged.current = true;
+      console.warn(
+        '[StagePlane] visible',
+        plane.id,
+        't',
+        t,
+        'a',
+        scratch.a,
+        'u',
+        scratch.u,
+        'v',
+        scratch.v,
+        'w',
+        scratch.w,
+        'h',
+        scratch.h,
+        'd',
+        scratch.d,
+        'ry',
+        scratch.ry,
+      );
+    }
 
     // cover : la texture remplit le rectangle sans jamais se déformer.
     const planeAspect = worldH > 0 ? worldW / worldH : 1;

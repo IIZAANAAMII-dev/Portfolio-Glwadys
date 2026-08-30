@@ -31,7 +31,7 @@ const fs = require('fs');
 
   for (const p of points) {
     await page.evaluate((y) => window.scrollTo(0, y), Math.round(docHeight * p));
-    await page.waitForTimeout(900);
+    await page.waitForTimeout(3200);
     const name = `${dir}/${prefix}-${String(Math.round(p * 1000)).padStart(4, '0')}.png`;
     await page.screenshot({ path: name });
     console.log('captured', name);
