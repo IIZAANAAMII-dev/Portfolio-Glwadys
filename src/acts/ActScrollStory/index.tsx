@@ -507,19 +507,23 @@ export function ActScrollStory({ content, locale }: Props) {
             )
             // …puis la page ivoire se déplie DEPUIS lui. Le fond ne « change »
             // pas de couleur : une page a grandi. Le changement a une origine.
-            .set(
+            // La page ne s'allume plus d'un set() brutal : elle passe de 0 à
+            // la taille du média en douceur, puis se déplie jusqu'au plein cadre.
+            .to(
               page,
               {
                 autoAlpha: 1,
                 scaleX: () => heroMediaW() / window.innerWidth,
                 scaleY: () => heroMediaH() / window.innerHeight,
+                duration: 0.18,
+                ease: 'power2.out',
               },
               T.heroHold + 0.58,
             )
             .to(
               page,
               { scaleX: 1, scaleY: 1, duration: 0.62, ease: 'power3.inOut' },
-              T.heroHold + 0.6,
+              T.heroHold + 0.62,
             );
 
           /* ---------------------------------------------------------------

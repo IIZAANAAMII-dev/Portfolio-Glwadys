@@ -1,3 +1,5 @@
+import { depthMedia } from '@/content/media';
+
 /**
  * LA PARTITION DU CANVAS PERSISTANT.
  *
@@ -39,6 +41,42 @@ export const SRC = {
   mgc: `${M}/mgc/mgc-editorial-wall-v2.jpg`,
   comptoir: `${M}/comptoir/comptoir-craft-v2.jpg`,
 } as const;
+
+const GALLERY_IMAGES = depthMedia.slice(1);
+
+function aspectOf(ratio: string) {
+  const [w, h] = ratio.split(':').map(Number);
+  return w! / h!;
+}
+
+const galleryFrame = (index: number): Plane => {
+  const media = GALLERY_IMAGES[index]!;
+  const side = index % 2 === 0 ? 'left' : 'right';
+  const baseU = side === 'left' ? 0.11 : 0.89;
+  const endU = side === 'left' ? -0.46 : 1.46;
+  const baseR = side === 'left' ? -22 : 22;
+  const endR = side === 'left' ? -70 : 70;
+  const tStart = 1.05 + index * 0.13;
+  const tEnd = tStart + 0.78;
+  const v = 0.36 + (index % 3) * 0.16;
+  const frameW = 0.3;
+  const h = Math.min(0.46, Math.max(0.14, frameW / aspectOf(media.ratio)));
+
+  return {
+    id: `gallery-${index}`,
+    src: media.src!,
+    tier: 0,
+    keys: [
+      { t: tStart, u: baseU, v, w: frameW * 0.5, h: h * 0.5, d: 26, a: 0, ry: baseR },
+      { t: tStart + 0.14, u: baseU, v: v + 0.03, w: frameW * 0.9, h: h * 0.9, d: 18, a: 1, ry: baseR * 1.15 },
+      { t: (tStart + tEnd) / 2, u: baseU + (side === 'left' ? -0.09 : 0.09), v: v + 0.07, w: frameW * 1.35, h: h * 1.35, d: 8, a: 1, ry: baseR * 1.7 },
+      { t: tEnd - 0.15, u: endU * 0.55, v: v + 0.11, w: frameW * 3, h: h * 3, d: 1.8, a: 0.75, ry: endR * 0.75 },
+      { t: tEnd, u: endU, v: v + 0.16, w: frameW * 5.2, h: h * 5.2, d: 0.65, a: 0, ry: endR },
+    ],
+  };
+};
+
+const GALLERY: Plane[] = GALLERY_IMAGES.map((_, i) => galleryFrame(i));
 
 export interface Key {
   t: number;
@@ -172,57 +210,17 @@ export const PLANES: Plane[] = [
     tier: 0,
     keys: [
       { t: 0, u: 0.5, v: 0.5, w: 0.18, h: 0.62, d: 8, a: 1, anchor: 'screen', linear: true },
-      { t: 0.62, u: 0.5, v: 0.5, w: 0.18, h: 0.62, d: 8, a: 1, anchor: 'screen', linear: true },
-      { t: 1, u: 0.5, v: 0.5, w: 1, h: 1, d: 8, a: 1 },
-      { t: 1.58, u: 0.5, v: 0.475, w: 0.63, h: 0.72, d: 14, ry: -3, a: 1 },
-      { t: 2, u: 0.5, v: 0.5, w: 0.45, h: 0.56, d: 22, ry: -2, a: 1 },
-      { t: 2.86, u: 0.5, v: 0.5, w: 1.55, h: 1.95, d: 1.3, a: 1 },
-      { t: 3, u: 0.5, v: 0.5, w: 2.2, h: 2.8, d: 0.9, a: 0 },
+      { t: 0.22, u: 0.5, v: 0.5, w: 0.18, h: 0.62, d: 8, a: 1, anchor: 'screen', linear: true },
+      { t: 0.44, u: 0.5, v: 0.5, w: 0.55, h: 0.78, d: 8, a: 1 },
+      { t: 0.7, u: 0.5, v: 0.5, w: 1, h: 1, d: 8, a: 1 },
+      { t: 0.9, u: 0.5, v: 0.5, w: 0.82, h: 0.82, d: 10, a: 0.8 },
+      { t: 1.15, u: 0.5, v: 0.5, w: 0.2, h: 0.24, d: 18, a: 0 },
     ],
   },
 
-  /* LES TROIS COUCHES. Elles naissent dans le cadre plein de l'écran — donc
-     rien n'apparaît : quelque chose se sépare. */
-  {
-    id: 'layer-fg',
-    src: SRC.campaign,
-    tier: 0,
-    keys: [
-      { t: 1, u: 0.5, v: 0.5, w: 1, h: 1, d: 7.4, fx: 0.3, fy: 0.46, a: 0 },
-      { t: 1.16, u: 0.44, v: 0.51, w: 0.72, h: 0.9, d: 7.4, fx: 0.3, fy: 0.46, a: 1 },
-      { t: 1.62, u: 0.245, v: 0.545, w: 0.3, h: 0.64, d: 7, ry: 6, a: 1 },
-      { t: 2, u: 0.17, v: 0.575, w: 0.26, h: 0.58, d: 5.2, ry: 7, a: 1 },
-      { t: 2.52, u: -0.34, v: 0.63, w: 0.95, h: 1.5, d: 1.7, ry: 12, a: 1 },
-      { t: 2.72, u: -0.9, v: 0.68, w: 1.4, h: 2.1, d: 1.1, ry: 14, a: 0 },
-    ],
-  },
-  {
-    id: 'layer-mid',
-    src: SRC.campaign,
-    tier: 0,
-    keys: [
-      { t: 1.04, u: 0.5, v: 0.5, w: 1, h: 1, d: 11, fx: 0.62, fy: 0.38, a: 0 },
-      { t: 1.2, u: 0.6, v: 0.47, w: 0.76, h: 0.66, d: 11, fx: 0.62, fy: 0.38, a: 1 },
-      { t: 1.64, u: 0.782, v: 0.4, w: 0.34, h: 0.4, d: 10.4, ry: -6, a: 1 },
-      { t: 2, u: 0.845, v: 0.362, w: 0.3, h: 0.36, d: 9, ry: -7, a: 1 },
-      { t: 2.58, u: 1.42, v: 0.3, w: 1, h: 1.1, d: 1.9, ry: -13, a: 1 },
-      { t: 2.78, u: 1.95, v: 0.24, w: 1.4, h: 1.5, d: 1.2, ry: -15, a: 0 },
-    ],
-  },
-  {
-    id: 'layer-bg',
-    src: SRC.campaign,
-    tier: 0,
-    desktopOnly: true,
-    keys: [
-      { t: 1.08, u: 0.5, v: 0.5, w: 1, h: 1, d: 17, fx: 0.66, fy: 0.7, a: 0 },
-      { t: 1.26, u: 0.52, v: 0.66, w: 0.8, h: 0.44, d: 17, fx: 0.66, fy: 0.7, a: 1 },
-      { t: 1.72, u: 0.52, v: 0.815, w: 0.5, h: 0.26, d: 17, rx: 5, a: 1 },
-      { t: 2, u: 0.5, v: 0.855, w: 0.45, h: 0.24, d: 15, rx: 6, a: 1 },
-      { t: 2.62, u: 0.5, v: 1.52, w: 1.7, h: 0.9, d: 1.6, rx: 16, a: 1 },
-      { t: 2.82, u: 0.5, v: 2.1, w: 2.2, h: 1.2, d: 1, rx: 18, a: 0 },
-    ],
-  },
+  /* LA GALERIE 3D. Cadres disposés comme dans un corridor ; on avance entre
+     les photographies d'environnement, de macro, de marque. */
+  ...GALLERY,
 
   rawPlane(0),
   rawPlane(1),

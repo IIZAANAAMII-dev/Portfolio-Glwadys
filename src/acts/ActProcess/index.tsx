@@ -24,8 +24,8 @@ const P = {
   intention: 1.05,
   system: 1.85,
   method: 2.65,
-  work: 4.38,
-  end: 4.75,
+  work: 5.9,
+  end: 6.35,
 } as const;
 
 const PROCESS_SCROLL_VH = P.end * 100;
@@ -259,7 +259,7 @@ export function ActProcess({ content, locale }: Props) {
             .to(methodScene, { autoAlpha: 1, duration: 0.14 }, P.method - 0.08)
             .to(methodChrome, { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.24 }, P.method);
 
-          const beat = 0.27;
+          const beat = 0.55;
           content.strategy.steps.forEach((_, index) => {
             const at = P.method + 0.12 + index * beat;
             const word = methodWords[index];

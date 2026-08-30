@@ -121,6 +121,26 @@
   min-height: 105svh;
 }
 
+/* Le macro chocolat est très texturé : on assombrit les mots pour qu'ils
+   restent lisibles, et on laisse le titre respirer sur plusieurs lignes. */
+.project[data-project='comptoir'] .name,
+.project[data-project='comptoir'] .summary,
+.project[data-project='comptoir'] .meta,
+.project[data-project='comptoir'] .skills {
+  text-shadow: 0 1px 24px rgb(0 0 0 / 0.55), 0 1px 3px rgb(0 0 0 / 0.35);
+}
+
+.project[data-project='comptoir'] .name {
+  top: 20vh;
+  max-width: 10ch;
+  text-wrap: balance;
+}
+
+.project[data-project='comptoir'] .summary {
+  bottom: 22vh;
+  width: min(38ch, 38vw);
+}
+
 .meta {
   position: absolute;
   top: var(--margin);

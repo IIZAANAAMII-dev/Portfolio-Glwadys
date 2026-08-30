@@ -1,10 +1,11 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import * as THREE from 'three';
 
 import { StageScene } from './StageScene';
+import { sourcesForTier } from './film';
 
 /**
  * Le Canvas maître. Un seul, pour toute l'expérience.
@@ -25,6 +26,19 @@ export default function StageCanvas() {
   }, []);
 
   const antialias = typeof window !== 'undefined' && (navigator.hardwareConcurrency ?? 4) > 4;
+
+  useEffect(() => {
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 1023px)').matches;
+    // Précharge l'écran (tier 0) et la galerie/processus (tier 1) pour éviter
+    // les cases vides au passage du téléphone à la scène 3D.
+    [0, 1].forEach((tier) =>
+      sourcesForTier(tier as 0 | 1, isMobile).forEach((src) => {
+        const img = new window.Image();
+        img.fetchPriority = 'high';
+        img.src = src;
+      }),
+    );
+  }, []);
 
   return (
     <Canvas

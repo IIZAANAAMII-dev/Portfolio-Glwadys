@@ -92,13 +92,14 @@
 .entry {
   position: relative;
   display: grid;
-  grid-template-columns: 0.8fr 1fr;
-  gap: clamp(2rem, 5vw, 6rem);
-  align-items: center;
-  flex: 0 0 54vw;
-  min-width: 44rem;
-  height: 72vh;
-  padding-inline: 6vw;
+  grid-template-columns: 0.85fr 1.15fr;
+  grid-template-rows: 1fr auto;
+  gap: clamp(1.2rem, 3vw, 3rem);
+  align-items: stretch;
+  flex: 0 0 62vw;
+  min-width: 46rem;
+  height: 74vh;
+  padding: 4vh 4vw 5vh;
   border: 1px solid var(--paper-edge);
   background-color: var(--ivory);
   background-image:
@@ -132,37 +133,48 @@
 }
 
 .year {
+  grid-column: 1;
+  grid-row: 1;
   align-self: start;
   font-family: var(--font-display);
-  font-size: var(--t-display);
+  font-size: clamp(4.5rem, 12vw, 13rem);
   font-style: italic;
-  line-height: var(--lh-display);
-  letter-spacing: var(--tr-display);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
   color: var(--rich-wine);
 }
 
 .entryCopy {
+  grid-column: 1;
+  grid-row: 2;
   align-self: end;
-  padding-bottom: 2vh;
+  max-width: 26ch;
+  padding-bottom: 1vh;
 }
 
 .entryLabel {
   max-width: 22ch;
+  font-size: clamp(2.4rem, 5vw, 6rem);
+  line-height: 0.96;
 }
 
 .place {
   display: block;
-  margin-top: 1.2rem;
-  opacity: 0.58;
+  margin-top: 1.8rem;
+  font-size: clamp(0.8rem, 1.2vw, 1.05rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.62;
 }
 
 .media {
-  position: absolute;
-  right: 8%;
-  top: 10%;
-  width: 15vw;
-  max-width: 13rem;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: end;
+  position: relative;
+  width: min(24vw, 34rem);
   z-index: var(--z-media);
 }
 
@@ -206,14 +218,21 @@
 }
 
 .handoffTitle {
-  top: var(--margin);
-  right: var(--margin);
+  left: 50%;
+  top: 52%;
+  translate: -50% -50%;
+  margin: 0;
+  font-size: clamp(3.6rem, 9.6vw, 13rem);
+  text-align: center;
+  white-space: nowrap;
 }
 
 .handoffPreview {
-  left: var(--margin);
+  left: 50%;
   bottom: max(12vh, 7rem);
+  translate: -50% 0;
   color: var(--rich-wine);
+  text-align: center;
 }
 
 .handoffGrid {
@@ -314,6 +333,9 @@
   }
 
   .media {
+    grid-column: auto;
+    grid-row: auto;
+    position: absolute;
     right: var(--margin);
     top: 18%;
     width: 30vw;

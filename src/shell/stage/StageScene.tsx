@@ -89,8 +89,12 @@ function useProgressiveTextures(mobile: boolean, anisotropy: number) {
     const store: TextureMap = new Map();
 
     const loadTier = async (tier: 0 | 1 | 2) => {
-      const entries = await Promise.all(
-        sourcesForTier(tier, mobile).map(async (src) => {
+      const sources = sourcesForTier(tier, mobile);
+      // Charge en parallèle, mais pousse chaque texture dès qu'elle arrive :
+      // l'écran du téléphone s'affiche immédiatement, les cadres de la galerie
+      // arrivent au fur et à mesure.
+      await Promise.all(
+        sources.map(async (src) => {
           try {
             const texture = await loader.loadAsync(src);
             texture.colorSpace = THREE.SRGBColorSpace;
@@ -99,17 +103,16 @@ function useProgressiveTextures(mobile: boolean, anisotropy: number) {
             texture.magFilter = THREE.LinearFilter;
             texture.anisotropy = Math.min(4, anisotropy);
             owned.push(texture);
-            return [src, texture] as const;
+            if (alive) {
+              store.set(src, texture);
+              setTextures(new Map(store));
+            }
           } catch {
             /* Un asset manquant ne doit jamais faire tomber la scène : le plan
                concerné reste simplement absent, la narration DOM subsiste. */
-            return null;
           }
         }),
       );
-      if (!alive) return;
-      entries.forEach((entry) => entry && store.set(entry[0], entry[1]));
-      setTextures(new Map(store));
     };
 
     /* Trois paliers séquentiels : le raccord du téléphone n'attend jamais les
@@ -239,9 +242,18 @@ function StagePlane({
 
   const range = PLANE_RANGE.get(plane.id)!;
 
+  useEffect(() => {
+    const el = mesh.current;
+    if (!el) return;
+    const mat = el.material as THREE.ShaderMaterial;
+    if (mat) mat.uniforms.uMap!.value = texture;
+  }, [texture]);
+
   useFrame(() => {
     const el = mesh.current;
     if (!el) return;
+    const mat = el.material as THREE.ShaderMaterial;
+    if (!mat) return;
 
     const { t } = stageState();
     if (t < range.from - 0.001 || t > range.to + 0.001 || !sample(plane, t, scratch)) {
@@ -270,16 +282,16 @@ function StagePlane({
 
     // cover : la texture remplit le rectangle sans jamais se déformer.
     const planeAspect = worldH > 0 ? worldW / worldH : 1;
-    const cover = uniforms.uCover.value;
+    const cover = mat.uniforms.uCover!.value as THREE.Vector2;
     if (planeAspect > imageAspect) {
       cover.set(1, imageAspect / planeAspect);
     } else {
       cover.set(planeAspect / imageAspect, 1);
     }
-    uniforms.uFocus.value.set(scratch.fx, scratch.fy);
-    uniforms.uAlpha.value = scratch.a;
+    (mat.uniforms.uFocus!.value as THREE.Vector2).set(scratch.fx, scratch.fy);
+    mat.uniforms.uAlpha!.value = scratch.a;
     // 0 à 12 unités : net. Au-delà, la matière s'enfonce dans l'air du décor.
-    uniforms.uHaze.value = Math.min(0.42, Math.max(0, (scratch.d - 13) / 130));
+    mat.uniforms.uHaze!.value = Math.min(0.42, Math.max(0, (scratch.d - 13) / 130));
   });
 
   return (

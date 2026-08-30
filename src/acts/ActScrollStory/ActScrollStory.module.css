@@ -760,6 +760,24 @@
    Toutes les valeurs sont accrochées à --margin : la double page tient
    la même gouttière que le reste du magazine. */
 
+/* La surface ivoire redéfinit localement les tokens texte : le héros est
+   sombre, ici le texte doit être lu sur papier. */
+.frontComposition,
+.behind,
+.interface,
+.satellite,
+.detailPlate {
+  --on-surface: var(--ink);
+  --on-surface-rgb: var(--ink-rgb);
+  --rule: rgb(var(--ink-rgb) / 0.22);
+  --rule-strong: rgb(var(--ink-rgb) / 0.46);
+  --accent-text: var(--rich-wine);
+  --text-strong: var(--ink);
+  --text-body: rgb(var(--ink-rgb) / 0.9);
+  --text-muted: rgb(var(--ink-rgb) / 0.72);
+  --text-faint: rgb(var(--ink-rgb) / 0.5);
+}
+
 .frontChapter {
   top: var(--margin);
   left: var(--margin);
@@ -1181,8 +1199,10 @@
   inset: -10%;
   z-index: var(--z-behind);
   background:
-    radial-gradient(circle at 50% 42%, rgb(74 46 33 / 0.55), transparent 58%),
-    linear-gradient(180deg, var(--wood-brown), var(--ink) 62%);
+    radial-gradient(circle at 50% 42%, rgb(var(--ink-rgb) / 0.62), transparent 58%),
+    linear-gradient(180deg, rgb(var(--ink-rgb) / 0.45), rgb(var(--ink-rgb) / 0.78) 62%),
+    url('/media/generated/social/social-portal-v2.jpg') 50% 50% / cover no-repeat;
+  filter: brightness(0.52) contrast(1.05) saturate(0.92);
   pointer-events: none;
 }
 

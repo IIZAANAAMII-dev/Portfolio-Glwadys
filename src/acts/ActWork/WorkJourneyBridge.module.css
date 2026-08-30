@@ -21,7 +21,8 @@
   height: 100svh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 54% 48%, rgb(var(--champagne-rgb) / 0.09), transparent 38%),
+    radial-gradient(circle at 48% 44%, rgb(var(--champagne-rgb) / 0.12), transparent 40%),
+    radial-gradient(circle at 84% 82%, rgb(var(--rich-wine-rgb) / 0.42), transparent 32%),
     var(--wood-brown);
   color: var(--ivory);
 }
@@ -89,23 +90,24 @@
 }
 
 .folio:nth-child(1) {
-  left: 31%;
-  top: 17vh;
+  left: 24%;
+  top: 14vh;
   z-index: 3;
+  width: min(26vw, 25rem);
 }
 
 .folio:nth-child(2) {
-  left: 47%;
-  top: 10vh;
+  left: 43%;
+  top: 6vh;
   z-index: 2;
-  width: min(23vw, 22rem);
+  width: min(28vw, 27rem);
 }
 
 .folio:nth-child(3) {
   left: 64%;
-  top: 19vh;
+  top: 16vh;
   z-index: 1;
-  width: min(20vw, 19rem);
+  width: min(25vw, 24rem);
 }
 
 .folioMeta {
@@ -179,16 +181,20 @@
 .journeyChapter {
   top: var(--margin);
   left: var(--margin);
+  color: var(--champagne);
 }
 
 .journeyTitle {
-  left: 28%;
-  top: var(--margin);
+  left: 50%;
+  top: 72vh;
+  translate: -50% 0;
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--t-title);
+  font-size: clamp(2.8rem, 7vw, 8.2rem);
   font-weight: 400;
-  line-height: var(--lh-title);
+  line-height: 0.92;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .years {

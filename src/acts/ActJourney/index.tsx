@@ -46,9 +46,7 @@ export function ActJourney({ content, locale }: Props) {
           const counter = q<HTMLElement>('[data-journey-counter]')[0];
           const handoff = q<HTMLElement>('[data-journey-handoff]')[0];
           const handoffCopy = q<HTMLElement>('[data-journey-handoff-copy]');
-          const handoffLine = q<HTMLElement>('[data-journey-handoff-line]')[0];
-          const handoffRows = q<HTMLElement>('[data-journey-handoff-row]');
-          if (!progressBar || !counter || !handoff || !handoffLine || entries.length === 0) return;
+          if (!progressBar || !counter || !handoff || entries.length === 0) return;
 
           const driver = { value: 0 };
           let activeIndex = -1;
@@ -81,11 +79,12 @@ export function ActJourney({ content, locale }: Props) {
 
           gsap.set(progressBar, { scaleY: 0, transformOrigin: 'center top' });
           gsap.set(handoff, { clipPath: 'inset(0 100% 0 0)' });
+          // La timeline entre depuis la droite, comme une continuité du mouvement
+          // des folios qui sortent à droite dans le pont précédent.
+          gsap.set(trackEl, { x: isDesktop ? '34vw' : '8vw' });
           // The page is already typeset behind its reveal mask. This keeps the
           // handoff readable even when someone scrolls through it quickly.
           gsap.set(handoffCopy, { autoAlpha: 1, y: 0 });
-          gsap.set(handoffLine, { scaleY: 0, transformOrigin: 'center top' });
-          gsap.set(handoffRows, { autoAlpha: 0, x: 16 });
           updateFocus();
 
           const tl = gsap.timeline({
@@ -116,12 +115,6 @@ export function ActJourney({ content, locale }: Props) {
             )
             .to(driver, { value: 1, duration: 0.82, onUpdate: updateFocus }, 0)
             .to(handoff, { clipPath: 'inset(0 0% 0 0)', duration: 0.18 }, 0.82)
-            .to(handoffLine, { scaleY: 1, duration: 0.14 }, 0.84)
-            .to(
-              handoffRows,
-              { autoAlpha: 1, x: 0, stagger: 0.025, duration: 0.14 },
-              0.845,
-            )
             .to(
               q<HTMLElement>('[data-journey-chrome]'),
               { autoAlpha: 0, y: -8, duration: 0.12 },
@@ -174,21 +167,12 @@ export function ActJourney({ content, locale }: Props) {
           {content.contact.axis}
         </span>
         <div className={styles.handoff} data-journey-handoff aria-hidden="true">
-          <span className={styles.handoffMargin} data-journey-handoff-line />
           <span className={`${styles.handoffChapter} micro`} data-journey-handoff-copy>
             08 / Index
           </span>
           <span className={`${styles.handoffTitle} title`} data-journey-handoff-copy>
             {content.expertise.heading}
           </span>
-          <div className={styles.handoffGrid}>
-            {content.expertise.entries.map((entry, index) => (
-              <span className={styles.handoffRow} data-journey-handoff-row key={entry.term}>
-                <i>{content.journey.entries[index]?.year ?? '→'}</i>
-                <strong>{entry.term}</strong>
-              </span>
-            ))}
-          </div>
           <span className={`${styles.handoffPreview} micro`} data-journey-handoff-copy>
             {content.expertise.entries.slice(0, 3).map((entry) => entry.term).join(' · ')}
           </span>

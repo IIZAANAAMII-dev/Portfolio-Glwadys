@@ -35,11 +35,15 @@
 .chapter {
   top: var(--margin);
   left: var(--margin);
+  color: var(--rich-wine);
+  letter-spacing: 0.12em;
 }
 
 .heading {
-  top: var(--margin);
+  top: calc(var(--margin) * 0.6);
   right: var(--margin);
+  font-size: clamp(2.8rem, 9.4vw, 12rem);
+  line-height: 0.88;
 }
 
 .aside {
@@ -135,7 +139,7 @@
   position: absolute;
   left: var(--margin);
   right: var(--margin);
-  top: 18vh;
+  top: 22vh;
   bottom: max(18vh, 10rem);
   overflow: hidden;
 }
@@ -168,7 +172,7 @@
   display: block;
   padding-block: 1.5vh;
   font-family: var(--font-display);
-  font-size: clamp(2.7rem, 5.6vw, 6.2rem);
+  font-size: clamp(3rem, 6.2vw, 7rem);
   font-style: italic;
   line-height: 0.95;
   letter-spacing: -0.035em;
@@ -182,7 +186,7 @@
   width: min(31ch, 28vw);
   translate: 0 -50%;
   text-align: right;
-  opacity: 0.46;
+  opacity: 0.62;
   transition: opacity var(--dur-snap) var(--ease-move);
 }
 
@@ -193,7 +197,7 @@
 
 .row:hover .context,
 .row:focus-within .context {
-  opacity: 0.78;
+  opacity: 0.95;
 }
 
 .row:hover::after,
