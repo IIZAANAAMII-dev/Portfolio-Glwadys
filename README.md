@@ -28,6 +28,14 @@ Toutes les captures sont enregistrées **dans le dépôt**, afin de rester acces
 [![The Edit 320px](docs/previews/iphone-320-edit.png)](docs/previews/iphone-320-edit.png)
 [![Contact 320px](docs/previews/iphone-320-contact.png)](docs/previews/iphone-320-contact.png)
 
+## Avant Jarvis : retrouver les anciennes animations
+
+J’ai également conservé des **captures et deux enregistrements réels de la version historique**, avant la refonte, pour comparer l'introduction GSAP, le téléphone, la profondeur et les raccords entre chapitres. Certaines séquences étaient ambitieuses, mais des images flottantes masquaient le contenu, notamment sur mobile : le but est de sauver les bonnes animations **sans reproduire ces défauts**.
+
+- [Voir le comparatif complet avant Jarvis / V14](docs/flagship-audit/16-legacy-motion-audit.md)
+- [Revoir l’ancienne animation desktop](docs/legacy-motion/desktop-legacy-session.webm)
+- [Revoir l’ancienne animation mobile](docs/legacy-motion/mobile-legacy-session.webm)
+
 ## Animations et QA
 
 Le site utilise **Next.js 16 / React 19 / GSAP Flip + ScrollTrigger**, sans remplacement du scroll natif et sans WebGL global. L'interaction `THE EDIT` garde le même visuel entre téléphone, planche contact et sélection, puis le transmet à Yuna. Le mode « réduire les animations » dispose d'un chemin alternatif.
