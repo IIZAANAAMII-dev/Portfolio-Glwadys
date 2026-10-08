@@ -49,3 +49,16 @@ The signature is a physical, precise oxblood crop/registration stroke that finds
 - Verify no console/network errors, motion reduced, hero reverse scroll and 390/320 scroll widths exact, nav clearance >=24px.
 - Write docs/flagship-audit/15-sol-creative-specimen.md with changed files, screenshots, results, remaining problems and caveats.
 - STOP after one coherent specimen pass for independent mentor/Astra jury, do not self-PASS or touch README gallery yet.
+
+## Independent Astra max cold jury findings — MANDATORY P1
+Read `docs/flagship-audit/15-astra-cold-jury.md` alongside the legacy motion audit.
+- The selected Yuna frame changes its crop/aspect when passed to Work. Repair by preserving the true selected crop across states **or explicitly narrating the intended format adaptation**; no misleading claim of exact crop.
+- The crop mark collides with the 01 badge in contact-sheet state; maintain guaranteed clearance even mid-Flip.
+- Show a concrete editorial choice, not an abstract annotation: propose a short visible note on the same selected photograph (e.g. "Le geste avant le bijou"), clearly presented as concept direction not real client quote.
+- Mobile Process and first Yuna viewport must show an actual strategy insight sooner, not merely large images.
+- Hero should regain **the monumental typography + staged image assembly from the user's original animations**, without mandatory locked scroll.
+- Keep five mobile nav destinations and check dock prominence.
+
+## Legacy motion source-of-truth
+The historical source is `d4fefe2` on `main`. The audit compared its real browser playback, not just code; the old intro's staged typography, media-plane orchestration and phone montage are worth **design translation**, but the old global StagePlane stack produces persistent photos over text, THREE.Clock warnings, ReadPixels GPU stalls and excessive long pinning. **DO NOT restore that code architecture**.
+Use the historical video links and image proofs, then implement a new bounded scene with CSS/GSAP, respecting real-mobile performance and accessibility.
