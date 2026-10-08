@@ -32,6 +32,15 @@ export function isScrollLocked() {
   return document.documentElement.dataset.scrollLocked === 'true';
 }
 
+/** Recale aussi l'horloge de Lenis après la reconstruction des pins GSAP. */
+export function restoreScroll(y: number) {
+  const target = Math.max(0, Math.min(y, document.documentElement.scrollHeight - window.innerHeight));
+  if (instance) {
+    instance.resize();
+    instance.scrollTo(target, { immediate: true, force: true });
+  } else window.scrollTo(0, target);
+}
+
 /** Événements du shell. Évite le prop drilling et tout state partagé. */
 export const SHELL_EVENTS = {
   /** L'Opening est terminé : la navigation peut apparaître. */

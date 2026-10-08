@@ -116,7 +116,7 @@ export function ActContact({ content }: Props) {
         },
       );
 
-      return () => emitContact(false);
+      return () => { mm.revert(); emitContact(false); };
     },
     { scope: root },
   );
@@ -148,7 +148,7 @@ export function ActContact({ content }: Props) {
         </div>
       </section>
 
-      <section ref={contactSection} className={styles.contactSection} aria-labelledby="contact-title">
+      <section id="act-contact" ref={contactSection} className={styles.contactSection} aria-labelledby="contact-title">
         <div className={styles.stage}>
           <div className={`${styles.lastPage} paper-card`}>
             <span className={`${styles.chapter} micro`}>09 / {content.contact.heading}</span>

@@ -65,7 +65,7 @@ export const SCROLL = {
   contactSheet: 200,
   moodboard: 200,
   strategy: 230,
-  journey: 160,
+  journey: 280,
   expertise: 100,
 } as const;
 

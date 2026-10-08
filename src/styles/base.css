@@ -75,7 +75,7 @@ a {
 
 :focus-visible {
   /* Visible sur ivoire comme sur encre : on utilise la couleur de surface. */
-  outline: 2px solid var(--on-surface);
+  outline: 2px solid currentColor;
   outline-offset: 3px;
 }
 
@@ -220,7 +220,16 @@ a {
 
 .line-mask > * {
   display: block;
-  will-change: transform;
+}
+
+body[data-locale='ko'] {
+  --font-sans: var(--font-kr);
+  word-break: keep-all;
+}
+
+/* Une destination native doit rester lisible après un saut clavier. */
+[id^='act-'] {
+  scroll-margin-top: 1px;
 }
 
 [data-reveal='lines'] .line-mask > * {

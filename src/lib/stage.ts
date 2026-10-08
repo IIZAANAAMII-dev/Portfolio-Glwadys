@@ -1,15 +1,16 @@
 'use client';
 
 /**
- * SCÈNE MAÎTRESSE — progression globale unique.
+ * SCÈNE D'ORIGINE — progression locale du raccord téléphone → immersion.
  *
- * Tout ce qui vit dans le Canvas persistant est piloté par **un seul scalaire**,
- * `t`, exprimé en numéros de chapitre. `t = 4.35` se lit « 35 % du chapitre 4 ».
+ * Le Canvas borné dans ActScrollStory lit un seul scalaire `t` (0 à 3).
+ * Les chapitres ultérieurs restent archivés ci-dessous ; leurs actes utilisent
+ * leur partition DOM, sans revendiquer cette scène.
  *
  * Pourquoi un module et non un contexte React : GSAP écrit `t` à chaque frame de
  * scroll. Le faire passer par du state React provoquerait un re-render par frame
- * et désynchroniserait le DOM du WebGL — exactement le défaut que cette refonte
- * corrige. Le Canvas lit `t` dans `useFrame`, jamais via une prop.
+ * et désynchroniserait le DOM du WebGL. Le Canvas lit `t` dans `useFrame`,
+ * jamais via une prop ; l'ownership est relâchée aux deux sorties de l'acte.
  *
  * Les chapitres sont contigus et ordonnés : interpoler entre deux keyframes
  * suffit à rendre chaque transition réversible, dans les deux sens de scroll,
@@ -65,6 +66,8 @@ interface StageState {
   dir: 1 | -1;
   /** Le Canvas doit-il produire des frames ? */
   live: boolean;
+  /** Le temps seul n'autorise jamais un plan à survivre à son acte. */
+  owner: 'story' | null;
   /**
    * Ancres DOM publiées par les actes : c'est le contrat qui synchronise la
    * couche DOM et le Canvas. Un plan ancré naît *exactement* dans le cadre de
@@ -73,7 +76,7 @@ interface StageState {
   rects: Map<string, StageRect>;
 }
 
-const state: StageState = { t: 0, dir: 1, live: false, rects: new Map() };
+const state: StageState = { t: 0, dir: 1, live: false, owner: null, rects: new Map() };
 
 let renderer: (() => void) | null = null;
 const liveListeners = new Set<(live: boolean) => void>();
@@ -96,19 +99,30 @@ export function stageState(): Readonly<StageState> {
  * `live` s'allume dès qu'un acte revendique la scène et s'éteint quand plus
  * aucun ne la revendique : le Canvas ne rend jamais pour rien.
  */
-export function setStage(t: number, live = true) {
-  const next = Math.max(0, Math.min(STAGE_END, t));
+export function setStage(t: number, owner: 'story') {
+  // -1 est le préchauffage : aucun plan du film n'est visible.
+  const next = Math.max(-1, Math.min(STAGE_END, t));
   if (next !== state.t) state.dir = next > state.t ? 1 : -1;
   state.t = next;
-  setStageLive(live);
+  state.owner = owner;
+  setStageLive(true);
   renderer?.();
 }
 
-export function setStageLive(live: boolean) {
+function setStageLive(live: boolean) {
   if (state.live === live) return;
   state.live = live;
   liveListeners.forEach((fn) => fn(live));
-  if (live) renderer?.();
+  renderer?.();
+}
+
+/** Sortie synchrone, y compris au retour, au resize et au démontage. */
+export function releaseStage(owner: 'story') {
+  if (state.owner !== owner) return;
+  state.owner = null;
+  state.t = 0;
+  state.rects.clear();
+  setStageLive(false);
 }
 
 export function onStageLive(fn: (live: boolean) => void) {

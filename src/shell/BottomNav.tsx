@@ -6,7 +6,7 @@ import type { Content } from '@/content';
 import { localeLabels, locales, type Locale } from '@/content/locales';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCRUB } from '@/lib/motion';
-import { SHELL_EVENTS } from '@/lib/scrollControl';
+import { SHELL_EVENTS, unlockScroll } from '@/lib/scrollControl';
 
 import styles from './BottomNav.module.css';
 
@@ -28,11 +28,13 @@ type NavKey = (typeof TARGETS)[number]['key'];
 
 export function BottomNav({ content, locale }: Props) {
   const root = useRef<HTMLElement>(null);
+  const languageButton = useRef<HTMLButtonElement>(null);
   const progress = useRef<HTMLSpanElement>(null);
   const [visible, setVisible] = useState(false);
   const [active, setActive] = useState<NavKey>('home');
   const [activeAct, setActiveAct] = useState(0);
   const [contactMode, setContactMode] = useState(false);
+  const [languageOpen, setLanguageOpen] = useState(false);
   const acts = useMemo(
     () => [
       { id: 'act-opening', label: content.nav.home, navKey: 'home' as const },
@@ -41,7 +43,7 @@ export function BottomNav({ content, locale }: Props) {
       { id: 'act-immersion', label: content.immersion.heading, navKey: 'home' as const },
       { id: 'act-process', label: content.process.heading, navKey: 'home' as const },
       { id: 'act-work', label: content.work.heading, navKey: 'work' as const },
-      { id: 'act-journey-handoff', label: content.journey.heading, navKey: 'journey' as const },
+      { id: 'act-journey-scene', label: content.journey.heading, navKey: 'journey' as const },
       { id: 'act-expertise', label: content.expertise.heading, navKey: 'expertise' as const },
       { id: 'act-contact', label: content.contact.heading, navKey: 'contact' as const },
     ],
@@ -69,6 +71,7 @@ export function BottomNav({ content, locale }: Props) {
           },
         });
       });
+      return () => mm.revert();
     },
     { scope: root },
   );
@@ -80,6 +83,18 @@ export function BottomNav({ content, locale }: Props) {
     document.addEventListener(SHELL_EVENTS.ready, onReady);
     return () => document.removeEventListener(SHELL_EVENTS.ready, onReady);
   }, []);
+
+  useEffect(() => {
+    if (!languageOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setLanguageOpen(false);
+        languageButton.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [languageOpen]);
 
   useEffect(() => {
     const onContact = (event: Event) => {
@@ -125,6 +140,7 @@ export function BottomNav({ content, locale }: Props) {
       data-visible={visible}
       data-contact={contactMode}
       data-nav-root
+      data-lang-open={languageOpen}
     >
       <div className={styles.navItems}>
         {TARGETS.map((t) => (
@@ -133,6 +149,10 @@ export function BottomNav({ content, locale }: Props) {
             className={`${styles.item} ${t.key === 'journey' ? styles.journeyItem : ''} ${t.key === 'expertise' ? styles.expertiseItem : ''}`}
             href={`#${t.id}`}
             aria-current={active === t.key ? 'true' : undefined}
+            onClick={() => {
+              unlockScroll();
+              setLanguageOpen(false);
+            }}
           >
             <span className={styles.label}>{content.nav[t.key]}</span>
           </a>
@@ -151,7 +171,19 @@ export function BottomNav({ content, locale }: Props) {
 
       <span className={styles.divider} aria-hidden="true" />
 
-      <div className={styles.langs} role="group" aria-label={content.a11y.languageSwitch}>
+      <button
+        ref={languageButton}
+        className={styles.languageToggle}
+        type="button"
+        aria-label={content.a11y.languageSwitch}
+        aria-expanded={languageOpen}
+        aria-controls="site-languages"
+        onClick={() => setLanguageOpen((open) => !open)}
+        onKeyDown={(event) => { if (event.key === 'Escape') setLanguageOpen(false); }}
+      >
+        {localeLabels[locale]} <span aria-hidden="true">{languageOpen ? '−' : '+'}</span>
+      </button>
+      <div id="site-languages" className={styles.langs} role="group" aria-label={content.a11y.languageSwitch}>
         {locales.map((l) => (
           <a
             key={l}

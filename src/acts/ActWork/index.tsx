@@ -32,11 +32,13 @@ function ProjectSection({
   locale,
   labels,
   index,
+  handoff,
 }: {
   project: Project;
   locale: Locale;
   labels: CaseLabels;
   index: number;
+  handoff: { title: string; sentence: string };
 }) {
   const root = useRef<HTMLElement>(null);
   const media =
@@ -118,19 +120,20 @@ function ProjectSection({
 
           const primaryMedia = mediaEls[0];
           if (project.id === 'yuna' && primaryMedia) {
-            tl
-              .fromTo(
-                primaryMedia,
-                { rotation: -1.5, scale: 0.96 },
-                { rotation: 0, scale: 1, duration: 0.58 },
-                0.04,
-              )
-              .fromTo(
+            tl.fromTo(
                 q<HTMLElement>('[data-yuna-sweep]'),
                 { xPercent: -135, autoAlpha: 0 },
                 { xPercent: 135, autoAlpha: 0.72, duration: 0.48 },
                 0.34,
               );
+            // Le dernier cadrage de la stratégie et le premier de Yuna
+            // partagent leur géométrie. La page tourne autour du même visuel.
+            gsap.fromTo(q<HTMLElement>('[data-yuna-handoff]'),
+              { clipPath: 'inset(0 0 0 0)' },
+              { clipPath: 'inset(0 0 100% 0)', ease: EASE.scrub,
+                scrollTrigger: { trigger: visual, start: 'top top', end: '+=65%', pin: visual, anticipatePin: 1,
+                  scrub: SCRUB.narrative, invalidateOnRefresh: true } },
+            );
           }
 
           if (project.id === 'mgc') {
@@ -181,6 +184,7 @@ function ProjectSection({
             );
         },
       );
+      return () => mm.revert();
     },
     { scope: root },
   );
@@ -188,9 +192,22 @@ function ProjectSection({
   return (
     <section ref={root} className={styles.project} data-project={project.id} aria-labelledby={`${project.id}-title`}>
       <div className={styles.projectVisual} data-project-visual>
+        {project.id === 'yuna' && (
+          <div className={styles.yunaHandoff} data-yuna-handoff aria-hidden="true">
+            <span className={`${styles.handoffIndex} micro`}>06 / Portfolio</span>
+            <span className={`${styles.handoffTitle} display`}>{handoff.title}</span>
+            <span className={styles.handoffStatement}>{handoff.sentence}</span>
+            <span className={styles.handoffRule} />
+            <div className={styles.handoffProof}>
+              <Media item={yunaMedia[0]!} locale={locale} sizes="(max-width: 1023px) 54vw, 29vw" />
+              <span className={`${styles.handoffStamp} micro`}>Campaign / Yuna Bijoux</span>
+              <span className={styles.handoffCrop} />
+            </div>
+          </div>
+        )}
         {project.id === 'comptoir' && (
           <div className={styles.macro} data-comptoir-macro>
-            <Media item={comptoirTexture} locale={locale} className="fill-frame" sizes="100vw" />
+            <Media item={comptoirTexture} locale={locale} className="fill-frame" sizes="(max-width: 1023px) 180svh, 100vw" />
           </div>
         )}
 
@@ -225,10 +242,10 @@ function ProjectSection({
                   item={item}
                   locale={locale}
                   label={project.caseStudy.evidence[0]?.label ?? project.name}
-                  sizes="32vw"
+                  sizes="(max-width: 1023px) 65vw, 32vw"
                 />
               ) : (
-                <Media item={item} locale={locale} compact sizes="32vw" />
+                <Media item={item} locale={locale} compact sizes="(max-width: 1023px) 65vw, 32vw" />
               )}
             </div>
           ))}
@@ -242,10 +259,10 @@ function ProjectSection({
                     item={item}
                     locale={locale}
                     label={project.caseStudy.evidence[1]?.label ?? project.name}
-                    sizes="22vw"
+                    sizes="(max-width: 1023px) 70vw, 22vw"
                   />
                 ) : (
-                  <Media item={item} locale={locale} compact sizes="22vw" />
+                  <Media item={item} locale={locale} compact sizes="(max-width: 1023px) 70vw, 22vw" />
                 )}
               </div>
             ))}
@@ -257,12 +274,18 @@ function ProjectSection({
             <li key={skill}>{skill}</li>
           ))}
         </ul>
+        <p className={`${styles.visualNote} micro`}>{labels.visualNote}</p>
       </div>
 
       <div className={styles.dossier} data-project-dossier>
         <div className={styles.dossierHeading} data-case-heading>
           <span className="micro">Case / {String(index + 1).padStart(2, '0')}</span>
           <span className={`${styles.dossierName} display`}>{project.name}</span>
+        </div>
+
+        <div className={styles.editorialDecision} data-case-row>
+          <h4 className="micro">{labels.decision}</h4>
+          <p>{project.caseStudy.editorialDecision}</p>
         </div>
 
         <div className={styles.caseGrid}>
@@ -305,6 +328,7 @@ export function ActWork({ content, locale }: Props) {
           locale={locale}
           labels={content.work.caseLabels}
           index={index}
+          handoff={{ title: content.work.heading, sentence: content.strategy.sentence }}
           key={project.id}
         />
       ))}

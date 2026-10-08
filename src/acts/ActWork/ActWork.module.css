@@ -167,6 +167,14 @@
   color: var(--champagne);
 }
 
+.project[data-project='comptoir'] figcaption {
+  opacity: 0.86;
+}
+
+.project[data-project='comptoir'] figcaption span:first-child {
+  color: var(--champagne);
+}
+
 .meta span:nth-child(2) {
   text-align: center;
 }
@@ -186,7 +194,7 @@
 .summary {
   position: absolute;
   left: var(--margin);
-  bottom: 17vh;
+  bottom: calc(18svh + var(--nav-clearance));
   z-index: var(--z-sticky);
   width: min(35ch, 31vw);
 }
@@ -228,9 +236,20 @@
 }
 
 .project[data-project='yuna'] .media[data-project-slot='1'] {
-  right: 9%;
-  top: 15%;
-  width: 29vw;
+  right: 8vw;
+  top: 13vh;
+  width: min(29vw, 30rem);
+  padding: 0.65rem 0.65rem 2.35rem;
+  background: var(--ivory);
+}
+
+.project[data-project='yuna'] .media[data-project-slot='1'] figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1.65rem;
+  border: 0;
+  font-size: 0.6rem;
 }
 
 .project[data-project='yuna'] .media[data-project-slot='2'] {
@@ -263,7 +282,7 @@
 .project[data-project='mgc'] .summary {
   left: auto;
   right: var(--margin);
-  bottom: 20vh;
+  bottom: calc(18svh + var(--nav-clearance));
 }
 
 @media (min-width: 1024px) {
@@ -317,7 +336,7 @@
 }
 
 .project[data-project='comptoir'] .summary {
-  bottom: 20vh;
+  bottom: max(20svh, var(--nav-clearance));
 }
 
 .comptoirMedia {
@@ -345,6 +364,33 @@
   padding: clamp(5rem, 9vw, 9rem) var(--margin) clamp(4rem, 7vw, 7rem);
   border-top: 1px solid currentColor;
   overflow: hidden;
+}
+
+.visualNote {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: calc(18svh + var(--nav-clearance) - 2.5rem);
+  max-width: 48ch;
+  font-size: 0.66rem;
+  letter-spacing: 0.035em;
+  color: currentColor;
+  opacity: 0.72;
+}
+
+.editorialDecision {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--gutter);
+  padding-bottom: 2.5rem;
+}
+
+.editorialDecision p {
+  max-width: 44ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.3vw, 2.4rem);
+  line-height: 1.2;
+  text-wrap: pretty;
 }
 
 .project[data-project='yuna'] .dossier {
@@ -503,50 +549,72 @@
 
   .handoffProof {
     right: var(--margin);
-    top: 31vh;
-    width: min(58vw, 23rem);
+    top: 32svh;
+    width: min(54vw, 23rem);
+  }
+
+  .handoffStatement {
+    bottom: var(--nav-clearance);
+    font-size: 1.45rem;
   }
 
   .projectVisual {
-    min-height: 112svh;
+    min-height: 118svh;
   }
 
   .meta {
-    grid-template-columns: 1fr auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    font-size: 0.65rem;
   }
 
   .meta span:nth-child(2) {
-    display: none;
+    display: block;
+    text-align: left;
+  }
+
+  .meta span:last-child {
+    margin-left: auto;
   }
 
   .name {
-    top: 16vh;
+    top: 15svh;
+    font-size: clamp(2.8rem, 13.4vw, 5rem);
   }
 
   .summary {
-    bottom: 19vh;
-    width: min(34ch, 78vw);
+    top: 70svh;
+    bottom: auto;
+    width: calc(100% - var(--margin) * 2);
+    font-size: clamp(1.15rem, 5vw, 1.5rem);
   }
 
   .skills {
-    gap: 0.6rem;
-    overflow: hidden;
+    bottom: var(--nav-clearance);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem 1rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.035em;
   }
 
-  .skills li:nth-child(n + 3) {
-    display: none;
+  .visualNote {
+    bottom: calc(var(--nav-clearance) + 8rem);
+    right: calc(var(--margin) + 4rem);
+    font-size: 0.6rem;
   }
 
   .project[data-project='yuna'] .media[data-project-slot='1'] {
-    right: 7%;
-    top: 34%;
-    width: 54vw;
+    right: var(--margin);
+    top: 32svh;
+    width: min(54vw, 23rem);
   }
 
   .project[data-project='yuna'] .media[data-project-slot='2'] {
     left: var(--margin);
     right: auto;
-    top: 48%;
+    top: 47svh;
     width: 27vw;
   }
 
@@ -556,19 +624,24 @@
   }
 
   .project[data-project='mgc'] .name {
-    top: 15vh;
+    top: 15svh;
+    font-size: clamp(2.4rem, 11.6vw, 4.6rem);
+  }
+
+  .project[data-project='mgc'] .summary {
+    bottom: auto;
   }
 
   .project[data-project='mgc'] .media[data-project-slot='1'] {
-    left: 5%;
-    top: 36%;
+    left: var(--margin);
+    top: 37svh;
     width: 45vw;
   }
 
   .project[data-project='mgc'] .media[data-project-slot='2'] {
     left: auto;
-    right: 6%;
-    top: 43%;
+    right: var(--margin);
+    top: 46svh;
     width: 44vw;
   }
 
@@ -583,12 +656,33 @@
   }
 
   .comptoirMedia > div:last-child {
-    width: 38vw;
+    width: 42vw;
+  }
+
+  .project[data-project='comptoir'] .projectVisual {
+    min-height: 118svh;
+  }
+
+  .project[data-project='comptoir'] .name {
+    top: 17svh;
+    max-width: 11ch;
+    font-size: clamp(2.45rem, 12.2vw, 4.8rem);
+  }
+
+  .project[data-project='comptoir'] .summary {
+    top: 46svh;
+    bottom: auto;
+    width: calc(100% - var(--margin) * 2);
+  }
+
+  .comptoirMedia {
+    top: 62svh;
+    bottom: auto;
   }
 
   .dossier {
     min-height: auto;
-    padding-block: 5rem;
+    padding-block: 3.5rem;
   }
 
   .dossierHeading {
@@ -605,7 +699,8 @@
   }
 
   .caseRow {
-    min-height: 16rem;
+    min-height: 0;
+    padding-block: 1.25rem 2rem;
     padding-inline: 0;
     border-left: 0;
     border-top: 1px solid currentColor;
@@ -616,16 +711,23 @@
   }
 
   .caseLabel {
-    margin-top: 2.5rem;
+    margin-top: 0.85rem;
+  }
+
+  .editorialDecision {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding-bottom: 2rem;
   }
 
   .proofRail {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 1.8rem;
     padding-top: 2rem;
   }
 
   .proofLabel {
+    grid-column: 1 / -1;
     padding-bottom: 0.6rem;
     border-bottom: 1px solid currentColor;
   }
@@ -634,10 +736,6 @@
 @media (prefers-reduced-motion: reduce) {
   .yunaHandoff {
     display: none;
-  }
-
-  .projectVisual {
-    min-height: 100svh;
   }
 
   .yunaSweep {

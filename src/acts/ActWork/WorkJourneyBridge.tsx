@@ -120,6 +120,7 @@ export function WorkJourneyBridge({ content, locale }: Props) {
             );
         },
       );
+      return () => mm.revert();
     },
     { scope: root },
   );

@@ -99,6 +99,7 @@ export function ActExpertise({ content }: Props) {
             );
         },
       );
+      return () => mm.revert();
     },
     { scope: root },
   );

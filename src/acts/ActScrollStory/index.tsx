@@ -6,6 +6,7 @@ import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
 import {
   behindMedia,
+  depthMedia,
   heroFrame,
   heroVertical,
   openingMedia,
@@ -17,8 +18,10 @@ import {
 import { gsap, useGSAP } from '@/lib/gsap';
 import { DUR, EASE, MQ, STAGGER } from '@/lib/motion';
 import { emitReady, lockScroll, unlockScroll } from '@/lib/scrollControl';
-import { setStage, setStageAnchor, setStageLive } from '@/lib/stage';
+import { releaseStage, setStage, setStageAnchor } from '@/lib/stage';
 import { useReducedMotion } from '@/lib/useReducedMotion';
+import { StageLayer } from '@/shell/StageLayer';
+import { ArchivePlate } from '@/ui/ArchivePlate';
 import { Media } from '@/ui/Media';
 
 import styles from './ActScrollStory.module.css';
@@ -106,7 +109,7 @@ const STORY_ACT_MARKERS = [
   { id: 'act-opening', start: T.heroHold },
   { id: 'act-social', start: T.socialIn },
   { id: 'act-phone', start: T.phoneIn },
-  { id: 'act-transfer', start: T.transfer },
+  { id: 'act-immersion', start: T.transfer },
 ] as const;
 
 type ActMarkerStyle = CSSProperties & {
@@ -162,7 +165,7 @@ function ReducedStory({ content, locale }: Props) {
         </h2>
         <p className="lead">{opening.tagline}</p>
         <div className={styles.reducedHeroMedia}>
-          <Media item={heroVertical} locale={locale} sizes="(max-width: 1023px) 68vw, 34vw" />
+          <Media item={heroVertical} locale={locale} preload={false} sizes="42vh" />
         </div>
       </article>
 
@@ -184,11 +187,23 @@ function ReducedStory({ content, locale }: Props) {
         </ol>
       </article>
 
-      <article className={styles.reducedPanel}>
+      <article className={`${styles.reducedPanel} ${styles.reducedPhonePanel}`}>
         <span className="micro">03 / {phone.heading}</span>
         <h2 className="display">{phone.beats.join(' · ')}</h2>
         <div className={styles.reducedPhoneMedia}>
           <Media item={phoneStory} locale={locale} sizes="52vw" />
+        </div>
+        <ol className={styles.reducedPhoneNotes}>
+          {phone.notes.map((note, index) => <li key={note}><span className="micro">0{index + 1} / {phone.beats[index]}</span><p>{note}</p></li>)}
+        </ol>
+      </article>
+      <article className={`${styles.reducedPanel} ${styles.reducedImmersion}`}>
+        <span className="micro">04 / {content.immersion.heading}</span>
+        <h2 className="display">{content.immersion.heading}</h2>
+        <p className="lead">{content.immersion.statement}</p>
+        <div className={styles.reducedMediaPair}>
+          <Media item={depthMedia[1]!} locale={locale} sizes="44vw" />
+          <Media item={depthMedia[2]!} locale={locale} sizes="44vw" />
         </div>
       </article>
     </div>
@@ -253,6 +268,7 @@ export function ActScrollStory({ content, locale }: Props) {
           const phoneUi = q<HTMLElement>('[data-phone-entry], [data-phone-detail]');
           const phoneBeats = q<HTMLElement>('[data-phone-beat]');
           const phoneRail = q<HTMLElement>('[data-phone-rail-item]');
+          const phoneNotes = q<HTMLElement>('[data-phone-note]');
           const phoneButtons = q<HTMLElement>('[data-phone-button]');
           const island = one(`.${styles.island}`);
           const feed = one(`.${styles.feed}`);
@@ -265,6 +281,10 @@ export function ActScrollStory({ content, locale }: Props) {
           const stageGround = one('[data-stage-ground]');
           const transferCopy = q<HTMLElement>('[data-transfer-bit]');
           const screenGlass = one('[data-screen-glass]');
+          const portalSurface = one('[data-portal-surface]');
+          const depthPlates = q<HTMLElement>('[data-depth-plate]');
+          const flat = one('[data-archive-plate="handoff"]');
+          const flatSlots = q<HTMLElement>('[data-archive-plate="handoff"] [data-flat-slot]');
 
           if (!ruleH || !behind || !frontCopy || !screenEl || !stageGround) return;
 
@@ -277,7 +297,8 @@ export function ActScrollStory({ content, locale }: Props) {
             return;
           }
 
-          lockScroll();
+          const openingSeen = document.documentElement.dataset.shellReady === 'true';
+          if (!openingSeen) lockScroll();
 
           /* ================================================================
              ÉTATS INITIAUX
@@ -285,7 +306,7 @@ export function ActScrollStory({ content, locale }: Props) {
           const stageRect = stageEl.getBoundingClientRect();
           const cx = stageRect.left + stageRect.width / 2;
           const cy = stageRect.top + stageRect.height / 2;
-          const NAME_SCALE = isDesktop ? 0.42 : 0.62;
+          const NAME_SCALE = isDesktop ? 0.54 : 0.72;
 
           // Tracking changes the measured width substantially; establish it
           // before centering both lines so the opening stack shares one axis.
@@ -305,11 +326,7 @@ export function ActScrollStory({ content, locale }: Props) {
 
           gsap.set(ruleH, { scaleX: 0 });
           gsap.set(ruleV, { scaleY: 0, autoAlpha: 0 });
-          // Keep the baseline in its final geometry. A transform reveal on these
-          // two nested spans was being re-applied during the initial pin refresh,
-          // leaving both names translated below their masks. Opacity owns the
-          // reveal; tracking and the parent move still carry the transformation.
-          gsap.set(nameLines, { yPercent: 0, autoAlpha: 0 });
+          gsap.set(nameLines, { yPercent: 108, autoAlpha: 1 });
           gsap.set([...metas, disciplines], { autoAlpha: 0 });
           gsap.set(notebookDetails, { autoAlpha: 0, y: 14 });
           gsap.set(openingFrame, { autoAlpha: 0, scaleX: 0.16, scaleY: 0.72 });
@@ -347,7 +364,8 @@ export function ActScrollStory({ content, locale }: Props) {
           gsap.set(behindRows, { autoAlpha: 0, x: -12 });
 
           gsap.set(phoneUi, { autoAlpha: 0, y: 10 });
-          gsap.set(phoneBeats, { yPercent: 110, autoAlpha: 0 });
+          gsap.set(phoneBeats, { y: 0, yPercent: 110, autoAlpha: 0 });
+          gsap.set(phoneNotes, { yPercent: 104, autoAlpha: 0 });
           gsap.set(phoneRail, { autoAlpha: 1 });
           gsap.set(phoneButtons, { scaleY: 0 });
           gsap.set(island, { width: 0 });
@@ -359,6 +377,9 @@ export function ActScrollStory({ content, locale }: Props) {
           gsap.set(stageGround, { autoAlpha: 0 });
           gsap.set(transferCopy, { autoAlpha: 0, y: 14 });
           gsap.set(screenGlass, { autoAlpha: 0 });
+          gsap.set(portalSurface, { autoAlpha: 0, scale: 1 });
+          gsap.set(depthPlates, { autoAlpha: 0, scale: 0.65, yPercent: 15 });
+          gsap.set(flat, { autoAlpha: 0, clipPath: 'inset(100% 0% 0% 0%)' });
 
           /* ================================================================
              OUVERTURE (auto, ~2.4 s) — devient la Hero sans coupure.
@@ -369,7 +390,7 @@ export function ActScrollStory({ content, locale }: Props) {
             .to(openingFrame, { autoAlpha: 0.82, scaleX: 1, scaleY: 1, duration: DUR.editorial })
             .to(ruleH, { scaleX: 1, duration: DUR.editorial }, 0.06)
             .to(metas, { autoAlpha: 0.72, duration: DUR.base, stagger: STAGGER.base }, 0.05)
-            .to(nameLines, { autoAlpha: 1, duration: DUR.editorial, stagger: STAGGER.base }, 0.22)
+            .to(nameLines, { yPercent: 0, duration: DUR.editorial, stagger: STAGGER.base }, 0.22)
             .to(
               [first, last],
               { letterSpacing: '-0.045em', duration: DUR.editorial, ease: EASE.move },
@@ -389,7 +410,7 @@ export function ActScrollStory({ content, locale }: Props) {
             )
             // La composition se déplie : le nom rejoint sa place de couverture.
             .to([first, last], { x: 0, y: 0, scale: 1, duration: DUR.cinematic, ease: EASE.handoff }, 1.24)
-            .to(last, { color: 'var(--rich-wine)', duration: DUR.editorial }, 1.24)
+            .to(last, { color: 'var(--warm-taupe)', duration: DUR.editorial }, 1.24)
             .to(tagline, { x: 0, y: 0, duration: DUR.cinematic, ease: EASE.handoff }, 1.24)
             .to(
               transients,
@@ -412,6 +433,7 @@ export function ActScrollStory({ content, locale }: Props) {
             // Le scroll est rendu avant la fin perçue : l'attente n'est jamais subie.
             .add(() => unlockScroll(), 2.05)
             .add(() => emitReady(), 2.3);
+          if (openingSeen) intro.progress(1);
 
           /* ================================================================
              PARTITION SCROLLÉE
@@ -422,11 +444,32 @@ export function ActScrollStory({ content, locale }: Props) {
              le plan WebGL naît donc dans la géométrie exacte du device, y
              compris pendant que celui-ci grandit. C'est ce qui remplace le
              fondu par une continuité. */
-          let stageOwned = false;
           const publishScreen = () => setStageAnchor('screen', screenEl);
+          const film = { timeline: undefined as gsap.core.Timeline | undefined };
+          const syncStage = () => {
+            const timeline = film.timeline;
+            if (!timeline) return;
+            const t = timeline.time();
+            const phase = t >= T.montage && t < T.transfer - 0.06 ? Math.min(3, Math.floor((t - T.montage) / 0.44)) : -1;
+            phoneRail.forEach((rail, index) => { rail.dataset.active = String(index === phase); });
+            if (!isDesktop || !timeline.scrollTrigger?.isActive || t < T.transfer - 0.35 || t >= T.end) {
+              releaseStage('story');
+              return;
+            }
+            publishScreen();
+            flatSlots.forEach((slot, index) => setStageAnchor(`flat-${index}`, slot));
+            if (t < T.transfer) {
+              setStage(-1, 'story');
+              return;
+            }
+            const step = STAGE_STEPS.find((s) => t < s.to) ?? STAGE_STEPS[STAGE_STEPS.length - 1]!;
+            const local = gsap.utils.clamp(0, 1, (t - step.at) / (step.to - step.at));
+            setStage(step.chapter - 1 + local, 'story');
+          };
 
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
+            onUpdate: syncStage,
             scrollTrigger: {
               trigger: rootEl,
               start: 'top top',
@@ -435,38 +478,20 @@ export function ActScrollStory({ content, locale }: Props) {
               pinSpacing: true,
               scrub: 0.55,
               invalidateOnRefresh: true,
-              onUpdate: (self) => {
-                const t = self.progress * T.end;
-
-                /* Le Canvas est allumé (donc monté, donc en train de décoder
-                   ses textures) pendant que le montage du téléphone joue
-                   encore : sa première frame utile est prête avant d'être vue. */
-                const wantsStage = t >= T.phoneIn;
-                if (wantsStage !== stageOwned) {
-                  stageOwned = wantsStage;
-                  setStageLive(wantsStage);
-                }
-                if (!wantsStage) return;
-
-                publishScreen();
-                if (t <= T.transfer) {
-                  setStage(0);
-                  return;
-                }
-                const step =
-                  STAGE_STEPS.find((s) => t < s.to) ?? STAGE_STEPS[STAGE_STEPS.length - 1]!;
-                const local = gsap.utils.clamp(0, 1, (t - step.at) / (step.to - step.at));
-                setStage(step.chapter - 1 + local);
-              },
+              onLeave: () => releaseStage('story'),
+              onLeaveBack: () => releaseStage('story'),
+              onEnterBack: syncStage,
+              onRefresh: syncStage,
             },
           });
+          film.timeline = tl;
 
           /* ---------------------------------------------------------------
              SECTION 1 — LA COUVERTURE DEVIENT UN CADRAGE
              Une seule idée : tout se retire sauf une image, et la page naît
              d'elle. Le nom ne disparaît pas — il passe DERRIÈRE le média.
              --------------------------------------------------------------- */
-          const heroMediaH = () => window.innerHeight * (isDesktop ? 0.52 : 0.44);
+          const heroMediaH = () => window.innerHeight * (isDesktop ? 0.52 : 0.34);
           const heroMediaW = () => heroMediaH() * (9 / 16);
 
           tl.to(
@@ -596,25 +621,29 @@ export function ActScrollStory({ content, locale }: Props) {
               },
               T.behindIn + 0.04,
             )
-            .to(device, { scale: 0.72, duration: 0.44 }, T.behindIn + 0.08)
-            .to(behind, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'power2.out' }, T.behindIn + 0.16)
+            .to(device, {
+              scale: isDesktop ? 0.72 : 0.42,
+              ...(isDesktop ? {} : { left: '83%', top: '28%' }),
+              duration: 0.36,
+            }, T.behindIn + 0.04)
+            .to(behind, { autoAlpha: 1, scale: 1, duration: 0.32, ease: EASE.move }, T.behindIn + 0.08)
             .to(
               behindMediaEls,
-              { clipPath: 'inset(0% 0% 0% 0%)', yPercent: 0, stagger: 0.14, duration: 0.44 },
-              T.behindIn + 0.26,
+              { clipPath: 'inset(0% 0% 0% 0%)', yPercent: 0, stagger: 0.08, duration: 0.28 },
+              T.behindIn + 0.1,
             )
-            .to(behindBits, { autoAlpha: 1, y: 0, stagger: 0.06, duration: 0.32 }, T.behindIn + 0.36)
+            .to(behindBits, { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.2 }, T.behindIn + 0.18)
             .to(
               behindRows,
-              { autoAlpha: 1, x: 0, stagger: 0.06, duration: 0.3 },
-              T.behindIn + 0.54,
+              { autoAlpha: 1, x: 0, stagger: 0.04, duration: 0.2 },
+              T.behindIn + 0.3,
             );
 
           /* ---------------------------------------------------------------
              SECTION 3 — LE CONTENU EN SITUATION
              Le device NAÎT autour du média. Il n'est pas posé : il pousse.
              --------------------------------------------------------------- */
-          const phoneW = () => window.innerHeight * (isDesktop ? 0.38 : 0.34);
+          const phoneW = () => Math.min(window.innerHeight * (isDesktop ? 0.35 : 0.255), window.innerWidth * (isDesktop ? 0.27 : 0.58));
           const bezel = isDesktop ? 10 : 8;
           const radius = isDesktop ? 44 : 36;
           const collectX = (_index: number, target: HTMLElement) => {
@@ -626,7 +655,7 @@ export function ActScrollStory({ content, locale }: Props) {
             return window.innerHeight / 2 - (rect.top + rect.height / 2);
           };
 
-          tl.to(behindBits, { autoAlpha: 0, y: -8, duration: 0.24 }, T.phoneIn - 0.56)
+          tl.to(behindBits, { autoAlpha: 0, y: -8, duration: 0.1 }, T.phoneIn - 0.5)
             // Les tirages de stratégie sont physiquement repris par l'écran :
             // moodboard et planning deviennent les premières unités du feed.
             .to(
@@ -646,7 +675,7 @@ export function ActScrollStory({ content, locale }: Props) {
               device,
               {
                 left: '50%',
-                top: '50%',
+                top: isDesktop ? '50%' : '40%',
                 xPercent: -50,
                 yPercent: -50,
                 scale: 1,
@@ -689,11 +718,11 @@ export function ActScrollStory({ content, locale }: Props) {
           tl.to(screenHero, { yPercent: -101, duration: 0.32 }, T.montage)
             .to(feed, { yPercent: 0, duration: 0.32 }, T.montage)
             .to(feed, { yPercent: -22, duration: 0.46 }, T.montage + 0.38)
-            .to(focus, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.3 }, T.montage + BEAT)
+            .to(focus, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.18 }, T.montage + BEAT)
             .to(q<HTMLElement>('[data-focus-image]'), { scale: 1.06, duration: 0.56 }, T.montage + BEAT)
-            .to(story, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.3 }, T.montage + BEAT * 2)
+            .to(story, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.18 }, T.montage + BEAT * 2)
             .to(q<HTMLElement>('[data-story-image]'), { scale: 1.05, duration: 0.56 }, T.montage + BEAT * 2)
-            .to(campaign, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.28 }, T.montage + BEAT * 3)
+            .to(campaign, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.18 }, T.montage + BEAT * 3)
             .fromTo(
               q<HTMLElement>('[data-campaign-image]'),
               { scale: 1.09 },
@@ -707,14 +736,13 @@ export function ActScrollStory({ content, locale }: Props) {
           content.phone.beats.forEach((_, i) => {
             const beat = phoneBeats[i];
             const rail = phoneRail[i];
-            if (!beat || !rail) return;
+            const note = phoneNotes[i];
+            if (!beat || !rail || !note) return;
             const at = T.montage + 0.06 + i * BEAT;
             tl.to(beat, { yPercent: 0, autoAlpha: 1, duration: 0.14 }, at)
-              .to(rail, { autoAlpha: 1, duration: 0.14 }, at)
-              .set(rail, { attr: { 'data-active': 'true' } }, at)
               .to(beat, { yPercent: -110, autoAlpha: 0, duration: 0.14 }, at + BEAT - 0.06)
-              .to(rail, { autoAlpha: 0.5, duration: 0.14 }, at + BEAT - 0.06)
-              .set(rail, { attr: { 'data-active': 'false' } }, at + BEAT - 0.06);
+              .to(note, { yPercent: 0, autoAlpha: 1, duration: 0.14 }, at)
+              .to(note, { yPercent: -104, autoAlpha: 0, duration: 0.14 }, at + BEAT - 0.06);
           });
 
           /* ===============================================================
@@ -748,13 +776,13 @@ export function ActScrollStory({ content, locale }: Props) {
             // 1-2 — immobilisation et recentrage.
             .to(
               device,
-              { left: '50%', top: '50%', xPercent: -50, yPercent: -50, duration: 0.3 },
-              T.transfer - 0.3,
+              { left: '50%', top: '50%', xPercent: -50, yPercent: -50, duration: 0.24 },
+              T.transfer - 0.04,
             )
             .to(
-              [...phoneUi, ...phoneBeats],
-              { autoAlpha: 0, y: -8, duration: 0.22 },
-              T.transfer - 0.24,
+              [...phoneUi, ...phoneBeats, ...phoneNotes],
+              { autoAlpha: 0, y: -8, duration: 0.18 },
+              T.transfer - 0.08,
             )
             .to(q<HTMLElement>('[data-campaign-ui]'), { autoAlpha: 0, duration: 0.2 }, T.transfer - 0.2)
             // Le fond passe au chocolat profond : la page devient un espace.
@@ -767,11 +795,7 @@ export function ActScrollStory({ content, locale }: Props) {
             )
             // Le contenu DOM de l'écran s'efface *sous* le plan WebGL qui le
             // recouvre déjà : on ne voit donc rien s'éteindre.
-            .to(
-              [screenHero, feed, focus, story, campaign],
-              { autoAlpha: 0, duration: 0.18 },
-              T.transfer + 0.16,
-            )
+            // Le contenu DOM reste sous son jumeau WebGL : fallback sans vide.
             .to(screenGlass, { autoAlpha: 1, duration: 0.2 }, T.transfer + 0.05)
             // 4 — le cadre sort du champ.
             .to(
@@ -798,8 +822,8 @@ export function ActScrollStory({ content, locale }: Props) {
             // 6-10 — la légende du raccord, brève et lisible sur le fond sombre.
             .to(
               transferCopy,
-              { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.3 },
-              T.screenFull + 0.34,
+              { autoAlpha: 1, y: 0, stagger: 0.06, duration: 0.2 },
+              T.screenFull + 0.2,
             )
             .to(
               transferCopy,
@@ -807,16 +831,24 @@ export function ActScrollStory({ content, locale }: Props) {
               T.separate + 0.42,
             );
 
+          // Les mêmes prises de vue gardent le récit sur mobile et sans GPU.
+          tl.to(portalSurface, { autoAlpha: 1, duration: 0.16 }, T.screenFull - 0.18)
+            .to(portalSurface, { scale: 0.72, autoAlpha: 0, duration: 0.5 }, T.screenFull + 0.06)
+            .to(depthPlates, { autoAlpha: 1, scale: 1, yPercent: 0, stagger: 0.06, duration: 0.34 }, T.screenFull + 0.08)
+            .to(depthPlates, { scale: 1.22, xPercent: (i: number) => i % 2 ? 95 : -95, autoAlpha: 0, stagger: 0.06, duration: 0.64 }, T.separate - 0.1)
+            .to(flat, { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.34 }, T.end - 0.34);
+
           // Verrou de durée : la partition vaut exactement T.end.
           tl.to({}, { duration: 0.01 }, T.end - 0.01);
+          Object.entries({ hero: 0, social: T.socialIn, behind: T.behindIn, phone: T.phoneIn, feed: T.montage, focus: T.montage + BEAT, story: T.montage + BEAT * 2, campaign: T.montage + BEAT * 3, portal: T.transfer, depth: T.screenFull, flat: T.end - 0.34 }).forEach(([label, at]) => tl.addLabel(label, at));
 
-          const onResize = () => publishScreen();
+          const onResize = () => syncStage();
           window.addEventListener('resize', onResize);
 
           return () => {
             window.removeEventListener('resize', onResize);
             setStageAnchor('screen', null);
-            setStageLive(false);
+            releaseStage('story');
             unlockScroll();
           };
         },
@@ -831,6 +863,7 @@ export function ActScrollStory({ content, locale }: Props) {
       }, 4200);
 
       return () => {
+        mm.revert();
         window.removeEventListener('keydown', release);
         window.clearTimeout(safety);
         unlockScroll();
@@ -866,6 +899,18 @@ export function ActScrollStory({ content, locale }: Props) {
         {/* Le sol du raccord : le chocolat profond monte sous le téléphone,
             donc la page ne « change pas de couleur », elle s'enfonce. */}
         <div className={styles.stageGround} data-stage-ground aria-hidden="true" />
+        <div className={styles.depthFallback} aria-hidden="true">
+          <div className={styles.portalSurface} data-portal-surface>
+            <Media item={socialPortal} locale={locale} className={styles.fillMedia} sizes="(max-width: 1023px) 160svh, 100vw" />
+          </div>
+          {depthMedia.slice(1).map((item, index) => (
+            <figure className={styles.depthPlate} data-depth-plate data-depth-slot={index} key={item.id}>
+              <Media item={item} locale={locale} compact sizes="(max-width: 1023px) 55vw, 30vw" />
+            </figure>
+          ))}
+        </div>
+        <StageLayer />
+        <ArchivePlate locale={locale} marker="handoff" className={styles.flatHandoff} />
 
         <span className={`${styles.edition} micro`} data-meta>
           <span className="line-mask">
@@ -979,7 +1024,7 @@ export function ActScrollStory({ content, locale }: Props) {
               <span className={`${styles.feedTitle} micro`}>Feed / 12 posts</span>
               {phoneFeed.concat(phoneFeed).map((m, i) => (
                 <div className={styles.feedItem} key={`${m.id}-${i}`}>
-                  <Media item={m} locale={locale} compact sizes="12vh" />
+                  <Media item={m} locale={locale} compact sizes="20vh" />
                 </div>
               ))}
               <span className={styles.feedTabs} aria-hidden="true">
@@ -991,7 +1036,7 @@ export function ActScrollStory({ content, locale }: Props) {
 
             <div className={styles.focus}>
               <div className={styles.layerImage} data-focus-image>
-                <Media item={phoneFeed[2]!} locale={locale} className={styles.fillMedia} sizes="28vh" />
+                <Media item={phoneFeed[2]!} locale={locale} className={styles.fillMedia} sizes="(max-width: 1023px) 55svh, 76vh" />
               </div>
               <span className={`${styles.reelLabel} micro`}>Reel / Cut 00:14</span>
               <span className={styles.reelPlay} aria-hidden="true">▶</span>
@@ -1024,7 +1069,7 @@ export function ActScrollStory({ content, locale }: Props) {
                   locale={locale}
                   className={styles.fillMedia}
                   loading="eager"
-                  sizes="32vh"
+                  sizes="(max-width: 1023px) 180svh, 1920px"
                 />
               </div>
               <span className={styles.cameraFocus} data-campaign-ui aria-hidden="true">
@@ -1086,7 +1131,7 @@ export function ActScrollStory({ content, locale }: Props) {
           <span className={styles.behindRule} data-behind-detail aria-hidden="true" />
 
           <figure className={styles.behindPrimary} data-behind-media>
-            <Media item={behindMedia[0]!} locale={locale} sizes="42vw" />
+            <Media item={behindMedia[0]!} locale={locale} sizes="(max-width: 1023px) 65vw, 42vw" />
           </figure>
 
           <figure className={styles.behindSecondary} data-behind-media>
@@ -1142,6 +1187,9 @@ export function ActScrollStory({ content, locale }: Props) {
               </li>
             ))}
           </ol>
+          <div className={styles.phoneNotes} aria-hidden="true">
+            {content.phone.notes.map((note) => <p className="line-mask" key={note}><span data-phone-note>{note}</span></p>)}
+          </div>
 
           <span className={styles.progressTrack} data-phone-detail aria-hidden="true">
             <span data-phone-meter />

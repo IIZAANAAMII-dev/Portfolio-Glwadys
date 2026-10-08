@@ -1,19 +1,17 @@
-/* Couche WebGL persistante.
-   Fixe, jamais interactive : le DOM au-dessus garde tous les événements,
-   le focus et le texte. */
+/* Couche locale, bornée et décodée avant de remplacer les tirages DOM.
+   Le DOM conserve tous les événements, le focus et le texte. */
 
 .layer {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: var(--z-canvas);
+  z-index: var(--z-scene);
   pointer-events: none;
   opacity: 0;
-  /* Le passage de « rien » à « quelque chose » ne doit pas se voir : la couche
-     est allumée par l'acte bien avant que son premier plan ne soit visible. */
-  transition: opacity 180ms linear;
+  visibility: hidden;
   contain: strict;
 }
 
-.layer[data-stage-live] {
+.layer[data-stage-live][data-stage-ready] {
   opacity: 1;
+  visibility: visible;
 }

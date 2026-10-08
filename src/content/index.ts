@@ -20,6 +20,7 @@ export interface WorkProject {
   summary: string;
   skills: string[];
   caseStudy: {
+    editorialDecision: string;
     challenge: string;
     direction: string;
     outcome: string;
@@ -73,6 +74,7 @@ export interface Content {
   phone: {
     heading: string;
     beats: string[];
+    notes: string[];
   };
   immersion: {
     heading: string;
@@ -94,6 +96,8 @@ export interface Content {
   work: {
     heading: string;
     caseLabels: {
+      decision: string;
+      visualNote: string;
       challenge: string;
       direction: string;
       outcome: string;
@@ -174,6 +178,7 @@ const fr: Content = {
   phone: {
     heading: 'Le contenu en situation',
     beats: ['Feed', 'Focus', 'Story', 'Campagne'],
+    notes: ['Installer un rythme reconnaissable.', 'Arrêter le regard sur un détail.', 'Donner un contexte au contenu.', 'Relier les formats par une même intention.'],
   },
   immersion: {
     heading: 'Dans le contenu',
@@ -201,6 +206,8 @@ const fr: Content = {
   work: {
     heading: 'Sélection',
     caseLabels: {
+      decision: 'Décision de présentation',
+      visualNote: 'Visuels conceptuels générés pour ce portfolio.',
       challenge: 'Enjeu',
       direction: 'Direction',
       outcome: 'Résultat',
@@ -217,6 +224,7 @@ const fr: Content = {
           'Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.',
         skills: ['Social Media', 'Contenu visuel', 'Planning éditorial', 'Storytelling produit'],
         caseStudy: {
+          editorialDecision: 'Isoler le geste et le détail : un visuel principal, les macros en contrepoint.',
           challenge:
             'Faire sentir la finesse d’un bijou à travers un écran, sans perdre la proximité de la marque.',
           direction:
@@ -240,6 +248,7 @@ const fr: Content = {
           'Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.',
         skills: ['Community', 'Contenu digital', 'Événementiel', 'Cohérence de marque'],
         caseStudy: {
+          editorialDecision: 'Faire passer le collectif avant le format : alterner scènes partagées et cadrages plus proches.',
           challenge:
             'Faire grandir une communauté locale sans lisser sa spontanéité ni son identité méditerranéenne.',
           direction:
@@ -263,6 +272,7 @@ const fr: Content = {
           'Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.',
         skills: ['Expérience client', 'Merchandising', 'Storytelling de marque', 'Retail'],
         caseStudy: {
+          editorialDecision: 'Partir de la matière, puis revenir au produit et au conseil en boutique.',
           challenge:
             'Faire vivre une marque gourmande dans chaque détail du parcours, de la vitrine jusqu’au conseil.',
           direction:
@@ -362,6 +372,7 @@ const en: Content = {
   phone: {
     heading: 'Content in context',
     beats: ['Feed', 'Focus', 'Story', 'Campaign'],
+    notes: ['Establish a recognisable rhythm.', 'Hold the eye on one detail.', 'Give the content a context.', 'Connect the formats through one intention.'],
   },
   immersion: {
     heading: 'Inside the content',
@@ -389,6 +400,8 @@ const en: Content = {
   work: {
     heading: 'Selected work',
     caseLabels: {
+      decision: 'Presentation decision',
+      visualNote: 'Concept visuals generated for this portfolio.',
       challenge: 'Challenge',
       direction: 'Direction',
       outcome: 'Outcome',
@@ -405,6 +418,7 @@ const en: Content = {
           'Bringing delicate jewellery collections forward: product storytelling, visual creation and engaging an audience that notices detail.',
         skills: ['Social Media', 'Visual Content', 'Editorial Planning', 'Product Storytelling'],
         caseStudy: {
+          editorialDecision: 'Isolate gesture and detail: one lead visual, with macros as a counterpoint.',
           challenge:
             'Translate the delicacy of jewellery through a screen without losing the brand’s sense of proximity.',
           direction:
@@ -428,6 +442,7 @@ const en: Content = {
           'Growing a Mediterranean women’s club: scrapbook formats, event coverage, engagement and authenticity.',
         skills: ['Community', 'Digital Content', 'Event Communication', 'Brand Consistency'],
         caseStudy: {
+          editorialDecision: 'Put the group before the format: alternate shared scenes and closer framing.',
           challenge:
             'Grow a local community without smoothing away its spontaneity or Mediterranean identity.',
           direction:
@@ -451,6 +466,7 @@ const en: Content = {
           'Immersed in artisanal fine food retail: personal advice, meticulous merchandising and in-store brand storytelling.',
         skills: ['Customer Experience', 'Merchandising', 'Brand Storytelling', 'Retail'],
         caseStudy: {
+          editorialDecision: 'Begin with material, then return to the product and in-store advice.',
           challenge:
             'Make a gourmet brand tangible at every step, from the storefront to personal advice.',
           direction:
@@ -550,6 +566,7 @@ const ko: Content = {
   phone: {
     heading: '실제 맥락 속의 콘텐츠',
     beats: ['Feed', 'Focus', 'Story', 'Campaign'],
+    notes: ['알아볼 수 있는 리듬을 만듭니다.', '하나의 디테일에 시선을 머물게 합니다.', '콘텐츠에 맥락을 더합니다.', '하나의 의도로 포맷을 연결합니다.'],
   },
   immersion: {
     heading: '콘텐츠 안으로',
@@ -577,6 +594,8 @@ const ko: Content = {
   work: {
     heading: '주요 작업',
     caseLabels: {
+      decision: '포트폴리오 구성 의도',
+      visualNote: '이 포트폴리오를 위해 생성한 콘셉트 비주얼입니다.',
       challenge: '과제',
       direction: '방향',
       outcome: '결과',
@@ -593,6 +612,7 @@ const ko: Content = {
           '섬세한 주얼리 컬렉션을 알리는 일. 제품 스토리텔링, 비주얼 제작, 디테일에 민감한 오디언스와의 관계 형성.',
         skills: ['Social Media', '비주얼 콘텐츠', '에디토리얼 기획', '제품 스토리텔링'],
         caseStudy: {
+          editorialDecision: '손의 움직임과 디테일에 집중합니다. 하나의 메인 비주얼과 매크로를 대비시킵니다.',
           challenge:
             '브랜드의 친밀함을 잃지 않으면서 화면 안에서 주얼리의 섬세함을 전달하는 것.',
           direction:
@@ -616,6 +636,7 @@ const ko: Content = {
           '지중해 여성 커뮤니티의 성장. 스크랩북 포맷, 이벤트 기록, 참여와 진정성.',
         skills: ['커뮤니티', '디지털 콘텐츠', '이벤트 커뮤니케이션', '브랜드 일관성'],
         caseStudy: {
+          editorialDecision: '포맷보다 사람들을 앞세웁니다. 함께하는 장면과 가까운 구도를 번갈아 배치합니다.',
           challenge:
             '자발성과 지중해의 정체성을 잃지 않으면서 지역 커뮤니티를 성장시키는 것.',
           direction:
@@ -639,6 +660,7 @@ const ko: Content = {
           '수공예 식품 리테일 현장. 맞춤 상담, 정교한 머천다이징, 매장에서의 브랜드 스토리텔링.',
         skills: ['고객 경험', '머천다이징', '브랜드 스토리텔링', '리테일'],
         caseStudy: {
+          editorialDecision: '소재에서 시작해 제품과 매장 상담으로 시선을 돌립니다.',
           challenge:
             '쇼윈도부터 상담까지, 고객 여정의 모든 디테일에서 미식 브랜드를 경험하게 하는 것.',
           direction:

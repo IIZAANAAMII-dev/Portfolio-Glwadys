@@ -4,7 +4,7 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import Lenis from 'lenis';
 
 import { gsap, ScrollTrigger } from '@/lib/gsap';
-import { registerLenis } from '@/lib/scrollControl';
+import { isScrollLocked, registerLenis, restoreScroll } from '@/lib/scrollControl';
 import { useReducedMotion } from '@/lib/useReducedMotion';
 
 /**
@@ -21,6 +21,42 @@ import { useReducedMotion } from '@/lib/useReducedMotion';
 export function SmoothScroll({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
   const lenisRef = useRef<Lenis | null>(null);
+
+  useEffect(() => {
+    // Ces événements publics de GSAP 3.15 sont absents de ses déclarations TS.
+    const mediaEvents = gsap as typeof gsap & {
+      addEventListener: (event: 'matchMediaInit' | 'matchMedia', callback: () => void) => void;
+      removeEventListener: (event: 'matchMediaInit' | 'matchMedia', callback: () => void) => void;
+    };
+    const refreshState = ScrollTrigger as typeof ScrollTrigger & { isRefreshing?: boolean };
+    let observedY = window.scrollY;
+    let switching = false;
+    let frame = 0;
+    const observe = () => {
+      if (!switching && !refreshState.isRefreshing) observedY = window.scrollY;
+    };
+    const beforeMedia = () => { switching = true; };
+    const afterMedia = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        // matchMedia démonte puis remesure les pins en passant par scroll=0.
+        // La dernière position observée précède cette mesure temporaire.
+        if (!isScrollLocked()) restoreScroll(observedY);
+        ScrollTrigger.update();
+        switching = false;
+        observedY = window.scrollY;
+      });
+    };
+    window.addEventListener('scroll', observe, { passive: true });
+    mediaEvents.addEventListener('matchMediaInit', beforeMedia);
+    mediaEvents.addEventListener('matchMedia', afterMedia);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', observe);
+      mediaEvents.removeEventListener('matchMediaInit', beforeMedia);
+      mediaEvents.removeEventListener('matchMedia', afterMedia);
+    };
+  }, []);
 
   useEffect(() => {
     // Reduced motion : scroll natif, aucun Lenis monté.

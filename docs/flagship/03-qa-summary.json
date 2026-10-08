@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-08T07:33:11.655Z",
+  "checks": 640,
+  "passed": 630,
+  "failures": [
+    "desktop-1440: reverse campaign, scène bornée",
+    "GPU: nombre de textures stable",
+    "resize: sortie suivante propre",
+    "qa/original-flagship-v1/locales/en/phone.png: images décodées",
+    "qa/original-flagship-v1/locales/en/strategy.png: images décodées",
+    "qa/original-flagship-v1/locales/en/project.png: images décodées",
+    "qa/original-flagship-v1/locales/en/journey.png: images décodées",
+    "qa/original-flagship-v1/locales/en/expertise.png: images décodées",
+    "qa/original-flagship-v1/locales/en/contact.png: images décodées",
+    "en: console"
+  ],
+  "captures": 187,
+  "verdict": "REOPEN"
+}

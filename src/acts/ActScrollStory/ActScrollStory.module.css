@@ -267,6 +267,13 @@
   white-space: nowrap;
   color: var(--ivory);
   text-shadow: 0 0.08em 0.35em rgb(var(--wood-rgb) / 0.18);
+  font-size: clamp(3.75rem, 14.7vw, 17rem);
+}
+
+.nameFirst :global(.line-mask),
+.nameLast :global(.line-mask) {
+  padding-block: 0.13em 0.11em;
+  margin-block: -0.13em -0.11em;
 }
 
 .nameFirst {
@@ -277,7 +284,7 @@
 .nameLast {
   bottom: 10vh;
   right: calc(var(--margin) - 0.055em);
-  color: var(--rich-wine);
+  color: var(--warm-taupe);
 }
 
 .tagline {
@@ -1096,12 +1103,28 @@
   left: var(--margin);
   bottom: max(15vh, 8.5rem);
   width: min(30vw, 28rem);
-  height: 0.95em;
+  height: 1.35em;
   color: var(--text-strong);
   font-family: var(--font-display);
   font-size: clamp(2.2rem, 4.2vw, 3.9rem);
   font-style: italic;
-  line-height: 0.9;
+  line-height: 1.05;
+}
+
+.phoneNotes {
+  position: absolute;
+  right: var(--margin);
+  top: 42%;
+  width: min(23vw, 20rem);
+  height: 5rem;
+  font-size: var(--t-lead);
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.phoneNotes > p {
+  position: absolute;
+  inset: 0;
 }
 
 .beat > span {
@@ -1225,7 +1248,7 @@
   position: absolute;
   left: var(--margin);
   bottom: max(16vh, 9rem);
-  z-index: var(--z-copy);
+  z-index: var(--z-scene-copy);
   width: min(34vw, 30rem);
   pointer-events: none;
 }
@@ -1244,7 +1267,57 @@
   text-shadow: 0 0.15rem 1.4rem rgb(0 0 0 / 0.65);
 }
 
+.depthFallback {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-ground);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.motionStory[data-stage-ready='true'] .depthFallback {
+  visibility: hidden;
+}
+
+.portalSurface {
+  position: absolute;
+  inset: 0;
+}
+
+.depthPlate {
+  position: absolute;
+  width: 24vw;
+  top: 18%;
+  left: 7%;
+  transform-origin: center;
+}
+
+.depthPlate[data-depth-slot='1'] { left: auto; right: 8%; top: 22%; width: 27vw; }
+.depthPlate[data-depth-slot='2'] { left: 37%; top: 58%; width: 30vw; }
+.depthPlate[data-depth-slot='3'] { left: 12%; top: 40%; width: 19vw; }
+.depthPlate[data-depth-slot='4'] { left: auto; right: 17%; top: 44%; width: 18vw; }
+
+.flatHandoff {
+  z-index: var(--z-flat);
+  background: var(--ivory);
+}
+
 @media (max-width: 1023px) {
+  .counter {
+    top: calc(var(--margin) + 1.5rem);
+    left: var(--margin);
+    right: auto;
+  }
+
+  .phoneNotes {
+    left: var(--margin);
+    right: var(--margin);
+    top: auto;
+    bottom: calc(var(--nav-clearance) + 4rem);
+    width: auto;
+    height: 3.2rem;
+    font-size: 1rem;
+  }
   .actMarker {
     top: var(--marker-mobile-top);
     height: var(--marker-mobile-height);
@@ -1264,75 +1337,77 @@
   }
 
   .nameFirst {
-    top: 13vh;
-    font-size: clamp(3.7rem, 17vw, 6.3rem);
+    top: 11svh;
+    font-size: clamp(3.7rem, 19.5vw, 8rem);
   }
 
   .nameLast {
-    bottom: 13vh;
-    font-size: clamp(3.7rem, 17vw, 6.3rem);
+    top: 21svh;
+    bottom: auto;
+    font-size: clamp(3.7rem, 19.5vw, 8rem);
   }
 
   .ruleH {
-    top: 31%;
+    top: 30%;
   }
 
   .tagline {
-    top: 23vh;
+    top: 33svh;
     width: min(28ch, 82%);
   }
 
   .device {
     left: auto;
     right: var(--margin);
-    top: 36%;
-    width: 42vw;
+    top: 46%;
+    width: 43vw;
   }
 
   .heroFrame {
     left: var(--margin);
-    top: 52%;
-    width: min(28vw, 10rem);
+    top: 54%;
+    width: min(30vw, 12rem);
   }
 
   .handNote {
-    left: auto;
-    right: calc(var(--margin) + 1.5rem);
-    top: 68%;
+    left: var(--margin);
+    right: auto;
+    top: 75%;
     max-width: 11ch;
-    text-align: right;
+    text-align: left;
   }
 
   .folio {
-    right: calc(var(--margin) + 0.5rem);
-    bottom: 6%;
+    left: var(--margin);
+    right: auto;
+    bottom: var(--nav-clearance);
   }
 
   .frontLabel {
-    top: 14%;
-    width: min(62vw, 18rem);
+    top: 13%;
+    width: 42vw;
     font-size: clamp(1.9rem, 8.4vw, 2.7rem);
   }
 
   .frontRule {
     top: auto;
-    bottom: 25vh;
-    width: min(68vw, 24rem);
+    bottom: calc(var(--nav-clearance) + 7.7rem);
+    width: calc(100% - var(--margin) * 2);
   }
 
   .frontIntent {
     top: auto;
-    bottom: 15vh;
-    width: min(68vw, 24rem);
+    bottom: calc(var(--nav-clearance) + 3rem);
+    width: calc(100% - var(--margin) * 2);
     font-size: 0.98rem;
   }
 
   .frontCount {
-    bottom: 10vh;
+    bottom: calc(var(--nav-clearance) + 1.5rem);
   }
 
   .frontNote {
-    bottom: 5vh;
+    bottom: var(--nav-clearance);
   }
 
   .satellite[data-social-slot='1'] {
@@ -1343,8 +1418,9 @@
 
   .detailPlate {
     right: var(--margin);
-    bottom: 30vh;
-    width: 24vw;
+    top: 39%;
+    bottom: auto;
+    width: 23vw;
   }
 
   /* Le rail passe en bandeau horizontal : les quatre étapes restent visibles
@@ -1353,7 +1429,7 @@
     left: var(--margin);
     right: var(--margin);
     top: auto;
-    bottom: 8vh;
+    bottom: var(--nav-clearance);
     grid-auto-flow: column;
     width: auto;
     border-top: 0;
@@ -1380,7 +1456,7 @@
   .beat {
     left: var(--margin);
     right: var(--margin);
-    bottom: 15vh;
+    bottom: calc(var(--nav-clearance) + 7.6rem);
     width: auto;
     font-size: clamp(1.7rem, 8vw, 2.4rem);
   }
@@ -1391,23 +1467,23 @@
 
   .behindPrimary {
     left: var(--margin);
-    top: 13vh;
-    width: 66vw;
+    top: 12svh;
+    width: 60vw;
   }
 
   .behindSecondary {
     left: auto;
     right: var(--margin);
-    top: 38%;
-    width: 30vw;
+    top: 17%;
+    width: 27vw;
   }
 
   .behindCopy {
     left: var(--margin);
     right: auto;
     top: auto;
-    bottom: 9vh;
-    width: min(78vw, 30rem);
+    bottom: var(--nav-clearance);
+    width: calc(100% - var(--margin) * 2);
   }
 
   .layers li {
@@ -1430,9 +1506,15 @@
   .transfer {
     left: var(--margin);
     right: var(--margin);
-    bottom: 14vh;
+    bottom: var(--nav-clearance);
     width: auto;
   }
+
+  .depthPlate { top: 12%; left: 6%; width: 43vw; }
+  .depthPlate[data-depth-slot='1'] { top: 22%; right: 5%; width: 43vw; }
+  .depthPlate[data-depth-slot='2'] { top: 46%; left: 14%; width: 62vw; }
+  .depthPlate[data-depth-slot='3'],
+  .depthPlate[data-depth-slot='4'] { display: none; }
 }
 
 /* ============================================================
@@ -1528,10 +1610,36 @@
   }
 
   .reducedPhoneMedia {
-    position: absolute;
-    right: 13vw;
-    top: 13vh;
+    position: relative;
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    justify-self: end;
     width: min(25vw, 15rem);
+  }
+
+  .reducedPhonePanel {
+    grid-template-columns: 1.4fr 0.6fr;
+    gap: 2rem;
+    padding-bottom: var(--nav-clearance);
+  }
+
+  .reducedPhonePanel > h2 {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .reducedPhoneNotes {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+    list-style: none;
+  }
+
+  .reducedPhoneNotes p {
+    margin-top: 0.8rem;
+    line-height: 1.5;
   }
 
   .reducedImmersion {
@@ -1557,8 +1665,28 @@
 
   .reducedHeroMedia {
     right: var(--margin);
-    top: 42%;
-    width: 38vw;
+    top: 38svh;
+    width: 44vw;
+  }
+
+  .reducedPanel:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .reducedPanel:first-child > h2 {
+    margin-top: 9svh;
+    font-size: clamp(3.2rem, 16vw, 4.5rem);
+    line-height: 0.98;
+  }
+
+  .reducedPanel:first-child > p {
+    position: absolute;
+    left: var(--margin);
+    right: var(--margin);
+    bottom: 5rem;
+    margin: 0;
   }
 
   .reducedMediaPair {
@@ -1567,8 +1695,16 @@
   }
 
   .reducedPhoneMedia {
-    right: var(--margin);
-    top: 35%;
+    grid-column: 1;
+    grid-row: 3;
     width: 44vw;
+  }
+
+  .reducedPhonePanel {
+    grid-template-columns: 1fr;
+  }
+
+  .reducedPhoneNotes {
+    grid-template-columns: 1fr 1fr;
   }
 }

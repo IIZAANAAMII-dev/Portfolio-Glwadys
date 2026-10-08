@@ -1,5 +1,6 @@
 .act {
   position: relative;
+  z-index: 1;
   min-height: 100svh;
   overflow: clip;
 }
@@ -151,6 +152,10 @@
 
 .row {
   position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) minmax(0, 26vw);
+  align-items: center;
+  gap: 1rem;
   min-height: 19vh;
   border-bottom: 1px solid var(--rule);
 }
@@ -172,7 +177,7 @@
   display: block;
   padding-block: 1.5vh;
   font-family: var(--font-display);
-  font-size: clamp(3rem, 6.2vw, 7rem);
+  font-size: clamp(3rem, 5.3vw, 6.1rem);
   font-style: italic;
   line-height: 0.95;
   letter-spacing: -0.035em;
@@ -180,13 +185,9 @@
 }
 
 .context {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  width: min(31ch, 28vw);
-  translate: 0 -50%;
+  position: relative;
   text-align: right;
-  opacity: 0.62;
+  opacity: 0.8;
   transition: opacity var(--dur-snap) var(--ease-move);
 }
 
@@ -206,11 +207,9 @@
 }
 
 .index {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  translate: -3rem -50%;
-  opacity: 0.44;
+  position: relative;
+  opacity: 0.75;
+  color: var(--rich-wine);
 }
 
 @media (max-width: 1023px) {
@@ -237,22 +236,23 @@
 
   .row {
     min-height: 17vh;
+    grid-template-columns: 1.4rem minmax(0, 1fr);
+    gap: 0.4rem;
+    padding-block: 0.75rem;
   }
 
   .term {
-    max-width: 86vw;
-    font-size: clamp(2.35rem, 11vw, 5rem);
+    font-size: clamp(2rem, 10vw, 4.5rem);
+    padding-block: 0;
   }
 
   .context {
-    top: auto;
-    right: auto;
-    left: 0;
-    bottom: 0.7rem;
-    width: min(46ch, 84vw);
-    translate: none;
+    grid-column: 2;
+    width: auto;
     text-align: left;
-    opacity: 0.54;
+    font-size: 0.65rem;
+    letter-spacing: 0.035em;
+    opacity: 0.8;
   }
 
   .aside {

@@ -19,7 +19,6 @@ import { PLANES, PLANE_RANGE, sourcesForTier, type Key, type Plane } from './fil
  */
 
 const FOV = 52;
-const NEAR = 0.4;
 
 /** Hauteur visible à la distance `d`, en unités monde. */
 function visibleHeight(d: number) {
@@ -80,7 +79,6 @@ type TextureMap = Map<string, THREE.Texture>;
 
 function useProgressiveTextures(mobile: boolean, anisotropy: number) {
   const [textures, setTextures] = useState<TextureMap>(() => new Map());
-  const tierRef = useRef(-1);
 
   useEffect(() => {
     let alive = true;
@@ -90,14 +88,19 @@ function useProgressiveTextures(mobile: boolean, anisotropy: number) {
 
     const loadTier = async (tier: 0 | 1 | 2) => {
       const sources = sourcesForTier(tier, mobile);
-      console.warn(`[stage] loading tier ${tier}: ${sources.length} sources`, sources);
       // Charge en parallèle, mais pousse chaque texture dès qu'elle arrive :
       // l'écran du téléphone s'affiche immédiatement, les cadres de la galerie
       // arrivent au fur et à mesure.
       await Promise.all(
         sources.map(async (src) => {
+          if (store.has(src)) return;
           try {
-            const texture = await loader.loadAsync(src);
+            const width = src.endsWith('social-portal-v2.jpg') ? 1920 : 1080;
+            const texture = await loader.loadAsync(`/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=75`);
+            if (!alive) {
+              texture.dispose();
+              return;
+            }
             texture.colorSpace = THREE.SRGBColorSpace;
             texture.generateMipmaps = true;
             texture.minFilter = THREE.LinearMipmapLinearFilter;
@@ -117,17 +120,12 @@ function useProgressiveTextures(mobile: boolean, anisotropy: number) {
       );
     };
 
-    /* Trois paliers séquentiels : le raccord du téléphone n'attend jamais les
-       textures des projets, mais elles sont prêtes bien avant leur chapitre. */
+    /* Deux paliers du raccord local. Les textures des projets ne sont pas
+       chargées dans cette scène : leurs actes restent propriétaires du DOM. */
     void (async () => {
       await loadTier(0);
-      console.warn('[stage] tier 0 done', store.size);
       if (!alive) return;
       await loadTier(1);
-      console.warn('[stage] tier 1 done', store.size);
-      if (!alive) return;
-      await loadTier(2);
-      console.warn('[stage] tier 2 done', store.size);
     })();
 
     return () => {
@@ -136,7 +134,7 @@ function useProgressiveTextures(mobile: boolean, anisotropy: number) {
     };
   }, [anisotropy, mobile]);
 
-  return { textures, tierRef };
+  return { textures };
 }
 
 /* ── Échantillonnage de la partition ─────────────────────────────────────
@@ -226,11 +224,7 @@ function StagePlane({
   texture: THREE.Texture;
   geometry: THREE.PlaneGeometry;
 }) {
-  useEffect(() => {
-    console.warn('[StagePlane] created', plane.id);
-  }, []);
   const mesh = useRef<THREE.Mesh>(null);
-  const logged = useRef(false);
   const aspect = useThree((s) => s.viewport.aspect);
 
   const imageAspect = useMemo(() => {
@@ -264,9 +258,12 @@ function StagePlane({
     const mat = el.material as THREE.ShaderMaterial;
     if (!mat) return;
 
-    const { t } = stageState();
-    if (t < range.from - 0.001 || t > range.to + 0.001 || !sample(plane, t, scratch)) {
+    const { t, live, owner } = stageState();
+    if (!live || owner !== 'story' || t > 3 || t < range.from - 0.001 || t > range.to + 0.001 || !sample(plane, t, scratch)) {
       el.visible = false;
+      el.position.set(0, 0, -400);
+      el.scale.set(0, 0, 0);
+      mat.uniforms.uAlpha!.value = 0;
       return;
     }
     if (scratch.a <= 0.002 || scratch.w <= 0) {
@@ -288,29 +285,6 @@ function StagePlane({
     el.rotation.set(scratch.rx * DEG, scratch.ry * DEG, scratch.rz * DEG);
     el.scale.set(worldW, worldH, 1);
     el.visible = true;
-    if (!logged.current && plane.id.startsWith('gallery')) {
-      logged.current = true;
-      console.warn(
-        '[StagePlane] visible',
-        plane.id,
-        't',
-        t,
-        'a',
-        scratch.a,
-        'u',
-        scratch.u,
-        'v',
-        scratch.v,
-        'w',
-        scratch.w,
-        'h',
-        scratch.h,
-        'd',
-        scratch.d,
-        'ry',
-        scratch.ry,
-      );
-    }
 
     // cover : la texture remplit le rectangle sans jamais se déformer.
     const planeAspect = worldH > 0 ? worldW / worldH : 1;
@@ -320,14 +294,17 @@ function StagePlane({
     } else {
       cover.set(planeAspect / imageAspect, 1);
     }
-    (mat.uniforms.uFocus!.value as THREE.Vector2).set(scratch.fx, scratch.fy);
+    (mat.uniforms.uFocus!.value as THREE.Vector2).set(
+      cover.x / 2 + (1 - cover.x) * scratch.fx,
+      cover.y / 2 + (1 - cover.y) * (1 - scratch.fy),
+    );
     mat.uniforms.uAlpha!.value = scratch.a;
     // 0 à 12 unités : net. Au-delà, la matière s'enfonce dans l'air du décor.
     mat.uniforms.uHaze!.value = Math.min(0.42, Math.max(0, (scratch.d - 13) / 130));
   });
 
   return (
-    <mesh ref={mesh} geometry={geometry} visible={false} frustumCulled={false} renderOrder={1}>
+    <mesh ref={mesh} name={plane.id} geometry={geometry} visible={false} frustumCulled={false} renderOrder={1}>
       <shaderMaterial
         vertexShader={VERTEX}
         fragmentShader={FRAGMENT}
@@ -342,8 +319,8 @@ function StagePlane({
 
 /* ── Scène ────────────────────────────────────────────────────────────── */
 
-export function StageScene() {
-  const { gl, invalidate, size, camera } = useThree();
+export function StageScene({ onReady }: { onReady: () => void }) {
+  const { gl, invalidate, size, scene } = useThree();
   const mobile = size.width < 1024;
   const geometry = useMemo(() => new THREE.PlaneGeometry(1, 1), []);
   const { textures } = useProgressiveTextures(mobile, gl.capabilities.getMaxAnisotropy());
@@ -357,25 +334,30 @@ export function StageScene() {
 
   // Le layout est en fractions d'écran : un resize doit redessiner.
   useEffect(() => {
-    const perspective = camera as THREE.PerspectiveCamera;
-    perspective.fov = FOV;
-    perspective.near = NEAR;
-    /* La caméra est à l'origine et regarde −Z. Il faut l'écrire explicitement :
-       R3F appelle `lookAt(0,0,0)` sur la caméra par défaut, ce qui est dégénéré
-       quand elle est elle-même à l'origine — THREE retombe alors sur un regard
-       vers +Z et la scène entière se retrouve derrière l'objectif. */
-    perspective.position.set(0, 0, 0);
-    perspective.rotation.set(0, 0, 0);
-    perspective.quaternion.identity();
-    perspective.updateProjectionMatrix();
-    perspective.updateMatrixWorld();
+    // La rotation explicite du Canvas empêche son lookAt par défaut. R3F
+    // conserve la responsabilité du redimensionnement de la caméra.
     invalidate();
-  }, [camera, invalidate, size.height, size.width]);
+  }, [invalidate, size.height, size.width]);
 
   useEffect(() => invalidate(), [invalidate, textures]);
+  useEffect(() => {
+    if ([...sourcesForTier(0, mobile), ...sourcesForTier(1, mobile)].every((source) => textures.has(source))) onReady();
+  }, [mobile, onReady, textures]);
+
+  // Télémétrie uniquement dans les preuves QA ; aucun compteur dans l'UI.
+  const qa = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('qa');
+  useFrame(() => {
+    if (!qa) return;
+    const { owner, t, live } = stageState();
+    Object.assign(gl.domElement.dataset, {
+      owner: owner ?? '', time: String(t), live: String(live),
+      textures: String(gl.info.memory.textures), geometries: String(gl.info.memory.geometries),
+      planes: scene.children.filter((child) => child.visible && child.type === 'Mesh').map((child) => child.name).join(','),
+    });
+  });
 
   const visible = useMemo(
-    () => PLANES.filter((plane) => !(mobile && plane.desktopOnly)),
+    () => PLANES.filter((plane) => plane.tier < 2 && !/^raw-[45]$/.test(plane.id) && !(mobile && plane.desktopOnly)),
     [mobile],
   );
 

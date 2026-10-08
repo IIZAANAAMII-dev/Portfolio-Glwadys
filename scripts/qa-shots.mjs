@@ -1,7 +1,7 @@
 /* Visual QA: capture scroll positions + console errors.
-   node scripts/qa-shots.js [outPrefix] [w] [h] [p1,p2,...] */
-const { chromium } = require('playwright');
-const fs = require('fs');
+   node scripts/qa-shots.mjs [outPrefix] [w] [h] [p1,p2,...] */
+import { chromium } from 'playwright';
+import fs from 'node:fs';
 
 (async () => {
   const prefix = process.argv[2] || 'shot';

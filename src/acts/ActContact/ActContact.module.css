@@ -335,7 +335,7 @@
   .finalNote {
     left: auto;
     right: var(--margin);
-    top: 50%;
+    top: 30svh;
     max-width: 10ch;
     text-align: right;
   }
@@ -343,7 +343,7 @@
   .links {
     left: var(--margin);
     right: auto;
-    top: 59%;
+    top: 54%;
     justify-items: start;
   }
 
@@ -352,10 +352,12 @@
   }
 
   .footerMeta {
-    bottom: calc(var(--margin) + 8.2rem);
+    bottom: calc(var(--nav-clearance) + 5.2rem);
     grid-template-columns: 1fr 1fr;
     gap: 0.6rem 1rem;
-    font-size: 0.58rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.025em;
+    line-height: 1.45;
   }
 
   .footerMeta span:nth-child(even) {
@@ -367,13 +369,14 @@
   }
 
   .copyright {
-    bottom: calc(var(--margin) + 5.9rem);
+    bottom: calc(var(--nav-clearance) + 3.2rem);
+    font-size: 0.58rem;
   }
 
   .backTop {
     left: var(--margin);
     right: auto;
-    bottom: calc(var(--margin) + 4rem);
+    bottom: var(--nav-clearance);
   }
 }
 
@@ -383,11 +386,6 @@
     display: none;
   }
 
-  .footerMeta span:nth-child(2) {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

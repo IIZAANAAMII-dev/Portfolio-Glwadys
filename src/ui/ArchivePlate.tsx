@@ -45,9 +45,9 @@ export function ArchivePlate({ locale, className, eyebrow, title, marker }: Arch
       {title && <span className={`${styles.title} display`}>{title}</span>}
 
       {contactSheet.slice(0, galleryFlatSlots.length).map((item, index) => (
-        <figure className={styles.card} style={slotStyle(index)} key={item.id}>
+        <figure className={styles.card} data-flat-slot={index} style={slotStyle(index)} key={item.id}>
           <span className={`${styles.index} micro`}>{String(index + 1).padStart(2, '0')}</span>
-          <Media item={item} locale={locale} compact sizes="25vw" />
+          <Media item={item} locale={locale} compact sizes="(max-width: 1023px) 100vw, 45vw" />
         </figure>
       ))}
 

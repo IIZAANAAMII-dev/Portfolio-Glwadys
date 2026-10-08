@@ -51,14 +51,24 @@ export function ActJourney({ content, locale }: Props) {
           const driver = { value: 0 };
           let activeIndex = -1;
           const updateFocus = () => {
-            const position = driver.value * Math.max(entries.length - 1, 1);
-            const nextActive = Math.round(position);
+            const offsets = entries.map((entry) => isDesktop ? entry.offsetLeft : entry.offsetTop);
+            const first = offsets[0]!;
+            const position = first + driver.value * (offsets[offsets.length - 1]! - first);
+            const nextActive = offsets.reduce((closest, offset, index) =>
+              Math.abs(offset - position) < Math.abs(offsets[closest]! - position) ? index : closest, 0);
+            // Le compteur désigne la carte réellement sous la tête de lecture.
+            gsap.set(trackEl, isDesktop
+              ? { x: window.innerWidth * 0.28 - position, y: 0 }
+              : { x: 0, y: -position });
 
             entries.forEach((entry, index) => {
-              const focus = Math.max(0, 1 - Math.abs(index - position));
+              const spacing = Math.max(1, offsets[index + 1] !== undefined
+                ? offsets[index + 1]! - offsets[index]!
+                : offsets[index]! - offsets[index - 1]!);
+              const focus = Math.max(0, 1 - Math.abs(offsets[index]! - position) / spacing);
               gsap.set(entry, {
                 scale: 0.94 + focus * 0.06,
-                autoAlpha: 0.58 + focus * 0.42,
+                autoAlpha: 0.8 + focus * 0.2,
                 y: (1 - focus) * 12,
               });
               if (nextActive === index) entry.dataset.active = 'true';
@@ -81,7 +91,7 @@ export function ActJourney({ content, locale }: Props) {
           gsap.set(handoff, { clipPath: 'inset(0 100% 0 0)' });
           // La timeline entre depuis la droite, comme une continuité du mouvement
           // des folios qui sortent à droite dans le pont précédent.
-          gsap.set(trackEl, { x: isDesktop ? '34vw' : '8vw' });
+          gsap.set(trackEl, { x: 0, y: 0 });
           // The page is already typeset behind its reveal mask. This keeps the
           // handoff readable even when someone scrolls through it quickly.
           gsap.set(handoffCopy, { autoAlpha: 1, y: 0 });
@@ -97,6 +107,7 @@ export function ActJourney({ content, locale }: Props) {
               scrub: SCRUB.rail,
               anticipatePin: 1,
               invalidateOnRefresh: true,
+              onRefresh: updateFocus,
               onToggle: ({ isActive }) => {
                 trackEl.style.willChange = isActive ? 'transform' : '';
               },
@@ -104,15 +115,6 @@ export function ActJourney({ content, locale }: Props) {
           });
 
           tl
-            .to(
-              trackEl,
-              {
-                x: isDesktop ? () => -(trackEl.scrollWidth - window.innerWidth * 0.72) : 0,
-                y: isDesktop ? 0 : () => -(trackEl.scrollHeight - window.innerHeight * 0.76),
-                duration: 0.82,
-              },
-              0,
-            )
             .to(driver, { value: 1, duration: 0.82, onUpdate: updateFocus }, 0)
             .to(handoff, { clipPath: 'inset(0 0% 0 0)', duration: 0.18 }, 0.82)
             .to(
@@ -127,6 +129,7 @@ export function ActJourney({ content, locale }: Props) {
           };
         },
       );
+      return () => mm.revert();
     },
     { scope: root },
   );
@@ -157,7 +160,7 @@ export function ActJourney({ content, locale }: Props) {
                 <span className={`${styles.place} micro`}>{entry.place}</span>
               </div>
               <div className={styles.media} data-journey-media>
-                <Media item={journeyMedia[index]!} locale={locale} compact sizes="20vw" />
+                <Media item={journeyMedia[index]!} locale={locale} compact sizes="(max-width: 1023px) 65vw, 40vw" />
               </div>
             </article>
           ))}

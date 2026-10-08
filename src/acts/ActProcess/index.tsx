@@ -4,7 +4,7 @@ import { useRef, type CSSProperties } from 'react';
 
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
-import { contactSheet, yunaMedia } from '@/content/media';
+import { contactSheet, ratioValue, yunaMedia } from '@/content/media';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCRUB } from '@/lib/motion';
 import { ArchivePlate } from '@/ui/ArchivePlate';
@@ -45,7 +45,7 @@ const workMarkerStyle: WorkMarkerStyle = {
   '--work-marker-mobile-top': `${markerStart(P.work - 0.12, MOBILE_RATIO)}%`,
 };
 
-function TokenArtifact({ index }: { index: number }) {
+function TokenArtifact({ index, locale }: { index: number; locale: Locale }) {
   if (index === 0) {
     return (
       <span className={styles.swatches} data-system-artifact aria-hidden="true">
@@ -83,6 +83,7 @@ function TokenArtifact({ index }: { index: number }) {
 
   return (
     <span className={styles.cropFrame} data-system-artifact aria-hidden="true">
+      <Media item={contactSheet[0]!} locale={locale} compact sizes="(max-width: 1023px) 35vw, 15vw" />
       <i />
     </span>
   );
@@ -156,6 +157,17 @@ export function ActProcess({ content, locale }: Props) {
 
       const q = gsap.utils.selector(stageEl);
       const one = <T extends HTMLElement>(selector: string): T | null => q<T>(selector)[0] ?? null;
+      const centre = (element: HTMLElement) => {
+        let x = element.offsetWidth / 2;
+        let y = element.offsetHeight / 2;
+        let current: HTMLElement | null = element;
+        while (current && current !== stageEl) {
+          x += current.offsetLeft;
+          y += current.offsetTop;
+          current = current.offsetParent as HTMLElement | null;
+        }
+        return { x, y };
+      };
 
       const entryPlate = one('[data-archive-plate="process-entry"]');
       const contactScene = one('[data-process-contact]');
@@ -200,7 +212,7 @@ export function ActProcess({ content, locale }: Props) {
           gsap.set(systemLines, { scaleX: 0, transformOrigin: 'left center' });
           gsap.set(systemCopy, { autoAlpha: 0, y: 12 });
           gsap.set(methodScene, { autoAlpha: 0 });
-          gsap.set(methodRows, { autoAlpha: 0.3, x: 0 });
+          gsap.set(methodRows, { autoAlpha: 0.8, x: 0 });
           gsap.set(methodWords, { autoAlpha: 0, yPercent: 12 });
           gsap.set(methodVisuals, { autoAlpha: 0, clipPath: 'inset(100% 0% 0% 0%)', scale: 1.04 });
           gsap.set(methodChrome, { autoAlpha: 0, y: 10 });
@@ -229,7 +241,11 @@ export function ActProcess({ content, locale }: Props) {
           tl.addLabel('contact', P.contact)
             .to(contactCards, { autoAlpha: 1, scale: 1, stagger: 0.035, duration: 0.18 }, P.entry + 0.02)
             .to(entryPlate, { autoAlpha: 0, duration: 0.12 }, P.entry + 0.08)
-            .to(railEl, { x: () => -(railEl.scrollWidth - window.innerWidth * (isDesktop ? 0.9 : 0.82)), duration: 0.76 }, P.contact)
+            .to(railEl, {
+              x: isDesktop ? () => -(railEl.scrollWidth - window.innerWidth * 0.9) : 0,
+              y: isDesktop ? 0 : () => -Math.max(0, railEl.scrollHeight - (railEl.parentElement?.clientHeight ?? 0)),
+              duration: 0.76,
+            }, P.contact)
             .to(contactChrome, { x: isDesktop ? -10 : 0, duration: 0.32 }, P.contact + 0.34)
 
             .addLabel('intention', P.intention)
@@ -240,7 +256,20 @@ export function ActProcess({ content, locale }: Props) {
             .to(intentionCopy, { autoAlpha: 1, y: 0, stagger: 0.055, duration: 0.3 }, P.intention + 0.14)
 
             .addLabel('system', P.system)
-            .to(intentionMedia, { scale: 0.82, autoAlpha: 0.16, stagger: 0.025, duration: 0.34 }, P.system - 0.16)
+            .to(intentionMedia, {
+              x: () => {
+                const target = systemArtifacts.at(-1);
+                if (!target) return 0;
+                return centre(target).x - centre(intentionMedia[0]!).x;
+              },
+              y: () => {
+                const target = systemArtifacts.at(-1);
+                if (!target) return 0;
+                return centre(target).y - centre(intentionMedia[0]!).y;
+              },
+              scale: () => (systemArtifacts.at(-1)?.clientWidth ?? 100) / intentionMedia[0]!.offsetWidth,
+              rotation: 1.4, autoAlpha: 0, duration: 0.34,
+            }, P.system - 0.16)
             .to(intentionCopy, { autoAlpha: 0, y: -8, duration: 0.18 }, P.system - 0.12)
             .to(
               systemScene,
@@ -271,34 +300,26 @@ export function ActProcess({ content, locale }: Props) {
 
             if (previousWord) tl.to(previousWord, { autoAlpha: 0, yPercent: -10, duration: 0.08 }, at - 0.035);
             if (previousVisual) tl.to(previousVisual, { autoAlpha: 0, clipPath: 'inset(0% 0% 100% 0%)', scale: 0.97, duration: 0.1 }, at - 0.035);
-            if (previousRow) tl.to(previousRow, { autoAlpha: 0.32, x: 0, color: 'var(--ink)', duration: 0.08 }, at - 0.035);
-            if (word) tl.to(word, { autoAlpha: 0.1, yPercent: 0, duration: 0.1 }, at);
+            if (previousRow) tl.to(previousRow, { autoAlpha: 0.8, x: 0, color: 'var(--ink)', duration: 0.08 }, at - 0.035);
+            if (word) tl.to(word, { autoAlpha: 1, yPercent: 0, duration: 0.1 }, at);
             if (visual) tl.to(visual, { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.16 }, at);
             if (row) tl.to(row, { autoAlpha: 1, x: isDesktop ? -10 : 0, color: 'var(--rich-wine)', duration: 0.1 }, at);
           });
 
           if (finalMethodVisual) {
-            const targetWidth = () =>
-              isDesktop
-                ? Math.min(window.innerWidth * 0.29, 480)
-                : Math.min(window.innerWidth * 0.58, 368);
+            const targetWidth = () => workProof.offsetWidth;
             const alignX = () => {
-              const rect = finalMethodVisual.getBoundingClientRect();
-              const margin = Math.max(20, window.innerWidth * 0.04);
-              const targetLeft = window.innerWidth - margin - targetWidth();
-              return targetLeft + targetWidth() / 2 - (rect.left + rect.width / 2);
+              return workProof.offsetLeft + workProof.offsetWidth / 2 - (finalMethodVisual.offsetLeft + finalMethodVisual.offsetWidth / 2);
             };
             const alignY = () => {
-              const rect = finalMethodVisual.getBoundingClientRect();
-              const targetTop = window.innerHeight * (isDesktop ? 0.13 : 0.31);
-              return targetTop + (rect.height * targetWidth()) / rect.width / 2 - (rect.top + rect.height / 2);
+              return workProof.offsetTop + workProof.offsetHeight / 2 - (finalMethodVisual.offsetTop + finalMethodVisual.offsetHeight / 2);
             };
             tl.to(
               finalMethodVisual,
               {
                 x: alignX,
                 y: alignY,
-                scale: () => targetWidth() / finalMethodVisual.getBoundingClientRect().width,
+                scale: () => targetWidth() / finalMethodVisual.offsetWidth,
                 rotation: 0,
                 duration: 0.24,
                 ease: EASE.handoff,
@@ -320,6 +341,7 @@ export function ActProcess({ content, locale }: Props) {
           };
         },
       );
+      return () => mm.revert();
     },
     { scope: root },
   );
@@ -341,6 +363,7 @@ export function ActProcess({ content, locale }: Props) {
             </div>
             <h2 id="process-title" className={`${styles.contactTitle} display`} data-contact-copy>{content.process.sheet}</h2>
             <span className={`${styles.contactNote} hand-note`} data-contact-copy aria-hidden="true">la matière brute / avant le choix</span>
+            <div className={styles.contactRailViewport}>
             <div ref={contactRail} className={styles.contactRail}>
               {contactSheet.map((item, index) => (
                 <figure className={styles.contactCard} data-contact-card key={item.id}>
@@ -349,6 +372,7 @@ export function ActProcess({ content, locale }: Props) {
                   <figcaption className="micro">{item.role}</figcaption>
                 </figure>
               ))}
+            </div>
             </div>
             <span className={styles.contactRule} data-contact-copy aria-hidden="true" />
           </div>
@@ -375,7 +399,7 @@ export function ActProcess({ content, locale }: Props) {
               {content.process.systemTokens.map((token, index) => (
                 <article className={styles.systemToken} data-system-token key={token}>
                   <span className={`${styles.tokenIndex} micro`}>{String(index + 1).padStart(2, '0')}</span>
-                  <TokenArtifact index={index} />
+                  <TokenArtifact index={index} locale={locale} />
                   <p>{token}</p>
                 </article>
               ))}
@@ -392,7 +416,7 @@ export function ActProcess({ content, locale }: Props) {
             </div>
             <div className={styles.methodVisuals} aria-hidden="true">
               {content.strategy.steps.map((step, index) => (
-                <figure data-method-visual key={`visual-${step.term}`}>
+                <figure data-method-visual key={`visual-${step.term}`} style={{ '--evidence-ratio': ratioValue[(index === content.strategy.steps.length - 1 ? yunaMedia[0]! : contactSheet[index % contactSheet.length]!).ratio] } as CSSProperties}>
                   <Media
                     item={index === content.strategy.steps.length - 1 ? yunaMedia[0]! : contactSheet[index % contactSheet.length]!}
                     locale={locale}

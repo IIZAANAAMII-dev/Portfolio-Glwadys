@@ -31,6 +31,7 @@
   --ivory-rgb: 243 237 227;
   --champagne-rgb: 208 173 114;
   --oxblood-rgb: 89 32 39;
+  --rich-wine-rgb: var(--oxblood-rgb);
   --wood-rgb: 43 29 23;
 
   /* ---------- SURFACE COURANTE ----------
@@ -91,6 +92,7 @@
   --space-related: 1.25rem;
   --space-block: 4rem;
   --space-act: clamp(6rem, 12vh, 11rem);
+  --nav-clearance: max(6.5rem, env(safe-area-inset-bottom) + 6.5rem);
 
   /* ---------- GRILLE ---------- */
   --cols: 12;

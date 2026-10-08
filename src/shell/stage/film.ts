@@ -1,4 +1,5 @@
 import { depthMedia } from '@/content/media';
+import { galleryFlatSlots } from '@/acts/ActScrollStory/galleryLayout';
 
 /**
  * LA PARTITION DU CANVAS PERSISTANT.
@@ -160,7 +161,10 @@ function rawPlane(index: number): Plane {
     { t: 2.42, u: slot.u, v: slot.v, w: slot.w * 0.6, h: slot.h * 0.6, d: 46 + index * 4, a: 1 },
   ];
 
-  const sheet: Key = { t: 3, ...slot, d: 17 + index * 0.7, a: 1 };
+  const flat = galleryFlatSlots[index]?.desktop;
+  const sheet: Key = flat
+    ? { t: 3, u: flat.left + flat.width / 2, v: flat.top + (flat.width * 1.6 / flat.aspect) / 2, w: flat.width, h: flat.width * 1.6 / flat.aspect, d: 17, a: 1, rz: 0, anchor: `flat-${index}` }
+    : { t: 3, ...slot, d: 17 + index * 0.7, a: 1 };
 
   /* 02 — Sélection : le tirage retenu avance et grandit, les autres reculent
      sans disparaître. Ils restent lisibles, mais secondaires. */
@@ -209,10 +213,10 @@ export const PLANES: Plane[] = [
     src: SRC.campaign,
     tier: 0,
     keys: [
-      { t: 0, u: 0.5, v: 0.5, w: 0.18, h: 0.62, d: 8, a: 1, anchor: 'screen', linear: true },
-      { t: 0.22, u: 0.5, v: 0.5, w: 0.18, h: 0.62, d: 8, a: 1, anchor: 'screen', linear: true },
-      { t: 0.44, u: 0.5, v: 0.5, w: 0.55, h: 0.78, d: 8, a: 1 },
-      { t: 0.7, u: 0.5, v: 0.5, w: 1, h: 1, d: 8, a: 1 },
+      { t: 0, u: 0.5, v: 0.5, w: 0.18, h: 0.62, d: 8, a: 1, fx: 0.32, anchor: 'screen', linear: true },
+      { t: 0.22, u: 0.5, v: 0.5, w: 0.18, h: 0.62, d: 8, a: 1, fx: 0.32, anchor: 'screen', linear: true },
+      { t: 0.44, u: 0.5, v: 0.5, w: 0.55, h: 0.78, d: 8, a: 1, fx: 0.32 },
+      { t: 0.7, u: 0.5, v: 0.5, w: 1, h: 1, d: 8, a: 1, fx: 0.32 },
       { t: 0.9, u: 0.5, v: 0.5, w: 0.82, h: 0.82, d: 10, a: 0.8 },
       { t: 1.15, u: 0.5, v: 0.5, w: 0.2, h: 0.24, d: 18, a: 0 },
     ],
@@ -283,7 +287,7 @@ export const PLANE_RANGE = new Map(
 export function sourcesForTier(tier: 0 | 1 | 2, mobile: boolean): string[] {
   return Array.from(
     new Set(
-      PLANES.filter((p) => p.tier === tier && !(mobile && p.desktopOnly)).map((p) => p.src),
+      PLANES.filter((p) => p.tier === tier && !/^raw-[45]$/.test(p.id) && !(mobile && p.desktopOnly)).map((p) => p.src),
     ),
   );
 }
