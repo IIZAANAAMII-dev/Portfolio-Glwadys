@@ -1,9 +1,8 @@
 /* Visual QA: capture scroll positions + console errors.
    node scripts/qa-shots.js [outPrefix] [w] [h] [p1,p2,...] */
-const { chromium } = require('playwright');
-const fs = require('fs');
-
 (async () => {
+  const { chromium } = await import('playwright');
+  const fs = await import('node:fs');
   const prefix = process.argv[2] || 'shot';
   const width = Number(process.argv[3] || 1440);
   const height = Number(process.argv[4] || 900);

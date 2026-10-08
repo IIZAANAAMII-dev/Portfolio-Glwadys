@@ -14,10 +14,28 @@
 }
 
 html {
-  /* Le smooth scroll est piloté par Lenis, jamais par CSS : les deux
-     ensemble se combattent. */
+  /* Keep browser-native scrolling and its keyboard/touch behavior. */
   scroll-behavior: auto;
   -webkit-text-size-adjust: 100%;
+}
+
+html.yuna-handoff-active::view-transition-old(root),
+html.yuna-handoff-active::view-transition-new(root) {
+  animation: none;
+}
+
+html.yuna-handoff-active::view-transition-group(yuna-handoff) {
+  animation-duration: 820ms;
+  animation-timing-function: cubic-bezier(0.72, 0, 0.24, 1);
+}
+
+html.yuna-handoff-active::view-transition-old(yuna-handoff),
+html.yuna-handoff-active::view-transition-new(yuna-handoff) {
+  animation: none;
+}
+
+::view-transition {
+  pointer-events: none;
 }
 
 body {
@@ -308,6 +326,12 @@ html[data-scroll-locked='true'] body {
   }
   html[data-scroll-locked='true'] body {
     overflow: visible;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
   *,
   *::before,

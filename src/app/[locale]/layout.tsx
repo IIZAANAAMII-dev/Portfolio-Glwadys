@@ -5,10 +5,7 @@ import type { ReactNode } from 'react';
 
 import { getContent } from '@/content';
 import { htmlLang, isLocale, locales, type Locale } from '@/content/locales';
-import { CustomCursor } from '@/shell/CustomCursor';
 import { Grain } from '@/shell/Grain';
-import { SmoothScroll } from '@/shell/SmoothScroll';
-import { StageLayer } from '@/shell/StageLayer';
 
 import '@/styles/tokens.css';
 import '@/styles/base.css';
@@ -96,13 +93,8 @@ export default async function LocaleLayout({
         <a className="skip-link" href="#main">
           {content.a11y.skipToContent}
         </a>
-        {/* Une seule scène 3D pour tout le site, montée sous la couche DOM. */}
-        <StageLayer />
-        <SmoothScroll>
-          <main id="main">{children}</main>
-        </SmoothScroll>
+        <main id="main">{children}</main>
         <Grain />
-        <CustomCursor />
       </body>
     </html>
   );

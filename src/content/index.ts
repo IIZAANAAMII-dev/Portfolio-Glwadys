@@ -59,6 +59,7 @@ export interface Content {
   hero: {
     firstName: string;
     lastName: string;
+    descriptor: string;
     disciplines: string[];
   };
   social: {
@@ -91,6 +92,17 @@ export interface Content {
     steps: StrategyStep[];
     sentence: string;
   };
+  edit: {
+    label: string;
+    layout: string;
+    finished: string;
+    contactSheet: string;
+    selected: string;
+    openContactSheet: string;
+    selectFrame: string;
+    previousStep: string;
+    handoff: string;
+  };
   work: {
     heading: string;
     caseLabels: {
@@ -98,6 +110,8 @@ export interface Content {
       direction: string;
       outcome: string;
       evidence: string;
+      role: string;
+      practice: string;
     };
     projects: WorkProject[];
   };
@@ -126,6 +140,12 @@ export interface Content {
     axis: string;
     services: string;
     languages: string;
+    labels: {
+      availability: string;
+      services: string;
+      languages: string;
+      axis: string;
+    };
     backToTop: string;
     copyright: string;
   };
@@ -142,6 +162,7 @@ export interface Content {
     languageSwitch: string;
     /** Description des emplacements média non encore fournis. */
     reservedMedia: string;
+    directionStudy: string;
   };
 }
 
@@ -162,6 +183,7 @@ const fr: Content = {
   hero: {
     firstName: 'Glwadys',
     lastName: 'Dalleau',
+    descriptor: 'Social media · contenu · communication de marque',
     disciplines: ['Content', 'Social', 'Brand Strategy'],
   },
   social: {
@@ -198,6 +220,17 @@ const fr: Content = {
     ],
     sentence: 'Une audience, une place, une voix, un rythme.',
   },
+  edit: {
+    label: 'THE EDIT — Yuna',
+    finished: 'Réserver · image finalisée',
+    contactSheet: 'Tirer · planche contact',
+    selected: 'Annoter · cadrage retenu',
+    layout: 'Caler · six décisions',
+    openContactSheet: 'Ouvrir la planche contact',
+    selectFrame: 'Sélectionner ce cadrage',
+    previousStep: 'Étape précédente',
+    handoff: 'Transmettre cette sélection au cas Yuna',
+  },
   work: {
     heading: 'Sélection',
     caseLabels: {
@@ -205,6 +238,8 @@ const fr: Content = {
       direction: 'Direction',
       outcome: 'Résultat',
       evidence: 'Preuves',
+      role: 'Rôle',
+      practice: 'Axes de travail',
     },
     projects: [
       {
@@ -316,8 +351,14 @@ const fr: Content = {
     linkedinLabel: 'LinkedIn',
     availability: 'Disponible — Marseille & à distance',
     axis: 'Paris ↔ Seoul',
-    services: 'Social media · Content · Brand communication',
+    services: 'Réseaux sociaux · Contenu · Communication de marque',
     languages: 'FR · EN · KO',
+    labels: {
+      availability: 'Disponibilité',
+      services: 'Services',
+      languages: 'Langues',
+      axis: 'Axe de travail',
+    },
     backToTop: 'Revenir au début',
     copyright: '© 2026 Glwadys Dalleau',
   },
@@ -333,6 +374,7 @@ const fr: Content = {
     skipToContent: 'Aller au contenu',
     languageSwitch: 'Changer de langue',
     reservedMedia: 'Emplacement réservé à un visuel',
+    directionStudy: 'Étude de direction — visuel conceptuel, non issu des livrables client',
   },
 };
 
@@ -350,6 +392,7 @@ const en: Content = {
   hero: {
     firstName: 'Glwadys',
     lastName: 'Dalleau',
+    descriptor: 'Social media · content · brand communication',
     disciplines: ['Content', 'Social', 'Brand Strategy'],
   },
   social: {
@@ -386,6 +429,17 @@ const en: Content = {
     ],
     sentence: 'An audience, a place, a voice, a rhythm.',
   },
+  edit: {
+    label: 'THE EDIT — Yuna',
+    finished: 'Frame · finished image',
+    contactSheet: 'Select · contact sheet',
+    selected: 'Mark · selected crop',
+    layout: 'Align · six decisions',
+    openContactSheet: 'Open the contact sheet',
+    selectFrame: 'Select this crop',
+    previousStep: 'Previous step',
+    handoff: 'Carry this selection into the Yuna case',
+  },
   work: {
     heading: 'Selected work',
     caseLabels: {
@@ -393,6 +447,8 @@ const en: Content = {
       direction: 'Direction',
       outcome: 'Outcome',
       evidence: 'Evidence',
+      role: 'Role',
+      practice: 'Areas of work',
     },
     projects: [
       {
@@ -506,6 +562,12 @@ const en: Content = {
     axis: 'Paris ↔ Seoul',
     services: 'Social media · Content · Brand communication',
     languages: 'FR · EN · KO',
+    labels: {
+      availability: 'Availability',
+      services: 'Services',
+      languages: 'Languages',
+      axis: 'Working axis',
+    },
     backToTop: 'Back to the beginning',
     copyright: '© 2026 Glwadys Dalleau',
   },
@@ -521,6 +583,7 @@ const en: Content = {
     skipToContent: 'Skip to content',
     languageSwitch: 'Change language',
     reservedMedia: 'Reserved image slot',
+    directionStudy: 'Direction study — concept visual, not a client deliverable',
   },
 };
 
@@ -538,6 +601,7 @@ const ko: Content = {
   hero: {
     firstName: 'Glwadys',
     lastName: 'Dalleau',
+    descriptor: 'Social media · 콘텐츠 · 브랜드 커뮤니케이션',
     disciplines: ['Content', 'Social', 'Brand Strategy'],
   },
   social: {
@@ -574,6 +638,17 @@ const ko: Content = {
     ],
     sentence: '하나의 오디언스, 하나의 자리, 하나의 목소리, 하나의 리듬.',
   },
+  edit: {
+    label: 'THE EDIT — Yuna',
+    finished: '프레이밍 · 완성 이미지',
+    contactSheet: '선택 · 콘택트 시트',
+    selected: '주석 · 선택한 크롭',
+    layout: '정렬 · 여섯 가지 결정',
+    openContactSheet: '콘택트 시트 열기',
+    selectFrame: '이 프레임 선택',
+    previousStep: '이전 단계',
+    handoff: '이 선택을 Yuna 사례로 이어가기',
+  },
   work: {
     heading: '주요 작업',
     caseLabels: {
@@ -581,6 +656,8 @@ const ko: Content = {
       direction: '방향',
       outcome: '결과',
       evidence: '근거',
+      role: '역할',
+      practice: '주요 업무',
     },
     projects: [
       {
@@ -694,6 +771,12 @@ const ko: Content = {
     axis: '파리 ↔ 서울',
     services: 'Social media · Content · Brand communication',
     languages: 'FR · EN · KO',
+    labels: {
+      availability: '가능 여부',
+      services: '서비스',
+      languages: '사용 언어',
+      axis: '활동 범위',
+    },
     backToTop: '처음으로 돌아가기',
     copyright: '© 2026 Glwadys Dalleau',
   },
@@ -709,6 +792,7 @@ const ko: Content = {
     skipToContent: '본문으로 건너뛰기',
     languageSwitch: '언어 변경',
     reservedMedia: '이미지 예정 영역',
+    directionStudy: '방향성 연구 — 콘셉트 비주얼, 실제 클라이언트 결과물이 아님',
   },
 };
 

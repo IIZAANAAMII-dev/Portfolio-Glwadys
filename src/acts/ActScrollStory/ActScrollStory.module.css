@@ -1,1574 +1,350 @@
-/* ============================================================
-   CHAPITRE 1 — COUVERTURE · CONTENU · SITUATION · IMMERSION
-   Une seule scène pinnée. Voir la partition dans index.tsx.
-   ============================================================ */
-
 .act {
-  position: relative;
-}
-
-/* Repères géométriques pour BottomNav. Ils remplissent les intervalles réels
-   de la partition sans participer au rendu ni intercepter les interactions. */
-.actMarkers {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.actMarker {
-  position: absolute;
-  top: var(--marker-top);
-  left: 0;
-  width: 1px;
-  height: var(--marker-height);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.stage {
-  /* ---------- EMPILEMENT LOCAL ----------
-     Échelle nommée, propre à l'acte. Le point clé : la typographie monumentale
-     est SOUS les médias, pour que le nom puisse passer derrière eux. */
-  --z-page: 1;
-  --z-type: 2;
-  --z-behind: 3;
-  --z-plate: 5;
-  --z-device: 6;
-  --z-copy: 8;
-  --z-ground: 11;
-  --z-scene: 12;
-  --z-portal: 14;
-  --z-scene-copy: 16;
-  --z-flat: 18;
-
-  position: relative;
-  height: 100vh;
-  height: 100svh;
-  overflow: hidden;
   background:
-    radial-gradient(circle at 68% 43%, rgb(var(--champagne-rgb) / 0.1), transparent 31%),
-    linear-gradient(112deg, rgb(var(--ink-rgb) / 0.08), transparent 52%),
+    radial-gradient(ellipse at 76% 44%, rgb(var(--champagne-rgb) / 0.09), transparent 36%),
+    linear-gradient(118deg, rgb(var(--ink-rgb) / 0.18), transparent 58%),
     var(--wood-brown);
   color: var(--ivory);
 }
 
-.motionStory {
-  position: absolute;
-  inset: 0;
+.hero {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.15rem var(--margin) calc(6.75rem + env(safe-area-inset-bottom));
 }
 
-.reducedStory {
-  display: none;
+.topline {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  color: var(--paper);
 }
 
-/* ---------- SURFACES ---------- */
-
-/* La page ivoire. Elle est repliée derrière le média de la couverture puis se
-   déplie jusqu'au plein cadre : le fond ne « change pas de couleur », une page
-   a grandi. C'est l'origine exigée pour tout changement de surface. */
-.pageSurface {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-page);
-  pointer-events: none;
-  transform-origin: center center;
-  background:
-    radial-gradient(circle at 50% 42%, rgb(var(--champagne-rgb) / 0.055), transparent 34%),
-    var(--ivory);
-  outline: 1px solid rgb(var(--champagne-rgb) / 0.5);
-  box-shadow: 0 2.5rem 7rem rgb(var(--ink-rgb) / 0.28);
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(0.2, 0.5);
-  will-change: transform, opacity;
+.languages {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
-.pageSurface::before {
-  content: '';
-  position: absolute;
-  inset: var(--margin);
-  border: 1px solid rgb(var(--ink-rgb) / 0.055);
-  background:
-    linear-gradient(90deg, transparent 0 33.333%, rgb(var(--ink-rgb) / 0.045) 33.333% calc(33.333% + 1px), transparent calc(33.333% + 1px) 66.666%, rgb(var(--ink-rgb) / 0.045) 66.666% calc(66.666% + 1px), transparent calc(66.666% + 1px)),
-    linear-gradient(0deg, transparent 0 50%, rgb(var(--ink-rgb) / 0.04) 50% calc(50% + 1px), transparent calc(50% + 1px));
-  pointer-events: none;
+.languages a {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid transparent;
+  color: rgb(var(--paper-rgb) / 0.8);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  transition: border-color var(--dur-snap) var(--ease-move), color var(--dur-snap) var(--ease-move);
 }
 
-/* Le sol sombre de la scène immersive. Il ne se révèle jamais à nu : il monte
-   pendant que le plein cadre opaque recouvre déjà le viewport. */
-.sceneGround {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-ground);
-  pointer-events: none;
-  background: var(--ink);
-  opacity: 0;
-  visibility: hidden;
+.languages a[aria-current='page'] {
+  border-color: var(--champagne);
+  color: var(--ivory);
 }
 
-/* Tranche de page, derrière le média de couverture. Annonce l'ivoire. */
-.flatPaper {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-ground);
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 54% 46%, rgb(var(--champagne-rgb) / 0.06), transparent 36%),
-    var(--ivory);
-  opacity: 0;
-  visibility: hidden;
-  will-change: clip-path, opacity;
+.heroMain {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1.1fr) minmax(17rem, 0.7fr);
+  align-items: center;
+  gap: clamp(3rem, 8vw, 9rem);
+  padding-block: clamp(2rem, 5vh, 4rem);
 }
 
-/* ---------- MÉTA ---------- */
-
-.edition,
-.axis,
-.disciplines {
-  position: absolute;
-  z-index: var(--z-copy);
-  opacity: 0.72;
-}
-
-/* Paint-safe defaults. GSAP reveals these after it has established the opening
-   geometry; the first browser frame can no longer flash the finished Hero. */
-.edition,
-.axis,
-.disciplines,
-.tagline,
-.heroFrame,
-.handNote,
-.folio,
-.transient,
-.device,
-.frontComposition,
-.satellite,
-.crossing,
-.behind,
-.portalFrame,
-.immersion,
-.flatHandoff {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.edition {
-  top: var(--margin);
-  left: var(--margin);
+.identity {
+  max-width: 52rem;
 }
 
 .axis {
-  top: var(--margin);
-  right: var(--margin);
   color: var(--champagne);
-  opacity: 1;
 }
 
-.disciplines {
-  bottom: var(--margin);
-  left: var(--margin);
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  list-style: none;
-}
-
-/* ---------- FILETS ---------- */
-
-.ruleH {
-  position: absolute;
-  top: 30%;
-  left: var(--margin);
-  right: var(--margin);
-  z-index: var(--z-type);
-  height: 1px;
-  background: var(--rule);
-  transform-origin: left center;
-  transform: scaleX(0);
-}
-
-.ruleV {
-  position: absolute;
-  left: 34%;
-  top: 32%;
-  z-index: var(--z-type);
-  width: 1px;
-  height: 32%;
-  background: rgb(var(--champagne-rgb) / 0.45);
-  transform-origin: center top;
-  opacity: 0;
-  visibility: hidden;
-  transform: scaleY(0);
-}
-
-.openingFrame {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: var(--z-copy);
-  width: clamp(18rem, 42vw, 39rem);
-  aspect-ratio: 1.75;
-  border: 1px solid rgb(var(--champagne-rgb) / 0.72);
-  translate: -50% -50%;
-  transform-origin: center;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(0.16, 0.72);
-}
-
-.openingFrame::before,
-.openingFrame::after {
-  content: '';
-  position: absolute;
-  background: rgb(var(--champagne-rgb) / 0.38);
-}
-
-.openingFrame::before {
-  left: 50%;
-  top: -10%;
-  width: 1px;
-  height: 120%;
-}
-
-.openingFrame::after {
-  left: -6%;
-  top: 50%;
-  width: 112%;
-  height: 1px;
-}
-
-.openingCount,
-.openingCaption {
-  position: absolute;
-  z-index: 1;
-  padding: 0.3rem 0.45rem;
-  color: var(--champagne);
-  background: var(--wood-brown);
-}
-
-.openingCount {
-  left: -1px;
-  top: -1px;
-}
-
-.openingCaption {
-  right: -1px;
-  bottom: -1px;
-}
-
-/* ---------- SECTION 1 — COUVERTURE ---------- */
-
-.nameFirst,
-.nameLast {
-  position: absolute;
-  /* SOUS les médias : le nom sort en passant derrière l'image. */
-  z-index: var(--z-type);
-  white-space: nowrap;
-  color: var(--ivory);
-  text-shadow: 0 0.08em 0.35em rgb(var(--wood-rgb) / 0.18);
-}
-
-.nameFirst {
-  top: 8vh;
-  left: calc(var(--margin) - 0.055em);
-}
-
-.nameLast {
-  bottom: 10vh;
-  right: calc(var(--margin) - 0.055em);
-  color: var(--rich-wine);
-}
-
-.tagline {
-  position: absolute;
-  left: var(--margin);
-  top: 40%;
-  z-index: var(--z-copy);
-  width: min(30ch, 24%);
-  opacity: 0.88;
-}
-
-.media {
-  position: absolute;
-}
-
-.heroFrame {
-  left: 41%;
-  top: 45%;
-  z-index: var(--z-plate);
-  width: min(12vw, 11rem);
-}
-
-.handNote,
-.folio {
-  position: absolute;
-  z-index: var(--z-copy);
-}
-
-.handNote {
-  left: 41%;
-  top: 36%;
-  color: var(--champagne);
-  rotate: -4deg;
-}
-
-.folio {
-  right: 8%;
-  bottom: 4%;
-  color: var(--champagne);
-  opacity: 0.72;
-}
-
-.transient {
-  position: absolute;
-  z-index: var(--z-plate);
-}
-
-.transient01 {
-  left: 24%;
-  bottom: 14%;
-  width: 9vw;
-}
-
-.transient02 {
-  right: 22%;
-  top: 11%;
-  width: 10vw;
-}
-
-/* ---------- ÉLÉMENT PERSISTANT ----------
-   Couverture 9:16 → dominant social → écran du téléphone.
-   Un seul nœud DOM. L'écran est l'intérieur exact du device et n'est JAMAIS
-   transformé indépendamment : c'est ce qui garantit qu'ils ne se
-   désolidarisent pas. */
-
-.device {
-  --device-ar: 9 / 16;
-  --phone-bezel: 0px;
-  --phone-radius: 0px;
-  position: absolute;
-  left: 62%;
-  top: 23%;
-  z-index: var(--z-device);
-  width: 17vw;
-  aspect-ratio: var(--device-ar);
-  box-sizing: border-box;
-  padding: var(--phone-bezel);
-  border: 1px solid transparent;
-  border-radius: var(--phone-radius);
-  background: transparent;
-  color: var(--ivory);
-  transform-origin: center center;
-  clip-path: inset(100% 0 0 0);
-  will-change: transform;
-}
-
-.screen {
-  position: relative;
-  isolation: isolate;
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-  box-sizing: border-box;
-  overflow: hidden;
-  /* Le rayon de l'écran est CALCULÉ, jamais fixé. C'est ce détail qui rend le
-     device crédible au lieu de ressembler à un mockup posé. */
-  border-radius: max(0px, calc(var(--phone-radius) - var(--phone-bezel)));
-  background: transparent;
-  contain: paint;
-}
-
-.screenHero,
-.feed,
-.focus,
-.story,
-.campaign,
-.layerImage {
-  position: absolute;
-  inset: 0;
-}
-
-.sharedHero,
-.fillMedia,
-.portalMedia {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  aspect-ratio: auto !important;
-  border: none !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.portalMedia img {
-  filter: none;
-}
-
-.island {
-  position: absolute;
-  top: calc(var(--phone-bezel, 0px) + 0.5rem);
-  left: 50%;
-  z-index: var(--z-copy);
-  width: 0;
-  height: 1.05rem;
-  translate: -50% 0;
-  border-radius: 999px;
-  background: #080706;
-}
-
-.sideButton {
-  position: absolute;
-  top: 22%;
-  width: 2px;
-  height: 12%;
-  background: var(--graphite);
-  transform: scaleY(0);
-  transform-origin: center top;
-}
-
-.sideButton[data-side='left'] {
-  left: -2px;
-}
-
-.sideButton[data-side='right'] {
-  right: -2px;
-  top: 29%;
-}
-
-.phoneChrome {
-  position: absolute;
-  left: 0.75rem;
-  right: 0.75rem;
-  top: 0.55rem;
-  z-index: var(--z-copy);
-  display: flex;
-  justify-content: space-between;
-  color: rgb(var(--ivory-rgb) / 0.72);
-  font-family: var(--font-sans);
-  font-size: 0.45rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.feed {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  align-content: start;
-  gap: 2px;
-  padding-top: 5.2rem;
-  background: var(--paper-deep);
-}
-
-.feedTitle {
-  position: absolute;
-  left: 0.75rem;
-  top: 4.15rem;
-  z-index: var(--z-copy);
-  color: var(--ink);
-  font-size: 0.48rem;
-}
-
-.feedItem {
-  width: 100%;
-}
-
-.focus,
-.story {
-  z-index: var(--z-plate);
-  overflow: hidden;
-  background: var(--graphite);
-  will-change: clip-path;
-}
-
-.campaign {
-  z-index: var(--z-device);
-  overflow: hidden;
-  background: var(--graphite);
-  will-change: clip-path;
-}
-
-.campaign::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 38%, rgb(var(--ink-rgb) / 0.52));
-  pointer-events: none;
-}
-
-.screenCaption {
-  position: absolute;
-  left: 0.75rem;
-  bottom: 0.75rem;
-  z-index: var(--z-copy);
-  color: var(--ivory);
-  font-size: 0.48rem;
-  text-shadow: 0 1px 0.8rem rgb(0 0 0 / 0.55);
-}
-
-.reelLabel,
-.campaignMeta {
-  position: absolute;
-  left: 0.75rem;
-  top: 2.15rem;
-  z-index: var(--z-copy);
-  color: var(--ivory);
-  text-shadow: 0 1px 0.8rem rgb(0 0 0 / 0.7);
-}
-
-.reelPlay {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: var(--z-copy);
-  display: grid;
-  place-items: center;
-  width: 2.35rem;
-  aspect-ratio: 1;
-  border: 1px solid rgb(var(--ivory-rgb) / 0.7);
-  border-radius: 50%;
-  color: var(--ivory);
-  font-size: 0.58rem;
-  translate: -50% -50%;
-  backdrop-filter: blur(4px);
-}
-
-.reelTimeline {
-  position: absolute;
-  left: 0.75rem;
-  right: 0.75rem;
-  bottom: 2.25rem;
-  z-index: var(--z-copy);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
-  height: 1.1rem;
-  padding: 2px;
-  border: 1px solid rgb(var(--ivory-rgb) / 0.55);
-  background: rgb(var(--ink-rgb) / 0.3);
-}
-
-.reelTimeline i {
-  background: rgb(var(--champagne-rgb) / 0.54);
-}
-
-.storyProgress {
-  position: absolute;
-  left: 0.75rem;
-  right: 0.75rem;
-  top: 2.15rem;
-  z-index: var(--z-copy);
-  height: 1px;
-  background: linear-gradient(90deg, var(--ivory) 0 68%, rgb(var(--ivory-rgb) / 0.32) 68%);
-}
-
-.storySticker {
-  position: absolute;
-  left: 50%;
-  bottom: 18%;
-  z-index: var(--z-copy);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: 72%;
-  overflow: hidden;
-  border: 1px solid rgb(var(--ivory-rgb) / 0.72);
-  background: rgb(var(--ivory-rgb) / 0.88);
-  color: var(--ink);
-  font-family: var(--font-sans);
-  font-size: 0.48rem;
-  translate: -50% 0;
-}
-
-.storySticker small {
-  grid-column: 1 / -1;
-  padding: 0.45rem;
-  font-size: 0.48rem;
-  text-align: center;
-}
-
-.storySticker strong {
-  padding: 0.4rem;
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
-  font-weight: 500;
-  text-align: center;
-}
-
-.storySticker strong + strong {
-  border-left: 1px solid rgb(var(--ink-rgb) / 0.18);
-  color: var(--rich-wine);
-}
-
-.campaignWord {
-  position: absolute;
-  left: 50%;
-  bottom: 12%;
-  z-index: var(--z-copy);
+.name {
+  margin-top: clamp(1.5rem, 4vh, 3.5rem);
   color: var(--ivory);
   font-family: var(--font-display);
-  font-size: clamp(1.35rem, 1.9vw, 2rem);
-  font-style: italic;
-  letter-spacing: -0.04em;
-  translate: -50% 0;
-  white-space: nowrap;
-}
-
-.campaignMeta {
-  top: auto;
-  bottom: 2.1rem;
-}
-
-.cameraFocus {
-  position: absolute;
-  inset: 12% 10%;
-  z-index: var(--z-copy);
-  pointer-events: none;
-}
-
-.cameraFocus i,
-.portalGuide i {
-  position: absolute;
-  width: clamp(0.65rem, 1.3vw, 1.2rem);
-  aspect-ratio: 1;
-  border-color: rgb(var(--ivory-rgb) / 0.78);
-  border-style: solid;
-}
-
-.cameraFocus i:nth-child(1),
-.portalGuide i:nth-child(1) { left: 0; top: 0; border-width: 1px 0 0 1px; }
-.cameraFocus i:nth-child(2),
-.portalGuide i:nth-child(2) { right: 0; top: 0; border-width: 1px 1px 0 0; }
-.cameraFocus i:nth-child(3),
-.portalGuide i:nth-child(3) { right: 0; bottom: 0; border-width: 0 1px 1px 0; }
-.cameraFocus i:nth-child(4),
-.portalGuide i:nth-child(4) { left: 0; bottom: 0; border-width: 0 0 1px 1px; }
-
-.carouselDots {
-  position: absolute;
-  left: 50%;
-  bottom: 0.72rem;
-  z-index: var(--z-copy);
-  display: flex;
-  gap: 0.25rem;
-  translate: -50% 0;
-}
-
-.carouselDots i {
-  width: 0.25rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: rgb(var(--ivory-rgb) / 0.42);
-}
-
-.carouselDots i:last-child {
-  background: var(--ivory);
-}
-
-.reflection {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-copy);
-  pointer-events: none;
-  background: linear-gradient(112deg, transparent 21%, rgb(var(--paper-rgb) / 0.11) 48%, transparent 72%);
-  mix-blend-mode: screen;
-  opacity: 0.46;
-}
-
-/* ---------- SECTION 2 — FRONT ---------- */
-
-.frontComposition {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-copy);
-  pointer-events: none;
-  color: var(--ink);
-}
-
-.frontChapter,
-.frontLabel,
-.frontIntent,
-.frontCount,
-.frontRule,
-.frontNote {
-  position: absolute;
-}
-
-.feedProfile {
-  position: absolute;
-  left: 0.72rem;
-  right: 0.72rem;
-  top: 1.75rem;
-  z-index: var(--z-copy);
-  display: grid;
-  grid-template-columns: 1.45rem 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 0.55rem;
-  align-items: center;
-  color: var(--ink);
-  font-family: var(--font-sans);
-  line-height: 1.1;
-}
-
-.feedProfile > span {
-  grid-row: 1 / 3;
-  display: grid;
-  place-items: center;
-  width: 1.45rem;
-  aspect-ratio: 1;
-  border: 1px solid var(--rich-wine);
-  border-radius: 50%;
-  color: var(--rich-wine);
-  font-size: 0.42rem;
-}
-
-.feedProfile strong {
-  font-size: 0.48rem;
-  font-weight: 600;
-}
-
-.feedProfile small {
-  font-size: 0.4rem;
-  opacity: 0.55;
-}
-
-.feedTabs {
-  position: absolute;
-  left: 50%;
-  bottom: 0.45rem;
-  z-index: var(--z-copy);
-  display: flex;
-  gap: 0.25rem;
-  translate: -50% 0;
-}
-
-.feedTabs i {
-  width: 0.28rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: rgb(var(--ink-rgb) / 0.34);
-}
-
-.feedTabs i:first-child {
-  background: var(--rich-wine);
-}
-
-/* ---------- SECTION 2 — GRILLE ÉDITORIALE ----------
-   Colonne de texte à gauche, image dominante au centre, tirages à droite.
-   Toutes les valeurs sont accrochées à --margin : la double page tient
-   la même gouttière que le reste du magazine. */
-
-/* La surface ivoire redéfinit localement les tokens texte : le héros est
-   sombre, ici le texte doit être lu sur papier. */
-.frontComposition,
-.behind,
-.interface,
-.satellite,
-.detailPlate {
-  --on-surface: var(--ink);
-  --on-surface-rgb: var(--ink-rgb);
-  --rule: rgb(var(--ink-rgb) / 0.22);
-  --rule-strong: rgb(var(--ink-rgb) / 0.46);
-  --accent-text: var(--rich-wine);
-  --text-strong: var(--ink);
-  --text-body: rgb(var(--ink-rgb) / 0.9);
-  --text-muted: rgb(var(--ink-rgb) / 0.72);
-  --text-faint: rgb(var(--ink-rgb) / 0.5);
-}
-
-.frontChapter {
-  top: var(--margin);
-  left: var(--margin);
-  color: var(--text-muted);
-}
-
-.frontChapter em,
-.behindLabel em,
-.chapter em {
-  color: var(--accent-text);
-  font-style: normal;
-  font-weight: 600;
-}
-
-.frontLabel {
-  left: var(--margin);
-  top: 21%;
-  width: min(24vw, 18rem);
-  margin: 0;
-  color: var(--text-strong);
-  font-family: var(--font-display);
-  font-size: clamp(2.1rem, 3.9vw, 3.6rem);
-  font-style: italic;
-  line-height: 0.98;
-  letter-spacing: var(--tr-title);
+  font-size: clamp(4.4rem, 8vw, 9rem);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 0.84;
   text-wrap: balance;
 }
 
-.frontIntent {
-  left: var(--margin);
-  top: 44%;
-  width: min(23vw, 22rem);
-  max-width: none;
-  color: var(--text-body);
-  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
-  line-height: 1.5;
-}
-
-.frontRule {
-  left: var(--margin);
-  top: 40%;
-  width: min(23vw, 22rem);
-  height: 1px;
-  background: rgb(var(--ink-rgb) / 0.28);
-}
-
-.frontCount {
-  left: var(--margin);
-  bottom: 16%;
-  color: var(--text-muted);
-}
-
-.frontNote {
-  left: var(--margin);
-  bottom: 9%;
-  color: var(--accent-text);
-  rotate: -2.5deg;
-}
-
-.satellite {
-  position: absolute;
-  z-index: var(--z-plate);
-  margin: 0;
-  transform-origin: center;
-}
-
-.satellite::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: -0.42rem;
-  z-index: 3;
-  width: clamp(1.7rem, 3vw, 3rem);
-  height: 0.72rem;
-  border-inline: 1px solid rgb(var(--ink-rgb) / 0.08);
-  background: rgb(var(--paper-rgb) / 0.68);
-  box-shadow: 0 0.2rem 0.65rem rgb(var(--wood-rgb) / 0.08);
-  translate: -50% 0;
-  rotate: -2deg;
-  pointer-events: none;
-}
-
-.satelliteImage {
-  overflow: hidden;
-  border: clamp(0.2rem, 0.4vw, 0.42rem) solid var(--ivory);
-  outline: 1px solid rgb(var(--ink-rgb) / 0.08);
-  background: var(--paper);
-  box-shadow: 0 1.1rem 2.8rem rgb(var(--wood-rgb) / 0.14);
-  transform-origin: center;
-  transition:
-    translate var(--dur-base) var(--ease-move),
-    box-shadow var(--dur-base) var(--ease-move);
-}
-
-.satelliteCaption {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-top: 0.6rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.3);
-  color: var(--text-muted);
-  font-size: 0.62rem;
-}
-
-.satelliteCaption em {
-  margin-right: 0.4rem;
-  color: var(--accent-text);
-  font-style: normal;
-  font-weight: 600;
-}
-
-/* Deux emplacements seulement, tenus par la colonne de droite. */
-.satellite[data-social-slot='1'] {
-  right: 4%;
-  top: 14%;
-  width: min(21vw, 20rem);
-}
-
-.satellite[data-social-slot='2'] {
-  right: 20%;
-  bottom: 8%;
-  width: min(15vw, 14rem);
-}
-
-/* Le détail complémentaire : petit, précis, tenu par la marge droite. */
-.detailPlate {
-  position: absolute;
-  right: 4%;
-  bottom: 11%;
-  z-index: var(--z-plate);
-  width: min(9.5vw, 9rem);
-  margin: 0;
-  padding: 0.4rem;
-  background: var(--ivory);
-  box-shadow: var(--paper-shadow);
-  outline: 1px solid rgb(var(--ink-rgb) / 0.08);
-}
-
-.detailCaption {
+.name span,
+.name em {
   display: block;
-  margin-top: 0.4rem;
-  color: var(--text-muted);
-  font-size: 0.58rem;
 }
 
-.detailCaption em {
-  margin-right: 0.32rem;
-  color: var(--accent-text);
-  font-style: normal;
-  font-weight: 600;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .satellite:hover .satelliteImage {
-    translate: 0 -4px;
-    box-shadow: 0 1.55rem 3.8rem rgb(var(--wood-rgb) / 0.2);
-  }
-}
-
-/* ---------- SECTION 2 — BEHIND ----------
-   La strate n'arrive pas de la gauche : elle AVANCE depuis le fond, pendant
-   que les contenus finis se referment. */
-
-.behind {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-behind);
-  overflow: hidden;
-  color: var(--ink);
-  transform-origin: center center;
-}
-
-.behindWord {
-  position: absolute;
-  right: -0.04em;
-  bottom: -0.1em;
-  color: rgb(var(--oxblood-rgb) / 0.06);
-  font-family: var(--font-display);
-  font-size: clamp(8rem, 17.5vw, 19rem);
-  font-style: italic;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.behindRule {
-  position: absolute;
-  left: var(--margin);
-  right: var(--margin);
-  top: 11vh;
-  height: 1px;
-  background: rgb(var(--ink-rgb) / 0.16);
-}
-
-.behindPrimary,
-.behindSecondary {
-  position: absolute;
-  margin: 0;
-  will-change: transform, clip-path;
-}
-
-.behindPrimary {
-  left: var(--margin);
-  top: 17vh;
-  width: min(34vw, 34rem);
-}
-
-.behindSecondary {
-  left: 64%;
-  top: 16%;
-  width: min(14vw, 13rem);
-  padding: 0.5rem;
-  background: var(--paper);
-  box-shadow: var(--paper-shadow);
-}
-
-.behindCopy {
-  position: absolute;
-  right: var(--margin);
-  top: 39%;
-  width: min(39vw, 36rem);
-}
-
-.behindLabel {
-  display: block;
-  margin-bottom: 0.9rem;
-  color: var(--text-muted);
-}
-
-.behindTitle {
-  margin: 0 0 1.1rem;
-  color: var(--text-strong);
+.name em {
+  margin-top: 0.1em;
+  color: var(--paper);
   font-style: italic;
 }
 
-.statement {
-  max-width: 30ch;
-  color: var(--text-body);
+.descriptor {
+  max-width: 34ch;
+  margin-top: clamp(1.35rem, 3vh, 2.4rem);
+  color: var(--ivory);
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
+  font-weight: 550;
+  line-height: 1.45;
   text-wrap: pretty;
 }
 
-/* Les cinq strates. Une liste, des filets, du contraste : aucun pictogramme
-   décoratif ne vient plus concurrencer la lecture. */
-.layers {
-  display: grid;
-  gap: 0;
-  margin: 1.75rem 0 0;
-  padding: 0;
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.3);
-  list-style: none;
+.tagline {
+  margin-top: 0.65rem;
+  color: rgb(var(--paper-rgb) / 0.86);
 }
 
-.layers li {
-  display: grid;
-  grid-template-columns: 3.1rem 1fr;
-  align-items: baseline;
-  gap: 0.9rem;
-  padding: 0.62rem 0;
-  border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14);
-}
-
-.layerIndex {
-  color: var(--accent-text);
-  font-variant-numeric: tabular-nums;
-}
-
-.layers li > strong {
-  color: var(--text-strong);
-  font-family: var(--font-sans);
-  font-size: 0.98rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-/* ---------- SECTION 3 — HABILLAGE ---------- */
-
-.interface {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-copy);
-  pointer-events: none;
-  color: var(--ink);
-}
-
-.interface [data-phone-entry],
-.interface [data-phone-detail],
-.interface [data-phone-beat] {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.interface [data-phone-beat] {
-  transform: translateY(110%);
-}
-
-.chapter,
-.counter,
-.beat,
-.sequenceRail,
-.progressTrack {
-  position: absolute;
-}
-
-.chapter {
-  top: var(--margin);
-  left: var(--margin);
-}
-
-.counter {
-  right: var(--margin);
-  top: var(--margin);
-  color: var(--text-muted);
-}
-
-.beat {
-  left: var(--margin);
-  bottom: max(15vh, 8.5rem);
-  width: min(30vw, 28rem);
-  height: 0.95em;
-  color: var(--text-strong);
-  font-family: var(--font-display);
-  font-size: clamp(2.2rem, 4.2vw, 3.9rem);
-  font-style: italic;
-  line-height: 0.9;
-}
-
-.beat > span {
-  position: absolute;
-  inset: 0;
-  display: block;
-}
-
-/* Le rail est une carte, pas une décoration : les quatre étapes restent
-   lisibles en permanence, l'étape active gagne le filet bordeaux. */
-.sequenceRail {
-  left: var(--margin);
-  top: 27%;
-  display: grid;
-  width: min(17vw, 13rem);
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.3);
-  list-style: none;
-}
-
-.sequenceRail li {
-  position: relative;
-  display: grid;
-  grid-template-columns: 2.5rem 1fr;
+.workLink {
+  display: inline-flex;
+  min-height: 48px;
   align-items: center;
-  padding-block: 0.68rem;
-  border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14);
-  color: var(--text-muted);
-  font-size: var(--t-micro);
-  letter-spacing: var(--tr-micro);
+  gap: 1.6rem;
+  margin-top: clamp(1.4rem, 3vh, 2.2rem);
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgb(var(--champagne-rgb) / 0.58);
+  color: var(--ivory);
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  transition: color var(--dur-snap) var(--ease-move);
+  transition: color var(--dur-snap) var(--ease-move), border-color var(--dur-snap) var(--ease-move);
 }
 
-.railIndex {
-  font-variant-numeric: tabular-nums;
+.workLink span:last-child {
+  color: var(--champagne);
+  font-size: 1.2rem;
+  transition: transform var(--dur-snap) var(--ease-move);
 }
 
-.railLabel {
-  font-weight: 500;
-}
-
-/* Repère de l'étape active. Une seule à la fois, par construction. */
-.railMark {
-  position: absolute;
-  left: -0.75rem;
-  top: 50%;
-  width: 0.42rem;
-  height: 1px;
-  background: var(--accent-text);
-  opacity: 0;
-  translate: 0 -50%;
-  transition: opacity var(--dur-snap) var(--ease-move), width var(--dur-snap) var(--ease-move);
-}
-
-.sequenceRail li[data-active='true'] {
-  color: var(--text-strong);
-}
-
-.sequenceRail li[data-active='true'] .railIndex {
-  color: var(--accent-text);
-  font-weight: 600;
-}
-
-.sequenceRail li[data-active='true'] .railMark {
-  width: 1.1rem;
-  opacity: 1;
-}
-
-.progressTrack {
-  left: calc(var(--margin) - 1.5rem);
-  top: 27%;
-  width: 2px;
-  height: 11rem;
-  background: rgb(var(--ink-rgb) / 0.16);
-}
-
-.progressTrack span {
-  display: block;
-  width: 2px;
-  height: 100%;
-  background: var(--accent-text);
-  transform-origin: center top;
-}
-
-/* ---------- RACCORD — TÉLÉPHONE → UNIVERS 3D ----------
-   Le contenu visuel du raccord vit dans le Canvas maître (src/shell/stage).
-   Il ne reste ici que deux choses : le sol qui s'enfonce dans le chocolat,
-   et la légende qui nomme la scène. Aucun second Canvas, aucun calque
-   d'images superposées. */
-
-.stageGround {
-  position: absolute;
-  inset: -10%;
-  z-index: var(--z-behind);
-  background:
-    radial-gradient(circle at 50% 42%, rgb(var(--ink-rgb) / 0.62), transparent 58%),
-    linear-gradient(180deg, rgb(var(--ink-rgb) / 0.45), rgb(var(--ink-rgb) / 0.78) 62%),
-    url('/media/generated/social/social-portal-v2.jpg') 50% 50% / cover no-repeat;
-  filter: brightness(0.52) contrast(1.05) saturate(0.92);
-  pointer-events: none;
-}
-
-/* Reflet d'approche sur le verre : la caméra entre dans la surface. */
-.screenGlass {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-copy);
-  background: linear-gradient(
-    118deg,
-    transparent 24%,
-    rgb(255 255 255 / 0.14) 42%,
-    rgb(255 255 255 / 0.05) 52%,
-    transparent 66%
-  );
-  pointer-events: none;
-}
-
-.transfer {
-  position: absolute;
-  left: var(--margin);
-  bottom: max(16vh, 9rem);
-  z-index: var(--z-copy);
-  width: min(34vw, 30rem);
-  pointer-events: none;
-}
-
-.transferLabel {
-  display: block;
-  margin-bottom: 0.9rem;
-  padding-bottom: 0.55rem;
-  border-bottom: 1px solid rgb(var(--ivory-rgb) / 0.34);
+.workLink:hover {
+  border-color: var(--ivory);
   color: var(--champagne);
 }
 
-.transferStatement {
-  max-width: 28ch;
-  color: var(--ivory);
-  text-shadow: 0 0.15rem 1.4rem rgb(0 0 0 / 0.65);
+.workLink:hover span:last-child {
+  transform: translate(3px, 3px);
 }
 
-@media (max-width: 1023px) {
-  .actMarker {
-    top: var(--marker-mobile-top);
-    height: var(--marker-mobile-height);
+.heroFigure {
+  width: min(100%, 28rem);
+  justify-self: end;
+  view-timeline-name: --opening-frame;
+  view-timeline-axis: block;
+}
+
+.heroImage {
+  position: relative;
+  padding: 0.65rem;
+  border: 1px solid rgb(var(--champagne-rgb) / 0.46);
+  background: rgb(var(--ink-rgb) / 0.28);
+  box-shadow: 1.2rem 1.2rem 0 rgb(var(--oxblood-rgb) / 0.44);
+  animation: reserve-the-frame 900ms var(--ease-handoff) both;
+}
+
+.heroImage::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0.65rem;
+  border: 1px solid var(--rich-wine);
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes reserve-the-frame {
+  from {
+    clip-path: inset(0 0 100%);
   }
 
-  .transient,
-  .ruleV,
-  .disciplines,
-  .satellite[data-social-slot='2'],
-  .progressTrack {
-    display: none;
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes frame-registers-for-edit {
+  from {
+    clip-path: inset(0);
+    transform: scale(1);
   }
 
-  .openingFrame {
-    width: min(78vw, 25rem);
-    aspect-ratio: 1.15;
+  to {
+    clip-path: inset(5% 7%);
+    transform: scale(0.97);
+  }
+}
+
+@keyframes mark-registers-for-edit {
+  from {
+    inset: 0.65rem;
+    opacity: 0;
   }
 
-  .nameFirst {
-    top: 13vh;
-    font-size: clamp(3.7rem, 17vw, 6.3rem);
+  to {
+    inset: 12% 10%;
+    opacity: 1;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .heroImage {
+    animation-name: reserve-the-frame, frame-registers-for-edit;
+    animation-duration: 900ms, auto;
+    animation-timing-function: var(--ease-handoff), linear;
+    animation-fill-mode: both, both;
+    animation-timeline: auto, --opening-frame;
+    animation-range: normal, exit 0% exit 48%;
   }
 
-  .nameLast {
-    bottom: 13vh;
-    font-size: clamp(3.7rem, 17vw, 6.3rem);
+  .heroImage::after {
+    animation: mark-registers-for-edit linear both;
+    animation-timeline: --opening-frame;
+    animation-range: exit 0% exit 48%;
+  }
+}
+
+.studyCaption {
+  max-width: 34ch;
+  margin-top: 1.15rem;
+  color: rgb(var(--paper-rgb) / 0.82);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.heroFooter {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgb(var(--paper-rgb) / 0.25);
+  color: var(--paper);
+}
+
+.footerIndex {
+  color: var(--champagne);
+}
+
+.heroFooter p {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.3vw, 2.2rem);
+  font-style: italic;
+  line-height: 1.05;
+}
+
+.heroFooter > a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--ivory);
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .hero {
+    min-height: 100svh;
+    padding: 0.6rem 1.25rem calc(7.5rem + env(safe-area-inset-bottom));
   }
 
-  .ruleH {
-    top: 31%;
+  .topline {
+    min-height: 3rem;
+    font-size: 0.68rem;
+  }
+
+  .heroMain {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-block: 1.2rem 1.5rem;
+  }
+
+  .name {
+    margin-top: 1.2rem;
+    font-size: clamp(3.7rem, 14.5vw, 5.4rem);
+    line-height: 0.84;
+  }
+
+  .descriptor {
+    max-width: 30ch;
+    margin-top: 1.2rem;
+    font-size: 1rem;
   }
 
   .tagline {
-    top: 23vh;
-    width: min(28ch, 82%);
+    max-width: 32ch;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    line-height: 1.4;
   }
 
-  .device {
-    left: auto;
-    right: var(--margin);
-    top: 36%;
-    width: 42vw;
+  .workLink {
+    margin-top: 0.7rem;
   }
 
-  .heroFrame {
-    left: var(--margin);
-    top: 52%;
-    width: min(28vw, 10rem);
+  .heroFigure {
+    width: min(42vw, 11rem);
+    justify-self: end;
   }
 
-  .handNote {
-    left: auto;
-    right: calc(var(--margin) + 1.5rem);
-    top: 68%;
-    max-width: 11ch;
-    text-align: right;
+  .heroImage {
+    padding: 0.4rem;
+    box-shadow: 0.55rem 0.55rem 0 rgb(var(--oxblood-rgb) / 0.48);
   }
 
-  .folio {
-    right: calc(var(--margin) + 0.5rem);
-    bottom: 6%;
+  .studyCaption {
+    width: calc(100vw - 2.5rem);
+    max-width: none;
+    margin-top: 0.75rem;
+    margin-left: calc(100% - (100vw - 2.5rem));
+    font-size: 0.75rem;
   }
 
-  .frontLabel {
-    top: 14%;
-    width: min(62vw, 18rem);
-    font-size: clamp(1.9rem, 8.4vw, 2.7rem);
+  .heroFooter {
+    grid-template-columns: 1.8rem minmax(0, 1fr);
+    gap: 0.7rem;
+    padding-top: 0.75rem;
   }
 
-  .frontRule {
-    top: auto;
-    bottom: 25vh;
-    width: min(68vw, 24rem);
+  .heroFooter p {
+    font-size: 1.15rem;
   }
 
-  .frontIntent {
-    top: auto;
-    bottom: 15vh;
-    width: min(68vw, 24rem);
-    font-size: 0.98rem;
-  }
-
-  .frontCount {
-    bottom: 10vh;
-  }
-
-  .frontNote {
-    bottom: 5vh;
-  }
-
-  .satellite[data-social-slot='1'] {
-    right: var(--margin);
-    top: 13%;
-    width: 40vw;
-  }
-
-  .detailPlate {
-    right: var(--margin);
-    bottom: 30vh;
-    width: 24vw;
-  }
-
-  /* Le rail passe en bandeau horizontal : les quatre étapes restent visibles
-     sans voler la hauteur du téléphone. */
-  .sequenceRail {
-    left: var(--margin);
-    right: var(--margin);
-    top: auto;
-    bottom: 8vh;
-    grid-auto-flow: column;
-    width: auto;
-    border-top: 0;
-  }
-
-  .sequenceRail li {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    gap: 0.2rem;
-    padding-block: 0.5rem;
-    border-bottom: 0;
-    border-top: 1px solid rgb(var(--ink-rgb) / 0.2);
-    text-align: center;
-  }
-
-  .sequenceRail li[data-active='true'] {
-    border-top-color: var(--accent-text);
-  }
-
-  .railMark {
+  .heroFooter > a {
     display: none;
-  }
-
-  .beat {
-    left: var(--margin);
-    right: var(--margin);
-    bottom: 15vh;
-    width: auto;
-    font-size: clamp(1.7rem, 8vw, 2.4rem);
-  }
-
-  .behindRule {
-    top: 10vh;
-  }
-
-  .behindPrimary {
-    left: var(--margin);
-    top: 13vh;
-    width: 66vw;
-  }
-
-  .behindSecondary {
-    left: auto;
-    right: var(--margin);
-    top: 38%;
-    width: 30vw;
-  }
-
-  .behindCopy {
-    left: var(--margin);
-    right: auto;
-    top: auto;
-    bottom: 9vh;
-    width: min(78vw, 30rem);
-  }
-
-  .layers li {
-    grid-template-columns: 2.4rem 1fr;
-    padding-block: 0.5rem;
-  }
-
-  .layers li > strong {
-    font-size: 0.9rem;
-  }
-
-  .statement {
-    max-width: 24ch;
-  }
-
-  .campaignWord {
-    font-size: clamp(1.3rem, 6vw, 1.9rem);
-  }
-
-  .transfer {
-    left: var(--margin);
-    right: var(--margin);
-    bottom: 14vh;
-    width: auto;
   }
 }
 
-/* ============================================================
-   REDUCED MOTION — composition posée, contenu intégralement lisible
-   ============================================================ */
+@media (max-width: 359px) {
+  .hero {
+    padding-inline: 1rem;
+  }
+
+  .name {
+    font-size: clamp(3.25rem, 14.8vw, 4rem);
+  }
+
+  .heroFigure {
+    width: 45vw;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .actMarker {
-    height: 25%;
+  .heroFigure,
+  .heroImage,
+  .heroImage::after {
+    animation: none !important;
+    clip-path: none;
   }
 
-  .actMarker:nth-child(1) {
-    top: 0;
-  }
-
-  .actMarker:nth-child(2) {
-    top: 25%;
-  }
-
-  .actMarker:nth-child(3) {
-    top: 50%;
-  }
-
-  .actMarker:nth-child(4) {
-    top: 75%;
-  }
-
-  .stage {
-    height: auto;
-    min-height: 0;
-    overflow: visible;
-    background: var(--ivory);
-    color: var(--ink);
-  }
-
-  .motionStory {
-    display: none;
-  }
-
-  .reducedStory {
-    display: block;
-  }
-
-  .reducedPanel {
-    position: relative;
-    display: grid;
-    min-height: 100vh;
-    min-height: 100svh;
-    padding: var(--margin);
-    overflow: hidden;
-    border-bottom: 1px solid rgb(var(--ink-rgb) / 0.14);
-    background: var(--ivory);
-  }
-
-  .reducedPanel > h2 {
-    align-self: start;
-    max-width: 10ch;
-    margin-top: 10vh;
-    text-wrap: balance;
-  }
-
-  .reducedPanel > p {
-    align-self: end;
-    max-width: 34ch;
-    margin-bottom: 6vh;
-    text-wrap: pretty;
-  }
-
-  .reducedName {
-    font-size: clamp(3.8rem, 13vw, 9.5rem);
-    line-height: 0.82;
-  }
-
-  .reducedName em {
-    display: block;
-    color: var(--rich-wine);
-  }
-
-  .reducedHeroMedia {
-    position: absolute;
-    right: var(--margin);
-    top: 22%;
-    width: min(28vw, 18rem);
-  }
-
-  .reducedMediaPair {
-    align-self: end;
-    display: grid;
-    grid-template-columns: 1.25fr 0.75fr;
-    gap: clamp(1rem, 4vw, 4rem);
-    width: min(68vw, 62rem);
-    margin: 0 0 6vh auto;
-  }
-
-  .reducedPhoneMedia {
-    position: absolute;
-    right: 13vw;
-    top: 13vh;
-    width: min(25vw, 15rem);
-  }
-
-  .reducedImmersion {
-    min-height: 100vh;
-    min-height: 100svh;
-  }
-
-  .reducedImmersion > h2,
-  .reducedImmersion > p {
-    position: relative;
-    z-index: 2;
-  }
-}
-
-@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
-  .reducedPanel {
-    min-height: 88svh;
-  }
-
-  .reducedPanel > h2 {
-    margin-top: 6vh;
-  }
-
-  .reducedHeroMedia {
-    right: var(--margin);
-    top: 42%;
-    width: 38vw;
-  }
-
-  .reducedMediaPair {
-    grid-template-columns: 1fr 0.7fr;
-    width: 88vw;
-  }
-
-  .reducedPhoneMedia {
-    right: var(--margin);
-    top: 35%;
-    width: 44vw;
+  .languages a,
+  .workLink,
+  .workLink span:last-child {
+    transition: none;
   }
 }

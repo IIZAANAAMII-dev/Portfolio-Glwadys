@@ -299,7 +299,7 @@ export const openingMedia: MediaItem[] = [
 /* ---------- ACT 01 — couverture ----------
    `hero-vertical` est l'élément persistant central du site : il traverse
    la Hero, le monde social, et devient l'écran du téléphone. */
-export const heroVertical: MediaItem = item('hero-vertical', 'story', '9:16', 'graphite', {
+export const heroVertical: MediaItem = item('hero-vertical', 'story', '9:16', 'bordeaux', {
   ...PHOTO.heroVertical,
   priority: true,
 });
@@ -366,7 +366,7 @@ export const contactSheet: MediaItem[] = [
 
 /* ---------- ACT 06 — projets ---------- */
 export const yunaMedia: MediaItem[] = [
-  item('yuna-campaign', 'campaign', '4:5', 'graphite', { ...PHOTO.yunaCampaign, project: 'yuna' }),
+  item('yuna-campaign', 'campaign', '4:5', 'bordeaux', { ...PHOTO.yunaCampaign, project: 'yuna' }),
   item('yuna-macro', 'macro', '1:1', 'blush', { ...PHOTO.yunaMacro, project: 'yuna' }),
   item('yuna-product', 'product', '1:1', 'graphite', { ...PHOTO.yunaProduct, project: 'yuna' }),
 ];

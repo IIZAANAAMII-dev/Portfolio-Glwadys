@@ -18,25 +18,13 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
   return (
     <>
-      <div id="act-scroll-story">
-        <ActScrollStory content={content} locale={locale} />
-      </div>
-      <div id="act-process">
-        <ActProcess content={content} locale={locale} />
-      </div>
-      <div data-act-work-content>
-        <ActWork content={content} locale={locale} />
-      </div>
-      <div id="act-journey-scene">
-        <ActJourney content={content} locale={locale} />
-      </div>
-      <div id="act-expertise">
-        <ActExpertise content={content} />
-      </div>
-      <div id="act-contact">
-        <ActContact content={content} />
-      </div>
-      <BottomNav content={content} locale={locale} />
+      <ActScrollStory content={content} locale={locale} />
+      <ActProcess content={content} locale={locale} />
+      <ActWork content={content} locale={locale} />
+      <ActJourney content={content} />
+      <ActExpertise content={content} />
+      <ActContact content={content} />
+      <BottomNav content={content} />
     </>
   );
 }
