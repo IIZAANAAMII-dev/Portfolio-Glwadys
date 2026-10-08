@@ -228,8 +228,8 @@ const fr: Content = {
     layout: 'Caler · six décisions',
     openContactSheet: 'Ouvrir la planche contact',
     selectFrame: 'Sélectionner ce cadrage',
-    previousStep: 'Étape précédente',
-    handoff: 'Transmettre cette sélection au cas Yuna',
+    previousStep: 'Revenir',
+    handoff: 'Transmettre à Yuna',
   },
   work: {
     heading: 'Sélection',
@@ -345,7 +345,7 @@ const fr: Content = {
   contact: {
     heading: 'Contact',
     statement: 'Créons quelque chose dont on se souvient.',
-    cta: 'Écrire à Glwadys',
+    cta: 'Transmettre / Écrire à Glwadys',
     email: EMAIL,
     linkedin: LINKEDIN,
     linkedinLabel: 'LinkedIn',
@@ -437,8 +437,8 @@ const en: Content = {
     layout: 'Align · six decisions',
     openContactSheet: 'Open the contact sheet',
     selectFrame: 'Select this crop',
-    previousStep: 'Previous step',
-    handoff: 'Carry this selection into the Yuna case',
+    previousStep: 'Back',
+    handoff: 'Carry into Yuna',
   },
   work: {
     heading: 'Selected work',
@@ -554,7 +554,7 @@ const en: Content = {
   contact: {
     heading: 'Contact',
     statement: 'Let’s make something people remember.',
-    cta: 'Email Glwadys',
+    cta: 'Transmit / Email Glwadys',
     email: EMAIL,
     linkedin: LINKEDIN,
     linkedinLabel: 'LinkedIn',
@@ -647,7 +647,7 @@ const ko: Content = {
     openContactSheet: '콘택트 시트 열기',
     selectFrame: '이 프레임 선택',
     previousStep: '이전 단계',
-    handoff: '이 선택을 Yuna 사례로 이어가기',
+    handoff: 'Yuna로 이어가기',
   },
   work: {
     heading: '주요 작업',
@@ -763,7 +763,7 @@ const ko: Content = {
   contact: {
     heading: '연락',
     statement: '기억에 남는 것을 함께 만들어요.',
-    cta: '이메일 보내기',
+    cta: '전달 / 이메일 보내기',
     email: EMAIL,
     linkedin: LINKEDIN,
     linkedinLabel: 'LinkedIn',

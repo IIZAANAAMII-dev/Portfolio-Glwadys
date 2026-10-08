@@ -2,6 +2,8 @@ import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
 import { localeLabels, locales } from '@/content/locales';
 import { heroVertical } from '@/content/media';
+import { MotionScope } from '@/motion/MotionScope';
+import { CropMarks } from '@/ui/CropMarks';
 import { Media } from '@/ui/Media';
 
 import styles from './ActScrollStory.module.css';
@@ -18,7 +20,7 @@ export function ActScrollStory({ content, locale }: Props) {
       className={`act surface-ink ${styles.act}`}
       aria-labelledby="hero-title"
     >
-      <div className={styles.hero}>
+      <MotionScope kind="hero" className={styles.hero}>
         <header className={styles.topline}>
           <p className="micro">{content.opening.edition}</p>
           <nav className={styles.languages} aria-label={content.a11y.languageSwitch}>
@@ -42,7 +44,10 @@ export function ActScrollStory({ content, locale }: Props) {
               <span>{content.hero.firstName}</span>
               <em>{content.hero.lastName}</em>
             </h1>
-            <p className={styles.descriptor}>{content.hero.descriptor}</p>
+            <p className={styles.descriptor}>
+              <span>{content.hero.descriptor.split(' · ').slice(0, 2).join(' · ')}</span>
+              <span className={styles.descriptorEnd}>{content.hero.descriptor.split(' · ').slice(2).join(' · ')}</span>
+            </p>
             <p className={`${styles.tagline} lead`}>{content.opening.tagline}</p>
             <a className={styles.workLink} href="#act-work">
               <span>{content.nav.work}</span>
@@ -51,8 +56,16 @@ export function ActScrollStory({ content, locale }: Props) {
           </div>
 
           <figure className={styles.heroFigure}>
+            <div className={styles.reservationNote} aria-hidden="true">
+              <em>THE<br />EDIT</em>
+              <span>{content.edit.finished.split(' · ')[0]} / 01</span>
+              <i data-reservation-rule />
+            </div>
             <div className={styles.heroImage}>
-              <Media item={heroVertical} locale={locale} sizes="(max-width: 767px) 46vw, 28vw" preload />
+              <div data-hero-crop className={styles.heroCrop}>
+                <Media item={heroVertical} locale={locale} className={styles.heroMedia} sizes="(max-width: 767px) 48vw, 28vw" preload />
+              </div>
+              <div data-hero-marks><CropMarks className={styles.cropMarks} /></div>
             </div>
             <figcaption className={styles.studyCaption}>
               <span className="micro">{content.a11y.directionStudy}</span>
@@ -67,7 +80,7 @@ export function ActScrollStory({ content, locale }: Props) {
             {content.strategy.heading} <span aria-hidden="true">↓</span>
           </a>
         </div>
-      </div>
+      </MotionScope>
     </section>
   );
 }

@@ -103,33 +103,7 @@
   box-shadow: none;
 }
 
-.visual :global(img) {
-  transition: transform 700ms var(--ease-reveal);
-}
-
-.case:hover .visual :global(img) {
-  transform: scale(1.025);
-}
-
-.case[data-project='yuna'] .visual::before,
-.case[data-project='mgc'] .visual::before {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  pointer-events: none;
-  content: '';
-}
-
-.case[data-project='yuna'] .visual::before {
-  inset: 8%;
-  border: 1px solid rgb(var(--ivory-rgb) / 0.72);
-  opacity: 0;
-  transition: opacity 320ms ease;
-}
-
-.case[data-project='yuna']:is(:hover, :focus-within) .visual::before {
-  opacity: 1;
-}
+.visual :global(img) { transition: none; }
 
 .case[data-project='yuna'] .visual :global(img),
 .case[data-project='yuna']:hover .visual :global(img),
@@ -142,21 +116,6 @@
   display: none;
 }
 
-.case[data-project='mgc'] .visual::before {
-  background-image:
-    linear-gradient(90deg, transparent calc(50% - 0.5px), rgb(var(--ivory-rgb) / 0.72) 50%, transparent calc(50% + 0.5px)),
-    linear-gradient(transparent calc(50% - 0.5px), rgb(var(--ivory-rgb) / 0.72) 50%, transparent calc(50% + 0.5px));
-  opacity: 0;
-  transform: scale(0.96);
-  transition:
-    opacity 420ms ease,
-    transform 650ms var(--ease-handoff);
-}
-
-.case[data-project='mgc']:is(:hover, :focus-within) .visual::before {
-  opacity: 1;
-  transform: scale(1);
-}
 
 .imageIndex {
   position: absolute;
@@ -280,17 +239,82 @@
   padding-top: 1.35rem;
 }
 
+.case[data-project='mgc'] .visual { aspect-ratio: 1 / 1; background: var(--ivory); }
+
+.assembly {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: 1.6fr 1fr;
+  gap: 0.6rem;
+  width: 100%;
+  height: 100%;
+  padding: 0.6rem;
+}
+
+.assemblyPrint { position: relative; min-height: 0; overflow: hidden; }
+.assemblyPrint:first-child { grid-column: 1 / -1; }
+.assemblyPrint :global(img) { object-position: 50% 43%; }
+.assemblyPrint:first-child :global(img) { object-position: 50% 35%; }
+
+.proofIndex {
+  position: absolute;
+  right: 0.35rem;
+  bottom: 0.35rem;
+  padding: 0.15rem 0.3rem;
+  background: var(--ivory);
+  color: var(--rich-wine);
+  font-size: 0.75rem;
+}
+
+.workCropMarks {
+  position: absolute;
+  z-index: 2;
+  inset: 5%;
+  width: 90%;
+  height: 90%;
+  color: var(--oxblood);
+  filter: drop-shadow(0 0 1px var(--ivory));
+  pointer-events: none;
+}
+
+.workCropMarks path { stroke-width: 0.55; }
+
+.materialDetail {
+  position: relative;
+  width: 70%;
+  margin: 1rem 0 0 auto;
+  border-left: 2px solid var(--rich-wine);
+  padding-left: 0.6rem;
+}
+
+.materialDetail :global([data-media]) { aspect-ratio: 2 / 1; box-shadow: none; border: 0; }
+.materialDetail :global(img) { object-position: 61% 62%; }
+.materialDetail > span { position: absolute; bottom: 0.3rem; right: 0.3rem; padding: 0.15rem 0.3rem; background: var(--ivory); color: var(--rich-wine); font-size: 0.75rem; }
+
+@media (min-width: 1024px) {
+  .case[data-project='yuna'] .direction { margin-top: 0.9rem; gap: 0.7rem; }
+  .case[data-project='yuna'] .direction > div { padding-top: 0.6rem; }
+  .case[data-project='yuna'] .direction h4 { margin-bottom: 0.25rem; }
+  .case[data-project='yuna'] .practice { margin-top: 0.5rem; gap: 0.35rem; }
+  .case[data-project='yuna'] .practice ul { row-gap: 0.25rem; }
+  .case[data-project='mgc'] .visual { aspect-ratio: 3 / 2; }
+  .case[data-project='mgc'] .role { margin-top: 4.25rem; }
+  .case[data-project='mgc'] .direction { margin-top: 0; gap: 6.5rem; }
+  .case[data-project='mgc'] .direction > div { padding-top: 0.75rem; }
+}
+
 .case[data-project='comptoir'] .visual {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
 }
 
 .case[data-project='comptoir'] .visual :global(img) {
-  transform: scale(1.035);
-  transition: transform 1100ms var(--ease-reveal);
+  transform: none;
+  object-position: 64% 48%;
+  transition: none;
 }
 
 .case[data-project='comptoir']:is(:hover, :focus-within) .visual :global(img) {
-  transform: scale(1.075);
+  transform: none;
 }
 
 .case[data-project='comptoir'] .caseCopy {
@@ -328,7 +352,7 @@
   .header {
     grid-template-columns: minmax(0, 1fr);
     gap: 0.75rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.25rem;
     padding-bottom: 1rem;
   }
 
@@ -361,8 +385,20 @@
     aspect-ratio: 4 / 5;
   }
 
+  .case[data-project='yuna'] .visual { aspect-ratio: 1 / 1; }
+  .case[data-project='yuna'] .role { margin-top: 4rem; }
+  .case[data-project='yuna'] .direction { margin-top: 6rem; }
+
+  .case[data-project='mgc'] { gap: 0.6rem; }
+  .case[data-project='mgc'] .caseTitle { margin-top: 0.4rem; }
+  .case[data-project='mgc'] .role { margin-top: 0.75rem; }
+  .case[data-project='mgc'] .summary { margin-top: 0.75rem; }
+  .case[data-project='mgc'] .direction { gap: 4.75rem; }
+  .case[data-project='comptoir'] { gap: 0.9rem; }
+  .case[data-project='comptoir'] .direction { margin-top: 4.75rem; }
+
   .case[data-project='comptoir'] .visual {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 6 / 5;
   }
 
   .case[data-project='mgc'] .caseCopy,
@@ -382,13 +418,5 @@
 
   .studyCaption {
     font-size: 0.75rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .visual :global(img),
-  .case[data-project='yuna'] .visual::before,
-  .case[data-project='mgc'] .visual::before {
-    transition: none;
   }
 }

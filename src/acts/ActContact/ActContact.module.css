@@ -86,7 +86,7 @@
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(100deg, rgb(var(--champagne-rgb) / 0.15), transparent 78%);
+  background: transparent;
   content: '';
   opacity: 0;
   pointer-events: none;
@@ -115,17 +115,17 @@
   position: relative;
 }
 
-.mailAction:is(:hover, :focus-visible) {
+.mailAction:is(:hover, :focus, :active) {
   border-color: var(--ivory);
   color: var(--champagne);
 }
 
-.mailAction:is(:hover, :focus-visible)::before {
+.mailAction:is(:hover, :focus, :active)::before {
   opacity: 1;
   transform: scaleX(1);
 }
 
-.mailAction:is(:hover, :focus-visible)::after {
+.mailAction:is(:hover, :focus, :active)::after {
   transform: scaleX(1);
 }
 
@@ -154,7 +154,7 @@
   transition: transform 320ms var(--ease-handoff);
 }
 
-.mailAction:is(:hover, :focus-visible) .arrow {
+.mailAction:is(:hover, :focus, :active) .arrow {
   transform: translate(0.25rem, -0.25rem);
 }
 
@@ -229,8 +229,8 @@
 
   .contactGrid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 2.5rem;
-    padding-block: 2.5rem 4.25rem;
+    gap: 1.5rem;
+    padding-block: 2.5rem 1.25rem;
   }
 
   .name {
@@ -255,7 +255,7 @@
   .details > div {
     grid-template-columns: minmax(6.25rem, 0.7fr) minmax(0, 1.3fr);
     gap: 0.7rem;
-    padding-block: 0.75rem;
+    padding-block: 0.5625rem;
   }
 
   .details dt {
@@ -273,6 +273,9 @@
 }
 
 @media (max-width: 359px) {
+  .email { grid-column: 1 / -1; }
+  .arrow { grid-row: 1; }
+
   .details > div {
     grid-template-columns: minmax(0, 1fr);
     gap: 0.3rem;

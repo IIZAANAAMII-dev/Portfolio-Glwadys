@@ -1,4 +1,5 @@
 import type { Content } from '@/content';
+import { MotionScope } from '@/motion/MotionScope';
 
 import styles from './ActJourney.module.css';
 
@@ -22,9 +23,11 @@ export function ActJourney({ content }: Props) {
           <p className={styles.axis}>{content.contact.axis}</p>
         </header>
 
-        <ol className={styles.entries}>
+        <MotionScope kind="journey" className={styles.ledger}>
+          <span className={styles.playhead} data-journey-playhead aria-hidden="true" />
+          <ol className={styles.entries}>
           {content.journey.entries.map((entry, index) => (
-            <li className={styles.entry} key={entry.year} tabIndex={0}>
+            <li className={styles.entry} key={entry.year} tabIndex={0} data-journey-year={entry.year}>
               <span className={styles.number} aria-hidden="true">
                 0{index + 1}
               </span>
@@ -35,7 +38,8 @@ export function ActJourney({ content }: Props) {
               </div>
             </li>
           ))}
-        </ol>
+          </ol>
+        </MotionScope>
       </div>
     </section>
   );

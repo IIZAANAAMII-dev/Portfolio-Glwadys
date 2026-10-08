@@ -1,6 +1,7 @@
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
-import { comptoirMedia, mgcMedia, yunaMedia } from '@/content/media';
+import { comptoirMedia, comptoirTexture, mgcMedia, yunaMedia } from '@/content/media';
+import { CropMarks } from '@/ui/CropMarks';
 import { Media } from '@/ui/Media';
 
 import styles from './ActWork.module.css';
@@ -13,7 +14,7 @@ interface Props {
 const projectMedia = {
   yuna: yunaMedia[0]!,
   mgc: mgcMedia[0]!,
-  comptoir: comptoirMedia[1]!,
+  comptoir: comptoirTexture,
 } as const;
 
 export function ActWork({ content, locale }: Props) {
@@ -46,18 +47,36 @@ export function ActWork({ content, locale }: Props) {
                   className={styles.visual}
                   data-yuna-handoff-target={project.id === 'yuna' ? 'true' : undefined}
                 >
-                  <Media
-                    item={projectMedia[project.id]}
-                    locale={locale}
-                    className={styles.projectImage}
-                    compact
-                    loading={project.id === 'yuna' ? 'eager' : undefined}
-                    sizes="(max-width: 767px) 90vw, (max-width: 1199px) 46vw, 34vw"
-                  />
+                  {project.id === 'mgc' ? (
+                    <div className={styles.assembly}>
+                      {[mgcMedia[0]!, mgcMedia[2]!, mgcMedia[3]!].map((frame, frameIndex) => (
+                        <div className={styles.assemblyPrint} key={frame.id}>
+                          <Media item={frame} locale={locale} compact sizes="(max-width: 767px) 90vw, 34vw" />
+                          <span className={styles.proofIndex} aria-hidden="true">0{frameIndex + 1}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <Media
+                      item={projectMedia[project.id]}
+                      locale={locale}
+                      className={styles.projectImage}
+                      compact
+                      loading={project.id === 'yuna' ? 'eager' : undefined}
+                      sizes="(max-width: 767px) 90vw, (max-width: 1199px) 46vw, 34vw"
+                    />
+                  )}
+                  {project.id === 'yuna' && <CropMarks className={styles.workCropMarks} />}
                   <span className={styles.imageIndex} aria-hidden="true">
                     0{index + 1}
                   </span>
                 </div>
+                {project.id === 'comptoir' && (
+                  <div className={styles.materialDetail}>
+                    <Media item={comptoirMedia[1]!} locale={locale} compact sizes="(max-width: 767px) 90vw, 34vw" />
+                    <span aria-hidden="true">03 / 02</span>
+                  </div>
+                )}
                 <figcaption className={styles.studyCaption}>
                   {content.a11y.directionStudy}
                 </figcaption>

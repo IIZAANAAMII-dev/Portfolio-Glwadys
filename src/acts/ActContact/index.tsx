@@ -16,6 +16,7 @@ export function ActContact({ content }: Props) {
       <div className={styles.section}>
         <header className={styles.header}>
           <p className="micro">06 / {content.contact.heading}</p>
+          <span className="micro" aria-hidden="true">THE EDIT / 06 ↗</span>
         </header>
 
         <div className={styles.contactGrid}>

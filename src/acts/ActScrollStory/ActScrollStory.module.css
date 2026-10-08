@@ -97,6 +97,8 @@
   text-wrap: pretty;
 }
 
+.descriptorEnd::before { content: ' · '; }
+
 .tagline {
   margin-top: 0.65rem;
   color: rgb(var(--paper-rgb) / 0.86);
@@ -133,80 +135,71 @@
 }
 
 .heroFigure {
-  width: min(100%, 28rem);
+  position: relative;
+  width: min(100%, 26rem, calc((100svh - 25rem) * 0.8));
   justify-self: end;
-  view-timeline-name: --opening-frame;
-  view-timeline-axis: block;
+}
+
+.reservationNote {
+  position: absolute;
+  top: 8%;
+  left: -6.5rem;
+  z-index: 3;
+  width: 5.5rem;
+  color: var(--champagne);
+}
+
+.reservationNote em {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+
+.reservationNote > span {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.reservationNote i {
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin-top: 0.55rem;
+  background: var(--champagne);
+  transform-origin: left;
 }
 
 .heroImage {
   position: relative;
   padding: 0.65rem;
-  border: 1px solid rgb(var(--champagne-rgb) / 0.46);
   background: rgb(var(--ink-rgb) / 0.28);
   box-shadow: 1.2rem 1.2rem 0 rgb(var(--oxblood-rgb) / 0.44);
-  animation: reserve-the-frame 900ms var(--ease-handoff) both;
 }
 
-.heroImage::after {
+.heroCrop {
+  transform-origin: center;
+}
+
+.heroMedia { aspect-ratio: 4 / 5; }
+
+.cropMarks {
   position: absolute;
   z-index: 2;
-  inset: 0.65rem;
-  border: 1px solid var(--rich-wine);
-  content: '';
-  opacity: 0;
+  inset: -0.4rem;
+  width: calc(100% + 0.8rem);
+  height: calc(100% + 0.8rem);
+  color: var(--champagne);
   pointer-events: none;
 }
 
-@keyframes reserve-the-frame {
-  from {
-    clip-path: inset(0 0 100%);
-  }
-
-  to {
-    clip-path: inset(0);
-  }
-}
-
-@keyframes frame-registers-for-edit {
-  from {
-    clip-path: inset(0);
-    transform: scale(1);
-  }
-
-  to {
-    clip-path: inset(5% 7%);
-    transform: scale(0.97);
-  }
-}
-
-@keyframes mark-registers-for-edit {
-  from {
-    inset: 0.65rem;
-    opacity: 0;
-  }
-
-  to {
-    inset: 12% 10%;
-    opacity: 1;
-  }
-}
-
-@supports (animation-timeline: view()) {
-  .heroImage {
-    animation-name: reserve-the-frame, frame-registers-for-edit;
-    animation-duration: 900ms, auto;
-    animation-timing-function: var(--ease-handoff), linear;
-    animation-fill-mode: both, both;
-    animation-timeline: auto, --opening-frame;
-    animation-range: normal, exit 0% exit 48%;
-  }
-
-  .heroImage::after {
-    animation: mark-registers-for-edit linear both;
-    animation-timeline: --opening-frame;
-    animation-range: exit 0% exit 48%;
-  }
+.cropMarks path {
+  stroke-width: 0.25;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
 }
 
 .studyCaption {
@@ -260,8 +253,8 @@
 
   .heroMain {
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
-    padding-block: 1.2rem 1.5rem;
+    gap: 1.25rem;
+    padding-block: 1rem 1.25rem;
   }
 
   .name {
@@ -288,9 +281,38 @@
   }
 
   .heroFigure {
-    width: min(42vw, 11rem);
-    justify-self: end;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: center;
+    column-gap: 1.2rem;
+    justify-self: stretch;
   }
+
+  .reservationNote {
+    position: static;
+    width: 100%;
+    padding-left: 0.25rem;
+  }
+
+  .reservationNote em {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+  }
+
+  .reservationNote i {
+    width: calc(100% + 1.2rem);
+  }
+
+  .heroMedia {
+    aspect-ratio: 4 / 5;
+    --focus: 50% 64% !important;
+  }
+
+  .descriptorEnd {
+    display: block;
+  }
+
+  .descriptorEnd::before { display: none; }
 
   .heroImage {
     padding: 0.4rem;
@@ -298,10 +320,10 @@
   }
 
   .studyCaption {
-    width: calc(100vw - 2.5rem);
+    grid-column: 1 / -1;
+    width: 100%;
     max-width: none;
-    margin-top: 0.75rem;
-    margin-left: calc(100% - (100vw - 2.5rem));
+    margin-top: 1rem;
     font-size: 0.75rem;
   }
 
@@ -329,9 +351,9 @@
     font-size: clamp(3.25rem, 14.8vw, 4rem);
   }
 
-  .heroFigure {
-    width: 45vw;
-  }
+  .heroMain { gap: 1rem; }
+
+  .heroFooter p { font-size: 1.05rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

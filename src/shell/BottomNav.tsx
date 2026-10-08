@@ -40,30 +40,33 @@ export function BottomNav({ content }: Props) {
 
     if (!sections.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const candidates = entries.filter((entry) => entry.isIntersecting);
-        if (!candidates.length) return;
-
-        const current = candidates
-          .map((entry) => ({
-            id: entry.target.id,
-            distance: Math.abs(
-              (entry.target as HTMLElement).getBoundingClientRect().top +
-                (entry.target as HTMLElement).getBoundingClientRect().height / 2 -
-                window.innerHeight / 2,
-            ),
-          }))
-          .sort((a, b) => a.distance - b.distance)[0];
-
-        const next = ACTIVE_SECTIONS.find((section) => section.id === current?.id);
-        if (next) setActive(next.key);
-      },
-      { rootMargin: '-45% 0px -45% 0px', threshold: 0 },
-    );
-
-    sections.forEach(({ element }) => observer.observe(element));
-    return () => observer.disconnect();
+    let frame = 0;
+    let current: NavKey = 'home';
+    let disposed = false;
+    const update = () => {
+      frame = 0;
+      const line = window.innerHeight * 0.42;
+      const next = [...sections].reverse().find(({ element }) => element.getBoundingClientRect().top <= line)?.key ?? 'home';
+      if (next !== current) {
+        current = next;
+        setActive(next);
+      }
+    };
+    const schedule = () => { if (!frame) frame = window.requestAnimationFrame(update); };
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('scrollend', schedule);
+    window.addEventListener('resize', schedule);
+    window.addEventListener('hashchange', schedule);
+    update();
+    void document.fonts.ready.then(() => { if (!disposed) schedule(); });
+    return () => {
+      disposed = true;
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('scrollend', schedule);
+      window.removeEventListener('resize', schedule);
+      window.removeEventListener('hashchange', schedule);
+    };
   }, []);
 
   return (
