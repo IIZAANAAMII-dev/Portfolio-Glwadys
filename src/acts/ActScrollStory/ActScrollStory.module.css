@@ -1424,17 +1424,16 @@
     bottom: var(--nav-clearance);
   }
 
-  .satellite[data-social-slot='1'] {
-    right: var(--margin);
-    top: 13%;
-    width: 40vw;
+  .satellite[data-social-slot='1'],
+  .detailPlate {
+    /* Portrait captions and a third print collided on the real iPhone.
+       Mobile reads one photographic plate; the full study lives in Work. */
+    display: none;
   }
 
-  .detailPlate {
-    right: var(--margin);
-    top: 39%;
-    bottom: auto;
-    width: 23vw;
+  .frontLabel {
+    top: 11%;
+    width: calc(100% - var(--margin) * 2);
   }
 
   /* Le rail passe en bandeau horizontal : les quatre étapes restent visibles
@@ -1443,8 +1442,11 @@
     left: var(--margin);
     right: var(--margin);
     top: auto;
-    bottom: var(--nav-clearance);
+    /* The floating 44px language control is ABOVE the capsule. Its entire
+       band belongs to utilities, never to the last campaign label. */
+    bottom: calc(var(--nav-clearance) + 2.25rem);
     grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
     width: auto;
     border-top: 0;
   }
