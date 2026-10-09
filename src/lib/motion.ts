@@ -66,7 +66,7 @@ export const SCROLL = {
   moodboard: 200,
   strategy: 230,
   journey: 390, // Six distinct cinematic beats, paced to remain readable.
-  expertise: 100,
+  expertise: 460, // Seven full editorial chapter readings, then one paper handoff.
 } as const;
 
 /** Le mobile recompose et raccourcit : ~70 % du budget desktop. */

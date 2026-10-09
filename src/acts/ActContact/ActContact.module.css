@@ -8,6 +8,13 @@
   color: var(--ink);
 }
 
+/* ============================================================
+   08.5 — MANIFESTO
+   Geometry is contractual: Expertise renders the same sheet in its last
+   frame. Do not change insets, title metrics or positions here without
+   changing ActExpertise's handoff layer in the same commit.
+   ============================================================ */
+
 .manifestoSection {
   position: relative;
   min-height: 156svh;
@@ -36,12 +43,7 @@
   inset: 0 clamp(1rem, 3vw, 2.75rem);
 }
 
-.lastPage {
-  inset: clamp(1rem, 3vw, 2.75rem);
-}
-
-.manifestoPage::before,
-.lastPage::before {
+.manifestoPage::before {
   content: '';
   position: absolute;
   top: 0;
@@ -66,29 +68,19 @@
 
 .manifestoEyebrow,
 .manifestoEdition,
-.manifestoAxis,
-.chapter,
-.edition,
-.copyright,
-.backTop {
+.manifestoAxis {
   position: absolute;
   z-index: var(--z-sticky);
 }
 
-.manifestoEyebrow,
-.chapter {
+.manifestoEyebrow {
   top: var(--margin);
   left: var(--margin);
 }
 
-.manifestoEdition,
-.edition {
+.manifestoEdition {
   top: var(--margin);
   right: var(--margin);
-}
-
-.edition {
-  right: calc(var(--margin) + clamp(2.5rem, 5vw, 5rem));
 }
 
 .manifestoTitle {
@@ -143,154 +135,417 @@
   bottom: var(--margin);
 }
 
+/* ============================================================
+   09 — BACK COVER
+   One masthead, one woven house label (the email CTA), one colophon.
+   The sheet is a flow layout, never a stack of absolute fragments, so
+   every locale and every viewport height resolves without collisions.
+   ============================================================ */
+
 .contactSection {
   position: relative;
   min-height: 116svh;
 }
 
+.lastPage {
+  --fold: clamp(2.5rem, 5vw, 5rem);
+  --pad-top: clamp(1rem, 3.4svh, 2.4rem);
+  --pad-bottom: clamp(0.75rem, 2.4svh, 1.6rem);
+
+  inset: clamp(1rem, 3vw, 2.75rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+  padding: var(--pad-top) var(--margin) var(--pad-bottom);
+  container: page / inline-size;
+}
+
+/* Laid paper + a warm falloff toward the edges: the last sheet is the most
+   handled one. Decorative only, below every text layer. */
+.lastPage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base);
+  background:
+    radial-gradient(ellipse 80% 70% at 46% 38%, transparent 55%, rgb(var(--wood-rgb) / 0.075) 100%),
+    repeating-linear-gradient(90deg, transparent 0 calc(3.25rem - 1px), rgb(var(--ink-rgb) / 0.022) calc(3.25rem - 1px) 3.25rem),
+    repeating-linear-gradient(0deg, transparent 0 3px, rgb(var(--ink-rgb) / 0.012) 3px 4px);
+  pointer-events: none;
+}
+
+/* Turned corner, shared with the manifesto sheet. */
 .lastPage::after {
   content: '';
   position: absolute;
   top: -1px;
   right: -1px;
-  width: clamp(2.5rem, 5vw, 5rem);
+  z-index: var(--z-sticky);
+  width: var(--fold);
   aspect-ratio: 1;
   background:
     linear-gradient(225deg, var(--wood-brown) 0 49%, rgb(var(--ink-rgb) / 0.12) 50% 51%, transparent 52%);
   pointer-events: none;
 }
 
-.name {
-  position: absolute;
-  left: var(--margin);
-  right: var(--margin);
-  top: 9.5vh;
+.lastPage > * {
+  position: relative;
   z-index: var(--z-media);
-  font-size: clamp(4rem, 12.6vw, 14rem);
 }
 
-.nameLine:last-child {
-  text-align: right;
-}
+/* ---------- Trim marks ---------- */
 
-.rule {
+.lastPage > .mark {
   position: absolute;
-  left: var(--margin);
-  right: var(--margin);
-  top: 50.5%;
-  height: 1px;
-  background: rgb(var(--ink-rgb) / 0.18);
-  transform-origin: left;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 0 solid rgb(var(--oxblood-rgb) / 0.42);
+  pointer-events: none;
 }
 
-.message {
-  position: absolute;
-  left: var(--margin);
-  top: 55%;
-  width: min(31ch, 35vw);
+.lastPage > .markTl {
+  top: calc(var(--pad-top) * 0.45);
+  left: calc(var(--margin) * 0.45);
+  border-top-width: 1px;
+  border-left-width: 1px;
 }
 
-.finalNote {
-  position: absolute;
-  left: 38%;
-  top: 64%;
-  max-width: 14ch;
+.lastPage > .markBl {
+  bottom: calc(var(--pad-bottom) * 0.6);
+  left: calc(var(--margin) * 0.45);
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+
+.lastPage > .markBr {
+  right: calc(var(--margin) * 0.45);
+  bottom: calc(var(--pad-bottom) * 0.6);
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+}
+
+/* ---------- Running head ---------- */
+
+.runningHead {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gutter);
+  padding-inline-end: calc(var(--fold) * 0.55);
+  color: rgb(var(--ink-rgb) / 0.72);
+}
+
+/* ---------- Masthead ---------- */
+
+.masthead {
+  align-self: end;
+  margin: 0;
+  padding-top: clamp(1rem, 4svh, 3rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+}
+
+.given {
+  position: relative;
+  z-index: 2;
+  /* The italic descender dips into the capitals below: one signature,
+     not two stacked words. */
+  margin-bottom: -0.36em;
+  padding: 0 0.12em 0.02em clamp(0.25rem, 2.2cqi, 2.5rem);
+  font-size: min(10cqi, 12.5svh);
+  font-style: italic;
+  line-height: 1.16;
+  letter-spacing: -0.035em;
   color: var(--rich-wine);
-  rotate: -4deg;
 }
 
-.links {
-  position: absolute;
-  right: var(--margin);
-  top: 55%;
+.given > span {
+  display: inline-block;
+  padding-right: 0.08em;
+}
+
+.family {
+  position: relative;
+  z-index: 1;
+  /* --family-fit is measured in JS so the surname spans the exact measure
+     of the sheet once Bodoni has loaded; 21cqi is the pre-font estimate. */
+  font-size: min(var(--family-fit, 21cqi), var(--family-cap, 30svh));
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+.family > span {
+  display: inline-block;
+  padding-top: 0.02em;
+}
+
+/* ---------- Double rule ---------- */
+
+.rules {
   display: grid;
-  justify-items: end;
+  gap: 3px;
+  margin-block: clamp(0.9rem, 2.6svh, 1.75rem) clamp(1rem, 3.6svh, 2.6rem);
+}
+
+.ruleThick,
+.ruleThin {
+  display: block;
+  height: 2px;
+  background: var(--ink);
+  transform-origin: left center;
+}
+
+.ruleThin {
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.32);
+  transform-origin: right center;
+}
+
+/* ---------- Body: statement / label / colophon ---------- */
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr);
+  align-items: end;
+  gap: clamp(1.5rem, 3.4vw, 4rem);
+}
+
+.statement {
+  max-width: 14ch;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, min(2.5vw, 4.4svh), 2.75rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+.statement::before {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  margin-bottom: 1.1rem;
+  background: var(--rich-wine);
+}
+
+:global(body[data-locale='ko']) .statement {
+  max-width: 13em;
+  font-family: var(--font-kr);
+  font-size: clamp(1.3rem, min(1.9vw, 3.6svh), 2.1rem);
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+}
+
+.labelSlot {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 34rem);
+  container: label / inline-size;
+}
+
+/* The shadow lives on its own layer so the "press" is opacity + scale only. */
+.labelShadow {
+  position: absolute;
+  inset: 4% 2% 0;
+  rotate: -1.4deg;
+  box-shadow:
+    0 1.4rem 2.6rem rgb(var(--wood-rgb) / 0.26),
+    0 0.25rem 0.6rem rgb(var(--wood-rgb) / 0.22);
+  pointer-events: none;
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(0.7rem, 1.6svh, 1.05rem);
+  padding: clamp(1.05rem, 2.2svh, 1.6rem) clamp(1.15rem, 5.4cqi, 2rem);
+  background-color: var(--rich-wine);
+  /* Woven ground: warp, weft and a soft sheen. Folded ends darken the edges. */
+  background-image:
+    linear-gradient(162deg, rgb(255 255 255 / 0.07), transparent 38%, rgb(0 0 0 / 0.14)),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.03) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.07) 0 1px, transparent 1px 2px);
+  box-shadow:
+    inset 0.4rem 0 0 rgb(0 0 0 / 0.16),
+    inset -0.4rem 0 0 rgb(0 0 0 / 0.16),
+    inset 0 0 0 1px rgb(0 0 0 / 0.22);
+  color: var(--ivory);
+  text-decoration: none;
+  transform: rotate(-1.4deg);
+  transition:
+    translate 220ms var(--ease-move),
+    scale 140ms var(--ease-move);
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Stitching. */
+.label::before {
+  content: '';
+  position: absolute;
+  inset: 0.45rem 0.7rem;
+  border: 1px dashed rgb(var(--champagne-rgb) / 0.55);
+  pointer-events: none;
+}
+
+.labelTop,
+.labelFoot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   gap: 1rem;
 }
 
-.email {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  max-width: 100%;
-  font-family: var(--font-display);
-  font-size: clamp(1.55rem, 3vw, 3.55rem);
-  font-style: italic;
+.labelTop {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgb(var(--champagne-rgb) / 0.38);
+  color: var(--champagne);
+}
+
+.labelCta {
+  margin-right: auto;
+  color: var(--ivory);
+}
+
+.labelArrow {
+  display: inline-block;
+  font-size: 1rem;
   line-height: 1;
-  overflow-wrap: break-word;
+  transition: translate 220ms var(--ease-move);
 }
 
-.email::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -0.5rem;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform var(--dur-editorial) var(--ease-reveal);
+.labelEmail {
+  display: block;
+  padding-block: 0.1em 0.18em;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 6.3cqi, 2.4rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  overflow-wrap: anywhere;
 }
 
-.email:hover::after,
-.email:focus-visible::after {
-  transform: scaleX(1);
-  transform-origin: left;
+.labelFoot {
+  font-size: 0.625rem;
+  color: rgb(var(--ivory-rgb) / 0.74);
 }
 
-.footerMeta {
-  position: absolute;
-  left: var(--margin);
-  right: var(--margin);
-  bottom: calc(var(--margin) + 2.6rem);
+.label:active {
+  scale: 0.985;
+}
+
+.label:focus-visible {
+  outline: 2px solid var(--rich-wine);
+  outline-offset: 6px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .label:hover {
+    translate: 0 -3px;
+  }
+
+  .label:hover .labelArrow {
+    translate: 2px -2px;
+  }
+
+  .linkedin:hover,
+  .backTop:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+.colophon {
   display: grid;
-  grid-template-columns: 1.15fr 1.45fr 0.7fr 1fr;
-  gap: var(--gutter);
-  padding-top: 1rem;
-  border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
-  color: rgb(var(--ink-rgb) / 0.68);
+  align-content: end;
+  gap: 0.55rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.22);
 }
 
-.footerMeta span:last-child {
-  text-align: right;
+.colophon p {
+  margin: 0;
+}
+
+.availability {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.services {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: rgb(var(--ink-rgb) / 0.74);
+  text-wrap: pretty;
+}
+
+.languages {
   color: var(--rich-wine);
 }
 
-.copyright {
-  left: var(--margin);
-  bottom: var(--margin);
-  opacity: 0.54;
-}
-
+.linkedin,
 .backTop {
-  right: var(--margin);
-  bottom: var(--margin);
   display: inline-flex;
   align-items: center;
+  justify-self: start;
+  gap: 0.35em;
   min-height: 44px;
-  color: var(--rich-wine);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
+  text-decoration-color: rgb(var(--ink-rgb) / 0.3);
+  touch-action: manipulation;
 }
 
 .linkedin {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
+  color: var(--ink);
 }
 
+/* ---------- Foot ---------- */
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gutter);
+  padding-top: clamp(0.5rem, 1.8svh, 1.25rem);
+}
+
+.copyright {
+  color: rgb(var(--ink-rgb) / 0.66);
+}
+
+.backTop {
+  color: var(--rich-wine);
+  text-decoration-color: rgb(var(--oxblood-rgb) / 0.35);
+}
+
+/* ============================================================
+   TABLET / PHONE — recomposed as a single column that may grow
+   taller than the viewport. The page carries the nav/locale band as
+   paper margin instead of hiding content beneath it.
+   ============================================================ */
+
 @media (max-width: 1023px) {
-  .manifestoPage,
-  .lastPage {
-    inset-inline: 0.75rem;
-  }
-
   .manifestoPage {
+    inset-inline: 0.75rem;
     inset-block: 0;
-  }
-
-  .lastPage {
-    inset-block: 0.75rem;
   }
 
   .manifestoTitle {
@@ -314,78 +569,128 @@
     bottom: 13%;
   }
 
-  .name {
-    top: 13vh;
-    font-size: clamp(3.4rem, 17.5vw, 7.5rem);
+  .contactSection {
+    min-height: 0;
   }
 
-  .nameLine:last-child {
-    text-align: left;
+  .stage {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+    padding: 0.75rem 0.75rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
   }
 
-  .rule {
-    top: 41%;
+  .lastPage {
+    --pad-top: 1.1rem;
+    --pad-bottom: var(--control-clearance);
+
+    position: relative;
+    inset: auto;
+    min-height: calc(100svh - 1.5rem);
   }
 
-  .message {
-    top: 45%;
-    width: min(30ch, 80vw);
+  .lastPage > .markBl,
+  .lastPage > .markBr {
+    bottom: calc(var(--control-clearance) - 1.6rem);
   }
 
-  .finalNote {
-    left: auto;
-    right: var(--margin);
-    top: 30svh;
-    max-width: 10ch;
-    text-align: right;
+  .masthead {
+    padding-top: clamp(2.5rem, 9svh, 5rem);
   }
 
-  .links {
-    left: var(--margin);
-    right: auto;
-    top: 54%;
-    justify-items: start;
+  .given {
+    margin-bottom: -0.3em;
+    font-size: 14.5cqi;
   }
 
-  .email {
-    font-size: clamp(1.05rem, 5vw, 2.25rem);
+  .rules {
+    margin-block: 1rem 1.75rem;
   }
 
-  .footerMeta {
-    bottom: calc(var(--nav-clearance) + 5.2rem);
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem 1rem;
-    font-size: 0.65rem;
-    letter-spacing: 0.025em;
-    line-height: 1.45;
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 1.9rem;
   }
 
-  .footerMeta span:nth-child(even) {
-    text-align: right;
+  .statement {
+    max-width: 15ch;
+    font-size: clamp(1.5rem, 7.2vw, 2.4rem);
   }
 
-  .footerMeta span:last-child {
-    text-align: right;
+  :global(body[data-locale='ko']) .statement {
+    font-size: clamp(1.3rem, 6vw, 2rem);
   }
 
-  .copyright {
-    bottom: calc(var(--nav-clearance) + 3.2rem);
-    font-size: 0.58rem;
+  .labelSlot {
+    justify-self: stretch;
+    width: 100%;
+    max-width: 30rem;
   }
 
-  .backTop {
-    left: var(--margin);
-    right: auto;
-    bottom: var(--nav-clearance);
+  .colophon {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 1rem;
+  }
+
+  .colophon > * {
+    grid-column: 1 / -1;
+  }
+
+  .colophon > .languages {
+    grid-column: 1;
+    align-self: center;
+  }
+
+  .colophon > .linkedin {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .foot {
+    padding-top: 1.25rem;
   }
 }
 
 @media (max-width: 479px) {
   .manifestoEdition,
-  .edition {
+  .runningEdition {
     display: none;
   }
 
+  .label {
+    gap: 0.7rem;
+  }
+
+  .labelFoot {
+    letter-spacing: 0.12em;
+  }
+
+  .foot {
+    flex-direction: row-reverse;
+  }
+}
+
+@media (max-width: 359px) {
+  /* At 320px the exact user email must read as ONE intact line: old typography
+     wrapped only the terminal 'm', which looked like a broken luxury label. */
+  .labelEmail {
+    font-size: clamp(0.85rem, 5.15cqi, 0.98rem);
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    overflow-wrap: normal;
+  }
+
+  .labelTop > span:first-child {
+    display: none;
+  }
+
+  .foot {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -405,5 +710,10 @@
 
   .manifestoFold {
     display: none;
+  }
+
+  .label,
+  .labelArrow {
+    transition: none;
   }
 }

@@ -507,6 +507,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, transparent 38%, rgb(var(--ink-rgb) / 0.52));
+  opacity: var(--campaign-shade, 1);
   pointer-events: none;
 }
 
@@ -1425,12 +1426,11 @@
     font-size: 0.98rem;
   }
 
-  .frontCount {
-    bottom: calc(var(--nav-clearance) + 1.5rem);
-  }
-
+  .frontCount,
   .frontNote {
-    bottom: var(--nav-clearance);
+    /* The subject and one short thought are enough; utility chrome owns
+       the lower band. Handwriting is reserved for the actual notebook. */
+    display: none;
   }
 
   .satellite[data-social-slot='1'],
@@ -1507,7 +1507,7 @@
     left: var(--margin);
     right: auto;
     top: auto;
-    bottom: var(--nav-clearance);
+    bottom: var(--control-clearance);
     width: calc(100% - var(--margin) * 2);
   }
 
@@ -1531,7 +1531,7 @@
   .transfer {
     left: var(--margin);
     right: var(--margin);
-    bottom: var(--nav-clearance);
+    bottom: var(--control-clearance);
     width: auto;
   }
 
@@ -1556,6 +1556,7 @@
   /* Mobile enters one image. There is no three-layer ghost collage over a
      duplicate street background; the desktop gallery keeps its own medium. */
   .depthPlate { display: none; }
+  .flatHandoff [data-flat-slot]:not([data-flat-slot='0']) { display: none; }
 }
 
 /* ============================================================
@@ -1750,4 +1751,109 @@
   .reducedPhoneNotes {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+
+/* ───────────────────── THE FINISHED IMAGE / ACT 02 ──────────────────────
+   Not a scatter of thumbnails: the shared physical photograph is a large
+   couture print; a single secondary portrait becomes evidence of authorship.
+   Its exact DOM object becomes the phone's media in Act 03. */
+.frontComposition {
+  background: transparent;
+}
+.frontLabel {
+  top: 18%;
+  font-size: clamp(3.6rem, 5.2vw, 6.3rem);
+  letter-spacing: -0.064em;
+  line-height: 0.91;
+  width: min(24vw, 22rem);
+  text-wrap: balance;
+}
+.frontIntent {
+  top: auto;
+  bottom: 23%;
+  width: min(24vw, 22rem);
+  max-width: 26ch;
+  line-height: 1.43;
+  text-wrap: pretty;
+  font-size: clamp(1rem, 1.3vw, 1.35rem);
+}
+.frontRule {
+  top: auto;
+  bottom: 35%;
+  width: min(18vw, 17rem);
+  background: var(--rich-wine);
+  opacity: 0.72;
+}
+.frontCount { bottom: 13%; }
+.frontNote { bottom: 7%; }
+
+.satellite[data-social-slot='1'] {
+  right: 5%;
+  top: 20%;
+  width: min(25vw, 25rem);
+  transform-origin: center;
+}
+.satelliteImage {
+  border: clamp(0.25rem, 0.7vw, 0.7rem) solid var(--ivory);
+  box-shadow: 0 1.45rem 3.4rem rgb(var(--wood-rgb) / 0.12);
+}
+.satellite::before {
+  width: clamp(1.5rem, 2.5vw, 2.5rem);
+  background: rgb(var(--paper-rgb) / 0.85);
+}
+/* No tertiary photograph that repeats a process asset three sections later.
+   The second visual is deliberately excluded from the polished spread; its
+   source remains available to other acts for an authored transition. */
+.satellite[data-social-slot='2'], .detailPlate {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .frontLabel {
+    top: 8%;
+    width: calc(100% - var(--margin) * 2);
+    font-size: clamp(2.8rem, 11.4vw, 4.75rem);
+    line-height: 0.91;
+    letter-spacing: -0.06em;
+    max-width: 12ch;
+  }
+  .frontIntent {
+    top: auto;
+    bottom: calc(var(--nav-clearance) + 1.2rem);
+    width: calc(100% - var(--margin) * 2);
+    max-width: 33ch;
+    font-size: clamp(0.88rem, 3.7vw, 1.02rem);
+    line-height: 1.4;
+    padding: 0;
+  }
+  .frontRule {
+    top: auto;
+    bottom: calc(var(--nav-clearance) + 5.4rem);
+    width: min(24vw, 6rem);
+    height: 1px;
+  }
+  .frontCount, .frontNote { display: none; }
+  /* The same physical image now occupies most of the visual field; adding
+     secondary imagery on a 320px iPhone would reintroduce the ghost collage. */
+  .satellite, .detailPlate { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frontComposition::before, .frontComposition::after { display: none; }
+}
+
+
+/* Ownership fence: the intro is a time-based GSAP timeline, while the story
+   is a scroll-based timeline. An accelerated iPhone scroll can otherwise let
+   opening labels paint over Act 02 despite their tween having finished.
+   The active director sets this phase once per scrub frame; CSS owns the
+   actual compositing order, including WebKit. */
+.stage[data-film-phase='narrative'] [data-notebook-detail],
+.stage[data-film-phase='narrative'] [data-meta],
+.stage[data-film-phase='narrative'] .transient,
+.stage[data-film-phase='narrative'] .heroFrame {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }

@@ -68,6 +68,7 @@ export interface Content {
     /** Titre accessible de l'acte, non affiché en grand. */
     heading: string;
     front: string;
+    frontStatement: string;
     behind: string;
     /** Les strates révélées par le Front → Behind. */
     layers: string[];
@@ -179,9 +180,10 @@ const fr: Content = {
   social: {
     heading: 'Le contenu',
     front: 'Ce que l’on voit',
+    frontStatement: 'Donner une forme à l’attention.',
     behind: 'Ce qui le tient',
     layers: ['Moodboard', 'Planning', 'Copy', 'Calendrier', 'Direction'],
-    statement: 'Derrière chaque contenu, une stratégie.',
+    statement: 'Le cadre guide. Le message reste.',
   },
   phone: {
     heading: 'Le contenu en situation',
@@ -379,9 +381,10 @@ const en: Content = {
   social: {
     heading: 'The content',
     front: 'What you see',
+    frontStatement: 'Give attention a form.',
     behind: 'What holds it',
     layers: ['Moodboard', 'Planning', 'Copy', 'Calendar', 'Direction'],
-    statement: 'Behind every piece of content, a strategy.',
+    statement: 'Framing leads. The message stays.',
   },
   phone: {
     heading: 'Content in context',
@@ -579,9 +582,10 @@ const ko: Content = {
   social: {
     heading: '콘텐츠',
     front: '보이는 것',
+    frontStatement: '시선에 형태를 입힙니다.',
     behind: '그것을 지탱하는 것',
     layers: ['무드보드', '기획', '카피', '캘린더', '디렉션'],
-    statement: '모든 콘텐츠 뒤에는 전략이 있습니다.',
+    statement: '구도가 이끌고, 메시지는 남습니다.',
   },
   phone: {
     heading: '실제 맥락 속의 콘텐츠',

@@ -26,6 +26,7 @@ import { ArchivePlate } from '@/ui/ArchivePlate';
 import { Media } from '@/ui/Media';
 import { NotebookFrame } from '@/ui/NotebookFrame';
 
+import { PHONE_BEAT as BEAT, phonePhase, phoneReadingTime } from './phoneSequence';
 import styles from './ActScrollStory.module.css';
 
 interface Props {
@@ -70,14 +71,14 @@ const T = {
   phoneIn: 4.15,
   montage: 4.6,
   /** Le dernier contenu s'immobilise, le téléphone se recentre. */
-  transfer: 6.32,
+  transfer: 6.70,
   /** L'écran est devenu la surface plein cadre. */
-  screenFull: 7.0,
+  screenFull: 7.38,
   /** Les couches se sont détachées. */
-  separate: 7.76,
+  separate: 8.14,
   /** La caméra a traversé : la main passe au chapitre « Le processus ». */
-  corridor: 8.6,
-  end: 8.6,
+  corridor: 8.98,
+  end: 8.98,
 } as const;
 
 /**
@@ -176,11 +177,12 @@ function ReducedStory({ content, locale }: Props) {
       <article className={styles.reducedPanel}>
         <span className="micro">02 / {social.heading}</span>
         <h2 className="display">{social.front}</h2>
-        <p className="lead">{social.statement}</p>
+        <p className="lead">{social.frontStatement}</p>
         <div className={styles.reducedMediaPair}>
-          <Media item={socialSatellites[1]!} locale={locale} sizes="44vw" />
+          <Media item={socialSatellites[0]!} locale={locale} sizes="44vw" />
           <Media item={behindMedia[0]!} locale={locale} sizes="44vw" />
         </div>
+        <p className="lead">{social.statement}</p>
         <ol className={styles.reducedLayers}>
           {social.layers.map((layer, index) => (
             <li key={layer}>
@@ -471,6 +473,10 @@ export function ActScrollStory({ content, locale }: Props) {
             const timeline = film.timeline;
             if (!timeline) return;
             const t = timeline.time();
+            // Phase identity is an explicit semantic contract. The opening's
+            // independent intro is NOT allowed to repaint its marginalia once
+            // a real social/movie chapter takes ownership of the film.
+            stageEl.dataset.filmPhase = t >= T.socialIn - 0.02 ? 'narrative' : 'opening';
             // Race condition proved on real iPhone: if visitors begin
             // scrolling during the autonomous 2.3s opening animation, its
             // independent timeline keeps writing opacity=1 AFTER the scroll
@@ -485,7 +491,7 @@ export function ActScrollStory({ content, locale }: Props) {
             // composited out of the pinned layer. Enforce act ownership: this
             // hero-only print may NEVER be visible over Social/Strategy/Phone.
             if (t > T.socialIn + 0.18) gsap.set(heroFrameEl, { autoAlpha: 0 });
-            const phase = t >= T.montage && t < T.transfer - 0.06 ? Math.min(3, Math.floor((t - T.montage) / 0.44)) : -1;
+            const phase = phonePhase(t, T.montage, T.transfer - 0.06, phoneRail.length);
             phoneRail.forEach((rail, index) => { rail.dataset.active = String(index === phase); });
             if (!isDesktop || !timeline.scrollTrigger?.isActive || t < T.transfer - 0.35 || t >= T.end) {
               releaseStage('story');
@@ -607,7 +613,23 @@ export function ActScrollStory({ content, locale }: Props) {
              --------------------------------------------------------------- */
           tl.to(
             device,
-            { left: isDesktop ? '31%' : '50%', top: '48%', duration: 0.5, ease: 'power2.inOut' },
+            {
+              left: isDesktop ? '42%' : '50%',
+              top: isDesktop ? '48%' : '49%',
+              // ONE hero print. The old 43vw mobile source looked like an
+              // incidental tiny third tile; the authored poster is now a
+              // dominant full-page photographic subject before becoming the
+              // physical screen of the phone in Act 03.
+              width: isDesktop ? '23vw' : '66vw',
+              // The autonomous opening may have paused before revealing
+              // the media if the visitor scrolls early. The SCROLL owner must
+              // explicitly own both visibility and crop in Act 02, otherwise
+              // a huge blank magazine window appears on real iPhones.
+              autoAlpha: 1,
+              clipPath: 'inset(0% 0% 0% 0%)',
+              duration: 0.5,
+              ease: 'power2.inOut',
+            },
             T.socialIn,
           )
             .to(frontCopy, { autoAlpha: 1, duration: 0.3 }, T.socialIn + 0.06)
@@ -760,19 +782,18 @@ export function ActScrollStory({ content, locale }: Props) {
           /* MONTAGE — quatre étapes, une seule réellement active à la fois.
              Le pas est de 0.44 vh au lieu de 0.5 : la séquence est raccourcie
              d'environ 15 % sans qu'aucune étape ne soit sacrifiée. */
-          const BEAT = 0.44;
           tl.to(screenHero, { yPercent: -101, duration: 0.32 }, T.montage)
             .to(feed, { yPercent: 0, duration: 0.32 }, T.montage)
             .to(feed, { yPercent: -22, duration: 0.46 }, T.montage + 0.38)
             .to(focus, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.18 }, T.montage + BEAT)
-            .to(q<HTMLElement>('[data-focus-image]'), { scale: 1.06, duration: 0.56 }, T.montage + BEAT)
+            .to(q<HTMLElement>('[data-focus-image]'), { scale: 1.06, duration: 0.22 }, T.montage + BEAT)
             .to(story, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.18 }, T.montage + BEAT * 2)
-            .to(q<HTMLElement>('[data-story-image]'), { scale: 1.05, duration: 0.56 }, T.montage + BEAT * 2)
+            .to(q<HTMLElement>('[data-story-image]'), { scale: 1.05, duration: 0.22 }, T.montage + BEAT * 2)
             .to(campaign, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.18 }, T.montage + BEAT * 3)
             .fromTo(
               q<HTMLElement>('[data-campaign-image]'),
               { scale: 1.09 },
-              { scale: 1, duration: 0.56 },
+              { scale: 1, duration: 0.22 },
               T.montage + BEAT * 3,
             );
 
@@ -785,10 +806,14 @@ export function ActScrollStory({ content, locale }: Props) {
             const note = phoneNotes[i];
             if (!beat || !rail || !note) return;
             const at = T.montage + 0.06 + i * BEAT;
-            tl.to(beat, { yPercent: 0, autoAlpha: 1, duration: 0.14 }, at)
-              .to(beat, { yPercent: -110, autoAlpha: 0, duration: 0.14 }, at + BEAT - 0.06)
-              .to(note, { yPercent: 0, autoAlpha: 1, duration: 0.14 }, at)
-              .to(note, { yPercent: -104, autoAlpha: 0, duration: 0.14 }, at + BEAT - 0.06);
+            tl.to(beat, { yPercent: 0, autoAlpha: 1, duration: 0.1 }, at)
+              .to(note, { yPercent: 0, autoAlpha: 1, duration: 0.1 }, at);
+            // The final campaign has a real photographic reading hold before
+            // its surface grows into Immersion. The global handoff owns its exit.
+            if (i < content.phone.beats.length - 1) {
+              tl.to(beat, { yPercent: -110, autoAlpha: 0, duration: 0.1 }, at + BEAT - 0.1)
+                .to(note, { yPercent: -104, autoAlpha: 0, duration: 0.1 }, at + BEAT - 0.1);
+            }
           });
 
           /* ===============================================================
@@ -826,6 +851,8 @@ export function ActScrollStory({ content, locale }: Props) {
               { autoAlpha: 0, y: -8, duration: 0.18 },
               T.transfer - 0.08,
             )
+            // A printed photographic aperture, not an anonymous black handset.
+            .to(campaign, { '--campaign-shade': 0, duration: 0.2 }, T.transfer - 0.2)
             .to(q<HTMLElement>('[data-campaign-ui]'), { autoAlpha: 0, duration: 0.2 }, T.transfer - 0.2)
             // Le fond passe au chocolat profond : la page devient un espace.
             .to(stageGround, { autoAlpha: 1, duration: 0.5 }, T.transfer - 0.1)
@@ -861,7 +888,7 @@ export function ActScrollStory({ content, locale }: Props) {
             .to(phoneButtons, { scaleY: 0, duration: 0.2 }, T.transfer + 0.18)
             .to(island, { width: 0, duration: 0.2 }, T.transfer + 0.18)
             .to(screenGlass, { autoAlpha: 0, duration: 0.2 }, T.screenFull - 0.3)
-            .set(device, { autoAlpha: 0 }, T.screenFull - 0.02)
+            .set(device, { autoAlpha: 0 }, T.screenFull)
             // Ce qui restait de la section 2 quitte la scène avant le plein cadre.
             .to(
               [behind, ...satellites, frontCopy, detailPlate],
@@ -880,15 +907,16 @@ export function ActScrollStory({ content, locale }: Props) {
               T.separate + 0.42,
             );
 
-          // The DOM twin acquires the screen's exact rectangle BEFORE the
-          // device retires. Then the mobile image holds at full opacity.
-          tl.to(portalSurface, { autoAlpha: 1, duration: 0.025 }, T.screenFull - 0.025);
+          // The DOM twin owns the full frame before the device retires;
+          // never reveal a low-alpha portal underneath an already hidden screen.
+          tl.to(portalSurface, { autoAlpha: 1, duration: 0.01 }, T.screenFull - 0.01);
           if (isDesktop) {
             tl.to(portalSurface, { scale: 0.72, autoAlpha: 0, duration: 0.5 }, T.screenFull + 0.06)
               .to(depthPlates, { autoAlpha: 1, scale: 1, yPercent: 0, stagger: 0.06, duration: 0.34 }, T.screenFull + 0.08)
               .to(depthPlates, { scale: 1.22, xPercent: (i: number) => i % 2 ? 95 : -95, autoAlpha: 0, stagger: 0.06, duration: 0.64 }, T.separate - 0.1);
           } else {
-            tl.to(portalSurface, { scale: 0.84, duration: 0.54 }, T.screenFull + 0.16)
+            // Resolve the crop BEFORE the sensory reading hold, not during its exit.
+            tl.to(portalSurface, { scale: 0.84, duration: 0.3 }, T.screenFull + 0.04)
               .to(portalSurface, { autoAlpha: 0, duration: 0.22 }, T.end - 0.96);
           }
           tl.to(flat, { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.28 }, T.end - 0.94);
@@ -921,8 +949,11 @@ export function ActScrollStory({ content, locale }: Props) {
 
           const unregisterQA = registerVisualFilm('opening', tl, {
             hero: 0.25, social: 2.28, behind: 3.64,
-            feed: 4.78, focus: 5.18, story: 5.66, campaign: 6.08,
-            portal: 7.0, immersion: 7.56, paper: 8.48, seam: T.end,
+            feed: phoneReadingTime(0, T.montage), focus: phoneReadingTime(1, T.montage),
+            story: phoneReadingTime(2, T.montage), campaign: phoneReadingTime(3, T.montage),
+            screen: T.screenFull - 0.005,
+            portal: T.screenFull, immersion: T.screenFull + 0.48,
+            paper: T.end - 0.12, seam: T.end,
           });
           const onResize = () => syncStage();
           window.addEventListener('resize', onResize);
@@ -984,7 +1015,7 @@ export function ActScrollStory({ content, locale }: Props) {
         <div className={styles.stageGround} data-stage-ground aria-hidden="true" />
         <div className={styles.depthFallback} aria-hidden="true">
           <div className={styles.portalSurface} data-portal-surface>
-            <Media item={socialPortal} locale={locale} className={styles.fillMedia} sizes="(max-width: 1023px) 160svh, 100vw" />
+            <Media item={socialPortal} locale={locale} className={styles.fillMedia} sizes="(max-width: 1023px) 180svh, 1920px" />
           </div>
           {depthMedia.slice(1).map((item, index) => (
             <figure className={styles.depthPlate} data-depth-plate data-depth-slot={index} key={item.id}>
@@ -1065,7 +1096,7 @@ export function ActScrollStory({ content, locale }: Props) {
             {content.social.front}
           </h2>
           <p className={`${styles.frontIntent} lead`} data-front-bit>
-            {content.social.statement}
+            {content.social.frontStatement}
           </p>
           <span className={`${styles.frontCount} micro`} data-front-bit>
             Table 02 — direction artistique

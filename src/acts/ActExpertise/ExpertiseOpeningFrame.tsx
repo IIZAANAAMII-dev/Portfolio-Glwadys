@@ -30,10 +30,17 @@ export function ExpertiseOpeningFrame({
       >
         {content.expertise.heading}
       </h2>
+      <div className={styles.catalogueMeta} {...animated} aria-hidden="true">
+        <span className={styles.catalogueEdition}>GD—26 / Atelier</span>
+        <span className={styles.catalogueNumber} data-expertise-number>01</span>
+        <span className={styles.catalogueFraction}>/{String(content.expertise.entries.length).padStart(2, '0')}</span>
+        <span className={styles.catalogueRule} />
+        <span className={styles.catalogueCaption}>{content.expertise.heading}</span>
+      </div>
       <div className={styles.listViewport} {...animated}>
         <ol ref={listRef} className={styles.list}>
           {content.expertise.entries.map((entry, index) => (
-            <li className={styles.row} key={entry.term}>
+            <li className={styles.row} data-expertise-row data-active={index === 0 ? 'true' : undefined} key={entry.term}>
               <span className={[styles.index, 'micro'].join(' ')}>{String(index + 1).padStart(2, '0')}</span>
               <span className={styles.term}>{entry.term}</span>
               <span className={[styles.context, 'micro'].join(' ')}>{entry.context}</span>

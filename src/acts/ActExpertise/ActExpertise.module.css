@@ -303,3 +303,405 @@
     display: none;
   }
 }
+
+/* ── 2026 EDITORIAL CATALOGUE ──────────────────────────────────────────────
+   A distinct visual scene, not seven plain rows. The left opening-book
+   colophon remains fixed; seven beautiful typographic plates travel behind
+   a single coherent reading mask. Both Journey's outgoing ExpertiseOpeningFrame
+   and Expertise's own incoming frame share these EXACT CSS rules. */
+.sheet {
+  background-color: var(--ivory);
+  background-image:
+    linear-gradient(90deg, rgb(var(--champagne-rgb) / 0.18) 0 41.6%, transparent 41.65% 100%),
+    linear-gradient(90deg, transparent 41.55%, rgb(var(--oxblood-rgb) / 0.28) 41.6%, transparent 41.7%),
+    radial-gradient(circle at 30% 20%, rgb(var(--ink-rgb) / 0.025) 0 0.7px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 11px 11px;
+}
+
+.heading {
+  top: 9%;
+  left: 46%;
+  right: 4.5%;
+  text-align: left;
+  font-size: clamp(4.2rem, 7vw, 8rem);
+  line-height: 0.89;
+  letter-spacing: -0.055em;
+}
+
+.chapter {
+  top: 4.5%;
+  left: 4.5%;
+  font-weight: 600;
+}
+
+.catalogueMeta {
+  position: absolute;
+  z-index: var(--z-sticky);
+  top: 23%;
+  left: 4.5%;
+  width: 32%;
+  pointer-events: none;
+  color: var(--rich-wine);
+}
+
+.catalogueEdition,
+.catalogueFraction,
+.catalogueCaption {
+  display: block;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  font-size: clamp(0.65rem, 0.85vw, 0.85rem);
+  letter-spacing: 0.16em;
+}
+
+.catalogueEdition {
+  font-weight: 600;
+}
+
+.catalogueNumber {
+  display: block;
+  margin-top: 3.5vh;
+  font-family: var(--font-display);
+  font-size: clamp(12rem, 24vw, 25rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.1em;
+  line-height: 0.82;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.catalogueFraction {
+  margin-top: 0.7rem;
+  letter-spacing: 0.1em;
+}
+
+.catalogueRule {
+  display: block;
+  height: 1px;
+  width: 64%;
+  margin: 3.3vh 0 1.3rem;
+  background: rgb(var(--rich-wine-rgb) / 0.44);
+}
+
+.catalogueCaption {
+  color: var(--ink);
+  letter-spacing: 0.1em;
+}
+
+.listViewport {
+  left: 46%;
+  right: 4.5%;
+  top: 27%;
+  bottom: 17%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 7%, #000 90%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 7%, #000 90%, transparent);
+}
+
+.list {
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid rgb(var(--rich-wine-rgb) / 0.35);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: min(54vh, 33rem);
+  padding: clamp(1.65rem, 3vw, 3.25rem) 0;
+  gap: clamp(0.8rem, 2.4vh, 1.65rem);
+  border-bottom: 1px solid rgb(var(--rich-wine-rgb) / 0.22);
+  transition: none;
+}
+
+.row::after {
+  left: 0;
+  top: 0;
+  bottom: auto;
+  width: min(7.5rem, 22%);
+  height: 2px;
+  background: var(--rich-wine);
+  opacity: 0;
+  transition: opacity 350ms ease, transform 350ms ease;
+}
+
+.row[data-active='true']::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.index {
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  opacity: 0.88;
+}
+
+.term {
+  width: 100%;
+  max-width: 15ch;
+  padding: 0;
+  color: var(--ink);
+  font-size: clamp(3.6rem, 6.4vw, 7.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.046em;
+  transition: color 500ms ease, transform 500ms var(--ease-reveal);
+  text-wrap: balance;
+}
+
+.row[data-active='true'] .term {
+  color: var(--rich-wine);
+}
+
+.context {
+  align-self: flex-start;
+  max-width: 43ch;
+  opacity: 0.88;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+  line-height: 1.5;
+  font-weight: 400;
+  text-align: left;
+  letter-spacing: -0.006em;
+  text-wrap: pretty;
+}
+
+.aside {
+  left: 4.5%;
+  right: auto;
+  bottom: 12%;
+  width: min(26ch, 28%);
+  text-align: left;
+  font-size: clamp(1rem, 1.5vw, 1.4rem);
+  line-height: 1.35;
+  opacity: 0.95;
+}
+
+@media (max-width: 1023px) {
+  .sheet {
+    background-image:
+      linear-gradient(90deg, transparent 0 5%, rgb(var(--rich-wine-rgb) / 0.15) 5% calc(5% + 1px), transparent calc(5% + 1px)),
+      radial-gradient(circle at 30% 20%, rgb(var(--ink-rgb) / 0.025) 0 0.7px, transparent 1px);
+  }
+
+  .chapter {
+    top: 3.6%;
+    left: var(--margin);
+  }
+
+  .heading {
+    left: var(--margin);
+    right: var(--margin);
+    top: 10%;
+    font-size: clamp(3rem, 13vw, 5.8rem);
+    line-height: 0.92;
+  }
+
+  .catalogueMeta {
+    left: var(--margin);
+    top: 24%;
+    width: calc(100% - 2 * var(--margin));
+  }
+
+  .catalogueEdition,
+  .catalogueCaption {
+    font-size: 0.6rem;
+  }
+
+  .catalogueEdition {
+    display: none;
+  }
+
+  .catalogueNumber {
+    margin: 0;
+    display: inline-block;
+    font-size: clamp(6.5rem, 29vw, 10rem);
+    vertical-align: baseline;
+    letter-spacing: -0.09em;
+    line-height: 0.8;
+  }
+
+  .catalogueFraction {
+    display: inline-block;
+    margin: 0 0 0 0.9rem;
+    font-size: 0.68rem;
+    vertical-align: baseline;
+  }
+
+  .catalogueRule {
+    position: absolute;
+    bottom: 0;
+    left: 51%;
+    width: 48%;
+    margin: 0;
+  }
+
+  .catalogueCaption {
+    position: absolute;
+    right: 0;
+    bottom: 1.4rem;
+    text-align: right;
+  }
+
+  .listViewport {
+    left: var(--margin);
+    right: var(--margin);
+    top: 44%;
+    bottom: 18%;
+    margin: 0;
+    -webkit-mask-image: linear-gradient(180deg, #000 0 88%, transparent);
+    mask-image: linear-gradient(180deg, #000 0 88%, transparent);
+  }
+
+  .row {
+    min-height: 49svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1.6rem 0;
+  }
+
+  .index {
+    font-size: 0.7rem;
+  }
+
+  .term {
+    font-size: clamp(2.8rem, 11.8vw, 5.15rem);
+    line-height: 0.96;
+    padding: 0;
+    max-width: 11.8ch;
+  }
+
+  .context {
+    grid-column: auto;
+    font-size: clamp(0.83rem, 3.3vw, 1rem);
+    max-width: 31ch;
+    text-align: left;
+    line-height: 1.5;
+    opacity: 0.94;
+  }
+
+  .aside {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalogueMeta { display: none; }
+
+  .heading {
+    position: relative;
+    inset: auto;
+    margin: 2rem 0 1.5rem;
+    font-size: clamp(3rem, 9vw, 6rem);
+  }
+
+  .sheet {
+    padding-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .listViewport {
+    position: relative;
+    inset: auto;
+    overflow: visible;
+    mask-image: none;
+    -webkit-mask-image: none;
+    margin-top: 2.5rem;
+  }
+
+  .row {
+    min-height: auto;
+    padding: 2rem 0;
+  }
+
+  .term {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+  }
+}
+
+/* ── PLATE HOLDS + MANIFESTO HANDOFF ───────────────────────────────────────
+   Every chapter is exactly one reading-mask tall, so the list can land on a
+   row's own top edge for all seven plates (the last included). The handoff
+   page is OPAQUE and shares ActContact's manifesto geometry, so nothing of
+   the index can ghost through it. */
+.sheet {
+  --hx: clamp(1rem, 3vw, 2.75rem);
+}
+
+.listViewport {
+  container-type: size;
+}
+
+.row {
+  height: 54svh;
+  height: 100cqh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.handoffLayer {
+  inset: 0 var(--hx);
+  z-index: calc(var(--z-sticky) + 1);
+  overflow: hidden;
+  color: var(--ink);
+  background-color: var(--ivory);
+  background-image:
+    radial-gradient(circle at 18% 12%, rgb(var(--ink-rgb) / 0.025) 0 1px, transparent 1.2px),
+    linear-gradient(105deg, transparent 0 48%, rgb(var(--ink-rgb) / 0.018) 49% 50%, transparent 51%);
+  background-size: 9px 9px, 100% 100%;
+  border: 1px solid var(--paper-edge);
+}
+
+.handoffLayer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7.5%;
+  width: 1px;
+  background: rgb(var(--oxblood-rgb) / 0.1);
+  pointer-events: none;
+}
+
+@media (max-width: 1023px) {
+  .sheet {
+    --hx: 0.75rem;
+  }
+
+  .listViewport {
+    bottom: max(18%, 8.5rem);
+    -webkit-mask-image: linear-gradient(180deg, #000 0 93%, transparent);
+    mask-image: linear-gradient(180deg, #000 0 93%, transparent);
+  }
+
+  .row {
+    padding: 1.1rem 0 0;
+    gap: 0.8rem;
+  }
+
+  .term {
+    font-size: clamp(2.3rem, 11.6vw, 5.15rem);
+    overflow-wrap: break-word;
+  }
+
+  .handoffNote {
+    left: var(--margin);
+    bottom: 13%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listViewport {
+    container-type: normal;
+  }
+
+  .row {
+    height: auto;
+    overflow: visible;
+  }
+}
