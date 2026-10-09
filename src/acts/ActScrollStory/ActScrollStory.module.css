@@ -1510,6 +1510,24 @@
     width: auto;
   }
 
+  /* Each text element owns its contrast surface: GSAP autoAlpha removes the
+     surface with its content, so there is NEVER an empty persistent overlay. */
+  .transferLabel {
+    width: max-content;
+    max-width: 100%;
+    margin-bottom: 0.4rem;
+    padding: 0.45rem 0.75rem;
+    background: rgb(var(--wood-rgb) / 0.92);
+    border-bottom-color: rgb(var(--ivory-rgb) / 0.42);
+  }
+
+  .transferStatement {
+    padding: 0.8rem 0.95rem;
+    border-left: 2px solid var(--champagne);
+    background: linear-gradient(120deg, rgb(var(--wood-rgb) / 0.96), rgb(var(--wood-rgb) / 0.87));
+    box-shadow: 0 0.85rem 2.4rem rgb(0 0 0 / 0.16);
+  }
+
   .depthPlate { top: 12%; left: 6%; width: 43vw; }
   .depthPlate[data-depth-slot='1'] { top: 22%; right: 5%; width: 43vw; }
   .depthPlate[data-depth-slot='2'] { top: 46%; left: 14%; width: 62vw; }
