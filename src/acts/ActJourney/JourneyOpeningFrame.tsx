@@ -35,11 +35,43 @@ export function JourneyOpeningFrame({
       <span className={[styles.counter, 'micro'].join(' ')} data-journey-counter data-journey-chrome>
         01 / {String(content.journey.entries.length).padStart(2, '0')}
       </span>
+      <div className={styles.storyGuide} data-journey-guide>
+        <p className={styles.storyStatement}>{content.journey.statement}</p>
+        <ol className={styles.chapterList} aria-label={content.journey.heading}>
+          {content.journey.entries.map((entry, index) => (
+            <li
+              className={styles.chapterItem}
+              data-journey-chapter
+              data-active={index === 0 ? 'true' : undefined}
+              key={entry.year}
+            >
+              <span className={styles.chapterYear}>{entry.year}</span>
+              <strong className={styles.chapterName}>{entry.chapter}</strong>
+            </li>
+          ))}
+        </ol>
+        <div className={styles.mobileCurrent} aria-live="off">
+          {content.journey.entries.map((entry, index) => (
+            <span
+              data-journey-now
+              data-active={index === 0 ? 'true' : undefined}
+              key={entry.year}
+            >
+              {String(index + 1).padStart(2, '0')} / 06 — {entry.year} · {entry.chapter}
+            </span>
+          ))}
+        </div>
+        <span className={styles.storyHint}>{content.journey.scrollHint}</span>
+      </div>
       <div ref={trackRef} className={styles.track}>
         {entries.map((entry, index) => (
           <article className={styles.entry} data-journey-entry key={entry.year}>
-            <span className={styles.year}>{entry.year}</span>
-            <div className={styles.entryCopy}>
+            <span className={styles.entryChapter} data-journey-ink>
+              <span>{String(index + 1).padStart(2, '0')} / 06</span>
+              <span>{entry.chapter}</span>
+            </span>
+            <span className={styles.year} data-journey-ink>{entry.year}</span>
+            <div className={styles.entryCopy} data-journey-ink>
               <h3 className={[styles.entryLabel, 'title'].join(' ')}>{entry.label}</h3>
               <span className={[styles.place, 'micro'].join(' ')}>{entry.place}</span>
             </div>

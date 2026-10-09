@@ -35,6 +35,8 @@ export interface JourneyEntry {
   year: string;
   label: string;
   place: string;
+  /** The narrative step, not another job title. */
+  chapter: string;
 }
 
 export interface ExpertiseEntry {
@@ -107,6 +109,8 @@ export interface Content {
   };
   journey: {
     heading: string;
+    statement: string;
+    scrollHint: string;
     entries: JourneyEntry[];
   };
   expertise: {
@@ -290,13 +294,15 @@ const fr: Content = {
   },
   journey: {
     heading: 'Parcours',
+    statement: 'Des premiers contenus à la direction de marque. Six chapitres, un même fil.',
+    scrollHint: 'Défiler pour suivre son évolution',
     entries: [
-      { year: '2021', label: 'Premiers contenus, premières marques', place: 'Freelance' },
-      { year: '2022', label: 'Social media en joaillerie', place: 'Yuna Bijoux, Brest' },
-      { year: '2023', label: 'Bachelor commerce international & marketing', place: 'IPAC' },
-      { year: '2024', label: 'Retail, merchandising, marque', place: 'Le Comptoir de Mathilde' },
-      { year: '2025', label: 'Communauté et contenu', place: 'Marseille Girls Club' },
-      { year: '2026', label: 'Direction de contenu et de marque', place: 'Paris ↔ Seoul' },
+      { year: '2021', label: 'Premiers contenus, premières marques', place: 'Freelance', chapter: 'Créer' },
+      { year: '2022', label: 'Social media en joaillerie', place: 'Yuna Bijoux, Brest', chapter: 'Raconter' },
+      { year: '2023', label: 'Bachelor commerce international & marketing', place: 'IPAC', chapter: 'Structurer' },
+      { year: '2024', label: 'Retail, merchandising, marque', place: 'Le Comptoir de Mathilde', chapter: 'Expérimenter' },
+      { year: '2025', label: 'Communauté et contenu', place: 'Marseille Girls Club', chapter: 'Rassembler' },
+      { year: '2026', label: 'Direction de contenu et de marque', place: 'Paris ↔ Seoul', chapter: 'Diriger' },
     ],
   },
   expertise: {
@@ -484,13 +490,15 @@ const en: Content = {
   },
   journey: {
     heading: 'Journey',
+    statement: 'From first content to brand direction. Six chapters, one evolving vision.',
+    scrollHint: 'Scroll to follow the story',
     entries: [
-      { year: '2021', label: 'First content, first brands', place: 'Freelance' },
-      { year: '2022', label: 'Social media in jewellery', place: 'Yuna Bijoux, Brest' },
-      { year: '2023', label: 'Bachelor in international business & marketing', place: 'IPAC' },
-      { year: '2024', label: 'Retail, merchandising, brand', place: 'Le Comptoir de Mathilde' },
-      { year: '2025', label: 'Community and content', place: 'Marseille Girls Club' },
-      { year: '2026', label: 'Content and brand direction', place: 'Paris ↔ Seoul' },
+      { year: '2021', label: 'First content, first brands', place: 'Freelance', chapter: 'Create' },
+      { year: '2022', label: 'Social media in jewellery', place: 'Yuna Bijoux, Brest', chapter: 'Tell' },
+      { year: '2023', label: 'Bachelor in international business & marketing', place: 'IPAC', chapter: 'Structure' },
+      { year: '2024', label: 'Retail, merchandising, brand', place: 'Le Comptoir de Mathilde', chapter: 'Experience' },
+      { year: '2025', label: 'Community and content', place: 'Marseille Girls Club', chapter: 'Connect' },
+      { year: '2026', label: 'Content and brand direction', place: 'Paris ↔ Seoul', chapter: 'Direct' },
     ],
   },
   expertise: {
@@ -678,13 +686,15 @@ const ko: Content = {
   },
   journey: {
     heading: '여정',
+    statement: '첫 콘텐츠에서 브랜드 디렉션까지. 여섯 장면으로 이어지는 하나의 이야기.',
+    scrollHint: '스크롤하여 여정을 따라가세요',
     entries: [
-      { year: '2021', label: '첫 콘텐츠, 첫 브랜드', place: '프리랜스' },
-      { year: '2022', label: '주얼리 소셜 미디어', place: 'Yuna Bijoux, 브레스트' },
-      { year: '2023', label: '국제 비즈니스 & 마케팅 학사', place: 'IPAC' },
-      { year: '2024', label: '리테일, 머천다이징, 브랜드', place: 'Le Comptoir de Mathilde' },
-      { year: '2025', label: '커뮤니티와 콘텐츠', place: 'Marseille Girls Club' },
-      { year: '2026', label: '콘텐츠 및 브랜드 디렉션', place: '파리 ↔ 서울' },
+      { year: '2021', label: '첫 콘텐츠, 첫 브랜드', place: '프리랜스', chapter: '시작' },
+      { year: '2022', label: '주얼리 소셜 미디어', place: 'Yuna Bijoux, 브레스트', chapter: '스토리' },
+      { year: '2023', label: '국제 비즈니스 & 마케팅 학사', place: 'IPAC', chapter: '체계' },
+      { year: '2024', label: '리테일, 머천다이징, 브랜드', place: 'Le Comptoir de Mathilde', chapter: '현장' },
+      { year: '2025', label: '커뮤니티와 콘텐츠', place: 'Marseille Girls Club', chapter: '연결' },
+      { year: '2026', label: '콘텐츠 및 브랜드 디렉션', place: '파리 ↔ 서울', chapter: '방향' },
     ],
   },
   expertise: {

@@ -73,9 +73,12 @@ export function WorkJourneyBridge({ content, locale }: Props) {
             nextEntries.forEach((entry, index) => {
               const focus = index === 0 ? 1 : 0;
               gsap.set(entry, {
-                scale: 0.94 + focus * 0.06,
-                autoAlpha: 0.8 + focus * 0.2,
-                y: (1 - focus) * 12,
+                scale: isDesktop ? 0.94 + focus * 0.06 : 1,
+                autoAlpha: isDesktop ? 0.8 + focus * 0.2 : focus,
+                y: isDesktop ? (1 - focus) * 12 : 0,
+                clipPath: isDesktop || index === 0
+                  ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
+                zIndex: index === 0 ? 1 : 0,
               });
               const media = entry.querySelector<HTMLElement>('[data-journey-media]');
               if (media) gsap.set(media, { scale: 0.94 + focus * 0.06, y: (1 - focus) * 16 });

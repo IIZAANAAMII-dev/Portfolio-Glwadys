@@ -58,6 +58,8 @@ export function ActJourney({ content, locale }: Props) {
           });
 
           const entries = q<HTMLElement>('[data-journey-entry]');
+          const chapters = q<HTMLElement>('[data-journey-chapter]');
+          const mobileNow = q<HTMLElement>('[data-journey-now]');
           const media = q<HTMLElement>('[data-journey-media]');
           const progressBar = q<HTMLElement>('[data-journey-progress]')[0];
           const counter = q<HTMLElement>('[data-journey-counter]')[0];
@@ -67,7 +69,70 @@ export function ActJourney({ content, locale }: Props) {
           const driver = { value: 0 };
           let activeIndex = -1;
           const updateFocus = () => {
-            const offsets = entries.map((entry) => isDesktop ? entry.offsetLeft : entry.offsetTop);
+            // Desktop remains the author's cinematic horizontal contact-sheet
+            // travel. Mobile is deliberately a different director: one
+            // full-page photograph per chapter, cross-dissolving on scroll.
+            // A vertical rail showed two cut-off years and too much dead space.
+            if (!isDesktop) {
+              const frame = driver.value * (entries.length - 1);
+              const nextActive = Math.min(entries.length - 1, Math.max(0, Math.round(frame)));
+              gsap.set(trackEl, { x: 0, y: 0 });
+              const outgoing = Math.floor(frame);
+              const incoming = Math.min(entries.length - 1, outgoing + 1);
+              // Long readable holds, short editorial transitions:
+              // 40% of each beat is fully readable, 20% is the paper
+              // reveal, and 40% holds the next finished composition.
+              const local = frame - outgoing;
+              const wipe = Math.max(0, Math.min(1, (local - 0.4) / 0.2));
+              entries.forEach((entry, index) => {
+                // Real editorial page wipe, NOT two translucent cards
+                // stacked on one another. The old photo always fills the
+                // image while the new shot is physically revealed across it.
+                const isOutgoing = index === outgoing;
+                const isIncoming = incoming !== outgoing && index === incoming;
+                const onScreen = isOutgoing || isIncoming;
+                gsap.set(entry, {
+                  x: 0,
+                  yPercent: 0,
+                  scale: 1,
+                  autoAlpha: onScreen ? 1 : 0,
+                  clipPath: isIncoming
+                    ? 'inset(0 ' + ((1 - wipe) * 100).toFixed(2) + '% 0 0)'
+                    : isOutgoing ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
+                  pointerEvents: index === nextActive ? 'auto' : 'none',
+                  zIndex: isIncoming ? 2 : isOutgoing ? 1 : 0,
+                });
+                if (nextActive === index) entry.dataset.active = 'true';
+                else delete entry.dataset.active;
+                // Letterforms dissolve before the photographic wipe.
+                // Never splice two half-readable words during a cross-frame.
+                const ink = entry.querySelectorAll<HTMLElement>('[data-journey-ink]');
+                const inkAlpha = isOutgoing
+                  ? Math.max(0, 1 - wipe / 0.2)
+                  : isIncoming ? Math.max(0, (wipe - 0.8) / 0.2) : 0;
+                gsap.set(ink, { autoAlpha: inkAlpha });
+                const mediaEl = media[index];
+                if (mediaEl) gsap.set(mediaEl, { scale: 1, y: 0 });
+              });
+              gsap.set(progressBar, { scaleY: driver.value });
+              if (activeIndex !== nextActive) {
+                activeIndex = nextActive;
+                counter.textContent = String(nextActive + 1).padStart(2, '0') + ' / ' + String(entries.length).padStart(2, '0');
+                chapters.forEach((chapter, index) => {
+                  if (index === nextActive) {
+                    chapter.dataset.active = 'true';
+                    chapter.setAttribute('aria-current', 'step');
+                  mobileNow[index]?.setAttribute('data-active', 'true');
+                  } else {
+                    delete chapter.dataset.active;
+                    chapter.removeAttribute('aria-current');
+                  mobileNow[index]?.removeAttribute('data-active');
+                  }
+                });
+              }
+              return;
+            }
+            const offsets = entries.map((entry) => entry.offsetLeft);
             const first = offsets[0]!;
             const position = first + driver.value * (offsets[offsets.length - 1]! - first);
             const nextActive = offsets.reduce((closest, offset, index) =>
@@ -100,6 +165,17 @@ export function ActJourney({ content, locale }: Props) {
             if (activeIndex !== nextActive) {
               activeIndex = nextActive;
               counter.textContent = `${String(nextActive + 1).padStart(2, '0')} / ${String(entries.length).padStart(2, '0')}`;
+              chapters.forEach((chapter, index) => {
+                if (index === nextActive) {
+                  chapter.dataset.active = 'true';
+                  chapter.setAttribute('aria-current', 'step');
+                  mobileNow[index]?.setAttribute('data-active', 'true');
+                } else {
+                  delete chapter.dataset.active;
+                  chapter.removeAttribute('aria-current');
+                  mobileNow[index]?.removeAttribute('data-active');
+                }
+              });
             }
           };
 
@@ -141,6 +217,11 @@ export function ActJourney({ content, locale }: Props) {
           return () => {
             trackEl.style.willChange = '';
             entries.forEach((entry) => delete entry.dataset.active);
+            chapters.forEach((chapter) => {
+              chapter.removeAttribute('aria-current');
+              delete chapter.dataset.active;
+            });
+            mobileNow.forEach((node) => node.removeAttribute('data-active'));
           };
         },
       );
