@@ -11,7 +11,7 @@ import {
   yunaMedia,
   yunaShared,
 } from '@/content/media';
-import { gsap, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCRUB } from '@/lib/motion';
 import { EditorialZoom } from '@/ui/EditorialZoom';
 import { Media } from '@/ui/Media';
@@ -63,6 +63,24 @@ function ProjectSection({
         (context) => {
           const { isReduced } = context.conditions as { isReduced: boolean };
           if (isReduced) return;
+
+          if (project.id === 'yuna') {
+            // ActProcess's pinned frame already contains the same Yuna cover.
+            // Do not render the next section over it before the physical
+            // boundary; on reverse scroll give ownership back to ActProcess.
+            gsap.set(rootEl, { autoAlpha: 0 });
+            ScrollTrigger.create({
+              trigger: rootEl,
+              start: 'top top',
+              end: 'bottom top',
+              onEnter: () => gsap.set(rootEl, { autoAlpha: 1 }),
+              onEnterBack: () => gsap.set(rootEl, { autoAlpha: 1 }),
+              onLeaveBack: () => gsap.set(rootEl, { autoAlpha: 0 }),
+              onRefresh: (self) => {
+                gsap.set(rootEl, { autoAlpha: self.scroll() >= self.start ? 1 : 0 });
+              },
+            });
+          }
 
           const mediaEls = q<HTMLElement>('[data-project-media]');
           const animatedEls = [

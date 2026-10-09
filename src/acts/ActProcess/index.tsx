@@ -330,7 +330,7 @@ export function ActProcess({ content, locale }: Props) {
 
           tl.addLabel('work', P.work)
             .to(workScene, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.32, ease: EASE.handoff }, P.work - 0.1)
-            .to([methodScene, systemScene], { autoAlpha: 0, duration: 0.16 }, P.work + 0.02)
+            // Retire la méthode dès que la couverture Yuna prend le relais : les deux\n            // compositions ne doivent jamais être lisibles simultanément sur mobile.\n            .to([methodScene, systemScene], { autoAlpha: 0, duration: 0.19 }, P.work - 0.09)
             .to(workRule, { scaleY: 1, duration: 0.2 }, P.work)
             .to(workCopy, { autoAlpha: 1, y: 0, stagger: 0.045, duration: 0.24 }, P.work + 0.02)
             .to(workProof, { autoAlpha: 1, y: 0, rotation: 0, scale: 1, duration: 0.24 }, P.work - 0.01)
