@@ -182,6 +182,7 @@ export function ActProcess({ content, locale }: Props) {
       const systemLines = q<HTMLElement>('[data-system-line]');
       const systemCopy = q<HTMLElement>('[data-system-copy]');
       const methodScene = one('[data-process-method]');
+      const folioCover = one('[data-method-book-cover]');
       const methodRows = q<HTMLElement>('[data-method-row]');
       const methodWords = q<HTMLElement>('[data-method-word]');
       const methodVisuals = q<HTMLElement>('[data-method-visual]');
@@ -214,7 +215,22 @@ export function ActProcess({ content, locale }: Props) {
           gsap.set(methodScene, { autoAlpha: 0 });
           gsap.set(methodRows, { autoAlpha: 0.8, x: 0 });
           gsap.set(methodWords, { autoAlpha: 0, yPercent: 12 });
-          gsap.set(methodVisuals, { autoAlpha: 0, clipPath: 'inset(100% 0% 0% 0%)', scale: 1.04 });
+          methodVisuals.forEach((page, index) => {
+            // The first page is physically on top, like a bound book.
+            // Mobile keeps a light 2D crop rather than running 3D transforms.
+            gsap.set(page, {
+              autoAlpha: 0,
+              clipPath: isDesktop ? 'inset(0% 0% 0% 0%)' : 'inset(100% 0% 0% 0%)',
+              rotationY: 0,
+              scale: isDesktop ? 1 : 1.04,
+              zIndex: methodVisuals.length - index,
+            });
+          });
+          if (folioCover) gsap.set(folioCover, {
+            autoAlpha: 1,
+            rotationY: 0,
+            transformOrigin: 'left center',
+          });
           gsap.set(methodChrome, { autoAlpha: 0, y: 10 });
           gsap.set(workScene, { clipPath: 'inset(100% 0% 0% 0%)' });
           gsap.set(workCopy, { autoAlpha: 0, y: 18 });
@@ -287,6 +303,13 @@ export function ActProcess({ content, locale }: Props) {
             .to(contactScene, { autoAlpha: 0, duration: 0.16 }, P.method - 0.16)
             .to(methodScene, { autoAlpha: 1, duration: 0.14 }, P.method - 0.08)
             .to(methodChrome, { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.24 }, P.method);
+          if (folioCover) {
+            tl.to(folioCover, isDesktop
+              ? { rotationY: -168, duration: 0.4, ease: EASE.scrub }
+              : { clipPath: 'inset(0% 100% 0% 0%)', duration: 0.35 },
+              P.method + 0.08)
+              .to(folioCover, { autoAlpha: 0, duration: 0.04 }, P.method + 0.48);
+          }
 
           const beat = 0.55;
           content.strategy.steps.forEach((_, index) => {
@@ -299,10 +322,32 @@ export function ActProcess({ content, locale }: Props) {
             const previousRow = methodRows[index - 1];
 
             if (previousWord) tl.to(previousWord, { autoAlpha: 0, yPercent: -10, duration: 0.08 }, at - 0.035);
-            if (previousVisual) tl.to(previousVisual, { autoAlpha: 0, clipPath: 'inset(0% 0% 100% 0%)', scale: 0.97, duration: 0.1 }, at - 0.035);
+            if (previousVisual) {
+              if (isDesktop) {
+                // One page physically turns; the following sheet has already
+                // appeared UNDER it. The master's scroll controls both.
+                tl.to(previousVisual, {
+                  rotationY: -164,
+                  transformOrigin: 'left center',
+                  duration: 0.27,
+                  ease: EASE.scrub,
+                }, at - 0.14)
+                  .to(previousVisual, { autoAlpha: 0, duration: 0.025 }, at + 0.13);
+              } else {
+                tl.to(previousVisual, {
+                  autoAlpha: 0, clipPath: 'inset(0% 0% 100% 0%)',
+                  scale: 0.97, duration: 0.12,
+                }, at - 0.035);
+              }
+            }
             if (previousRow) tl.to(previousRow, { autoAlpha: 0.8, x: 0, color: 'var(--ink)', duration: 0.08 }, at - 0.035);
             if (word) tl.to(word, { autoAlpha: 1, yPercent: 0, duration: 0.1 }, at);
-            if (visual) tl.to(visual, { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.16 }, at);
+            if (visual) tl.to(visual, {
+              autoAlpha: 1,
+              clipPath: 'inset(0% 0% 0% 0%)',
+              rotationY: 0, scale: 1,
+              duration: isDesktop ? 0.025 : 0.16,
+            }, isDesktop ? at - 0.145 : at);
             if (row) tl.to(row, { autoAlpha: 1, x: isDesktop ? -10 : 0, color: 'var(--rich-wine)', duration: 0.1 }, at);
           });
 
@@ -413,6 +458,15 @@ export function ActProcess({ content, locale }: Props) {
               {content.strategy.steps.map((step, index) => (
                 <span data-method-word key={step.term}><small>0{index + 1}</small>{step.term}</span>
               ))}
+            </div>
+            <div className={styles.methodBook} aria-hidden="true">
+              <span className={styles.bookSpine} />
+              <div className={styles.bookCover} data-method-book-cover>
+                <span className={styles.bookEdition}>ATELIER / 2026</span>
+                <span className={styles.bookMonogram}>G.</span>
+                <strong className={styles.bookTitle}>{content.strategy.heading}</strong>
+                <span className={styles.bookFooter}>01 — 06 / {content.process.heading}</span>
+              </div>
             </div>
             <div className={styles.methodVisuals} aria-hidden="true">
               {content.strategy.steps.map((step, index) => (

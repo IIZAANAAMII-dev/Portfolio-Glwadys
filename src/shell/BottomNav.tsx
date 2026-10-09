@@ -104,32 +104,54 @@ export function BottomNav({ content, locale }: Props) {
     return () => document.removeEventListener(SHELL_EVENTS.contact, onContact);
   }, []);
 
-  /* L'acte actif est déduit de l'observation du DOM, jamais d'un état dupliqué
-     dans chaque section : c'est la cause racine de la navigation fausse dans
-     les tentatives précédentes du projet. */
+  /*
+   * Read the PHYSICAL act boundaries on every scroll direction, not the
+   * IntersectionObserver event payload. IO stopped updating the label after a
+   * pinned scroll reverse because the giant ActProcess wrapper remained
+   * intersecting while the 1px Work anchor was already out of the viewport.
+   * That left "Projets / ACT 06" highlighted while the real image was ACT 05.
+   * Recompute from ALL boundaries and schedule at most once per animation frame.
+   */
   useEffect(() => {
-    const sections = acts.map((act) => document.getElementById(act.id)).filter(
-      (el): el is HTMLElement => Boolean(el),
-    );
-    if (!sections.length) return;
+    const anchors = acts.map((act, index) => ({
+      index,
+      node: document.getElementById(act.id),
+    })).filter((item): item is { index: number; node: HTMLElement } => Boolean(item.node));
+    if (!anchors.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const hit = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!hit) return;
-        const index = acts.findIndex((act) => act.id === hit.target.id);
-        const match = acts[index];
-        if (!match) return;
-        setActiveAct(index);
-        setActive(match.navKey);
-      },
-      { rootMargin: '-45% 0px -45% 0px', threshold: [0, 0.2, 0.6, 1] },
-    );
-
-    sections.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    let raf = 0;
+    let lastIndex = -1;
+    const sync = () => {
+      raf = 0;
+      const focusLine = window.innerHeight * 0.5;
+      let selected = anchors[0]!.index;
+      // Markers are already positioned by the film's pinned GSAP director.
+      // The LAST boundary crossing the focus line owns the active act.
+      for (const item of anchors) {
+        if (item.node.getBoundingClientRect().top <= focusLine) selected = item.index;
+      }
+      if (selected === lastIndex) return;
+      lastIndex = selected;
+      const match = acts[selected];
+      if (!match) return;
+      setActiveAct(selected);
+      setActive(match.navKey);
+    };
+    const requestSync = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(sync);
+    };
+    const onRefresh = () => requestSync();
+    requestSync();
+    window.addEventListener('scroll', requestSync, { passive: true });
+    window.addEventListener('resize', onRefresh);
+    window.addEventListener('pageshow', onRefresh);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', requestSync);
+      window.removeEventListener('resize', onRefresh);
+      window.removeEventListener('pageshow', onRefresh);
+    };
   }, [acts]);
 
   return (

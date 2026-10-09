@@ -189,7 +189,7 @@ const fr: Content = {
     statement: 'On ne regarde plus le contenu. On est dedans.',
   },
   process: {
-    heading: 'Le processus',
+    heading: 'Le carnet',
     sheet: 'Planche contact',
     moodboard: 'Intention',
     system: 'Système',
@@ -385,7 +385,7 @@ const en: Content = {
     statement: 'You are no longer looking at the content. You are inside it.',
   },
   process: {
-    heading: 'The process',
+    heading: 'The notebook',
     sheet: 'Contact sheet',
     moodboard: 'Intent',
     system: 'System',
@@ -581,7 +581,7 @@ const ko: Content = {
     statement: '더 이상 콘텐츠를 보는 것이 아니라, 그 안에 있습니다.',
   },
   process: {
-    heading: '과정',
+    heading: '작업 노트',
     sheet: '콘택트 시트',
     moodboard: '의도',
     system: '시스템',
