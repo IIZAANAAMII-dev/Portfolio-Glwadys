@@ -5,9 +5,10 @@ import { useRef, type CSSProperties } from 'react';
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
 import { contactSheet, ratioValue, yunaMedia } from '@/content/media';
-import { gsap, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCRUB } from '@/lib/motion';
-import { ArchivePlate } from '@/ui/ArchivePlate';
+import { registerVisualFilm } from '@/lib/visualQa';
+import { NotebookFrame } from '@/ui/NotebookFrame';
 import { Media } from '@/ui/Media';
 
 import styles from './ActProcess.module.css';
@@ -169,7 +170,10 @@ export function ActProcess({ content, locale }: Props) {
         return { x, y };
       };
 
-      const entryPlate = one('[data-archive-plate="process-entry"]');
+      const entryPlate = one('[data-notebook-frame="process"]');
+      const entryImage = one('[data-notebook-frame="process"] [data-notebook-frame-image]');
+      const entryPaper = one('[data-notebook-frame="process"] [data-notebook-paper]');
+      const entryFolio = one('[data-notebook-frame="process"] [data-notebook-folio]');
       const contactScene = one('[data-process-contact]');
       const contactCards = q<HTMLElement>('[data-contact-card]');
       const contactChrome = q<HTMLElement>('[data-contact-copy]');
@@ -203,6 +207,7 @@ export function ActProcess({ content, locale }: Props) {
           if (isReduced) return;
 
           gsap.set(entryPlate, { autoAlpha: 1 });
+          gsap.set(contactChrome, { autoAlpha: 0, y: 8 });
           gsap.set(contactCards, { autoAlpha: 0, scale: 0.96 });
           gsap.set(intentionScene, { autoAlpha: 0 });
           gsap.set(intentionMedia, { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.06 });
@@ -241,6 +246,7 @@ export function ActProcess({ content, locale }: Props) {
             defaults: { ease: EASE.scrub },
             scrollTrigger: {
               trigger: rootEl,
+              id: 'notebook-film',
               start: 'top top',
               end: `+=${Math.round(PROCESS_SCROLL_VH * (isDesktop ? 1 : MOBILE_RATIO))}%`,
               pin: stageEl,
@@ -254,21 +260,38 @@ export function ActProcess({ content, locale }: Props) {
             },
           });
 
+          // The end of Story and the start of this pin share ONE viewport.
+          // Hide this actor until it owns the boundary, including reverse.
+          gsap.set(rootEl, { autoAlpha: 0 });
+          ScrollTrigger.create({
+            id: 'notebook-ownership', trigger: rootEl,
+            start: 'top top', end: 'bottom top',
+            onEnter: () => gsap.set(rootEl, { autoAlpha: 1 }),
+            onEnterBack: () => gsap.set(rootEl, { autoAlpha: 1 }),
+            onLeaveBack: () => gsap.set(rootEl, { autoAlpha: 0 }),
+            onRefresh: self => gsap.set(rootEl, { autoAlpha: self.scroll() >= self.start ? 1 : 0 }),
+          });
+
           tl.addLabel('contact', P.contact)
-            .to(contactCards, { autoAlpha: 1, scale: 1, stagger: 0.035, duration: 0.18 }, P.entry + 0.02)
-            .to(entryPlate, { autoAlpha: 0, duration: 0.12 }, P.entry + 0.08)
-            .to(railEl, {
-              x: isDesktop ? () => -(railEl.scrollWidth - window.innerWidth * 0.9) : 0,
-              y: isDesktop ? 0 : () => -Math.max(0, railEl.scrollHeight - (railEl.parentElement?.clientHeight ?? 0)),
-              duration: 0.76,
-            }, P.contact)
-            .to(contactChrome, { x: isDesktop ? -10 : 0, duration: 0.32 }, P.contact + 0.34)
+            .to(contactChrome, { autoAlpha: 1, y: 0, duration: 0.24 }, P.entry + 0.06)
+            .to(contactCards, { autoAlpha: 1, scale: 1, stagger: 0.035, duration: 0.18 }, P.contact + 0.08)
 
             .addLabel('intention', P.intention)
-            .to(contactCards, { autoAlpha: 0.14, scale: 0.76, stagger: 0.02, duration: 0.26 }, P.intention - 0.14)
+            .to(contactCards, { autoAlpha: 0, scale: 0.94, duration: 0.2 }, P.intention - 0.18)
             .to(contactChrome, { autoAlpha: 0, y: -10, duration: 0.18 }, P.intention - 0.1)
-            .to(intentionScene, { autoAlpha: 1, duration: 0.12 }, P.intention - 0.08)
-            .to(intentionMedia, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, stagger: 0.075, duration: 0.4 }, P.intention)
+            .to([entryPaper, entryFolio], { autoAlpha: 0, duration: 0.22 }, P.intention - 0.16)
+            .to(intentionScene, { autoAlpha: 1, duration: 0.12 }, P.intention - 0.08);
+          const intentionPhoto = one('[data-intention-media] [data-media]');
+          if (entryImage && intentionPhoto) {
+            tl.to(entryImage, {
+              x: () => centre(intentionPhoto).x - centre(entryImage).x,
+              y: () => centre(intentionPhoto).y - centre(entryImage).y,
+              scale: () => intentionPhoto.offsetWidth / entryImage.offsetWidth,
+              duration: 0.34, ease: EASE.handoff,
+            }, P.intention - 0.16);
+          }
+          tl.to(intentionMedia, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.04 }, P.intention + 0.18)
+            .to(entryPlate, { autoAlpha: 0, duration: 0.04 }, P.intention + 0.2)
             .to(intentionCopy, { autoAlpha: 1, y: 0, stagger: 0.055, duration: 0.3 }, P.intention + 0.14)
 
             .addLabel('system', P.system)
@@ -375,13 +398,21 @@ export function ActProcess({ content, locale }: Props) {
 
           tl.addLabel('work', P.work)
             .to(workScene, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.32, ease: EASE.handoff }, P.work - 0.1)
-            // Retire la méthode dès que la couverture Yuna prend le relais : les deux\n            // compositions ne doivent jamais être lisibles simultanément sur mobile.\n            .to([methodScene, systemScene], { autoAlpha: 0, duration: 0.19 }, P.work - 0.09)
+            // Retire the method when the Yuna cover takes ownership. The two
+            // compositions must never remain readable simultaneously.
+            .to([methodScene, systemScene], { autoAlpha: 0, duration: 0.19 }, P.work - 0.09)
             .to(workRule, { scaleY: 1, duration: 0.2 }, P.work)
             .to(workCopy, { autoAlpha: 1, y: 0, stagger: 0.045, duration: 0.24 }, P.work + 0.02)
             .to(workProof, { autoAlpha: 1, y: 0, rotation: 0, scale: 1, duration: 0.24 }, P.work - 0.01)
             .to({}, { duration: 0.01 }, P.end - 0.01);
 
+          const unregisterQA = registerVisualFilm('notebook', tl, {
+            entry: 0, sheet: 0.64, intention: 1.5, system: 2.4,
+            cover: 2.7, method: 3.16, decision: 4.7, campaign: 5.7,
+            selection: 6.26, seam: P.end,
+          });
           return () => {
+            unregisterQA();
             railEl.style.willChange = '';
           };
         },
@@ -397,7 +428,7 @@ export function ActProcess({ content, locale }: Props) {
 
       <div ref={stage} className={styles.stage}>
         <div className={styles.motionProcess}>
-          <ArchivePlate className={styles.entryPlate} locale={locale} marker="process-entry" />
+          <NotebookFrame className={styles.entryPlate} locale={locale} marker="process" />
 
           <div className={styles.contactScene} data-process-contact>
             <div className={styles.processChrome} data-contact-copy>
@@ -410,7 +441,7 @@ export function ActProcess({ content, locale }: Props) {
             <span className={`${styles.contactNote} hand-note`} data-contact-copy aria-hidden="true">la matière brute / avant le choix</span>
             <div className={styles.contactRailViewport}>
             <div ref={contactRail} className={styles.contactRail}>
-              {contactSheet.map((item, index) => (
+              {contactSheet.slice(4).map((item, index) => (
                 <figure className={styles.contactCard} data-contact-card key={item.id}>
                   <span className={`${styles.contactIndex} micro`}>{String(index + 1).padStart(2, '0')}</span>
                   <Media item={item} locale={locale} compact sizes="27vw" />

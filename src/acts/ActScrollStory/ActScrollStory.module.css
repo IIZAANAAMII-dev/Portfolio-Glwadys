@@ -5,6 +5,9 @@
 
 .act {
   position: relative;
+  /* The next pin starts on this pin's last physical frame, not one empty
+     viewport later. ActProcess controls its own visibility at the boundary. */
+  margin-bottom: -100svh;
 }
 
 /* Repères géométriques pour BottomNav. Ils remplissent les intervalles réels
@@ -1314,6 +1317,12 @@
   background: var(--ivory);
 }
 
+.notebookHandoff {
+  z-index: calc(var(--z-flat) + 1);
+  opacity: 0;
+  visibility: hidden;
+}
+
 @media (max-width: 1023px) {
   .counter {
     top: calc(var(--margin) + 1.5rem);
@@ -1544,11 +1553,9 @@
     box-shadow: 0 0.85rem 2.4rem rgb(0 0 0 / 0.16);
   }
 
-  .depthPlate { top: 12%; left: 6%; width: 43vw; }
-  .depthPlate[data-depth-slot='1'] { top: 22%; right: 5%; width: 43vw; }
-  .depthPlate[data-depth-slot='2'] { top: 46%; left: 14%; width: 62vw; }
-  .depthPlate[data-depth-slot='3'],
-  .depthPlate[data-depth-slot='4'] { display: none; }
+  /* Mobile enters one image. There is no three-layer ghost collage over a
+     duplicate street background; the desktop gallery keeps its own medium. */
+  .depthPlate { display: none; }
 }
 
 /* ============================================================
@@ -1575,6 +1582,8 @@
   .actMarker:nth-child(4) {
     top: 75%;
   }
+
+  .act { margin-bottom: 0; }
 
   .stage {
     height: auto;

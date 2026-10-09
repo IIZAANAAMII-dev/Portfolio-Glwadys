@@ -20,9 +20,11 @@ import { DUR, EASE, MQ, STAGGER } from '@/lib/motion';
 import { emitReady, lockScroll, unlockScroll } from '@/lib/scrollControl';
 import { releaseStage, setStage, setStageAnchor } from '@/lib/stage';
 import { useReducedMotion } from '@/lib/useReducedMotion';
+import { registerVisualFilm } from '@/lib/visualQa';
 import { StageLayer } from '@/shell/StageLayer';
 import { ArchivePlate } from '@/ui/ArchivePlate';
 import { Media } from '@/ui/Media';
+import { NotebookFrame } from '@/ui/NotebookFrame';
 
 import styles from './ActScrollStory.module.css';
 
@@ -287,6 +289,9 @@ export function ActScrollStory({ content, locale }: Props) {
           const depthPlates = q<HTMLElement>('[data-depth-plate]');
           const flat = one('[data-archive-plate="handoff"]');
           const flatSlots = q<HTMLElement>('[data-archive-plate="handoff"] [data-flat-slot]');
+          const notebookFrame = one('[data-notebook-frame="story"]');
+          const notebookImage = one('[data-notebook-frame="story"] [data-notebook-frame-image]');
+          const notebookPaper = one('[data-notebook-frame="story"] [data-notebook-paper]');
 
           if (!ruleH || !behind || !frontCopy || !screenEl || !stageGround) return;
 
@@ -387,6 +392,12 @@ export function ActScrollStory({ content, locale }: Props) {
           gsap.set(portalSurface, { autoAlpha: 0, scale: 1 });
           gsap.set(depthPlates, { autoAlpha: 0, scale: 0.65, yPercent: 15 });
           gsap.set(flat, { autoAlpha: 0, clipPath: 'inset(100% 0% 0% 0%)' });
+          gsap.set(notebookFrame, { autoAlpha: 0 });
+          // The actor owns visibility. The photograph itself stays opaque,
+          // including after reverse-scrub; opacity is not a tween startAt.
+          gsap.set(notebookImage, { autoAlpha: 1 });
+          gsap.set(notebookPaper, { autoAlpha: 0, scaleX: 0.3, scaleY: 0.8 });
+          gsap.set(q<HTMLElement>('[data-notebook-frame="story"] [data-notebook-folio]'), { autoAlpha: 0 });
 
           /* ================================================================
              OUVERTURE (auto, ~2.4 s) — devient la Hero sans coupure.
@@ -496,6 +507,7 @@ export function ActScrollStory({ content, locale }: Props) {
             onUpdate: syncStage,
             scrollTrigger: {
               trigger: rootEl,
+              id: 'opening-film',
               start: 'top top',
               end: `+=${Math.round(SCROLL_VH * (isDesktop ? 1 : MOBILE_RATIO))}%`,
               pin: stageEl,
@@ -799,12 +811,8 @@ export function ActScrollStory({ content, locale }: Props) {
              est une interpolation continue, donc réversible.
              =============================================================== */
 
-          /* Facteur d'approche : l'écran doit dépasser la hauteur du viewport
-             pour que le cadre du téléphone en soit chassé. */
-          const approachScale = () => {
-            const screenH = phoneW() * (19.5 / 9) - bezel * 2;
-            return Math.max(1, (window.innerHeight * 1.12) / screenH);
-          };
+          /* Approach ends at the exact viewport rectangle. Arbitrary 1.12×
+             overscale changed the crop when the full-frame DOM twin arrived. */
 
           tl
             // 1-2 — immobilisation et recentrage.
@@ -824,7 +832,13 @@ export function ActScrollStory({ content, locale }: Props) {
             // 3 — approche. Le device grandit, le plan WebGL est ancré sur lui.
             .to(
               device,
-              { scale: approachScale, duration: T.screenFull - T.transfer, ease: 'power2.in' },
+              {
+                scale: 1,
+                width: () => stageEl.clientWidth,
+                height: () => stageEl.clientHeight,
+                duration: T.screenFull - T.transfer,
+                ease: 'power2.inOut',
+              },
               T.transfer,
             )
             // Le contenu DOM de l'écran s'efface *sous* le plan WebGL qui le
@@ -838,6 +852,7 @@ export function ActScrollStory({ content, locale }: Props) {
                 '--phone-bezel': '0px',
                 '--phone-radius': '0px',
                 borderColor: 'transparent',
+                borderWidth: 0,
                 backgroundColor: 'transparent',
                 duration: 0.34,
               },
@@ -865,21 +880,55 @@ export function ActScrollStory({ content, locale }: Props) {
               T.separate + 0.42,
             );
 
-          // Les mêmes prises de vue gardent le récit sur mobile et sans GPU.
-          tl.to(portalSurface, { autoAlpha: 1, duration: 0.16 }, T.screenFull - 0.18)
-            .to(portalSurface, { scale: 0.72, autoAlpha: 0, duration: 0.5 }, T.screenFull + 0.06)
-            .to(depthPlates, { autoAlpha: 1, scale: 1, yPercent: 0, stagger: 0.06, duration: 0.34 }, T.screenFull + 0.08)
-            .to(depthPlates, { scale: 1.22, xPercent: (i: number) => i % 2 ? 95 : -95, autoAlpha: 0, stagger: 0.06, duration: 0.64 }, T.separate - 0.1)
-            .to(flat, { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.34 }, T.end - 0.34);
+          // The DOM twin acquires the screen's exact rectangle BEFORE the
+          // device retires. Then the mobile image holds at full opacity.
+          tl.to(portalSurface, { autoAlpha: 1, duration: 0.025 }, T.screenFull - 0.025);
+          if (isDesktop) {
+            tl.to(portalSurface, { scale: 0.72, autoAlpha: 0, duration: 0.5 }, T.screenFull + 0.06)
+              .to(depthPlates, { autoAlpha: 1, scale: 1, yPercent: 0, stagger: 0.06, duration: 0.34 }, T.screenFull + 0.08)
+              .to(depthPlates, { scale: 1.22, xPercent: (i: number) => i % 2 ? 95 : -95, autoAlpha: 0, stagger: 0.06, duration: 0.64 }, T.separate - 0.1);
+          } else {
+            tl.to(portalSurface, { scale: 0.84, duration: 0.54 }, T.screenFull + 0.16)
+              .to(portalSurface, { autoAlpha: 0, duration: 0.22 }, T.end - 0.96);
+          }
+          tl.to(flat, { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.28 }, T.end - 0.94);
+
+          // A selected photographic print grows into the first bound spread.
+          // The incoming component is a twin, not a second four-photo gallery.
+          const firstFlat = flatSlots[0];
+          if (firstFlat && notebookFrame && notebookImage && notebookPaper) {
+            const at = T.end - 0.64;
+            tl.set(notebookFrame, { autoAlpha: 1 }, at)
+              .set(firstFlat, { autoAlpha: 0 }, at)
+              .fromTo(notebookImage, {
+                autoAlpha: 1,
+                x: () => firstFlat.offsetLeft + firstFlat.offsetWidth / 2 - (notebookImage.offsetLeft + notebookImage.offsetWidth / 2),
+                y: () => firstFlat.offsetTop + firstFlat.offsetHeight / 2 - (notebookImage.offsetTop + notebookImage.offsetHeight / 2),
+                scale: () => firstFlat.offsetWidth / notebookImage.offsetWidth,
+              }, {
+                x: 0, y: 0, scale: 1, autoAlpha: 1,
+                duration: 0.48, ease: EASE.handoff, immediateRender: false,
+              }, at)
+              .to(flatSlots.slice(1), { autoAlpha: 0, xPercent: 38, duration: 0.28 }, at)
+              .to(q<HTMLElement>('[data-archive-plate="handoff"] .micro'), { autoAlpha: 0, duration: 0.12 }, at)
+              .to(notebookPaper, { autoAlpha: 1, scaleX: 1, scaleY: 1, duration: 0.38, ease: EASE.handoff }, at + 0.12)
+              .to(q<HTMLElement>('[data-notebook-frame="story"] [data-notebook-folio]'), { autoAlpha: 1, duration: 0.12 }, T.end - 0.2);
+          }
 
           // Verrou de durée : la partition vaut exactement T.end.
           tl.to({}, { duration: 0.01 }, T.end - 0.01);
           Object.entries({ hero: 0, social: T.socialIn, behind: T.behindIn, phone: T.phoneIn, feed: T.montage, focus: T.montage + BEAT, story: T.montage + BEAT * 2, campaign: T.montage + BEAT * 3, portal: T.transfer, depth: T.screenFull, flat: T.end - 0.34 }).forEach(([label, at]) => tl.addLabel(label, at));
 
+          const unregisterQA = registerVisualFilm('opening', tl, {
+            hero: 0.25, social: 2.28, behind: 3.64,
+            feed: 4.78, focus: 5.18, story: 5.66, campaign: 6.08,
+            portal: 7.0, immersion: 7.56, paper: 8.48, seam: T.end,
+          });
           const onResize = () => syncStage();
           window.addEventListener('resize', onResize);
 
           return () => {
+            unregisterQA();
             window.removeEventListener('resize', onResize);
             setStageAnchor('screen', null);
             releaseStage('story');
@@ -945,6 +994,7 @@ export function ActScrollStory({ content, locale }: Props) {
         </div>
         <StageLayer />
         <ArchivePlate locale={locale} marker="handoff" className={styles.flatHandoff} />
+        <NotebookFrame locale={locale} marker="story" className={styles.notebookHandoff} />
 
         <span className={`${styles.edition} micro`} data-meta>
           <span className="line-mask">
