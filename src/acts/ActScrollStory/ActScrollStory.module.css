@@ -952,7 +952,11 @@
 .behind {
   position: absolute;
   inset: 0;
-  z-index: var(--z-behind);
+  /* An actual sheet of ivory paper, not a transparent overlay. Safari's
+     clip-path compositor otherwise leaves the opening's photographic print
+     ON TOP of the strategy rows even after its intended exit. */
+  z-index: var(--z-plate);
+  background: var(--ivory);
   overflow: hidden;
   color: var(--ink);
   transform-origin: center center;
@@ -1057,6 +1061,14 @@
   font-size: 0.98rem;
   font-weight: 500;
   letter-spacing: -0.01em;
+}
+
+/* Safari/WebKit ownership gate. When the physical ivory page is visible,
+   the photo print from the opening may NOT float above its semantic list.
+   GSAP's clip-path can stay rasterized on iOS after the camera moves. */
+.stage:has(.behind[style*='visibility: inherit']) .heroFrame {
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 /* ---------- SECTION 3 — HABILLAGE ---------- */

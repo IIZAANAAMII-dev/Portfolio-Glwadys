@@ -365,7 +365,10 @@ export function ActScrollStory({ content, locale }: Props) {
           gsap.set(behind, { autoAlpha: 0, scale: 0.94 });
           gsap.set(behindMediaEls, { clipPath: 'inset(0% 0% 100% 0%)', yPercent: 6 });
           gsap.set(behindBits, { autoAlpha: 0, y: 14 });
-          gsap.set(behindRows, { autoAlpha: 0, x: -12 });
+          // The five labels form ONE readable index. Staggered opacity left
+          // "Calendrier / Direction" nearly invisible while the title was
+          // already fully revealed on real iPhone screenshots.
+          gsap.set(behindRows, { autoAlpha: 0, x: -6 });
 
           gsap.set(phoneUi, { autoAlpha: 0, y: 10 });
           gsap.set(phoneBeats, { y: 0, yPercent: 110, autoAlpha: 0 });
@@ -457,6 +460,20 @@ export function ActScrollStory({ content, locale }: Props) {
             const timeline = film.timeline;
             if (!timeline) return;
             const t = timeline.time();
+            // Race condition proved on real iPhone: if visitors begin
+            // scrolling during the autonomous 2.3s opening animation, its
+            // independent timeline keeps writing opacity=1 AFTER the scroll
+            // film already entered Social / Behind. Hand ownership over to
+            // the scroll director exactly once; do not let opener reappear.
+            if (t > T.heroHold + 0.2 && intro.isActive()) {
+              intro.pause();
+              gsap.set([...metas, ...notebookDetails, disciplines], { autoAlpha: 0 });
+              if (t >= T.socialIn) gsap.set(heroFrameEl, { autoAlpha: 0 });
+            }
+            // Safari can retain an opening photo when its clip-path tween is
+            // composited out of the pinned layer. Enforce act ownership: this
+            // hero-only print may NEVER be visible over Social/Strategy/Phone.
+            if (t > T.socialIn + 0.18) gsap.set(heroFrameEl, { autoAlpha: 0 });
             const phase = t >= T.montage && t < T.transfer - 0.06 ? Math.min(3, Math.floor((t - T.montage) / 0.44)) : -1;
             phoneRail.forEach((rail, index) => { rail.dataset.active = String(index === phase); });
             if (!isDesktop || !timeline.scrollTrigger?.isActive || t < T.transfer - 0.35 || t >= T.end) {
@@ -513,12 +530,20 @@ export function ActScrollStory({ content, locale }: Props) {
             .to(openingFrame, { autoAlpha: 0, duration: 0.2 }, T.heroHold)
             .to(
               [...metas, ...notebookDetails, disciplines],
-              { autoAlpha: 0, duration: 0.42, stagger: 0.03 },
+              // The autoplay intro and scroll scrub must NEVER both own the
+              // same handwriting/folio opacity. If the visitor scrolls before
+              // the 2.3 s intro settles, scroll takes precedence immediately.
+              // Without overwrite, 'ideas become direction' reappeared ON TOP
+              // of the Strategy rows on a real iPhone screen.
+              { autoAlpha: 0, duration: 0.42, stagger: 0.03, overwrite: 'auto' },
               T.heroHold + 0.1,
             )
             .to(
               heroFrameEl,
-              { xPercent: -46, yPercent: 22, clipPath: 'inset(0% 0% 100% 0%)', duration: 0.5 },
+              // Safari/WebKit on iPhone can leave a clipped media plate visible
+              // even when the 100% inset should hide it. The hero proof must
+              // physically EXIT before it can cover the Social strategy list.
+              { xPercent: -46, yPercent: 22, clipPath: 'inset(0% 0% 100% 0%)', autoAlpha: 0, duration: 0.5 },
               T.heroHold + 0.08,
             )
             // Le média survivant vient au centre sans perdre son contrat 9:16.
@@ -642,8 +667,10 @@ export function ActScrollStory({ content, locale }: Props) {
             .to(behindBits, { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.2 }, T.behindIn + 0.18)
             .to(
               behindRows,
-              { autoAlpha: 1, x: 0, stagger: 0.04, duration: 0.2 },
-              T.behindIn + 0.3,
+              // Deliberately reveal as a single semantic list, not a staircase
+              // of unreadable grey words; GSAP scrub still reverses naturally.
+              { autoAlpha: 1, x: 0, duration: 0.14 },
+              T.behindIn + 0.22,
             );
 
           /* ---------------------------------------------------------------
