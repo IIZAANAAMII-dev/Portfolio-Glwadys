@@ -24,9 +24,9 @@ const P = {
   contact: 0.12,
   intention: 1.05,
   system: 1.85,
-  method: 2.65,
-  work: 5.9,
-  end: 6.35,
+  method: 2.95,
+  work: 6.2,
+  end: 6.65,
 } as const;
 
 const PROCESS_SCROLL_VH = P.end * 100;
@@ -106,7 +106,7 @@ function ReducedProcess({ content, locale }: Props) {
       <article className={styles.reducedPanel}>
         <span className="micro">05.2 / {content.process.moodboard}</span>
         <h2 className="display">{content.process.system}</h2>
-        <p className="lead">{content.strategy.sentence}</p>
+        <p className="lead">{content.process.systemStatement}</p>
         <div className={styles.reducedSelected}>
           <Media item={contactSheet[0]!} locale={locale} compact sizes="38vw" />
         </div>
@@ -292,7 +292,7 @@ export function ActProcess({ content, locale }: Props) {
           }
           tl.to(intentionMedia, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.04 }, P.intention + 0.18)
             .to(entryPlate, { autoAlpha: 0, duration: 0.04 }, P.intention + 0.2)
-            .to(intentionCopy, { autoAlpha: 1, y: 0, stagger: 0.055, duration: 0.3 }, P.intention + 0.14)
+            .to(intentionCopy, { autoAlpha: 1, y: 0, stagger: 0.035, duration: 0.18 }, P.intention + 0.14)
 
             .addLabel('system', P.system)
             .to(intentionMedia, {
@@ -317,11 +317,13 @@ export function ActProcess({ content, locale }: Props) {
             )
             .to(systemLines, { scaleX: 1, stagger: 0.04, duration: 0.24 }, P.system)
             .to(systemCopy, { autoAlpha: 1, y: 0, stagger: 0.05, duration: 0.28 }, P.system + 0.04)
-            .to(systemTokens, { autoAlpha: 1, yPercent: 0, stagger: 0.055, duration: 0.34 }, P.system + 0.1)
-            .to(systemArtifacts, { autoAlpha: 1, scale: 1, stagger: 0.045, duration: 0.28 }, P.system + 0.2)
+            // One readable board, not five asynchronous translucent cards.
+            // All artifacts are opaque BEFORE the reading hold begins.
+            .to(systemTokens, { autoAlpha: 1, yPercent: 0, duration: 0.2 }, P.system + 0.1)
+            .to(systemArtifacts, { autoAlpha: 1, scale: 1, duration: 0.2 }, P.system + 0.18)
 
             .addLabel('method', P.method)
-            .to(systemScene, { scale: isDesktop ? 0.58 : 0.7, xPercent: isDesktop ? -31 : -20, yPercent: -7, autoAlpha: 0.26, duration: 0.34 }, P.method - 0.16)
+            .to(systemScene, { scale: isDesktop ? 0.58 : 0.7, xPercent: isDesktop ? -31 : -20, yPercent: -7, autoAlpha: 0, duration: 0.24 }, P.method - 0.16)
             .to(intentionScene, { autoAlpha: 0, duration: 0.2 }, P.method - 0.16)
             .to(contactScene, { autoAlpha: 0, duration: 0.16 }, P.method - 0.16)
             .to(methodScene, { autoAlpha: 1, duration: 0.14 }, P.method - 0.08)
@@ -408,8 +410,9 @@ export function ActProcess({ content, locale }: Props) {
 
           const unregisterQA = registerVisualFilm('notebook', tl, {
             entry: 0, sheet: 0.64, intention: 1.5, system: 2.4,
-            cover: 2.7, method: 3.16, decision: 4.7, campaign: 5.7,
-            selection: 6.26, seam: P.end,
+            cover: P.method + 0.05, method: P.method + 0.53,
+            decision: P.method + 2.05, campaign: P.work - 0.2,
+            selection: P.end - 0.09, seam: P.end,
           });
           return () => {
             unregisterQA();
@@ -438,7 +441,7 @@ export function ActProcess({ content, locale }: Props) {
               </span>
             </div>
             <h2 id="process-title" className={`${styles.contactTitle} display`} data-contact-copy>{content.process.sheet}</h2>
-            <span className={`${styles.contactNote} hand-note`} data-contact-copy aria-hidden="true">la matière brute / avant le choix</span>
+            <span className={`${styles.contactNote} hand-note`} data-contact-copy aria-hidden="true">{content.process.materialNote}</span>
             <div className={styles.contactRailViewport}>
             <div ref={contactRail} className={styles.contactRail}>
               {contactSheet.slice(4).map((item, index) => (
@@ -456,8 +459,8 @@ export function ActProcess({ content, locale }: Props) {
           <div className={styles.intentionScene} data-process-intention>
             <span className={`${styles.sceneChapter} micro`} data-intention-copy>05.2 / {content.process.moodboard}</span>
             <h3 className={`${styles.intentionTitle} display`} data-intention-copy>{content.process.moodboard}</h3>
-            <p className={styles.intentionStatement} data-intention-copy>{content.strategy.sentence}</p>
-            <span className={`${styles.intentionNote} hand-note`} data-intention-copy aria-hidden="true">un tirage retenu / le reste recule</span>
+            <p className={styles.intentionStatement} data-intention-copy>{content.process.intentionStatement}</p>
+            <span className={`${styles.intentionNote} hand-note`} data-intention-copy aria-hidden="true">{content.process.choiceNote}</span>
             <figure className={styles.intentionMedia} data-intention-media>
               <Media item={contactSheet[0]!} locale={locale} compact sizes="42vw" />
               <figcaption className="micro">Selected 01 / {contactSheet[0]!.role}</figcaption>
@@ -469,7 +472,7 @@ export function ActProcess({ content, locale }: Props) {
           <div className={styles.systemScene} data-process-system>
             <span className={`${styles.sceneChapter} micro`} data-system-copy>05.2 / {content.process.moodboard} → {content.process.system}</span>
             <h3 className={`${styles.systemTitle} display`} data-system-copy>{content.process.system}</h3>
-            <p className={styles.systemStatement} data-system-copy>{content.strategy.sentence}</p>
+            <p className={styles.systemStatement} data-system-copy>{content.process.systemStatement}</p>
             <span className={styles.systemLine} data-system-line aria-hidden="true" />
             <div className={styles.systemBoard}>
               {content.process.systemTokens.map((token, index) => (
@@ -501,9 +504,9 @@ export function ActProcess({ content, locale }: Props) {
             </div>
             <div className={styles.methodVisuals} aria-hidden="true">
               {content.strategy.steps.map((step, index) => (
-                <figure data-method-visual key={`visual-${step.term}`} style={{ '--evidence-ratio': ratioValue[(index === content.strategy.steps.length - 1 ? yunaMedia[0]! : contactSheet[index % contactSheet.length]!).ratio] } as CSSProperties}>
+                <figure data-method-visual key={`visual-${step.term}`} style={{ '--evidence-ratio': ratioValue[(index === content.strategy.steps.length - 1 ? yunaMedia[0]! : contactSheet[(index + 4) % contactSheet.length]!).ratio] } as CSSProperties}>
                   <Media
-                    item={index === content.strategy.steps.length - 1 ? yunaMedia[0]! : contactSheet[index % contactSheet.length]!}
+                    item={index === content.strategy.steps.length - 1 ? yunaMedia[0]! : contactSheet[(index + 4) % contactSheet.length]!}
                     locale={locale}
                     compact
                     sizes="28vw"

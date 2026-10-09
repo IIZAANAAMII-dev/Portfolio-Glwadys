@@ -93,6 +93,8 @@
   --space-block: 4rem;
   --space-act: clamp(6rem, 12vh, 11rem);
   --nav-clearance: max(6.5rem, env(safe-area-inset-bottom) + 6.5rem);
+  /* The floating locale target sits above the navigation capsule. */
+  --control-clearance: calc(var(--nav-clearance) + 2.25rem);
 
   /* ---------- GRILLE ---------- */
   --cols: 12;

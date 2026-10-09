@@ -41,11 +41,42 @@ for (const [engine, name, width, height] of [[chromium, 'chromium', 1440, 900], 
             [...document.images].forEach(image => observer.observe(image));
           });
           const images = intersecting.filter(image => opacity(image) > 0.95 && image.getBoundingClientRect().width > 100);
-          return { ...window.__VISUAL_QA__.snapshot(), overflow: document.documentElement.scrollWidth - innerWidth, visibleImages: images.map(i => ({ id: i.parentElement.dataset.media, loaded: i.complete && i.naturalWidth > 0 })) };
+          const rect = el => { if (!el) return null; const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height, alpha: opacity(el) }; };
+          const crop = document.querySelector('[data-system-token]:last-child [data-system-artifact]');
+          const readability = {
+            materialNote: rect(document.querySelector('[data-contact-copy].hand-note')),
+            intentionNote: rect(document.querySelector('[data-intention-copy].hand-note')),
+            framing: rect(crop),
+            framingLabel: rect(document.querySelector('[data-system-token]:last-child p')),
+            utilities: [...document.querySelectorAll('[class*="languageToggle"], [data-nav-root]')].map(rect),
+            methodRows: [...document.querySelectorAll('[data-method-row]')].map(rect),
+            methodList: rect(document.querySelector('[data-method-row]')?.parentElement),
+            methodImage: document.querySelector('[data-method-visual] [data-media]')?.dataset.media,
+          };
+          return { ...window.__VISUAL_QA__.snapshot(), readability, overflow: document.documentElement.scrollWidth - innerWidth, visibleImages: images.map(i => ({ id: i.parentElement.dataset.media, loaded: i.complete && i.naturalWidth > 0 })) };
         });
         results.push({ tag, film, state, ...sample });
         assert.equal(sample.overflow, 0, `${film}/${state} overflow`);
         assert.ok(sample.visibleImages.every(i => i.loaded), `${film}/${state} unloaded visible image: ${JSON.stringify(sample.visibleImages.filter(i => !i.loaded))}`);
+        if (film === 'notebook') {
+          const { materialNote, intentionNote, framing, framingLabel, utilities } = sample.readability;
+          const inside = r => r.x >= -1 && r.y >= -1 && r.right <= width + 1 && r.bottom <= height + 1;
+          const overlap = (a, b) => b && b.alpha > 0.95 && Math.min(a.right, b.right) > Math.max(a.x, b.x) && Math.min(a.bottom, b.bottom) > Math.max(a.y, b.y);
+          const protectedNote = note => {
+            if (note.alpha === 0) return;
+            assert.ok(inside(note), `${state} marginalia clipped: ${JSON.stringify(note)}`);
+            assert.ok(note.alpha > 0.98, `${state} marginalia not opaque`);
+            assert.ok(utilities.every(u => !overlap(note, u)), `${state} marginalia utility collision`);
+          };
+          if (state === 'sheet') protectedNote(materialNote);
+          if (state === 'intention') protectedNote(intentionNote);
+          if (state === 'system') {
+            assert.ok(framing.height >= 140 && framing.width >= 100, `framing aperture too small: ${JSON.stringify(framing)}`);
+            assert.ok(framing.alpha > 0.98 && framingLabel.alpha > 0.98, 'framing reading hold not opaque');
+            assert.ok(inside(framing) && utilities.every(u => !overlap(framingLabel, u)), 'framing crop/label utility collision');
+          }
+          if (state === 'method') assert.notEqual(sample.readability.methodImage, 'sheet-01', 'method repeats intention image');
+        }
         if (locale === 'fr') await page.screenshot({ path: `${out}/${tag}-${film}-${state}.png` });
       }
       // Same actual photo, same crop, same rectangle on either side of the

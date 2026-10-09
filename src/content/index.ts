@@ -87,6 +87,10 @@ export interface Content {
     sheet: string;
     moodboard: string;
     system: string;
+    intentionStatement: string;
+    systemStatement: string;
+    materialNote: string;
+    choiceNote: string;
     /** Tokens du système de marque rendus visibles. */
     systemTokens: string[];
   };
@@ -193,6 +197,10 @@ const fr: Content = {
     sheet: 'Planche contact',
     moodboard: 'Intention',
     system: 'Système',
+    intentionStatement: 'Retenir une image. Écarter le bruit.',
+    systemStatement: 'Faire d’un choix un langage cohérent.',
+    materialNote: 'La matière, avant le choix.',
+    choiceNote: 'Un tirage. Une intention.',
     systemTokens: ['Palette', 'Typographie', 'Ton', 'Message', 'Cadrage'],
   },
   strategy: {
@@ -389,6 +397,10 @@ const en: Content = {
     sheet: 'Contact sheet',
     moodboard: 'Intent',
     system: 'System',
+    intentionStatement: 'Keep one image. Leave out the noise.',
+    systemStatement: 'Turn one choice into a consistent language.',
+    materialNote: 'Raw material, before the choice.',
+    choiceNote: 'One print. One intention.',
     systemTokens: ['Palette', 'Typography', 'Tone', 'Message', 'Framing'],
   },
   strategy: {
@@ -585,6 +597,10 @@ const ko: Content = {
     sheet: '콘택트 시트',
     moodboard: '의도',
     system: '시스템',
+    intentionStatement: '하나의 이미지를 고르고, 잡음을 덜어냅니다.',
+    systemStatement: '하나의 선택을 일관된 언어로 만듭니다.',
+    materialNote: '선택 전의 소재.',
+    choiceNote: '한 장의 이미지, 하나의 의도.',
     systemTokens: ['팔레트', '타이포그래피', '톤', '메시지', '프레이밍'],
   },
   strategy: {

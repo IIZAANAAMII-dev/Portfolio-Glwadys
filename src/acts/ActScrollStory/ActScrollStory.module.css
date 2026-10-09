@@ -1453,7 +1453,7 @@
     top: auto;
     /* The floating 44px language control is ABOVE the capsule. Its entire
        band belongs to utilities, never to the last campaign label. */
-    bottom: calc(var(--nav-clearance) + 2.25rem);
+    bottom: var(--control-clearance);
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);
     width: auto;

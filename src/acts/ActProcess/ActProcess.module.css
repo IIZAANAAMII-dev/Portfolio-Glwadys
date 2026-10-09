@@ -84,12 +84,17 @@
 
 .contactNote {
   position: absolute;
-  left: var(--margin);
-  bottom: 12vh;
+  left: calc(var(--margin) + 1rem);
+  bottom: max(15svh, var(--control-clearance));
   z-index: var(--z-sticky);
-  max-width: 14ch;
+  width: min(30vw, 20rem);
+  max-width: none;
   color: var(--rich-wine);
-  rotate: -3deg;
+  font-size: clamp(1rem, 1.6vw, 1.5rem);
+  text-wrap: balance;
+  /* Independent rotate survives GSAP's transform reset; keep the note
+     inside the sheet rather than rotating it past the viewport edge. */
+  rotate: 0deg;
 }
 
 .contactRail {
@@ -190,11 +195,12 @@
 .intentionNote {
   position: absolute;
   right: 9%;
-  bottom: 10vh;
+  bottom: max(15svh, var(--control-clearance));
   z-index: var(--z-sticky);
-  max-width: 18ch;
+  max-width: 22ch;
   color: var(--rich-wine);
-  rotate: 2deg;
+  font-size: clamp(1rem, 1.6vw, 1.5rem);
+  rotate: 0deg;
 }
 
 .intentionAxis {
@@ -308,8 +314,8 @@
   position: absolute;
   left: var(--margin);
   right: var(--margin);
-  top: 42vh;
-  bottom: 11vh;
+  top: 42svh;
+  bottom: max(15svh, var(--control-clearance));
   z-index: var(--z-media);
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -417,6 +423,10 @@
 }
 
 .cropFrame {
+  /* A real portrait aperture, with separate index and caption bands. */
+  top: 2rem;
+  bottom: 3.5rem;
+  height: auto;
   border: 1px solid rgb(var(--ink-rgb) / 0.32);
   overflow: hidden;
 }
@@ -775,8 +785,12 @@
   }
 
   .intentionNote {
-    right: var(--margin);
-    bottom: var(--nav-clearance);
+    left: var(--margin);
+    right: auto;
+    top: 34svh;
+    bottom: auto;
+    max-width: calc(100% - var(--margin) * 2);
+    font-size: 1.1rem;
   }
 
   .systemTitle {
@@ -786,27 +800,33 @@
   .systemStatement {
     left: var(--margin);
     right: auto;
-    top: 23vh;
-    width: 82vw;
-    font-size: clamp(1.7rem, 7vw, 3rem);
+    top: 22svh;
+    width: calc(100% - var(--margin) * 2);
+    font-size: clamp(1.35rem, 6.1vw, 2.2rem);
   }
 
   .systemLine {
-    top: 39vh;
+    top: 33svh;
   }
 
   .systemBoard {
-    top: 42vh;
-    bottom: var(--nav-clearance);
-    grid-template-columns: repeat(2, 1fr);
+    top: 37svh;
+    bottom: var(--control-clearance);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(0, 1fr));
   }
 
   .systemToken {
+    grid-column: 1;
+    min-height: 0;
     padding: 0.55rem;
   }
 
+  /* Four small language specimens, one dominant photographic aperture.
+     The fifth artifact must not become a 38%-high strip in a third row. */
   .systemToken:nth-child(5) {
-    grid-column: 1 / -1;
+    grid-column: 2;
+    grid-row: 1 / -1;
   }
 
   .systemToken > p {
@@ -823,12 +843,23 @@
   .swatches,
   .typeSpecimen,
   .toneSignal,
-  .quoteMark,
-  .cropFrame {
+  .quoteMark {
     left: 0.55rem;
     right: 0.55rem;
     top: 24%;
     height: 38%;
+  }
+
+  .typeSpecimen strong { font-size: 1.65rem; }
+  .typeSpecimen small { margin-top: 0.2rem; font-size: 0.45rem; }
+  .quoteMark { font-size: 2.2rem; }
+
+  .cropFrame {
+    left: 0.55rem;
+    right: 0.55rem;
+    top: 2rem;
+    bottom: 3.5rem;
+    height: auto;
   }
 
   .methodCounter {

@@ -36,6 +36,23 @@ Verified:
 - Real images/videos: [1440 evidence](../qa/sol61-builder/pass-b/1440/), [390 evidence](../qa/sol61-builder/pass-b/390/), [320 evidence](../qa/sol61-builder/pass-b/320/). Example [mobile sheet](../qa/sol61-builder/pass-b/390/webkit-390-fr-notebook-sheet.png), [mobile film](../qa/sol61-builder/pass-b/390/webkit-390-fr-forward-reverse.webm).
 - Failed exploratory runs remain in `probe-b/` / top-level `pass-b/`; authoritative passing evidence is ONLY the three width-specific directories above.
 
-## Next source pass (not yet claimed complete)
-- C: separate Behind's editorial intention from the later six-step method; improve notebook system framing; inspect all nine acts, contrast and controls, reduced-motion/no-JS completeness; preserve final case and journey ownership.
+## Milestone C1 — readable, authored notebook frames
+- Root cause of washed-out Cadrage: staggered token/artifact fades only finished at 2.51, while method departure started at 2.49. There was no complete opaque reading frame. All five artifacts now finish at 2.23, hold until 2.79, then retire completely instead of remaining a translucent ghost behind method.
+- Desktop aperture spans the card's useful height; mobile uses four subordinate language specimens beside ONE dominant full-height photographic crop, not a fifth thin row. Caption/index bands and locale/nav band stay separate.
+- Material marginalia: remove independent rotation, put inside the paper's left margin, constrain size. Intention note moves above the image on mobile rather than against FR+/navigation; desktop gets protected bottom clearance.
+- Intention and Système now have distinct, deliberate FR/EN/KO sentences and localized marginalia. The six-step method remains complete and the first method image is the macro (`sheet-05`), not the immediately repeated intention image (`sheet-01`). Preserve the final Yuna image/geometry.
+- One shared `--control-clearance` token reserves the 44px language band for phone and notebook. Semantic QA method/selection times derive from the real composition timings after extending the system's reading hold.
+- Actual C source: `ActProcess/index.tsx`, `ActProcess.module.css`, `src/content/index.ts`, `src/styles/tokens.css`, `ActScrollStory.module.css`; focused regression assertions in `qa/sol61-film-gate.mjs`.
+
+Verification:
+- C browser matrix PASS: nine normal-motion locale/viewport contexts, 198 forward/reverse semantic samples plus nine seam records (207 recorded positions). Photo pixels still identical across each three-capture forward/reverse seam; no recorded failures.
+- New assertions verify aperture >=140px high, >=100px wide, effective alpha >0.98; marginalia fully inside viewport and outside visible utility targets; framing caption outside controls; first method image differs from intention.
+- Real after evidence: [desktop C](../qa/sol61-builder/pass-c/1440/), [WebKit 390 C](../qa/sol61-builder/pass-c/390/), [WebKit 320 C](../qa/sol61-builder/pass-c/320/). Before is the width-specific B evidence above. Each FR directory also contains actual forward/reverse film.
+- Mentor independently opened live screenshots (`mentor-{iphone390,desktop}-{intention,system,sheet}-quality.png`): mobile Cadrage 156×302, fully opaque; note starts y287 away from utilities; desktop margin note inside paper. These are the mentor's visual findings, not a fabricated builder vision verdict (vision tool still HTTP 403).
+- `next.config.mjs` unrelated trycloudflare dev-origin change inspected and deliberately excluded; do not ship experimental config with source milestone.
+
+## Open items — not a final design certification
+- P1: desktop system remains a fairly corporate five-column composition; independent jury should challenge curated/material staging rather than assume geometry PASS means luxury art direction PASS.
+- Next highest-impact source pass: differentiated Social/Behind and Phone→Immersion under [director blueprint 22](22-luxury-film-direction-sol61.md), not more notebook evidence collection.
+- P0 acceptance gates still OPEN until full-film QA: all-nine-act reverse/interruption/resize; actual iPhone toolbar/safe-area/touch; reduced-motion/no-JS completeness; case-study controls/contrast; performance and WebGL lifecycle. Existing snapshots do not certify those behaviors.
 - Runtime and art acceptance remain pending independent tasks `t_27e19338` and `t_78ac6e14`. No self-rating, production deploy or main merge.
