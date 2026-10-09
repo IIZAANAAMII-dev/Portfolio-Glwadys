@@ -1338,13 +1338,15 @@
 
   .nameFirst {
     top: 11svh;
-    font-size: clamp(3.7rem, 19.5vw, 8rem);
+    /* At 320–390px, preserve the COMPLETE author name as the camera opens.
+       Scale the typography optically, not by clipping the first letter. */
+    font-size: clamp(3rem, 17vw, 7.2rem);
   }
 
   .nameLast {
     top: 21svh;
     bottom: auto;
-    font-size: clamp(3.7rem, 19.5vw, 8rem);
+    font-size: clamp(3rem, 17vw, 7.2rem);
   }
 
   .ruleH {

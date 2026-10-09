@@ -57,7 +57,9 @@ interface Props {
 
 /** Repères de la partition, en hauteurs de viewport. */
 const T = {
-  heroHold: 0.0,
+  // Leave a real editorial opening hold: without it, the name is already
+  // flying outside the phone viewport after the first touch scroll.
+  heroHold: 0.42,
   socialIn: 1.18,
   /** Les détails complémentaires : troisième niveau de la hiérarchie. */
   detail: 2.02,
@@ -412,7 +414,10 @@ export function ActScrollStory({ content, locale }: Props) {
             )
             // La composition se déplie : le nom rejoint sa place de couverture.
             .to([first, last], { x: 0, y: 0, scale: 1, duration: DUR.cinematic, ease: EASE.handoff }, 1.24)
-            .to(last, { color: 'var(--rich-wine)', duration: DUR.editorial }, 1.24)
+            // The wine ink belongs on IVORY pages; on dark-wood hero it lost
+            // contrast and erased half the surname. Keep the warm silver/
+            // taupe editorial voice visible through the opening reveal.
+            .to(last, { color: 'var(--warm-taupe)', duration: DUR.editorial }, 1.24)
             .to(tagline, { x: 0, y: 0, duration: DUR.cinematic, ease: EASE.handoff }, 1.24)
             .to(
               transients,

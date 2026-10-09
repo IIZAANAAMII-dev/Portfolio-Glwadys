@@ -189,17 +189,32 @@ function ProjectSection({
               0,
             )
             .fromTo(
-              q<HTMLElement>('[data-case-row]'),
-              { yPercent: 18, autoAlpha: 0 },
-              { yPercent: 0, autoAlpha: 1, stagger: 0.08, duration: 0.42 },
-              0.12,
-            )
-            .fromTo(
               q<HTMLElement>('[data-case-proof]'),
               { xPercent: -5, autoAlpha: 0 },
               { xPercent: 0, autoAlpha: 1, stagger: 0.05, duration: 0.32 },
               0.54,
             );
+
+          // Dossier rows are *readable information*, not decorations. A
+          // single scrub spanning the entire dossier left the final rows
+          // translucent even at the center of the phone viewport, especially
+          // on Bordeaux. Each row now finishes revealing as it enters.
+          q<HTMLElement>('[data-case-row]').forEach((row, index) => {
+            gsap.fromTo(row,
+              { y: 22, autoAlpha: 0.7 },
+              {
+                y: 0, autoAlpha: 1, ease: EASE.move,
+                scrollTrigger: {
+                  trigger: row,
+                  start: 'top 98%',
+                  end: 'top 84%',
+                  scrub: SCRUB.narrative,
+                  invalidateOnRefresh: true,
+                },
+                delay: index * 0.02,
+              },
+            );
+          });
         },
       );
       return () => mm.revert();

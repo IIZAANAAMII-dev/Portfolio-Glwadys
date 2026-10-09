@@ -486,7 +486,7 @@
 
 .caseNumber {
   justify-self: end;
-  opacity: 0.54;
+  opacity: 0.78;
 }
 
 .caseLabel {
@@ -535,7 +535,7 @@
 }
 
 .proof span {
-  opacity: 0.64;
+  opacity: 0.82;
 }
 
 @media (max-width: 1023px) {
