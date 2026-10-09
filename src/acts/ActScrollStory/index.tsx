@@ -326,7 +326,9 @@ export function ActScrollStory({ content, locale }: Props) {
 
           gsap.set(ruleH, { scaleX: 0 });
           gsap.set(ruleV, { scaleY: 0, autoAlpha: 0 });
-          gsap.set(nameLines, { yPercent: 108, autoAlpha: 1 });
+          // Preserve the creator's original name reveal: opacity follows the editorial
+          // tracking/camera movement without the mask displacement that could hide a line.
+          gsap.set(nameLines, { yPercent: 0, autoAlpha: 0 });
           gsap.set([...metas, disciplines], { autoAlpha: 0 });
           gsap.set(notebookDetails, { autoAlpha: 0, y: 14 });
           gsap.set(openingFrame, { autoAlpha: 0, scaleX: 0.16, scaleY: 0.72 });
@@ -390,7 +392,7 @@ export function ActScrollStory({ content, locale }: Props) {
             .to(openingFrame, { autoAlpha: 0.82, scaleX: 1, scaleY: 1, duration: DUR.editorial })
             .to(ruleH, { scaleX: 1, duration: DUR.editorial }, 0.06)
             .to(metas, { autoAlpha: 0.72, duration: DUR.base, stagger: STAGGER.base }, 0.05)
-            .to(nameLines, { yPercent: 0, duration: DUR.editorial, stagger: STAGGER.base }, 0.22)
+            .to(nameLines, { autoAlpha: 1, duration: DUR.editorial, stagger: STAGGER.base }, 0.22)
             .to(
               [first, last],
               { letterSpacing: '-0.045em', duration: DUR.editorial, ease: EASE.move },
@@ -410,7 +412,7 @@ export function ActScrollStory({ content, locale }: Props) {
             )
             // La composition se déplie : le nom rejoint sa place de couverture.
             .to([first, last], { x: 0, y: 0, scale: 1, duration: DUR.cinematic, ease: EASE.handoff }, 1.24)
-            .to(last, { color: 'var(--warm-taupe)', duration: DUR.editorial }, 1.24)
+            .to(last, { color: 'var(--rich-wine)', duration: DUR.editorial }, 1.24)
             .to(tagline, { x: 0, y: 0, duration: DUR.cinematic, ease: EASE.handoff }, 1.24)
             .to(
               transients,
