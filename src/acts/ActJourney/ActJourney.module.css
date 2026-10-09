@@ -1,7 +1,11 @@
 .act {
   position: relative;
+  z-index: 2;
   min-height: 100svh;
   overflow: clip;
+  /* The Work bridge's sticky stage releases exactly one viewport before its
+     section ends. Continue with the identical Journey stage at that pixel. */
+  margin-top: -100svh;
 }
 
 .stage {
@@ -195,6 +199,9 @@
   background-image: radial-gradient(circle, rgb(var(--ink-rgb) / 0.022) 0 0.7px, transparent 1px);
   background-size: 12px 12px;
   color: var(--ink);
+  opacity: 0;
+  visibility: hidden;
+  clip-path: inset(0 100% 0 0);
 }
 
 .handoffMargin {
@@ -375,6 +382,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .act {
+    margin-top: 0;
+  }
+
   .act,
   .stage {
     min-height: auto;

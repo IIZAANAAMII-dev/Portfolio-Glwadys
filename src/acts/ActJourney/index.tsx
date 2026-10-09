@@ -4,10 +4,12 @@ import { useRef } from 'react';
 
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
-import { journeyMedia } from '@/content/media';
-import { gsap, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
-import { Media } from '@/ui/Media';
+import { ExpertiseOpeningFrame } from '@/acts/ActExpertise/ExpertiseOpeningFrame';
+import expertiseStyles from '@/acts/ActExpertise/ActExpertise.module.css';
+
+import { JourneyOpeningFrame } from './JourneyOpeningFrame';
 
 import styles from './ActJourney.module.css';
 
@@ -40,12 +42,26 @@ export function ActJourney({ content, locale }: Props) {
           };
           if (isReduced) return;
 
+          // The Work bridge already renders this exact frame at its end.
+          // Hide incoming section background until that sticky film ends.
+          gsap.set(rootEl, { autoAlpha: 0 });
+          ScrollTrigger.create({
+            trigger: rootEl,
+            start: 'top top',
+            end: 'bottom top',
+            onEnter: () => gsap.set(rootEl, { autoAlpha: 1 }),
+            onEnterBack: () => gsap.set(rootEl, { autoAlpha: 1 }),
+            onLeaveBack: () => gsap.set(rootEl, { autoAlpha: 0 }),
+            onRefresh: (self) => {
+              gsap.set(rootEl, { autoAlpha: self.scroll() >= self.start ? 1 : 0 });
+            },
+          });
+
           const entries = q<HTMLElement>('[data-journey-entry]');
           const media = q<HTMLElement>('[data-journey-media]');
           const progressBar = q<HTMLElement>('[data-journey-progress]')[0];
           const counter = q<HTMLElement>('[data-journey-counter]')[0];
           const handoff = q<HTMLElement>('[data-journey-handoff]')[0];
-          const handoffCopy = q<HTMLElement>('[data-journey-handoff-copy]');
           if (!progressBar || !counter || !handoff || entries.length === 0) return;
 
           const driver = { value: 0 };
@@ -88,13 +104,12 @@ export function ActJourney({ content, locale }: Props) {
           };
 
           gsap.set(progressBar, { scaleY: 0, transformOrigin: 'center top' });
-          gsap.set(handoff, { clipPath: 'inset(0 100% 0 0)' });
+          gsap.set(handoff, { autoAlpha: 1, clipPath: 'inset(0 100% 0 0)' });
           // La timeline entre depuis la droite, comme une continuité du mouvement
           // des folios qui sortent à droite dans le pont précédent.
           gsap.set(trackEl, { x: 0, y: 0 });
           // The page is already typeset behind its reveal mask. This keeps the
           // handoff readable even when someone scrolls through it quickly.
-          gsap.set(handoffCopy, { autoAlpha: 1, y: 0 });
           updateFocus();
 
           const tl = gsap.timeline({
@@ -137,48 +152,13 @@ export function ActJourney({ content, locale }: Props) {
   return (
     <section ref={root} className={`act surface-ink ${styles.act}`} aria-labelledby="journey-title">
       <div ref={stage} className={styles.stage} data-cursor="drag">
-        <span className={`${styles.chapter} micro`} data-journey-chrome>
-          07 / Timeline
-        </span>
-        <h2 id="journey-title" className={`${styles.heading} title`} data-journey-chrome>
-          {content.journey.heading}
-        </h2>
-        <span className={`${styles.range} micro`}>2021 — 2026</span>
-        <span className={styles.playhead} data-journey-chrome aria-hidden="true">
-          <span className={styles.progress} data-journey-progress />
-        </span>
-        <span className={`${styles.counter} micro`} data-journey-counter data-journey-chrome>
-          01 / {String(content.journey.entries.length).padStart(2, '0')}
-        </span>
-
-        <div ref={track} className={styles.track}>
-          {content.journey.entries.map((entry, index) => (
-            <article className={styles.entry} data-journey-entry key={entry.year}>
-              <span className={styles.year}>{entry.year}</span>
-              <div className={styles.entryCopy}>
-                <h3 className={`${styles.entryLabel} title`}>{entry.label}</h3>
-                <span className={`${styles.place} micro`}>{entry.place}</span>
-              </div>
-              <div className={styles.media} data-journey-media>
-                <Media item={journeyMedia[index]!} locale={locale} compact sizes="(max-width: 1023px) 65vw, 40vw" />
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <span className={`${styles.caption} editorial-stamp`} data-journey-chrome>
-          {content.contact.axis}
-        </span>
-        <div className={styles.handoff} data-journey-handoff aria-hidden="true">
-          <span className={`${styles.handoffChapter} micro`} data-journey-handoff-copy>
-            08 / Index
-          </span>
-          <span className={`${styles.handoffTitle} title`} data-journey-handoff-copy>
-            {content.expertise.heading}
-          </span>
-          <span className={`${styles.handoffPreview} micro`} data-journey-handoff-copy>
-            {content.expertise.entries.slice(0, 3).map((entry) => entry.term).join(' · ')}
-          </span>
+        <JourneyOpeningFrame content={content} locale={locale} trackRef={track} />
+        <div className={[styles.handoff, 'surface-paper'].join(' ')} data-journey-handoff aria-hidden="true">
+          {/* Same DOM and styling as the first image of Expertise.
+              The next chapter is physically revealed, not presented on a separate card. */}
+          <div className={expertiseStyles.sheet}>
+            <ExpertiseOpeningFrame content={content} decorative />
+          </div>
         </div>
       </div>
     </section>

@@ -5,6 +5,19 @@
   background: var(--wood-brown);
 }
 
+/* Continuity plate: the very same Journey opening layout is revealed
+   inside Work's last sticky film frame before the next scene takes over. */
+.nextFrame {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  clip-path: inset(0% 0% 100% 0%);
+  background: var(--wood-brown);
+}
+
 .journeyMarker {
   position: absolute;
   top: 8%;

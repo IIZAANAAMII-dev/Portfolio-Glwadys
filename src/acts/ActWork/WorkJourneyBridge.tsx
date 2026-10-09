@@ -8,6 +8,8 @@ import { comptoirMedia, mgcMedia, yunaMedia } from '@/content/media';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCRUB } from '@/lib/motion';
 import { Media } from '@/ui/Media';
+import { JourneyOpeningFrame } from '@/acts/ActJourney/JourneyOpeningFrame';
+import journeyStyles from '@/acts/ActJourney/ActJourney.module.css';
 
 import styles from './WorkJourneyBridge.module.css';
 
@@ -34,7 +36,10 @@ export function WorkJourneyBridge({ content, locale }: Props) {
       const thread = q<HTMLElement>('[data-bridge-thread]')[0];
       const journeyCopy = q<HTMLElement>('[data-bridge-journey]');
       const archiveCopy = q<HTMLElement>('[data-bridge-archive]');
-      if (folios.length === 0 || !colorField || !thread) return;
+      const nextFrame = q<HTMLElement>('[data-bridge-next-frame]')[0];
+      const nextEntries = q<HTMLElement>('[data-bridge-next-frame] [data-journey-entry]');
+      const nextTrack = nextEntries[0]?.parentElement;
+      if (folios.length === 0 || !colorField || !thread || !nextFrame || !nextTrack) return;
 
       const mm = gsap.matchMedia();
       mm.add(
@@ -56,6 +61,45 @@ export function WorkJourneyBridge({ content, locale }: Props) {
           gsap.set(archiveCopy, { autoAlpha: 0.78, y: 4 });
           gsap.set(thread, { scaleY: 0.08, transformOrigin: 'center top' });
           gsap.set(colorField, { scaleY: 1, transformOrigin: 'center bottom' });
+          gsap.set(nextFrame, { autoAlpha: 1, clipPath: 'inset(0% 0% 100% 0%)' });
+          // ActJourney's GSAP director aligns the first card with its playhead.
+          // Reproduce precisely that starting coordinate, otherwise the first
+          // photo jumps sideways at the seam although its DOM is shared.
+          const alignNextFilm = () => {
+            const first = nextEntries[0]!;
+            gsap.set(nextTrack, isDesktop
+              ? { x: window.innerWidth * 0.28 - first.offsetLeft, y: 0 }
+              : { x: 0, y: -first.offsetTop });
+            nextEntries.forEach((entry, index) => {
+              const focus = index === 0 ? 1 : 0;
+              gsap.set(entry, {
+                scale: 0.94 + focus * 0.06,
+                autoAlpha: 0.8 + focus * 0.2,
+                y: (1 - focus) * 12,
+              });
+              const media = entry.querySelector<HTMLElement>('[data-journey-media]');
+              if (media) gsap.set(media, { scale: 0.94 + focus * 0.06, y: (1 - focus) * 16 });
+            });
+            // Read the REAL first Journey frame rather than approximating it.
+            // The original director offsets its track after fonts and pin
+            // measurement; copying only CSS gives a visible 70px jump.
+            const realStage = document.querySelector<HTMLElement>('#act-journey-scene [data-cursor="drag"]');
+            const realFirst = realStage?.querySelector<HTMLElement>('[data-journey-entry]');
+            if (realStage && realFirst) {
+              const actual = realFirst.getBoundingClientRect();
+              const actualStage = realStage.getBoundingClientRect();
+              const clone = first.getBoundingClientRect();
+              const cloneStage = nextFrame.getBoundingClientRect();
+              if (isDesktop) {
+                const x = Number(gsap.getProperty(nextTrack, 'x')) || 0;
+                gsap.set(nextTrack, { x: x + actual.left - actualStage.left - (clone.left - cloneStage.left) });
+              } else {
+                const y = Number(gsap.getProperty(nextTrack, 'y')) || 0;
+                gsap.set(nextTrack, { y: y + actual.top - actualStage.top - (clone.top - cloneStage.top) });
+              }
+            }
+          };
+          alignNextFilm();
 
           const threadShift = () => {
             if (isDesktop) return -window.innerWidth * 0.22;
@@ -71,6 +115,7 @@ export function WorkJourneyBridge({ content, locale }: Props) {
                 end: 'bottom bottom',
                 scrub: SCRUB.narrative,
                 invalidateOnRefresh: true,
+                onRefresh: alignNextFilm,
               },
             })
             .to(
@@ -117,7 +162,14 @@ export function WorkJourneyBridge({ content, locale }: Props) {
                 duration: 0.24,
               },
               0.78,
-            );
+            )
+            // The outgoing project folios become the real first film frame
+            // of Journey. Its separate Next.js act takes over at the same
+            // pinned coordinate, without restarting the visual composition.
+            .to(nextFrame, {
+              clipPath: 'inset(0% 0% 0% 0%)',
+              duration: 0.18,
+            }, 0.82);
         },
       );
       return () => mm.revert();
@@ -163,6 +215,11 @@ export function WorkJourneyBridge({ content, locale }: Props) {
         <h2 className={styles.journeyTitle} data-bridge-journey>
           {content.journey.heading}
         </h2>
+        <div className={styles.nextFrame} data-bridge-next-frame>
+          <div className={journeyStyles.stage}>
+            <JourneyOpeningFrame content={content} locale={locale} preview />
+          </div>
+        </div>
       </div>
     </section>
   );

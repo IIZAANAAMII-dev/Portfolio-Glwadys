@@ -3,8 +3,10 @@
 import { useRef } from 'react';
 
 import type { Content } from '@/content';
-import { gsap, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
+
+import { ExpertiseOpeningFrame } from './ExpertiseOpeningFrame';
 
 import styles from './ActExpertise.module.css';
 
@@ -38,6 +40,25 @@ export function ActExpertise({ content }: Props) {
             isReduced: boolean;
           };
           if (isReduced) return;
+
+          // The actual Expertise page must not enter from the bottom as a
+          // second copy of Journey's last frame. Journey's pinned frame owns
+          // the transition until its final pixel; then the identical real
+          // page takes over at the exact same screen coordinates.
+          // Hide the entire incoming surface, not only its stage: even an empty
+          // ivory root would otherwise occlude the departing Journey frame.
+          gsap.set(rootEl, { autoAlpha: 0 });
+          ScrollTrigger.create({
+            trigger: rootEl,
+            start: 'top top',
+            end: 'bottom top',
+            onEnter: () => gsap.set(rootEl, { autoAlpha: 1 }),
+            onEnterBack: () => gsap.set(rootEl, { autoAlpha: 1 }),
+            onLeaveBack: () => gsap.set(rootEl, { autoAlpha: 0 }),
+            onRefresh: (self) => {
+              gsap.set(rootEl, { autoAlpha: self.scroll() >= self.start ? 1 : 0 });
+            },
+          });
 
           gsap.set(fold, { scale: 0, transformOrigin: 'right top' });
           gsap.set(handoff, {
@@ -108,26 +129,7 @@ export function ActExpertise({ content }: Props) {
     <section ref={root} className={`act surface-paper ${styles.act}`} aria-labelledby="expertise-title">
       <div ref={stage} className={styles.stage}>
         <div className={styles.sheet} data-expertise-sheet>
-          <span className={`${styles.chapter} micro`} data-expertise-content>
-            08 / Index
-          </span>
-          <h2 id="expertise-title" className={`${styles.heading} title`} data-expertise-content>
-            {content.expertise.heading}
-          </h2>
-          <div className={styles.listViewport} data-expertise-content>
-            <ol ref={list} className={styles.list}>
-              {content.expertise.entries.map((entry, index) => (
-                <li className={styles.row} key={entry.term}>
-                  <span className={`${styles.index} micro`}>{String(index + 1).padStart(2, '0')}</span>
-                  <span className={styles.term}>{entry.term}</span>
-                  <span className={`${styles.context} micro`}>{entry.context}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <p className={`${styles.aside} hand-note`} data-expertise-content>
-            {content.strategy.sentence}
-          </p>
+          <ExpertiseOpeningFrame content={content} listRef={list} />
           <span className={styles.sheetFold} data-expertise-fold aria-hidden="true" />
           <div className={styles.handoffLayer} data-expertise-handoff aria-hidden="true">
             <div className={styles.handoffMeta}>

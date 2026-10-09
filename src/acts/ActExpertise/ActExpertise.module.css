@@ -1,8 +1,12 @@
 .act {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   min-height: 100svh;
   overflow: clip;
+  /* The Journey pin ends exactly one screen before its spacer ends.
+     Overlay that outgoing last frame with the identical first Expertise
+     frame: no scrolling double-page or hard cut between separate scenes. */
+  margin-top: -100svh;
 }
 
 .stage {
@@ -261,6 +265,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .act {
+    margin-top: 0;
+  }
+
   .act,
   .stage {
     min-height: auto;
