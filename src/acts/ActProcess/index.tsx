@@ -4,12 +4,12 @@ import { useRef, type CSSProperties } from 'react';
 
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
-import { contactSheet, ratioValue, yunaMedia } from '@/content/media';
+import { contactSheet, yunaMedia, type MediaItem } from '@/content/media';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
-import { EASE, MQ, SCRUB } from '@/lib/motion';
+import { MQ, SCRUB } from '@/lib/motion';
 import { registerVisualFilm } from '@/lib/visualQa';
-import { NotebookFrame } from '@/ui/NotebookFrame';
 import { Media } from '@/ui/Media';
+import { NotebookFrame } from '@/ui/NotebookFrame';
 
 import styles from './ActProcess.module.css';
 
@@ -18,15 +18,35 @@ interface Props {
   locale: Locale;
 }
 
-/** Une seule partition pour tout l'acte 05. Une unité = un viewport de scroll. */
+/**
+ * ACTE 05 — LE CARNET (scène 4 « The Page Turn » → scène 5 « The Vault »).
+ * docs/flagship/23-sonnet-cinematic-creative-treatment.md
+ *
+ * Le seul acte clair du film. Un livre relié, UN objet : la planche-contact
+ * reçue de la chambre noire est la première page de droite. Chaque feuillet
+ * tourne physiquement autour de la reliure (rotationY, perspective par
+ * feuillet, recto/verso) ; son verso devient la page de gauche suivante.
+ *
+ *   Planche contact │ tirage retenu
+ *   Intention       │ Système (cinq jetons)
+ *   01 Audience     │ preuve 01
+ *   …               │ …
+ *   06 Campaign     │ Yuna — tirage collé dans la géométrie EXACTE de
+ *                     `workProof`, puis la page s'ouvre en iris (circle)
+ *                     depuis ce tirage sur la chambre forte sombre.
+ *
+ * Les anciennes scènes empilées (planche, intention, système, méthode,
+ * couverture) et leurs doublons ont été fusionnées dans ce seul livre.
+ */
+
+/** Partition, en hauteurs de viewport de scroll. */
 const P = {
-  entry: 0,
-  contact: 0.12,
-  intention: 1.05,
-  system: 1.85,
-  method: 2.95,
-  work: 6.2,
-  end: 6.65,
+  intro: 0.06,
+  firstTurn: 0.95,
+  step: 0.62,
+  turn: 0.36,
+  vault: 5.42,
+  end: 6.3,
 } as const;
 
 const PROCESS_SCROLL_VH = P.end * 100;
@@ -42,52 +62,15 @@ function markerStart(start: number, ratio: number) {
 }
 
 const workMarkerStyle: WorkMarkerStyle = {
-  '--work-marker-top': `${markerStart(P.work - 0.12, 1)}%`,
-  '--work-marker-mobile-top': `${markerStart(P.work - 0.12, MOBILE_RATIO)}%`,
+  '--work-marker-top': `${markerStart(P.vault - 0.12, 1)}%`,
+  '--work-marker-mobile-top': `${markerStart(P.vault - 0.12, MOBILE_RATIO)}%`,
 };
 
-function TokenArtifact({ index, locale }: { index: number; locale: Locale }) {
-  if (index === 0) {
-    return (
-      <span className={styles.swatches} data-system-artifact aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </span>
-    );
-  }
+const pad = (n: number) => String(n).padStart(2, '0');
 
-  if (index === 1) {
-    return (
-      <span className={styles.typeSpecimen} data-system-artifact aria-hidden="true">
-        <strong>Aa</strong>
-        <small>A—Z / 01—09</small>
-      </span>
-    );
-  }
-
-  if (index === 2) {
-    return (
-      <span className={styles.toneSignal} data-system-artifact aria-hidden="true">
-        {Array.from({ length: 7 }, (_, signalIndex) => <i key={signalIndex} />)}
-      </span>
-    );
-  }
-
-  if (index === 3) {
-    return (
-      <span className={styles.quoteMark} data-system-artifact aria-hidden="true">
-        “
-      </span>
-    );
-  }
-
-  return (
-    <span className={styles.cropFrame} data-system-artifact aria-hidden="true">
-      <Media item={contactSheet[0]!} locale={locale} compact sizes="(max-width: 1023px) 35vw, 15vw" />
-      <i />
-    </span>
-  );
+/** La preuve de chaque étape. La dernière est la campagne Yuna réelle. */
+function evidenceFor(index: number, total: number): MediaItem {
+  return index === total - 1 ? yunaMedia[0]! : contactSheet[(index + 4) % contactSheet.length]!;
 }
 
 function ReducedProcess({ content, locale }: Props) {
@@ -144,395 +127,304 @@ function ReducedProcess({ content, locale }: Props) {
   );
 }
 
+/** Spécimen du système : de la matière typographique, pas des cartes. */
+function SystemSpecimen({ index }: { index: number }) {
+  if (index === 0) return <span className={styles.specSwatches} aria-hidden="true"><i /><i /><i /></span>;
+  if (index === 1) return <span className={styles.specType} aria-hidden="true">Aa</span>;
+  if (index === 2) return <span className={styles.specTone} aria-hidden="true">{Array.from({ length: 7 }, (_, i) => <i key={i} />)}</span>;
+  if (index === 3) return <span className={styles.specQuote} aria-hidden="true">“</span>;
+  return <span className={styles.specCrop} aria-hidden="true" />;
+}
+
 export function ActProcess({ content, locale }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const contactRail = useRef<HTMLDivElement>(null);
+  const { process, strategy, work } = content;
+  const steps = strategy.steps;
 
   useGSAP(
     () => {
       const rootEl = root.current;
       const stageEl = stage.current;
-      const railEl = contactRail.current;
-      if (!rootEl || !stageEl || !railEl) return;
+      if (!rootEl || !stageEl) return;
 
       const q = gsap.utils.selector(stageEl);
-      const one = <T extends HTMLElement>(selector: string): T | null => q<T>(selector)[0] ?? null;
-      const centre = (element: HTMLElement) => {
-        let x = element.offsetWidth / 2;
-        let y = element.offsetHeight / 2;
-        let current: HTMLElement | null = element;
-        while (current && current !== stageEl) {
-          x += current.offsetLeft;
-          y += current.offsetTop;
-          current = current.offsetParent as HTMLElement | null;
-        }
-        return { x, y };
-      };
+      const one = <E extends HTMLElement>(selector: string): E | null => q<E>(selector)[0] ?? null;
 
-      const entryPlate = one('[data-notebook-frame="process"]');
       const entryImage = one('[data-notebook-frame="process"] [data-notebook-frame-image]');
-      const entryPaper = one('[data-notebook-frame="process"] [data-notebook-paper]');
       const entryFolio = one('[data-notebook-frame="process"] [data-notebook-folio]');
-      const contactScene = one('[data-process-contact]');
-      const contactCards = q<HTMLElement>('[data-contact-card]');
-      const contactChrome = q<HTMLElement>('[data-contact-copy]');
-      const intentionScene = one('[data-process-intention]');
-      const intentionMedia = q<HTMLElement>('[data-intention-media]');
-      const intentionCopy = q<HTMLElement>('[data-intention-copy]');
-      const systemScene = one('[data-process-system]');
-      const systemTokens = q<HTMLElement>('[data-system-token]');
-      const systemArtifacts = q<HTMLElement>('[data-system-artifact]');
-      const systemLines = q<HTMLElement>('[data-system-line]');
-      const systemCopy = q<HTMLElement>('[data-system-copy]');
-      const methodScene = one('[data-process-method]');
-      const folioCover = one('[data-method-book-cover]');
-      const methodRows = q<HTMLElement>('[data-method-row]');
-      const methodWords = q<HTMLElement>('[data-method-word]');
-      const methodVisuals = q<HTMLElement>('[data-method-visual]');
-      const finalMethodVisual = methodVisuals.at(-1) ?? null;
-      const methodChrome = q<HTMLElement>('[data-method-copy]');
+      const leaves = q<HTMLElement>('[data-leaf]');
       const workScene = one('[data-process-work]');
-      const workCopy = q<HTMLElement>('[data-work-copy]');
       const workProof = one('[data-work-proof]');
       const workRule = one('[data-work-rule]');
-
-      if (!entryPlate || !contactScene || !intentionScene || !systemScene || !methodScene || !workScene || !workProof || !workRule) return;
+      if (!leaves.length || !workScene || !workProof || !workRule) return;
 
       const mm = gsap.matchMedia();
-      mm.add(
-        { isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced },
-        (context) => {
-          const { isDesktop, isReduced } = context.conditions as { isDesktop: boolean; isReduced: boolean };
-          if (isReduced) return;
+      mm.add({ isDesktop: MQ.desktop, isMobile: MQ.mobile, isReduced: MQ.reduced }, (context) => {
+        const { isDesktop, isReduced } = context.conditions as { isDesktop: boolean; isReduced: boolean };
+        if (isReduced) return;
 
-          gsap.set(entryPlate, { autoAlpha: 1 });
-          gsap.set(contactChrome, { autoAlpha: 0, y: 8 });
-          gsap.set(contactCards, { autoAlpha: 0, scale: 0.96 });
-          gsap.set(intentionScene, { autoAlpha: 0 });
-          gsap.set(intentionMedia, { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.06 });
-          gsap.set(intentionCopy, { autoAlpha: 0, y: 12 });
-          gsap.set(systemScene, { autoAlpha: 0, clipPath: 'inset(0% 100% 0% 0%)' });
-          gsap.set(systemTokens, { autoAlpha: 0, yPercent: 16 });
-          gsap.set(systemArtifacts, { autoAlpha: 0, scale: 0.82 });
-          gsap.set(systemLines, { scaleX: 0, transformOrigin: 'left center' });
-          gsap.set(systemCopy, { autoAlpha: 0, y: 12 });
-          gsap.set(methodScene, { autoAlpha: 0 });
-          gsap.set(methodRows, { autoAlpha: 0.8, x: 0 });
-          gsap.set(methodWords, { autoAlpha: 0, yPercent: 12 });
-          methodVisuals.forEach((page, index) => {
-            // The first page is physically on top, like a bound book.
-            // Mobile keeps a light 2D crop rather than running 3D transforms.
-            gsap.set(page, {
-              autoAlpha: 0,
-              clipPath: isDesktop ? 'inset(0% 0% 0% 0%)' : 'inset(100% 0% 0% 0%)',
-              rotationY: 0,
-              scale: isDesktop ? 1 : 1.04,
-              zIndex: methodVisuals.length - index,
-            });
-          });
-          if (folioCover) gsap.set(folioCover, {
-            autoAlpha: 1,
+        const baseBits = q<HTMLElement>('[data-base-bit]');
+        const contactThumbs = q<HTMLElement>('[data-contact-thumb]');
+        const leafIntro = q<HTMLElement>('[data-leaf="0"] [data-leaf-intro]');
+        const leafFolio = one('[data-leaf-folio]');
+        const sweep = one('[data-sweep]');
+        const workCopy = q<HTMLElement>('[data-work-copy]');
+
+        /* ---------- ÉTATS INITIAUX ----------
+           Le feuillet 0 est le jumeau exact du NotebookFrame reçu : on retire
+           l'original, le feuillet prend sa place sans un pixel d'écart. */
+        gsap.set([entryImage, entryFolio], { autoAlpha: 0 });
+        gsap.set(baseBits, { autoAlpha: 0, y: 14 });
+        gsap.set(contactThumbs, { autoAlpha: 0, yPercent: 18 });
+        gsap.set(leafIntro, { autoAlpha: 0, y: 12 });
+        gsap.set(sweep, { autoAlpha: 0 });
+        leaves.forEach((leaf, index) => {
+          gsap.set(leaf, {
+            zIndex: 50 - index,
             rotationY: 0,
+            autoAlpha: 1,
             transformOrigin: 'left center',
+            transformPerspective: isDesktop ? 2600 : 1600,
           });
-          gsap.set(methodChrome, { autoAlpha: 0, y: 10 });
-          gsap.set(workScene, { clipPath: 'inset(100% 0% 0% 0%)' });
-          gsap.set(workCopy, { autoAlpha: 0, y: 18 });
-          gsap.set(workProof, { autoAlpha: 0, y: 24, rotation: 1.8, scale: 0.96 });
-          gsap.set(workRule, { scaleY: 0, transformOrigin: 'center top' });
+        });
+        gsap.set(q<HTMLElement>('[data-front-shade]'), { autoAlpha: 0 });
+        gsap.set(q<HTMLElement>('[data-back-shade]'), { autoAlpha: 0.42 });
+        gsap.set(q<HTMLElement>('[data-back-term]'), { autoAlpha: 0, yPercent: 26 });
+        gsap.set(workScene, { clipPath: 'circle(0px at 50% 50%)' });
+        gsap.set(workCopy, { autoAlpha: 0, y: 18 });
+        gsap.set(workRule, { scaleY: 0, transformOrigin: 'center top' });
 
-          const tl = gsap.timeline({
-            defaults: { ease: EASE.scrub },
-            scrollTrigger: {
-              trigger: rootEl,
-              id: 'notebook-film',
-              start: 'top top',
-              end: `+=${Math.round(PROCESS_SCROLL_VH * (isDesktop ? 1 : MOBILE_RATIO))}%`,
-              pin: stageEl,
-              pinSpacing: true,
-              scrub: SCRUB.narrative,
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-              onToggle: ({ isActive }) => {
-                railEl.style.willChange = isActive ? 'transform' : '';
-              },
-            },
-          });
+        const tl = gsap.timeline({
+          defaults: { ease: 'none', overwrite: false },
+          scrollTrigger: {
+            trigger: rootEl,
+            id: 'notebook-film',
+            start: 'top top',
+            end: `+=${Math.round(PROCESS_SCROLL_VH * (isDesktop ? 1 : MOBILE_RATIO))}%`,
+            pin: stageEl,
+            pinSpacing: true,
+            scrub: SCRUB.narrative,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
 
-          // The end of Story and the start of this pin share ONE viewport.
-          // Hide this actor until it owns the boundary, including reverse.
-          gsap.set(rootEl, { autoAlpha: 0 });
-          ScrollTrigger.create({
-            id: 'notebook-ownership', trigger: rootEl,
-            start: 'top top', end: 'bottom top',
-            onEnter: () => gsap.set(rootEl, { autoAlpha: 1 }),
-            onEnterBack: () => gsap.set(rootEl, { autoAlpha: 1 }),
-            onLeaveBack: () => gsap.set(rootEl, { autoAlpha: 0 }),
-            onRefresh: self => gsap.set(rootEl, { autoAlpha: self.scroll() >= self.start ? 1 : 0 }),
-          });
+        // La fin de Story et le début de ce pin partagent UN viewport.
+        gsap.set(rootEl, { autoAlpha: 0 });
+        ScrollTrigger.create({
+          id: 'notebook-ownership', trigger: rootEl,
+          start: 'top top', end: 'bottom top',
+          onEnter: () => gsap.set(rootEl, { autoAlpha: 1 }),
+          onEnterBack: () => gsap.set(rootEl, { autoAlpha: 1 }),
+          onLeaveBack: () => gsap.set(rootEl, { autoAlpha: 0 }),
+          onRefresh: (self) => gsap.set(rootEl, { autoAlpha: self.scroll() >= self.start ? 1 : 0 }),
+        });
 
-          tl.addLabel('contact', P.contact)
-            .to(contactChrome, { autoAlpha: 1, y: 0, duration: 0.24 }, P.entry + 0.06)
-            .to(contactCards, { autoAlpha: 1, scale: 1, stagger: 0.035, duration: 0.18 }, P.contact + 0.08)
+        /* ---- La planche s'écrit sur la page de gauche ---- */
+        tl.addLabel('entry', 0)
+          .to(baseBits, { autoAlpha: 1, y: 0, duration: 0.3, stagger: 0.06, ease: 'power3.out' }, P.intro)
+          .to(contactThumbs, { autoAlpha: 1, yPercent: 0, duration: 0.24, stagger: 0.05, ease: 'power3.out' }, P.intro + 0.18)
+          .to(leafIntro, { autoAlpha: 1, y: 0, duration: 0.24, stagger: 0.06, ease: 'power3.out' }, P.intro + 0.12);
+        // Mobile : le titre de la planche prend la place du folio d'atelier.
+        if (!isDesktop) tl.to(leafFolio, { autoAlpha: 0, duration: 0.12 }, P.intro);
 
-            .addLabel('intention', P.intention)
-            .to(contactCards, { autoAlpha: 0, scale: 0.94, duration: 0.2 }, P.intention - 0.18)
-            .to(contactChrome, { autoAlpha: 0, y: -10, duration: 0.18 }, P.intention - 0.1)
-            .to([entryPaper, entryFolio], { autoAlpha: 0, duration: 0.22 }, P.intention - 0.16)
-            .to(intentionScene, { autoAlpha: 1, duration: 0.12 }, P.intention - 0.08);
-          const intentionPhoto = one('[data-intention-media] [data-media]');
-          if (entryImage && intentionPhoto) {
-            tl.to(entryImage, {
-              x: () => centre(intentionPhoto).x - centre(entryImage).x,
-              y: () => centre(intentionPhoto).y - centre(entryImage).y,
-              scale: () => intentionPhoto.offsetWidth / entryImage.offsetWidth,
-              duration: 0.34, ease: EASE.handoff,
-            }, P.intention - 0.16);
+        /* ---- Les feuillets tournent ----
+           Desktop : vraie rotation 3D autour de la reliure ; le feuillet passe
+           au-dessus de la pile au moment où il quitte la droite, son verso
+           devient la page de gauche. Mobile (page unique) : le feuillet se
+           détache vers la gauche et révèle le suivant. */
+        leaves.slice(0, -1).forEach((leaf, index) => {
+          const at = P.firstTurn + index * P.step;
+          const frontShade = leaf.querySelector<HTMLElement>('[data-front-shade]');
+          const backShade = leaf.querySelector<HTMLElement>('[data-back-shade]');
+          const backTerm = leaf.querySelectorAll<HTMLElement>('[data-back-term]');
+          tl.addLabel(`turn-${index + 1}`, at);
+          if (isDesktop) {
+            tl.set(leaf, { zIndex: 100 + index }, at)
+              .to(leaf, { rotationY: -180, duration: P.turn, ease: 'power2.inOut' }, at)
+              .to(frontShade, { autoAlpha: 0.5, duration: P.turn / 2, ease: 'power1.in' }, at)
+              .to(backShade, { autoAlpha: 0, duration: P.turn / 2, ease: 'power1.out' }, at + P.turn / 2)
+              .to(sweep, { autoAlpha: 0.32, duration: P.turn / 2, ease: 'power1.in' }, at)
+              .to(sweep, { autoAlpha: 0, duration: P.turn / 2, ease: 'power1.out' }, at + P.turn / 2)
+              .to(backTerm, { autoAlpha: 1, yPercent: 0, duration: 0.22, stagger: 0.05, ease: 'power3.out' }, at + P.turn * 0.72);
+          } else {
+            tl.to(leaf, { rotationY: -96, duration: P.turn, ease: 'power2.in' }, at)
+              .to(frontShade, { autoAlpha: 0.55, duration: P.turn, ease: 'power1.in' }, at)
+              .to(leaf, { autoAlpha: 0, duration: 0.08 }, at + P.turn - 0.08);
           }
-          tl.to(intentionMedia, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: 0.04 }, P.intention + 0.18)
-            .to(entryPlate, { autoAlpha: 0, duration: 0.04 }, P.intention + 0.2)
-            .to(intentionCopy, { autoAlpha: 1, y: 0, stagger: 0.035, duration: 0.18 }, P.intention + 0.14)
+        });
 
-            .addLabel('system', P.system)
-            .to(intentionMedia, {
-              x: () => {
-                const target = systemArtifacts.at(-1);
-                if (!target) return 0;
-                return centre(target).x - centre(intentionMedia[0]!).x;
-              },
-              y: () => {
-                const target = systemArtifacts.at(-1);
-                if (!target) return 0;
-                return centre(target).y - centre(intentionMedia[0]!).y;
-              },
-              scale: () => (systemArtifacts.at(-1)?.clientWidth ?? 100) / intentionMedia[0]!.offsetWidth,
-              rotation: 1.4, autoAlpha: 0, duration: 0.34,
-            }, P.system - 0.16)
-            .to(intentionCopy, { autoAlpha: 0, y: -8, duration: 0.18 }, P.system - 0.12)
-            .to(
-              systemScene,
-              { autoAlpha: 1, clipPath: 'inset(0% 0% 0% 0%)', duration: 0.24 },
-              P.system - 0.12,
-            )
-            .to(systemLines, { scaleX: 1, stagger: 0.04, duration: 0.24 }, P.system)
-            .to(systemCopy, { autoAlpha: 1, y: 0, stagger: 0.05, duration: 0.28 }, P.system + 0.04)
-            // One readable board, not five asynchronous translucent cards.
-            // All artifacts are opaque BEFORE the reading hold begins.
-            .to(systemTokens, { autoAlpha: 1, yPercent: 0, duration: 0.2 }, P.system + 0.1)
-            .to(systemArtifacts, { autoAlpha: 1, scale: 1, duration: 0.2 }, P.system + 0.18)
+        /* ---- La chambre forte : l'iris s'ouvre depuis le tirage Yuna ----
+           Le dernier tirage collé occupe la géométrie exacte de `workProof` :
+           l'iris révèle donc la même image, au même endroit, sur fond sombre. */
+        const proofCentre = () => ({
+          x: workProof.offsetLeft + workProof.offsetWidth / 2,
+          y: workProof.offsetTop + workProof.offsetHeight / 2,
+        });
+        const irisRadius = () => {
+          const { x, y } = proofCentre();
+          const w = stageEl.clientWidth;
+          const h = stageEl.clientHeight;
+          return Math.ceil(Math.hypot(Math.max(x, w - x), Math.max(y, h - y))) + 2;
+        };
+        tl.addLabel('work', P.vault)
+          .fromTo(workScene, {
+            clipPath: () => { const { x, y } = proofCentre(); return `circle(0px at ${x}px ${y}px)`; },
+          }, {
+            clipPath: () => { const { x, y } = proofCentre(); return `circle(${irisRadius()}px at ${x}px ${y}px)`; },
+            duration: 0.5,
+            ease: 'power2.inOut',
+            immediateRender: false,
+          }, P.vault)
+          .to(workRule, { scaleY: 1, duration: 0.24 }, P.vault + 0.3)
+          .to(workCopy, { autoAlpha: 1, y: 0, stagger: 0.06, duration: 0.26, ease: 'power3.out' }, P.vault + 0.34)
+          .to({}, { duration: 0.01 }, P.end - 0.01);
 
-            .addLabel('method', P.method)
-            .to(systemScene, { scale: isDesktop ? 0.58 : 0.7, xPercent: isDesktop ? -31 : -20, yPercent: -7, autoAlpha: 0, duration: 0.24 }, P.method - 0.16)
-            .to(intentionScene, { autoAlpha: 0, duration: 0.2 }, P.method - 0.16)
-            .to(contactScene, { autoAlpha: 0, duration: 0.16 }, P.method - 0.16)
-            .to(methodScene, { autoAlpha: 1, duration: 0.14 }, P.method - 0.08)
-            .to(methodChrome, { autoAlpha: 1, y: 0, stagger: 0.04, duration: 0.24 }, P.method);
-          if (folioCover) {
-            tl.to(folioCover, isDesktop
-              ? { rotationY: -168, duration: 0.4, ease: EASE.scrub }
-              : { clipPath: 'inset(0% 100% 0% 0%)', duration: 0.35 },
-              P.method + 0.08)
-              .to(folioCover, { autoAlpha: 0, duration: 0.04 }, P.method + 0.48);
-          }
-
-          const beat = 0.55;
-          content.strategy.steps.forEach((_, index) => {
-            const at = P.method + 0.12 + index * beat;
-            const word = methodWords[index];
-            const visual = methodVisuals[index];
-            const row = methodRows[index];
-            const previousWord = methodWords[index - 1];
-            const previousVisual = methodVisuals[index - 1];
-            const previousRow = methodRows[index - 1];
-
-            if (previousWord) tl.to(previousWord, { autoAlpha: 0, yPercent: -10, duration: 0.08 }, at - 0.035);
-            if (previousVisual) {
-              if (isDesktop) {
-                // One page physically turns; the following sheet has already
-                // appeared UNDER it. The master's scroll controls both.
-                tl.to(previousVisual, {
-                  rotationY: -164,
-                  transformOrigin: 'left center',
-                  duration: 0.27,
-                  ease: EASE.scrub,
-                }, at - 0.14)
-                  .to(previousVisual, { autoAlpha: 0, duration: 0.025 }, at + 0.13);
-              } else {
-                tl.to(previousVisual, {
-                  autoAlpha: 0, clipPath: 'inset(0% 0% 100% 0%)',
-                  scale: 0.97, duration: 0.12,
-                }, at - 0.035);
-              }
-            }
-            if (previousRow) tl.to(previousRow, { autoAlpha: 0.8, x: 0, color: 'var(--ink)', duration: 0.08 }, at - 0.035);
-            if (word) tl.to(word, { autoAlpha: 1, yPercent: 0, duration: 0.1 }, at);
-            if (visual) tl.to(visual, {
-              autoAlpha: 1,
-              clipPath: 'inset(0% 0% 0% 0%)',
-              rotationY: 0, scale: 1,
-              duration: isDesktop ? 0.025 : 0.16,
-            }, isDesktop ? at - 0.145 : at);
-            if (row) tl.to(row, { autoAlpha: 1, x: isDesktop ? -10 : 0, color: 'var(--rich-wine)', duration: 0.1 }, at);
-          });
-
-          if (finalMethodVisual) {
-            const targetWidth = () => workProof.offsetWidth;
-            const alignX = () => {
-              return workProof.offsetLeft + workProof.offsetWidth / 2 - (finalMethodVisual.offsetLeft + finalMethodVisual.offsetWidth / 2);
-            };
-            const alignY = () => {
-              return workProof.offsetTop + workProof.offsetHeight / 2 - (finalMethodVisual.offsetTop + finalMethodVisual.offsetHeight / 2);
-            };
-            tl.to(
-              finalMethodVisual,
-              {
-                x: alignX,
-                y: alignY,
-                scale: () => targetWidth() / finalMethodVisual.offsetWidth,
-                rotation: 0,
-                duration: 0.24,
-                ease: EASE.handoff,
-              },
-              P.work - 0.22,
-            );
-          }
-
-          tl.addLabel('work', P.work)
-            .to(workScene, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.32, ease: EASE.handoff }, P.work - 0.1)
-            // Retire the method when the Yuna cover takes ownership. The two
-            // compositions must never remain readable simultaneously.
-            .to([methodScene, systemScene], { autoAlpha: 0, duration: 0.19 }, P.work - 0.09)
-            .to(workRule, { scaleY: 1, duration: 0.2 }, P.work)
-            .to(workCopy, { autoAlpha: 1, y: 0, stagger: 0.045, duration: 0.24 }, P.work + 0.02)
-            .to(workProof, { autoAlpha: 1, y: 0, rotation: 0, scale: 1, duration: 0.24 }, P.work - 0.01)
-            .to({}, { duration: 0.01 }, P.end - 0.01);
-
-          const unregisterQA = registerVisualFilm('notebook', tl, {
-            entry: 0, sheet: 0.64, intention: 1.5, system: 2.4,
-            cover: P.method + 0.05, method: P.method + 0.53,
-            decision: P.method + 2.05, campaign: P.work - 0.2,
-            selection: P.end - 0.09, seam: P.end,
-          });
-          return () => {
-            unregisterQA();
-            railEl.style.willChange = '';
-          };
-        },
-      );
+        const turnState = (n: number) => P.firstTurn + (n - 1) * P.step + P.turn + 0.12;
+        const unregisterQA = registerVisualFilm('notebook', tl, {
+          entry: 0,
+          sheet: 0.6,
+          intention: turnState(1),
+          method: turnState(2),
+          decision: turnState(5),
+          campaign: turnState(7),
+          vault: P.vault + 0.3,
+          selection: P.end - 0.09,
+          seam: P.end,
+        });
+        return () => {
+          unregisterQA();
+        };
+      });
       return () => mm.revert();
     },
     { scope: root },
   );
 
+  /* Contenu des feuillets. Recto = page de droite ; verso = page de gauche
+     suivante. Sur mobile (page unique), le texte du recto est porté par
+     `[data-mobile-text]` et le verso n'existe pas. */
+  const backPages: Array<{ chapter: string; index?: string; term: string; note: string; hand?: string }> = [
+    { chapter: `05.2 / ${process.moodboard}`, term: process.moodboard, note: process.intentionStatement, hand: process.choiceNote },
+    ...steps.map((step, i) => ({
+      chapter: `05.3 / ${strategy.heading}`,
+      index: `${pad(i + 1)} / ${pad(steps.length)}`,
+      term: step.term,
+      note: step.note,
+    })),
+  ];
+  const leafCount = 2 + steps.length;
+
   return (
-    <section ref={root} className={`act surface-paper ${styles.act}`} aria-labelledby="process-title">
+    <section ref={root} className={`act surface-paper ${styles.act}`} aria-label={process.heading}>
       <span id="act-work" className={styles.workMarker} style={workMarkerStyle} aria-hidden="true" />
 
       <div ref={stage} className={styles.stage}>
         <div className={styles.motionProcess}>
+          {/* Le livre : le papier du NotebookFrame reçu est sa reliure. */}
           <NotebookFrame className={styles.entryPlate} locale={locale} marker="process" />
 
-          <div className={styles.contactScene} data-process-contact>
-            <div className={styles.processChrome} data-contact-copy>
-              <span className="micro">05 / {content.process.heading}</span>
-              <span className={`${styles.processSequence} micro`} aria-hidden="true">
-                {content.process.sheet} → {content.process.moodboard} → {content.process.system} → {content.strategy.heading}
-              </span>
-            </div>
-            <h2 id="process-title" className={`${styles.contactTitle} display`} data-contact-copy>{content.process.sheet}</h2>
-            <span className={`${styles.contactNote} hand-note`} data-contact-copy aria-hidden="true">{content.process.materialNote}</span>
-            <div className={styles.contactRailViewport}>
-            <div ref={contactRail} className={styles.contactRail}>
-              {contactSheet.slice(4).map((item, index) => (
-                <figure className={styles.contactCard} data-contact-card key={item.id}>
-                  <span className={`${styles.contactIndex} micro`}>{String(index + 1).padStart(2, '0')}</span>
-                  <Media item={item} locale={locale} compact sizes="27vw" />
-                  <figcaption className="micro">{item.role}</figcaption>
-                </figure>
-              ))}
-            </div>
-            </div>
-            <span className={styles.contactRule} data-contact-copy aria-hidden="true" />
-          </div>
-
-          <div className={styles.intentionScene} data-process-intention>
-            <span className={`${styles.sceneChapter} micro`} data-intention-copy>05.2 / {content.process.moodboard}</span>
-            <h3 className={`${styles.intentionTitle} display`} data-intention-copy>{content.process.moodboard}</h3>
-            <p className={styles.intentionStatement} data-intention-copy>{content.process.intentionStatement}</p>
-            <span className={`${styles.intentionNote} hand-note`} data-intention-copy aria-hidden="true">{content.process.choiceNote}</span>
-            <figure className={styles.intentionMedia} data-intention-media>
-              <Media item={contactSheet[0]!} locale={locale} compact sizes="42vw" />
-              <figcaption className="micro">Selected 01 / {contactSheet[0]!.role}</figcaption>
-              <span className={styles.intentionCrop} aria-hidden="true" />
-            </figure>
-            <span className={styles.intentionAxis} data-intention-copy aria-hidden="true" />
-          </div>
-
-          <div className={styles.systemScene} data-process-system>
-            <span className={`${styles.sceneChapter} micro`} data-system-copy>05.2 / {content.process.moodboard} → {content.process.system}</span>
-            <h3 className={`${styles.systemTitle} display`} data-system-copy>{content.process.system}</h3>
-            <p className={styles.systemStatement} data-system-copy>{content.process.systemStatement}</p>
-            <span className={styles.systemLine} data-system-line aria-hidden="true" />
-            <div className={styles.systemBoard}>
-              {content.process.systemTokens.map((token, index) => (
-                <article className={styles.systemToken} data-system-token key={token}>
-                  <span className={`${styles.tokenIndex} micro`}>{String(index + 1).padStart(2, '0')}</span>
-                  <TokenArtifact index={index} locale={locale} />
-                  <p>{token}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.methodScene} data-process-method>
-            <span className={`${styles.sceneChapter} micro`} data-method-copy>05.3 / {content.strategy.heading}</span>
-            <span className={`${styles.methodCounter} micro`} data-method-copy aria-hidden="true">Direction → décision → campagne</span>
-            <div className={styles.methodWords} aria-hidden="true">
-              {content.strategy.steps.map((step, index) => (
-                <span data-method-word key={step.term}><small>0{index + 1}</small>{step.term}</span>
-              ))}
-            </div>
-            <div className={styles.methodBook} aria-hidden="true">
-              <span className={styles.bookSpine} />
-              <div className={styles.bookCover} data-method-book-cover>
-                <span className={styles.bookEdition}>ATELIER / 2026</span>
-                <span className={styles.bookMonogram}>G.</span>
-                <strong className={styles.bookTitle}>{content.strategy.heading}</strong>
-                <span className={styles.bookFooter}>01 — 06 / {content.process.heading}</span>
-              </div>
-            </div>
-            <div className={styles.methodVisuals} aria-hidden="true">
-              {content.strategy.steps.map((step, index) => (
-                <figure data-method-visual key={`visual-${step.term}`} style={{ '--evidence-ratio': ratioValue[(index === content.strategy.steps.length - 1 ? yunaMedia[0]! : contactSheet[(index + 4) % contactSheet.length]!).ratio] } as CSSProperties}>
-                  <Media
-                    item={index === content.strategy.steps.length - 1 ? yunaMedia[0]! : contactSheet[(index + 4) % contactSheet.length]!}
-                    locale={locale}
-                    compact
-                    sizes="28vw"
-                  />
-                  <figcaption>
-                    <span className="micro">0{index + 1} / {index === content.strategy.steps.length - 1 ? 'Campaign · Yuna' : 'Evidence'}</span>
-                    <strong>{step.term}</strong>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-            <ol className={styles.methodList}>
-              {content.strategy.steps.map((step, index) => (
-                <li data-method-row key={step.term}>
-                  <span className="micro">0{index + 1}</span>
-                  <strong>{step.term}</strong>
-                  <p>{step.note}</p>
+          {/* Page de gauche initiale (desktop) — la planche contact. */}
+          <div className={styles.basePage}>
+            <span className={`${styles.pageChapter} micro`} data-base-bit>05 / {process.heading}</span>
+            <h2 className={styles.pageTitle} data-base-bit>{process.sheet}</h2>
+            <p className={`${styles.pageNote} hand-note`} data-base-bit>{process.materialNote}</p>
+            <ol className={styles.contactStrip} aria-hidden="true">
+              {contactSheet.slice(1, 5).map((item, index) => (
+                <li data-contact-thumb key={item.id}>
+                  <Media item={item} locale={locale} compact sizes="9vw" />
+                  <span className="micro">{pad(index + 2)}</span>
                 </li>
               ))}
             </ol>
           </div>
 
+          <span className={styles.sweep} data-sweep aria-hidden="true" />
+
+          {/* ---------- LES FEUILLETS ---------- */}
+          <div className={styles.leaves}>
+            {Array.from({ length: leafCount }, (_, k) => {
+              const back = backPages[k];
+              const stepIndex = k - 2;
+              const step = steps[stepIndex];
+              return (
+                <div className={styles.leaf} data-leaf={k} key={k}>
+                  <div className={`${styles.face} ${styles.front}`}>
+                    {k === 0 && (
+                      <>
+                        <figure className={styles.entryPrint}>
+                          <Media item={contactSheet[0]!} locale={locale} compact loading="eager" sizes="(max-width: 1023px) 64vw, 28vw" />
+                        </figure>
+                        <span className={`${styles.entryFolio} micro`} data-leaf-folio>01 / ATELIER</span>
+                        <div className={styles.mobileText} data-mobile-text>
+                          <span className="micro" data-leaf-intro>05 / {process.heading}</span>
+                          <h2 className={styles.mobileTitle} data-leaf-intro>{process.sheet}</h2>
+                        </div>
+                      </>
+                    )}
+
+                    {k === 1 && (
+                      <div className={styles.systemPage}>
+                        <span className={`${styles.pageChapter} micro`}>05.2 / {process.system}</span>
+                        <p className={`${styles.mobileOnly} ${styles.mobileLead}`}>
+                          <strong>{process.moodboard}.</strong> {process.intentionStatement}
+                        </p>
+                        <h3 className={styles.pageTitle}>{process.system}</h3>
+                        <p className={styles.pageLead}>{process.systemStatement}</p>
+                        <ol className={styles.specList}>
+                          {process.systemTokens.map((token, index) => (
+                            <li key={token}>
+                              <span className="micro">{pad(index + 1)}</span>
+                              <SystemSpecimen index={index} />
+                              <strong>{token}</strong>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    )}
+
+                    {step && (
+                      <>
+                        <div className={styles.mobileText}>
+                          <span className="micro">05.3 / {strategy.heading} · {pad(stepIndex + 1)}/{pad(steps.length)}</span>
+                          <h3 className={styles.mobileTitle}>{step.term}</h3>
+                        </div>
+                        <figure className={styles.evidence}>
+                          <Media item={evidenceFor(stepIndex, steps.length)} locale={locale} sizes="(max-width: 1023px) 54vw, 29vw" />
+                          <figcaption className={`${styles.evidenceStamp} micro`}>
+                            {stepIndex === steps.length - 1 ? 'Campaign / Yuna Bijoux' : `${pad(stepIndex + 1)} / ${step.term}`}
+                          </figcaption>
+                          <span className={styles.evidenceCrop} aria-hidden="true" />
+                        </figure>
+                        <p className={`${styles.mobileOnly} ${styles.mobileNote}`}>{step.note}</p>
+                      </>
+                    )}
+                    <span className={styles.frontShade} data-front-shade aria-hidden="true" />
+                  </div>
+
+                  {back && (
+                    <div className={`${styles.face} ${styles.back}`}>
+                      <span className={`${styles.pageChapter} micro`}>{back.chapter}</span>
+                      {back.index && <span className={`${styles.backIndex} micro`}>{back.index}</span>}
+                      <h3 className={styles.backTerm}>
+                        <span className={styles.backMask}><span data-back-term>{back.term}</span></span>
+                      </h3>
+                      <p className={styles.backNote} data-back-term>{back.note}</p>
+                      {back.hand && <p className={`${styles.backHand} hand-note`} data-back-term>{back.hand}</p>}
+                      <span className={styles.backShade} data-back-shade aria-hidden="true" />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* ---------- 06 · LA CHAMBRE FORTE ---------- */}
           <div className={styles.workScene} data-process-work aria-hidden="true">
             <span className={`${styles.workIndex} micro`} data-work-copy>06 / Portfolio</span>
-            <h3 className={`${styles.workTitle} display`} data-work-copy>{content.work.heading}</h3>
-            <p className={styles.workStatement} data-work-copy>{content.strategy.sentence}</p>
+            <h3 className={`${styles.workTitle} display`} data-work-copy>{work.heading}</h3>
+            <p className={styles.workStatement} data-work-copy>{strategy.sentence}</p>
             <span className={styles.workRule} data-work-rule />
             <div className={styles.workProof} data-work-proof>
               <Media item={yunaMedia[0]!} locale={locale} preload sizes="29vw" />

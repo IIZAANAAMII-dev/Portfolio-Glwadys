@@ -66,6 +66,8 @@
     top: 20%;
     height: 58%;
     transform-origin: center;
+    /* Page unique sur mobile : pas de pli central qui couperait le tirage. */
+    background: var(--ivory);
   }
   .binding { left: 3%; }
   .image {
