@@ -286,6 +286,13 @@
   }
 }
 
+/* Baseline links remain usable before/without the animated shell. */
+@media (scripting: none) {
+  .nav { opacity: 1; visibility: visible; translate: -50% 0; }
+  .storyState, .languageToggle { display: none; }
+  .langs { display: flex; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nav {
     transition: none;

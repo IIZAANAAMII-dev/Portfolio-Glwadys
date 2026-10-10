@@ -6,9 +6,10 @@ import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { registerVisualFilm } from '@/lib/visualQa';
-import { clamp01, heldSteps, segment, settle } from '@/lib/holdScalar';
+import { clamp01, heldSteps, sampleAt, segment, settle } from '@/lib/holdScalar';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
 import { ExpertiseOpeningFrame } from '@/acts/ActExpertise/ExpertiseOpeningFrame';
+import { clearExpertisePaint, createExpertisePainter } from '@/acts/ActExpertise/expertisePainter';
 import expertiseStyles from '@/acts/ActExpertise/ActExpertise.module.css';
 
 import { JourneyArchive } from './JourneyArchive';
@@ -21,13 +22,16 @@ interface Props {
 }
 
 /* Beat map of the archive (fractions of the pinned scroll).
-   0    → 0.03  still: the wine page (end of Comptoir) frames the first print
-   0.03 → 0.15  the passe-partout is lifted off, wine → wood
+   0    → 0.03  still: the wine page frames the Comptoir print (bridge's last frame)
+   0.03 → 0.13  the Comptoir print is filed along the ledge at its own year
+   0.05 → 0.15  the passe-partout is lifted off, wine → wood, 2021 is revealed
    0.17 → 0.85  six prints, each one held for reading, one settle between them
    0.85 → 0.88  last print held
    0.88 → 1     the wine index page rises over the archive (Expertise frame 0) */
 const BEAT = {
-  liftFrom: 0.03,
+  fileFrom: 0.03,
+  fileTo: 0.13,
+  liftFrom: 0.05,
   liftTo: 0.15,
   readFrom: 0.17,
   readTo: 0.85,
@@ -76,53 +80,88 @@ export function ActJourney({ content, locale }: Props) {
           const shades = q<HTMLElement>('[data-archive-shade]');
           const chapters = q<HTMLElement>('[data-archive-chapter]');
           const rolls = q<HTMLElement>('[data-archive-roll]');
-          if (!gate || !mat || !handoff || !riseEdge || !counter || prints.length === 0) return;
+          const indexClone = q<HTMLElement>('[data-index-clone]')[0];
+          const cover = q<HTMLElement>('[data-archive-cover]')[0];
+          if (!gate || !mat || !handoff || !riseEdge || !counter || !indexClone || !cover || prints.length === 0) return;
+          // The rising index page is Expertise's first frame, painted by
+          // Expertise's own painter at pos 0 (hero term, bands, rule).
+          const indexPainter = createExpertisePainter(indexClone, isDesktop);
 
           const count = prints.length;
           const total = String(count).padStart(2, '0');
-          let gateX = 0;
-          let firstX = 0;
-          let pitch = 0;
+          const file = Math.min(count - 1, Math.max(0, Number(cover.dataset.file) || 0));
+          let gateCx = 0;
+          let centers: number[] = [];
           let stageH = 1;
           let shown = -1;
 
+          // A print's resting offset in passage, |d| = distance to the gate.
+          const passage = (d: number) => {
+            const ad = Math.abs(d);
+            return {
+              sink: Math.min(ad, 1.4) * stageH * 0.014,
+              turn: Math.max(-1, Math.min(1, d)) * 0.7 * Math.min(1, ad),
+            };
+          };
+
           const measure = () => {
-            gateX = gate.offsetLeft;
-            firstX = prints[0]!.offsetLeft;
-            pitch = (prints[1]?.offsetLeft ?? firstX + prints[0]!.offsetWidth) - firstX;
+            // Computed (fractional) sizes, not offsetWidth: rounding drifts
+            // away from the shared aperture across six prints on small screens.
+            const gateCss = getComputedStyle(gate);
+            gateCx = parseFloat(gateCss.left) + parseFloat(gateCss.width) / 2;
+            const gap = parseFloat(getComputedStyle(stripEl).columnGap) || 0;
+            let left = prints[0]!.offsetLeft;
+            centers = prints.map((print) => {
+              const w = parseFloat(getComputedStyle(print).width);
+              const centre = left + w / 2;
+              left += w + gap;
+              return centre;
+            });
             stageH = stageEl.clientHeight || window.innerHeight;
+            indexPainter.measure();
+            indexPainter.paint(0, 0);
           };
 
           const driver = { t: 0 };
           const render = () => {
             const t = driver.t;
+            const filed = settle(segment(t, BEAT.fileFrom, BEAT.fileTo));
             const lift = settle(segment(t, BEAT.liftFrom, BEAT.liftTo));
             const pos = heldSteps(segment(t, BEAT.readFrom, BEAT.readTo), count, 0.22);
             const rise = settle(segment(t, BEAT.riseFrom, 1));
 
-            // 1. The passe-partout leaves upwards, carrying its title.
+            // 1. The Comptoir print slides along the ledge onto its own year
+            //    (the same photograph, waiting off-frame at the 2024 print).
+            //    It lands with that print's exact passage offset at pos 0.
+            const target = passage(file);
+            const reach = (centers[file] ?? 0) - (centers[0] ?? 0);
+            cover.style.transform = `translate3d(${(filed * reach).toFixed(2)}px, ${(filed * target.sink).toFixed(2)}px, 0) rotate(${(filed * target.turn).toFixed(3)}deg)`;
+            cover.style.visibility = filed >= 1 ? 'hidden' : 'visible';
+
+            // 2. The passe-partout leaves upwards, carrying its title.
             mat.style.transform = `translate3d(0, ${(-lift * 100).toFixed(3)}%, 0)`;
             mat.style.visibility = lift >= 1 ? 'hidden' : 'visible';
 
-            // 2. The prints travel as one physical row: x is a single value.
-            const x = gateX - (firstX + pos * pitch);
+            // 3. The prints travel as one physical row: x is a single value,
+            //    centring the reading print (of any format) in the gate.
+            const x = gateCx - sampleAt(centers, pos);
             stripEl.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
             prints.forEach((print, index) => {
               const d = index - pos;
               const ad = Math.abs(d);
-              if (ad > 2.6) return;
               // Resting print: exactly flat. Prints in passage sink a few
               // pixels and turn by less than a degree, like paper slid by hand.
-              const sink = Math.min(ad, 1.4) * stageH * 0.014;
-              const turn = Math.max(-1, Math.min(1, d)) * 0.7 * Math.min(1, ad);
+              const { sink, turn } = passage(d);
               print.style.transform = `translate3d(0, ${sink.toFixed(2)}px, 0) rotate(${turn.toFixed(3)}deg)`;
               const shade = shades[index];
               if (shade) shade.style.opacity = (Math.min(1, ad) * 0.6).toFixed(3);
               const photo = photos[index];
-              if (photo) photo.style.transform = `translate3d(${(-d * 3.2).toFixed(3)}%, 0, 0) scale(1.08)`;
+              // Parallax stays inside the 1.08 overscale: no edge is ever exposed.
+              const drift = Math.max(-1.2, Math.min(1.2, d));
+              if (photo) photo.style.transform = `translate3d(${(-drift * 3.2).toFixed(3)}%, 0, 0) scale(1.08)`;
             });
 
-            // 3. The reading column derives from the same position.
+            // 4. The reading column derives from the same position.
             chapters.forEach((chapter, index) => {
               const d = index - pos;
               const alpha = clamp01(1 - Math.abs(d) * 2.6);
@@ -149,7 +188,7 @@ export function ActJourney({ content, locale }: Props) {
               });
             }
 
-            // 4. The wine index page rises from the lower paper edge.
+            // 5. The wine index page rises from the lower paper edge.
             handoff.style.setProperty('--rise', rise.toFixed(4));
             handoff.style.visibility = rise <= 0 ? 'hidden' : 'visible';
             riseEdge.style.transform = `translate3d(0, ${((1 - rise) * stageH).toFixed(2)}px, 0)`;
@@ -158,6 +197,12 @@ export function ActJourney({ content, locale }: Props) {
 
           measure();
           render();
+          let alive = true;
+          document.fonts?.ready.then(() => {
+            if (!alive) return;
+            measure();
+            render();
+          });
 
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
@@ -181,14 +226,15 @@ export function ActJourney({ content, locale }: Props) {
           tl.to(driver, { t: 1, duration: 1, onUpdate: render }, 0);
 
           const unregister = registerVisualFilm('journey', tl, {
-            aperture: 0, first: 0.17, second: 0.306, third: 0.442,
+            aperture: 0, filing: 0.09, first: 0.17, second: 0.306, third: 0.442,
             fourth: 0.578, fifth: 0.714, sixth: 0.85, index: 1,
           });
           return () => {
+            alive = false;
             unregister();
             delete rootEl.dataset.enhanced;
             stripEl.style.willChange = '';
-            [mat, stripEl, riseEdge, ...prints, ...photos, ...rolls, ...chapters].forEach((node) => {
+            [mat, cover, stripEl, riseEdge, ...prints, ...photos, ...rolls, ...chapters].forEach((node) => {
               node.style.transform = '';
               node.style.visibility = '';
               node.style.opacity = '';
@@ -196,6 +242,7 @@ export function ActJourney({ content, locale }: Props) {
             shades.forEach((node) => (node.style.opacity = ''));
             handoff.style.removeProperty('--rise');
             handoff.style.visibility = '';
+            clearExpertisePaint(indexClone);
             chapters.forEach((chapter, index) => {
               chapter.removeAttribute('aria-current');
               if (index === 0) chapter.dataset.active = 'true';
@@ -222,7 +269,7 @@ export function ActJourney({ content, locale }: Props) {
         <div className={[styles.handoff, 'surface-bordeaux'].join(' ')} data-archive-handoff aria-hidden="true">
           {/* Same DOM, CSS and painter state as Expertise's first frame:
               the index page physically rises over the archive. */}
-          <div className={expertiseStyles.sheet}>
+          <div className={expertiseStyles.sheet} data-index-clone>
             <ExpertiseOpeningFrame content={content} decorative />
           </div>
         </div>

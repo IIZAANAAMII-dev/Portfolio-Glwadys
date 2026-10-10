@@ -28,10 +28,12 @@
 .sheet {
   --hx: clamp(1rem, 3vw, 2.75rem);
   --mx: 8vw;
-  --list-top: 21svh;
-  --row-h: min(9.2svh, 6.2vw);
+  --list-top: 22svh;
+  /* Resting rows are deliberately modest: the active discipline is set at
+     hero size by the painter (about twice this) and needs the measure. */
+  --row-h: min(6.6svh, 4.6vw);
   --num-w: 3.4vw;
-  --slot-x: 62vw;
+  --slot-x: 70vw;
   position: absolute;
   inset: 0;
   overflow: hidden;
@@ -80,7 +82,7 @@
   top: var(--list-top);
   left: calc(var(--slot-x) - 2vw);
   width: 1px;
-  height: calc(var(--row-h) * 7);
+  height: calc(var(--row-h) * 7.7);
   background: linear-gradient(180deg, transparent, rgb(var(--champagne-rgb) / 0.26) 12%, rgb(var(--champagne-rgb) / 0.26) 88%, transparent);
   pointer-events: none;
 }
@@ -101,11 +103,24 @@
   grid-template-columns: var(--num-w) minmax(0, 1fr);
   align-items: center;
   height: var(--row-h);
-  border-bottom: 1px solid rgb(var(--ivory-rgb) / 0.07);
 }
 
 .row:first-child {
   border-top: 1px solid rgb(var(--ivory-rgb) / 0.07);
+}
+
+/* The row's hairline sits under its band (--band, written by the painter),
+   so an opened hero row keeps its own ruled space. */
+.row::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgb(var(--ivory-rgb) / 0.07);
+  transform: translate3d(0, calc(var(--band, var(--row-h)) - 1px), 0);
+  pointer-events: none;
 }
 
 .num {
@@ -124,13 +139,13 @@
   justify-self: start;
   color: var(--ivory);
   font-family: var(--font-display);
-  font-size: calc(var(--row-h) * 0.72);
+  font-size: calc(var(--row-h) * 0.66);
   font-style: italic;
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.035em;
   white-space: nowrap;
-  opacity: 0.68;
+  opacity: 0.6;
   transform-origin: left center;
   will-change: transform, opacity;
 }
@@ -141,7 +156,6 @@
 
 .row[data-active='true'] .term {
   opacity: 1;
-  transform: scale(1.07);
 }
 
 .rowContext {
@@ -161,10 +175,10 @@
   left: var(--mx);
   width: calc(var(--slot-x) - var(--mx) - 2vw);
   height: 1px;
-  margin-top: calc(var(--row-h) - 1px);
   background: linear-gradient(90deg, var(--champagne), rgb(var(--champagne-rgb) / 0.55) 70%, var(--champagne));
   pointer-events: none;
-  transform: translate3d(0, var(--list-top), 0);
+  transform: translate3d(0, calc(var(--list-top) + var(--row-h) - 1px), 0);
+  transform-origin: 0 0;
   will-change: transform;
 }
 
@@ -306,7 +320,10 @@
     --hx: 0.75rem;
     --mx: max(var(--margin), 1.25rem);
     --list-top: calc(var(--margin) + 5.4rem);
-    --row-h: clamp(2.5rem, calc((100svh - 14.5rem - var(--nav-clearance)) / 7), 4.1rem);
+    /* Seven rows, the opened hero band (≤ 0.45 row at 320) and a two-line
+       context all end above the language control and the nav, at 320×568
+       too (context ends ≈ 423px, control line 428px). */
+    --row-h: clamp(2.25rem, calc((100svh - var(--list-top) - var(--control-clearance) - 4.4rem) / 7.25), 4.1rem);
     --num-w: 1.9rem;
     background:
       radial-gradient(ellipse 90% 50% at 20% 35%, rgb(var(--ivory-rgb) / 0.045), transparent 70%),
@@ -327,21 +344,21 @@
     right: var(--margin);
   }
 
+  /* Resting size leaves the measure for the active term's hero scale
+     (painter). The longest discipline, "Brand Communication", needs about
+     11.4 em-widths: 7vw − 5.2px keeps it opening to ≥ 1.25× at 320, 390 and
+     430, while the resting index grows with the phone (17px → 22px → 25px). */
   .term {
-    font-size: min(calc(var(--row-h) * 0.68), 7.9vw);
+    font-size: min(calc(var(--row-h) * 0.56), calc(7vw - 5.2px));
   }
 
-  .row[data-active='true'] .term {
-    transform: none;
-  }
-
-  /* A 2px champagne bar beside the active discipline. */
+  /* A 2px champagne bar beside the active discipline, as tall as its band. */
   .rule {
     left: calc(var(--mx) - 0.7rem);
     width: 2px;
     height: var(--row-h);
-    margin-top: 0;
     background: var(--champagne);
+    transform: translate3d(0, var(--list-top), 0);
   }
 
   /* One caption band directly under the index, above nav and language. */
@@ -428,6 +445,12 @@
     padding: 1rem 0;
     grid-template-columns: var(--num-w) minmax(0, 1fr);
     row-gap: 0.4rem;
+  }
+
+  .row::after {
+    top: auto;
+    bottom: 0;
+    transform: none;
   }
 
   .term,

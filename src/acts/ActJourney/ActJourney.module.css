@@ -52,7 +52,9 @@
   left: 0;
   z-index: 1;
   display: flex;
-  align-items: flex-start;
+  /* The ledge: every format stands on the same lower edge. The portrait is
+     the tallest format, so the ledge is the aperture's lower edge. */
+  align-items: flex-end;
   gap: var(--gap);
   width: max-content;
 }
@@ -68,10 +70,13 @@
   background: rgb(var(--champagne-rgb) / 0.2);
 }
 
+/* --fw / --fh: the chapter's print format, as factors of --pw (JourneyArchive). */
 .print {
+  --fw: 1;
+  --fh: 1.25;
   position: relative;
-  flex: 0 0 var(--print-w);
-  width: var(--print-w);
+  flex: 0 0 calc(var(--pw) * var(--fw) + 2 * var(--pb));
+  width: calc(var(--pw) * var(--fw) + 2 * var(--pb));
   margin: 0;
   padding: var(--pb);
   transform-origin: 50% 100%;
@@ -79,8 +84,8 @@
 
 .photo {
   position: relative;
-  width: var(--pw);
-  height: var(--ph);
+  width: calc(var(--pw) * var(--fw, 1));
+  height: calc(var(--pw) * var(--fh, 1.25));
   overflow: hidden;
   background: var(--charcoal);
   /* The ivory border of a real print, then its shadow on the wood. */
@@ -153,8 +158,10 @@
   font-variant-numeric: tabular-nums;
 }
 
-.caption span:last-child {
-  color: rgb(var(--ivory-rgb) / 0.62);
+.staticCaption { display: none; }
+
+.caption > span:nth-child(2) {
+  color: rgb(var(--ivory-rgb) / 0.8);
 }
 
 /* ── The left page (reading column) ─────────────────────────────────── */
@@ -182,9 +189,13 @@
   list-style: none;
 }
 
+/* Each label stands on its own print's upper edge (prints share the lower
+   ledge, so a square or landscape print starts lower than the portrait):
+   the label and the year stamp always bracket the height of the image. */
 .chapterItem {
   position: absolute;
   inset: 0 0 auto;
+  top: calc(var(--pw) * (1.25 - var(--fh, 1.25)));
   display: block;
 }
 
@@ -299,6 +310,21 @@
 
 .counter {
   font-variant-numeric: tabular-nums;
+}
+
+/* ── The Comptoir cover print ───────────────────────────────────────────
+   Laid in the mat window, above the mat. Same box as the gate. */
+.coverPrint {
+  position: absolute;
+  left: var(--gx);
+  top: var(--gy);
+  z-index: 7;
+  width: var(--print-w);
+  height: var(--print-h);
+  padding: var(--pb);
+  pointer-events: none;
+  /* No will-change: the bridge scales this print, it must re-raster sharp. */
+  transform-origin: 0 0;
 }
 
 /* ── The wine passe-partout ─────────────────────────────────────────── */
@@ -478,6 +504,11 @@
     margin-top: 0.55rem;
   }
 
+  /* Below the print, every label reads from the same line. */
+  .chapterItem {
+    top: 0;
+  }
+
   .itemLabel {
     max-width: 34ch;
     font-size: clamp(0.84rem, 3.6vw, 0.98rem);
@@ -522,6 +553,8 @@
 @media (prefers-reduced-motion: reduce), (scripting: none) {
   .act { margin-top: 0; }
   .stage {
+    display: flex;
+    flex-direction: column;
     height: auto;
     padding: var(--space-act) var(--margin);
   }
@@ -529,6 +562,7 @@
   .gate,
   .head,
   .stamp,
+  .coverPrint,
   .window,
   .handoff,
   .riseEdge,
@@ -542,9 +576,13 @@
     position: relative;
     inset: auto;
     transform: none;
+    border: 0;
+  }
+
+  /* One wine page, padded once (the paper inside it is not a second card). */
+  .mat {
     background: var(--rich-wine);
     padding: 2rem var(--margin) 2.5rem;
-    border: 0;
   }
 
   .matChapter,
@@ -559,14 +597,12 @@
     white-space: normal;
   }
 
+  .mat { order: -1; }
+
   .page {
-    position: relative;
-    inset: auto;
-    width: auto;
-    margin-top: 3rem;
-    background: none;
-    border: 0;
-    box-shadow: none;
+    /* Each still print carries its own factual caption. The accessible
+       ordered chronology in ActJourney remains available to screen readers. */
+    display: none;
   }
 
   .chapters {
@@ -640,6 +676,27 @@
   }
 
   .caption {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    white-space: normal;
+    padding-left: 0;
+    line-height: 1.5;
+  }
+  .caption::before { display: none; }
+  .caption .staticCaption {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 0.6rem;
+    text-transform: none;
+    letter-spacing: normal;
+    color: var(--ivory);
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  .staticCaption strong {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-style: italic;
+    font-weight: 400;
   }
 }

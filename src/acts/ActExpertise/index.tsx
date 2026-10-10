@@ -119,11 +119,24 @@ export function ActExpertise({ content }: Props) {
             )
             .to(fold, { scale: 1, duration: 0.03 }, 0.97);
 
+          // The hero scale depends on the display face's real widths.
+          let alive = true;
+          document.fonts?.ready.then(() => {
+            if (!alive) return;
+            painter.measure();
+            render();
+          });
+
           const unregister = registerVisualFilm('expertise', tl, {
             first: 0.06, second: 0.18, third: 0.3, fourth: 0.42,
             fifth: 0.54, sixth: 0.66, seventh: 0.78, all: 0.86, contact: 1,
           });
-          return () => { unregister(); delete rootEl.dataset.enhanced; clearExpertisePaint(sheet); };
+          return () => {
+            alive = false;
+            unregister();
+            delete rootEl.dataset.enhanced;
+            clearExpertisePaint(sheet);
+          };
         },
       );
       return () => mm.revert();

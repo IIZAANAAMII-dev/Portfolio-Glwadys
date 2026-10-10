@@ -1,4 +1,4 @@
-import type { RefObject } from 'react';
+import type { CSSProperties, RefObject } from 'react';
 
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
@@ -22,11 +22,27 @@ function yearColumns(years: string[]) {
 }
 
 /**
- * Le journal des images, 2021 → 2026: an archive of oversized prints laid on
- * the dark wood desk. One print rests in the reading position, the previous
- * one slides under the left page, the next one waits at the paper edge.
- * A wine passe-partout — the same wine page the Comptoir dossier ends on —
- * is lifted off the first print to open the act.
+ * Six print formats, one per chapter, standing on the same ledge (bottom
+ * aligned). Widths/heights are factors of the portrait print width `--pw`.
+ * The first print is the portrait of the shared aperture; the 2024 print is
+ * the same portrait, so the Comptoir cover print can be filed onto it.
+ */
+const FORMATS = [
+  { fw: 1, fh: 1.25 }, // 4:5 portrait — the aperture
+  { fw: 1.06, fh: 1.06 }, // square
+  { fw: 1.18, fh: 0.787 }, // 3:2 landscape
+  { fw: 1, fh: 1.25 }, // 4:5 portrait — receives the Comptoir print
+  { fw: 1.18, fh: 0.787 }, // 3:2 landscape
+  { fw: 1.06, fh: 1.06 }, // square
+] as const;
+
+/**
+ * Le journal des images, 2021 → 2026: an archive of oversized prints in six
+ * formats standing on a ledge of dark wood. One print rests in the reading
+ * position, the previous one slides under the left page, the next one waits
+ * at the paper edge. A wine passe-partout — the same wine page the Comptoir
+ * dossier ends on — is lifted off to open the act, while the Comptoir print
+ * is filed along the ledge at its own year.
  */
 export function JourneyArchive({
   content,
@@ -48,20 +64,32 @@ export function JourneyArchive({
       {/* Prints: the photographic protagonists. */}
       <div ref={stripRef} className={styles.strip} data-archive-strip aria-hidden="true">
         {journey.entries.map((entry, index) => (
-          <figure className={styles.print} data-archive-print key={entry.year}>
+          <figure
+            className={styles.print}
+            data-archive-print
+            key={entry.year}
+            style={{
+              '--fw': FORMATS[index % FORMATS.length]!.fw,
+              '--fh': FORMATS[index % FORMATS.length]!.fh,
+            } as CSSProperties}
+          >
             <div className={styles.photo}>
               <div className={styles.photoInner} data-archive-photo>
                 <Media
                   item={journeyMedia[index]!}
                   locale={locale}
                   compact
-                  sizes="(max-width: 1023px) 76vw, 36vw"
+                  sizes="(max-width: 1023px) 92vw, 44vw"
                 />
               </div>
             </div>
             <figcaption className={styles.caption}>
               <span>{entry.year}</span>
               <span>{entry.place}</span>
+              <span className={styles.staticCaption}>
+                <strong>{entry.chapter}</strong>
+                <span>{entry.label}</span>
+              </span>
             </figcaption>
             <span className={styles.shade} data-archive-shade />
           </figure>
@@ -77,6 +105,7 @@ export function JourneyArchive({
               data-archive-chapter
               data-active={index === 0 ? 'true' : undefined}
               key={entry.year}
+              style={{ '--fh': FORMATS[index % FORMATS.length]!.fh } as CSSProperties}
             >
               <span className={styles.itemYear}>{entry.year}</span>
               <span className={styles.itemVerb}>{entry.chapter}</span>

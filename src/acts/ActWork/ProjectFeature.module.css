@@ -1,32 +1,53 @@
-.project { position: relative; background: #221719; color: var(--ivory); overflow: clip; }
+.project { position: relative; background: #221719; color: var(--ivory); overflow: clip; --desk: var(--wood-brown); }
 .stage { position: relative; min-height: 48rem; height: 100svh; overflow: hidden; isolation: isolate; }
-.meta { position: absolute; z-index: 2; top: var(--margin); left: var(--margin); right: var(--margin); display: flex; justify-content: space-between; gap: 2rem; }
-.photo { position: absolute; right: 0; top: 0; width: 64%; height: 100%; transform-origin: right center; overflow: hidden; }
+/* z-order: desk 3 < spread 4 < photograph 5 < cover copy 6. The photograph
+   travels above the open spread; the cover copy steps back before it moves. */
+.meta { position: absolute; z-index: 6; top: var(--margin); left: var(--margin); right: var(--margin); display: flex; justify-content: space-between; gap: 2rem; }
+.photo { --veil: 1; position: absolute; z-index: 5; right: 0; top: 0; width: 64%; height: 100%; overflow: hidden; }
 .photo > [data-media] { width: 100%; height: 100%; aspect-ratio: auto; border: 0; }
 .photo img { object-position: 50% 46%; }
-.photo::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, #221719 0%, transparent 22%); }
-.titleBlock { position: absolute; z-index: 2; top: 23%; left: var(--margin); width: 44%; }
+.photo::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, #221719 0%, transparent 22%); opacity: var(--veil); }
+.titleBlock { position: absolute; z-index: 6; top: 23%; left: var(--margin); width: 44%; }
 .role { display: block; max-width: 36ch; margin-bottom: 2rem; color: var(--champagne); }
 .name { margin: 0; max-width: 9ch; font-family: var(--font-display); font-size: clamp(4.5rem, 9.6vw, 10rem); line-height: 0.86; font-weight: 400; letter-spacing: -0.065em; text-wrap: balance; }
-.summary { position: absolute; z-index: 2; left: var(--margin); bottom: max(16%, 9rem); width: 27%; max-width: 34ch; font-size: clamp(1rem, 1.3vw, 1.25rem); line-height: 1.5; }
-.folio { position: absolute; right: var(--margin); bottom: max(12%, 7rem); font-family: var(--font-display); font-size: 4rem; font-style: italic; }
-.note { position: absolute; z-index: 2; left: var(--margin); bottom: var(--nav-clearance); max-width: 36ch; font-size: 0.65rem; letter-spacing: 0.055em; line-height: 1.5; }
+/* The summary keeps a clear line of air above the disclosure, which stands
+   on the navigation line: nothing the visitor must read sits under the nav. */
+.summary { position: absolute; z-index: 6; left: var(--margin); bottom: max(16%, calc(var(--nav-clearance) + 3.6rem)); width: 27%; max-width: 34ch; font-size: clamp(1rem, 1.3vw, 1.25rem); line-height: 1.5; }
+.folio { position: absolute; z-index: 6; right: var(--margin); bottom: max(12%, 7rem); font-family: var(--font-display); font-size: 4rem; font-style: italic; }
+/* The generated-visuals disclosure is a credit line, set to be read. */
+.note { position: absolute; z-index: 6; left: var(--margin); bottom: var(--nav-clearance); max-width: 36ch; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; line-height: 1.5; }
 
-/* MGC: a horizontal community photograph, not another portrait cover. */
-.project[data-project='mgc'] { background: var(--ivory); color: var(--ink); }
+/* Yuna: a silver hairline set inside the portrait, like a jeweller's mount. */
+.project[data-project='yuna'] .photo::before {
+  content: ''; position: absolute; inset: clamp(0.9rem, 1.6vw, 1.6rem); z-index: 1; pointer-events: none;
+  border: 1px solid rgb(222 222 226 / 0.5); opacity: var(--veil);
+}
+
+/* MGC: a panoramic community plate, not another portrait cover. The plate
+   stops on the navigation line so the photograph is read whole; the title
+   stands on its top edge at a fixed distance, and a ruled sidebar spans its
+   exact height: standfirst at the top, folio and disclosure at the foot. */
+.project[data-project='mgc'] { background: var(--ivory); color: var(--ink); --desk: var(--charcoal); --plate-top: 31%; }
 .project[data-project='mgc'] .stage { background: var(--ivory); }
-.project[data-project='mgc'] .photo { left: 0; right: auto; top: 30%; bottom: 0; height: 70%; width: 72%; transform-origin: left bottom; }
+.project[data-project='mgc'] .stage::before {
+  content: ''; position: absolute; z-index: 1; left: 74%; top: var(--plate-top); bottom: var(--nav-clearance);
+  width: 1px; background: rgb(var(--ink-rgb) / 0.18); pointer-events: none;
+}
+.project[data-project='mgc'] .photo { left: 0; right: auto; top: var(--plate-top); bottom: var(--nav-clearance); height: auto; width: 72%; }
 .project[data-project='mgc'] .photo img { object-position: 58% 48%; }
 .project[data-project='mgc'] .photo::after { display: none; }
-.project[data-project='mgc'] .titleBlock { top: 13%; left: 6%; width: 88%; }
+.project[data-project='mgc'] .titleBlock { top: auto; bottom: calc(100% - var(--plate-top) + 1.6rem); left: 6%; width: 88%; }
 .project[data-project='mgc'] .name { max-width: none; font-size: clamp(4rem, 8.3vw, 9rem); }
 .project[data-project='mgc'] .role { margin-bottom: 1rem; color: var(--rich-wine); }
-.project[data-project='mgc'] .summary { left: 76%; width: 20%; top: 38%; bottom: auto; }
-.project[data-project='mgc'] .folio { color: var(--rich-wine); }
-.project[data-project='mgc'] .note { left: 76%; width: 20%; }
+.project[data-project='mgc'] .summary {
+  left: 76%; width: 20%; max-width: none; top: var(--plate-top); bottom: auto;
+  font-size: clamp(1.05rem, 1.45vw, 1.4rem); line-height: 1.45;
+}
+.project[data-project='mgc'] .folio { right: auto; left: 76%; bottom: calc(var(--nav-clearance) + 3.4rem); line-height: 1; color: var(--rich-wine); }
+.project[data-project='mgc'] .note { left: 76%; width: 20%; max-width: none; }
 
 /* Comptoir: warm, close material; a narrow wine spine and broad image. */
-.project[data-project='comptoir'] { background: var(--rich-wine); }
+.project[data-project='comptoir'] { background: var(--rich-wine); --desk: #3a1419; }
 .project[data-project='comptoir'] .photo { width: 72%; }
 .project[data-project='comptoir'] .photo img { object-position: 61% 50%; }
 .project[data-project='comptoir'] .photo::after { background: linear-gradient(90deg, var(--rich-wine), transparent 60%), linear-gradient(0deg, rgb(25 14 15 / 0.45), transparent 60%); }
@@ -34,10 +55,42 @@
 .project[data-project='comptoir'] .titleBlock { width: 65%; top: 20%; }
 .project[data-project='comptoir'] .summary { width: 26%; }
 
+/* ── The double-page spread ─────────────────────────────────────────────
+   Matte ivory paper on the project's desk, a shaded gutter, nothing else.
+   The left page is empty: the cover photograph itself lands in its slot. */
+.desk {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: radial-gradient(ellipse 70% 60% at 50% 45%, rgb(255 255 255 / 0.05), transparent 70%), var(--desk);
+  visibility: hidden;
+}
+.spread {
+  position: absolute; z-index: 4; top: 9svh; bottom: var(--nav-clearance); left: 6vw; right: 6vw;
+  display: grid; grid-template-columns: 1fr 1fr; color: var(--ink);
+}
+/* Each page casts its own shadow, so the turning leaf carries it without a
+   full-spread filter repaint. Both pages stay hidden until GSAP owns them. */
+.pageLeft, .pageRight { position: relative; background: var(--ivory); visibility: hidden; box-shadow: 0 2.2rem 3rem rgb(0 0 0 / 0.3); }
+.pageLeft {
+  background: linear-gradient(270deg, rgb(var(--ink-rgb) / 0.14), transparent 9%), var(--ivory);
+}
+.slot { position: absolute; inset: clamp(1rem, 2.2vw, 2.2rem) clamp(1rem, 2.2vw, 2.2rem) 3.2rem; }
+.pageFolio { position: absolute; left: clamp(1rem, 2.2vw, 2.2rem); right: clamp(1rem, 2.2vw, 2.2rem); bottom: 1.15rem; color: rgb(var(--ink-rgb) / 0.78); font-size: 0.66rem; }
+.pageRight {
+  display: flex; flex-direction: column; gap: 1.6rem;
+  padding: clamp(2rem, 4.4vw, 4.8rem) clamp(1.6rem, 4vw, 4.4rem) clamp(1.6rem, 3vw, 3rem);
+  background: linear-gradient(90deg, rgb(var(--ink-rgb) / 0.12), transparent 8%), var(--ivory);
+  backface-visibility: hidden;
+}
+.pageLabel { color: var(--rich-wine); }
+.decision {
+  margin: auto 0; max-width: 19ch; color: var(--rich-wine);
+  font-family: var(--font-display); font-size: clamp(1.9rem, 3vw, 3.4rem); font-style: italic; font-weight: 400;
+  line-height: 1.1; letter-spacing: -0.025em; text-wrap: pretty;
+}
+.pageMeta { display: grid; gap: 0.45rem; padding-top: 1rem; border-top: 1px solid rgb(var(--ink-rgb) / 0.18); color: rgb(var(--ink-rgb) / 0.78); }
+
 /* The reading spread is semantic and always fully legible, not scrub-faded. */
 .dossier { position: relative; padding: 6rem var(--margin) 5rem; background: var(--ivory); color: var(--ink); }
-.dossierIntro { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; margin-bottom: 4rem; }
-.dossierIntro p { max-width: 34ch; font-family: var(--font-display); font-size: clamp(2rem, 3.6vw, 3.7rem); line-height: 1.13; letter-spacing: -0.025em; color: var(--rich-wine); text-wrap: pretty; }
 .details { display: grid; grid-template-columns: 1.3fr 1fr; align-items: center; gap: 6vw; max-width: 68rem; margin: 0 auto 5rem; }
 .details > :only-child { width: min(100%, 28rem); grid-column: 1 / -1; justify-self: center; }
 .caseGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
@@ -51,7 +104,6 @@
 .evidence p span { font-size: 0.83rem; }
 .skills { display: flex; flex-wrap: wrap; list-style: none; gap: 1rem 2rem; padding: 2rem 0 0; margin-top: 3rem; border-top: 1px solid var(--rule); }
 .project[data-project='comptoir'] .dossier { background: var(--rich-wine); color: var(--ivory); }
-.project[data-project='comptoir'] .dossierIntro p,
 .project[data-project='comptoir'] .caseGrid h4 { color: var(--champagne); }
 
 @media (max-width: 1023px) {
@@ -65,20 +117,38 @@
   .name { font-size: clamp(3.3rem, 16.5vw, 5.8rem); max-width: none; }
   .summary { top: 65%; bottom: auto; width: calc(100% - var(--margin) * 2); font-size: clamp(0.9rem, 3.8vw, 1.1rem); max-width: 40ch; }
   .folio { display: none; }
-  .note { bottom: var(--nav-clearance); width: calc(100% - var(--margin) * 2 - 2rem); max-width: 40ch; font-size: 0.52rem; }
-  .project[data-project='mgc'] .photo { top: 27%; height: 36%; width: 100%; }
-  .project[data-project='mgc'] .titleBlock { top: 10%; left: var(--margin); width: calc(100% - var(--margin) * 2); }
+  .note { bottom: var(--nav-clearance); width: calc(100% - var(--margin) * 2 - 2rem); max-width: 40ch; font-size: 0.6rem; }
+  .project[data-project='mgc'] .stage::before { display: none; }
+  .project[data-project='mgc'] .photo { top: 27%; bottom: auto; height: 36%; width: 100%; }
+  .project[data-project='mgc'] .titleBlock { top: 10%; bottom: auto; left: var(--margin); width: calc(100% - var(--margin) * 2); }
   .project[data-project='mgc'] .name { font-size: clamp(2.7rem, 12.2vw, 4.2rem); max-width: 15ch; line-height: 0.95; }
   .project[data-project='mgc'] .role { margin-bottom: 0.6rem; }
-  .project[data-project='mgc'] .summary { left: var(--margin); top: 67%; width: calc(100% - var(--margin) * 2); }
-  .project[data-project='mgc'] .note { left: var(--margin); width: calc(100% - var(--margin) * 2 - 2rem); }
+  .project[data-project='mgc'] .summary { left: var(--margin); top: 67%; width: calc(100% - var(--margin) * 2); max-width: 40ch; font-size: clamp(0.9rem, 3.8vw, 1.1rem); line-height: 1.5; }
+  .project[data-project='mgc'] .note { left: var(--margin); width: calc(100% - var(--margin) * 2 - 2rem); max-width: 40ch; }
   .project[data-project='comptoir'] .photo { top: 8%; width: 100%; height: 58%; }
   .project[data-project='comptoir'] .photo::after { background: linear-gradient(0deg, var(--rich-wine), transparent 85%); }
   .project[data-project='comptoir'] .titleBlock { top: 40%; width: calc(100% - var(--margin) * 2); }
   .project[data-project='comptoir'] .name { font-size: clamp(2.8rem, 13vw, 4.8rem); max-width: 12ch; }
   .project[data-project='comptoir'] .summary { top: 66%; width: calc(100% - var(--margin) * 2); }
+
+  /* A folded brief: the photograph on the upper page, the decision on the
+     lower page, which unfolds from the horizontal crease. The paper ends on
+     the language control's line, so the floating FR+ never sits on it. */
+  .spread {
+    top: 1.1rem; left: 0.75rem; right: 0.75rem; bottom: var(--control-clearance);
+    grid-template-columns: 1fr; grid-template-rows: 1.1fr 1fr;
+  }
+  .pageLeft { background: linear-gradient(0deg, rgb(var(--ink-rgb) / 0.13), transparent 7%), var(--ivory); }
+  .slot { inset: 0.65rem 0.65rem 1.9rem; }
+  .pageFolio { left: 0.7rem; right: 0.7rem; bottom: 0.55rem; font-size: 0.5rem; }
+  .pageRight {
+    gap: 0.75rem; padding: 1.15rem 1.15rem 1rem;
+    background: linear-gradient(180deg, rgb(var(--ink-rgb) / 0.11), transparent 7%), var(--ivory);
+  }
+  .decision { margin: 0.2rem 0 auto; max-width: 24ch; font-size: clamp(1.15rem, 5.4vw, 1.6rem); line-height: 1.16; }
+  .pageMeta { gap: 0.3rem; padding-top: 0.6rem; font-size: 0.55rem; }
+
   .dossier { padding-block: 3.5rem; }
-  .dossierIntro { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
   .details { gap: 1rem; margin-bottom: 3rem; }
   .caseGrid { grid-template-columns: 1fr; }
   .caseGrid article, .caseGrid article + article { padding: 1.5rem 0; border-left: 0; border-bottom: 1px solid var(--rule); }
@@ -89,10 +159,15 @@
 }
 @media (max-width: 1023px) and (max-height: 680px) {
   .project .stage .summary { top: 64%; font-size: 0.8rem; line-height: 1.4; }
-  .project .stage .note { max-width: 27ch; font-size: 0.5rem; bottom: calc(var(--nav-clearance) - 0.15rem); }
+  /* Two lines at most, left of the language control (320 × 568). */
+  .project .stage .note { max-width: min(100%, 11.5rem); font-size: 0.55rem; bottom: calc(var(--nav-clearance) - 0.15rem); }
   .project[data-project='mgc'] .photo { top: 33%; height: 27%; }
   .project[data-project='mgc'] .name { font-size: 12vw; }
   .project[data-project='comptoir'] .titleBlock { top: 37%; }
+  .spread { top: 0.75rem; grid-template-rows: 0.95fr 1fr; }
+  .pageRight { gap: 0.5rem; padding: 0.85rem 0.95rem 0.75rem; }
+  .decision { font-size: clamp(1rem, 5vw, 1.3rem); }
+  .pageMeta > :first-child { display: none; }
 }
 @media (prefers-reduced-motion: reduce), (scripting: none) {
   .stage [data-yuna-handoff] { display: none; }
@@ -102,5 +177,12 @@
   .project .stage .summary { order: 2; }
   .project .stage .note { order: 3; }
   .project .stage .name { font-size: clamp(3rem, 8vw, 7rem); }
-  .folio { display: none; }
+  .folio, .desk, .pageLeft { display: none; }
+  /* No copy is set over the still photograph: no legibility veil on it,
+     and no sidebar rule outside the motion composition. */
+  .project .stage .photo::after, .project[data-project] .stage::before { display: none; }
+  /* The spread's decision page is printed in the flow, still and complete. */
+  .project .stage .spread { position: static; order: 4; display: block; }
+  .project .stage .pageRight { visibility: visible; padding: 1.6rem 1.4rem; gap: 1rem; box-shadow: none; }
+  .project .stage .decision { margin: 0; max-width: 28ch; }
 }
