@@ -56,6 +56,7 @@
 
   /* ---------- TYPOGRAPHIE ----------
      Rapport monument/micro ≈ 28:1. C'est ce contraste qui produit le luxe. */
+  --font-noto-kr: 'Noto Sans KR Variable';
   --font-display: var(--font-bodoni), 'Bodoni Moda', 'Didot', Georgia, serif;
   --font-sans: var(--font-inter-tight), 'Inter Tight', system-ui, sans-serif;
   --font-hand: var(--font-kalam), 'Segoe Print', 'Bradley Hand', cursive;

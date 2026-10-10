@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Bodoni_Moda, Inter_Tight, Kalam, Noto_Sans_KR } from 'next/font/google';
+import localFont from 'next/font/local';
+import '@/fonts/noto/index.css';
 import type { ReactNode } from 'react';
 
 import { getContent } from '@/content';
@@ -12,37 +13,27 @@ import { SmoothScroll } from '@/shell/SmoothScroll';
 import '@/styles/tokens.css';
 import '@/styles/base.css';
 
-/* Polices auto-hébergées par next/font : aucune requête vers un tiers,
-   aucun CLS. Les trois sont sous SIL Open Font License 1.1. */
-
-const bodoni = Bodoni_Moda({
-  subsets: ['latin'],
+/* Same licensed families, vendored from Fontsource: reproducible offline builds.
+   Noto keeps unicode-range subsets and is only fetched for rendered glyphs. */
+const bodoni = localFont({
+  src: '../../fonts/bodoni/bodoni-moda-latin-standard-normal.woff2',
+  weight: '400 900',
   display: 'swap',
   variable: '--font-bodoni',
-  // Axe optique exploité : `font-optical-sizing: auto` dans base.css.
-  axes: ['opsz'],
 });
 
-const interTight = Inter_Tight({
-  subsets: ['latin'],
+const interTight = localFont({
+  src: '../../fonts/inter/inter-tight-latin-wght-normal.woff2',
+  weight: '100 900',
   display: 'swap',
   variable: '--font-inter-tight',
 });
 
-/* Accent manuscrit volontairement limité aux annotations courtes. */
-const kalam = Kalam({
-  subsets: ['latin'],
+const kalam = localFont({
+  src: '../../fonts/kalam/kalam-latin-400-normal.woff2',
+  weight: '400',
   display: 'swap',
   variable: '--font-kalam',
-  weight: '400',
-});
-
-/* Chargé uniquement lorsque /ko l'utilise réellement : pas de preload. */
-const notoKR = Noto_Sans_KR({
-  display: 'swap',
-  variable: '--font-noto-kr',
-  weight: ['400', '500'],
-  preload: false,
 });
 
 export function generateStaticParams() {
@@ -87,7 +78,7 @@ export default async function LocaleLayout({
   const typed: Locale = locale;
   const content = getContent(typed);
 
-  const fontVars = [bodoni.variable, interTight.variable, kalam.variable, notoKR.variable].join(' ');
+  const fontVars = [bodoni.variable, interTight.variable, kalam.variable].join(' ');
 
   return (
     <html lang={htmlLang[typed]} className={fontVars} suppressHydrationWarning>
