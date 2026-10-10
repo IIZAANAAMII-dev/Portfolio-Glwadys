@@ -65,7 +65,7 @@ export const SCROLL = {
   contactSheet: 200,
   moodboard: 200,
   strategy: 230,
-  journey: 390, // Six distinct cinematic beats, paced to remain readable.
+  journey: 540, // Passe-partout lift + six held archive prints + index page rise.
   expertise: 460, // Seven full editorial chapter readings, then one paper handoff.
 } as const;
 

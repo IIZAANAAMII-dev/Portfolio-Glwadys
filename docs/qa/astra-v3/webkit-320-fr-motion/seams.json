@@ -1,0 +1,80 @@
+[
+  {
+    "beforeFilm": "notebook",
+    "afterFilm": "work-yuna",
+    "frames": [
+      {
+        "x": 138.59375,
+        "y": 193.140625,
+        "w": 150.015625,
+        "h": 188.015625,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fyuna%2Fyuna-campaign-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "50% 46%",
+        "opacity": "1"
+      },
+      {
+        "x": 138.59375,
+        "y": 193.140625,
+        "w": 150.015625,
+        "h": 188.015625,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fyuna%2Fyuna-campaign-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "50% 46%",
+        "opacity": "1"
+      }
+    ]
+  },
+  {
+    "beforeFilm": "work-journey",
+    "afterFilm": "journey",
+    "frames": [
+      {
+        "x": 52.743125915527344,
+        "y": 51.767578125,
+        "w": 214.43060302734375,
+        "h": 268.04296875,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fprocess%2Fcontact-sheet-editorial-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "50% 50%",
+        "opacity": "1"
+      },
+      {
+        "x": 53.149375915527344,
+        "y": 51.767578125,
+        "w": 214.43060302734375,
+        "h": 268.04296875,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fprocess%2Fcontact-sheet-editorial-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "50% 50%",
+        "opacity": "1"
+      }
+    ]
+  },
+  {
+    "beforeFilm": "journey",
+    "afterFilm": "expertise",
+    "frames": [
+      {
+        "x": 50.390625,
+        "y": 113.53125,
+        "w": 137.84375,
+        "h": 25.265625,
+        "source": null,
+        "fit": "fill",
+        "position": "50% 50%",
+        "opacity": "1"
+      },
+      {
+        "x": 50.390625,
+        "y": 113.53125,
+        "w": 137.84375,
+        "h": 25.265625,
+        "source": null,
+        "fit": "fill",
+        "position": "50% 50%",
+        "opacity": "1"
+      }
+    ]
+  }
+]

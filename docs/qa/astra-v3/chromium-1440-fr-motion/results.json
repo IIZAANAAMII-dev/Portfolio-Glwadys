@@ -1,0 +1,3840 @@
+{
+  "engine": "chromium",
+  "width": 1440,
+  "height": 900,
+  "locale": "fr",
+  "mode": "motion",
+  "errors": [],
+  "failures": [],
+  "states": [
+    {
+      "film": "work-yuna",
+      "state": "entry",
+      "scrollY": 13878,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 17279.8515625,
+          "w": 339.1565856933594,
+          "h": 63.78125,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 17364.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 17447.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 17529.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 17612.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 17695.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 17778.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 12332.2626953125,
+        "w": 513.7157592773438,
+        "h": 642.162109375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": 265.375,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": 643.6875,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": 808.15625,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": 4215.671875,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": 4398.296875,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": 4864.453125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": 7779.546875,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": 8212.9375,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": 8349.328125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "work-yuna",
+      "state": "read",
+      "scrollY": 14904,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 16253.8515625,
+          "w": 339.1565856933594,
+          "h": 63.78125,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 16338.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 16421.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 16503.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 16586.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 16669.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 16752.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 11306.2626953125,
+        "w": 513.7157592773438,
+        "h": 642.162109375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": 265.375,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": 643.6875,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": 808.15625,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": 3189.671875,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": 3372.296875,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": 3838.453125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": 6753.546875,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": 7186.9375,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": 7323.328125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "work-mgc",
+      "state": "read",
+      "scrollY": 18582,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 12575.8515625,
+          "w": 339.1565856933594,
+          "h": 63.78125,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 12660.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 12743.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 12825.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 12908.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 12991.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 13074.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 7628.26318359375,
+        "w": 513.7157592773438,
+        "h": 642.16162109375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -2728.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -2350.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -2185.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": 159.671875,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": 342.296875,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": 808.453125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": 3075.546875,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": 3508.9375,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": 3645.328125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "work-comptoir",
+      "state": "read",
+      "scrollY": 22067,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 9090.8515625,
+          "w": 339.1565856933594,
+          "h": 63.78125,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 9175.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 9258.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 9340.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 9423.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 9506.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 9589.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 4143.26318359375,
+        "w": 513.7157592773438,
+        "h": 642.1611328125
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -6213.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -5835.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -5670.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -2893.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -2710.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -2244.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": 238.546875,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": 671.9375,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": 808.328125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "work-journey",
+      "state": "cover",
+      "scrollY": 24990,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 6167.85107421875,
+          "w": 339.1565856933594,
+          "h": 63.7822265625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 6252.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 6335.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 6417.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 6500.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 6583.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 6666.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 1220.262939453125,
+        "w": 513.7157592773438,
+        "h": 642.16162109375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -9136.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -8758.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -8593.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -5816.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -5633.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -5167.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -2252.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -1819.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -1682.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "work-journey",
+      "state": "turn",
+      "scrollY": 25469,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 5688.85107421875,
+          "w": 339.1565856933594,
+          "h": 63.7822265625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 5773.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 5856.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 5938.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 6021.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 6104.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 6187.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 741.262939453125,
+        "w": 513.7157592773438,
+        "h": 642.16162109375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -9615.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -9237.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -9072.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -6295.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -6112.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -5646.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -2731.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -2298.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -2161.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "work-journey",
+      "state": "aperture",
+      "scrollY": 26049,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 5108.85107421875,
+          "w": 339.1565856933594,
+          "h": 63.7822265625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 5193.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 5276.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 5358.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 5441.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 5524.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 5607.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 161.26295471191406,
+        "w": 513.7157592773438,
+        "h": 642.1615600585938
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -10195.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -9817.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -9652.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -6875.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -6692.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -6226.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -3311.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -2878.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -2741.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "journey",
+      "state": "aperture",
+      "scrollY": 26099,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 5058.85107421875,
+          "w": 339.1565856933594,
+          "h": 63.7822265625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 5143.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 5226.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 5308.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 5391.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 5474.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 5557.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 111.26295471191406,
+        "w": 513.7157592773438,
+        "h": 642.1615600585938
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -10245.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -9867.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -9702.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -6925.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -6742.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -6276.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -3361.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -2928.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -2791.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "journey",
+      "state": "first",
+      "scrollY": 26925,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 4232.85107421875,
+          "w": 339.1565856933594,
+          "h": 63.7822265625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 4317.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 4400.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 4482.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 4565.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 4648.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 4731.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 111.26295471191406,
+        "w": 513.7157592773438,
+        "h": 642.1615600585938
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -11071.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -10693.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -10528.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -7751.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -7568.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -7102.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -4187.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -3754.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -3617.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "journey",
+      "state": "fourth",
+      "scrollY": 28908,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 2249.85107421875,
+          "w": 339.1565856933594,
+          "h": 63.7822265625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 2334.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 2417.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 2499.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 2582.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 2665.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 2748.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2024ExpérimenterRetail, merchandising, marqueLe Comptoir de Mathilde",
+      "photo": {
+        "x": -1018.9672241210938,
+        "y": 125.44306182861328,
+        "w": 521.5227661132812,
+        "h": 648.3897094726562
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -13054.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -12676.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -12511.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -9734.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -9551.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -9085.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -6170.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -5737.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -5600.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "journey",
+      "state": "sixth",
+      "scrollY": 30230,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 927.8511962890625,
+          "w": 339.1565856933594,
+          "h": 63.781982421875,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 1012.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 1095.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 1177.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 1260.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 1343.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 1426.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": 125.44306182861328,
+        "w": 521.5228271484375,
+        "h": 648.3897094726562
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -14376.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -13998.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -13833.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -11056.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -10873.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -10407.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -7492.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -7059.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -6922.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "journey",
+      "state": "index",
+      "scrollY": 30959,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 198.85116577148438,
+          "w": 339.1565856933594,
+          "h": 63.78204345703125,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 283.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 366.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 448.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 531.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 614.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 697.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": 125.44306182861328,
+        "w": 521.5228271484375,
+        "h": 648.3897094726562
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -15105.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -14727.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -14562.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -11785.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -11602.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -11136.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -8221.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -7788.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -7651.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "expertise",
+      "state": "first",
+      "scrollY": 31207,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 198.85116577148438,
+          "w": 339.1565856933594,
+          "h": 63.78204345703125,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 283.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 366.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 448.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 531.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 614.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 697.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": -122.55693817138672,
+        "w": 521.5228271484375,
+        "h": 648.3897094726562
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -15353.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -14975.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -14810.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -12033.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -11850.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -11384.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -8469.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -8036.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -7899.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "expertise",
+      "state": "second",
+      "scrollY": 31704,
+      "overflow": 0,
+      "active": "Content Creation",
+      "counter": "02 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 200.9375,
+          "w": 316.96875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 281.1480407714844,
+          "w": 457.55877685546875,
+          "h": 63.78204345703125,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 366.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 448.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 531.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 614.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 697.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": -619.5569458007812,
+        "w": 521.5228271484375,
+        "h": 648.3897094726562
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -15850.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -15472.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -15307.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -12530.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -12347.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -11881.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -8966.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -8533.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -8396.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "expertise",
+      "state": "third",
+      "scrollY": 32201,
+      "overflow": 0,
+      "active": "Content Strategy",
+      "counter": "03 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 200.9375,
+          "w": 316.96875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 283.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 363.9449157714844,
+          "w": 452.208740234375,
+          "h": 63.78204345703125,
+          "alpha": "1"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 448.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 531.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 614.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 697.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": -1116.556884765625,
+        "w": 521.5228271484375,
+        "h": 648.3896484375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -16347.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -15969.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -15804.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -13027.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -12844.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -12378.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -9463.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -9030.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -8893.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "expertise",
+      "state": "fourth",
+      "scrollY": 32698,
+      "overflow": 0,
+      "active": "Brand Communication",
+      "counter": "04 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 200.9375,
+          "w": 316.96875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 283.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 366.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 446.7417907714844,
+          "w": 606.0045776367188,
+          "h": 63.78204345703125,
+          "alpha": "1"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 531.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 614.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 697.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": -1613.556884765625,
+        "w": 521.5228271484375,
+        "h": 648.3896484375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -16844.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -16466.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -16301.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -13524.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -13341.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -12875.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -9960.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -9527.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -9390.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "expertise",
+      "state": "fifth",
+      "scrollY": 33195,
+      "overflow": 0,
+      "active": "Community",
+      "counter": "05 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 200.9375,
+          "w": 316.96875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 283.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 366.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 448.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 529.5386962890625,
+          "w": 314.830810546875,
+          "h": 63.781982421875,
+          "alpha": "1"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 614.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 697.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": -2110.556884765625,
+        "w": 521.5228271484375,
+        "h": 648.3896484375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -17341.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -16963.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -16798.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -14021.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -13838.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -13372.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -10457.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -10024.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -9887.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "expertise",
+      "state": "sixth",
+      "scrollY": 33691,
+      "overflow": 0,
+      "active": "Digital Marketing",
+      "counter": "06 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 200.9375,
+          "w": 316.96875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 283.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 366.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 448.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 531.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 612.3355712890625,
+          "w": 464.948486328125,
+          "h": 63.781982421875,
+          "alpha": "1"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 697.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": -2606.556884765625,
+        "w": 521.5228271484375,
+        "h": 648.3896484375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -17837.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -17459.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -17294.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -14517.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -14334.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -13868.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -10953.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -10520.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -10383.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "expertise",
+      "state": "seventh",
+      "scrollY": 34188,
+      "overflow": 0,
+      "active": "International",
+      "counter": "07 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 200.9375,
+          "w": 316.96875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 283.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 366.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 448.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 531.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 614.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 695.1324462890625,
+          "w": 349.7562255859375,
+          "h": 63.781982421875,
+          "alpha": "1"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": -3103.556884765625,
+        "w": 521.5228271484375,
+        "h": 648.3896484375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -18334.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -17956.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -17791.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -15014.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -14831.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -14365.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -11450.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -11017.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -10880.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "expertise",
+      "state": "all",
+      "scrollY": 34519,
+      "overflow": 0,
+      "active": "International",
+      "counter": "07 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 200.9375,
+          "w": 316.96875,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 283.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 366.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 448.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 531.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 614.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 695.1324462890625,
+          "w": 349.7562255859375,
+          "h": 63.781982421875,
+          "alpha": "1"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": -3434.556884765625,
+        "w": 521.5228271484375,
+        "h": 648.3896484375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -18665.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -18287.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -18122.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -15345.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -15162.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -14696.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -11781.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -11348.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -11211.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "expertise",
+      "state": "contact",
+      "scrollY": 35099,
+      "overflow": 0,
+      "active": "International",
+      "counter": "07 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 200.9375,
+          "w": 316.96875,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 283.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 366.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 448.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 531.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 614.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "1"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 695.1324462890625,
+          "w": 349.7562255859375,
+          "h": 63.781982421875,
+          "alpha": "1"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": -4014.556884765625,
+        "w": 521.5228271484375,
+        "h": 648.3896484375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -19245.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -18867.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -18702.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -15925.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -15742.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -15276.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -12361.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -11928.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -11791.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "expertise",
+      "state": "sixth",
+      "reverse": true,
+      "scrollY": 33691,
+      "overflow": 0,
+      "active": "Digital Marketing",
+      "counter": "06 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 200.9375,
+          "w": 316.96875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 283.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 366.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 448.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 531.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 612.3355712890625,
+          "w": 464.948486328125,
+          "h": 63.781982421875,
+          "alpha": "1"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 697.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2026DirigerDirection de contenu et de marqueParis ↔ Seoul",
+      "photo": {
+        "x": -2098.96728515625,
+        "y": -2606.556884765625,
+        "w": 521.5228271484375,
+        "h": 648.3896484375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -17837.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -17459.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -17294.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -14517.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -14334.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -13868.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -10953.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -10520.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -10383.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "journey",
+      "state": "fourth",
+      "reverse": true,
+      "scrollY": 28908,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 2249.85107421875,
+          "w": 339.1565856933594,
+          "h": 63.7822265625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 2334.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 2417.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 2499.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 2582.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 2665.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 2748.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2024ExpérimenterRetail, merchandising, marqueLe Comptoir de Mathilde",
+      "photo": {
+        "x": -1018.9672241210938,
+        "y": 125.44306182861328,
+        "w": 521.5227661132812,
+        "h": 648.3897094726562
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -13054.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -12676.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -12511.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": -9734.328125,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": -9551.703125,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": -9085.546875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": -6170.453125,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": -5737.0625,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -5600.671875,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "work-mgc",
+      "state": "read",
+      "reverse": true,
+      "scrollY": 18582,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 12575.8515625,
+          "w": 339.1565856933594,
+          "h": 63.78125,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 12660.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 12743.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 12825.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 12908.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 12991.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 13074.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 7628.26318359375,
+        "w": 513.7157592773438,
+        "h": 642.16162109375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": -2728.625,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": -2350.3125,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": -2185.84375,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": 159.671875,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": 342.296875,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": 808.453125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": 3075.546875,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": 3508.9375,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": 3645.328125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "film": "work-yuna",
+      "state": "entry",
+      "reverse": true,
+      "scrollY": 13878,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 164.140625,
+          "y": 17279.8515625,
+          "w": 339.1565856933594,
+          "h": 63.78125,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 164.140625,
+          "y": 17364.234375,
+          "w": 427.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 164.140625,
+          "y": 17447.03125,
+          "w": 422.625,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 164.140625,
+          "y": 17529.828125,
+          "w": 566.359375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Community",
+          "x": 164.140625,
+          "y": 17612.625,
+          "w": 294.234375,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 164.140625,
+          "y": 17695.421875,
+          "w": 434.53125,
+          "h": 59.609375,
+          "alpha": "0.68"
+        },
+        {
+          "text": "International",
+          "x": 164.140625,
+          "y": 17778.21875,
+          "w": 326.875,
+          "h": 59.609375,
+          "alpha": "0.68"
+        }
+      ],
+      "journey": "2021CréerPremiers contenus, premières marquesFreelance",
+      "photo": {
+        "x": 578.7359008789062,
+        "y": 12332.2626953125,
+        "w": 513.7157592773438,
+        "h": 642.162109375
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 57.59375,
+              "y": 265.375,
+              "w": 633.59375,
+              "h": 237.75
+            },
+            {
+              "text": "Valoriser des collections de bijoux raffinés : storytelling produit, création visuelle et engagement d’une audience sensible au détail.",
+              "x": 57.59375,
+              "y": 643.6875,
+              "w": 374,
+              "h": 112.3125
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": 808.15625,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 86.390625,
+              "y": 4215.671875,
+              "w": 1267.1875,
+              "h": 102.78125
+            },
+            {
+              "text": "Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.",
+              "x": 1094.390625,
+              "y": 4398.296875,
+              "w": 288,
+              "h": 140.390625
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 1094.390625,
+              "y": 4864.453125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 57.59375,
+              "y": 7779.546875,
+              "w": 828,
+              "h": 190.6875
+            },
+            {
+              "text": "Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.",
+              "x": 57.59375,
+              "y": 8212.9375,
+              "w": 374,
+              "h": 84.234375
+            },
+            {
+              "text": "Visuels conceptuels générés pour ce portfolio.",
+              "x": 57.59375,
+              "y": 8349.328125,
+              "w": 252,
+              "h": 27.84375
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

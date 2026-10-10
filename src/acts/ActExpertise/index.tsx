@@ -4,15 +4,26 @@ import { useRef } from 'react';
 
 import type { Content } from '@/content';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
+import { registerVisualFilm } from '@/lib/visualQa';
+import { heldSteps, segment, settle } from '@/lib/holdScalar';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
 
 import { ExpertiseOpeningFrame } from './ExpertiseOpeningFrame';
+import { clearExpertisePaint, createExpertisePainter } from './expertisePainter';
 
 import styles from './ActExpertise.module.css';
 
 interface Props {
   content: Content;
 }
+
+/* Beat map of the wine index (fractions of the pinned scroll).
+   0 → 0.06   still: discipline 01 is read, the page is exactly Journey's last frame
+   0.06 → 0.78 seven readings, each one held, a short settle between them
+   0.78 → 0.81 the last discipline keeps a full reading hold
+   0.81 → 0.86 chord: the seven disciplines light together (payoff of the index)
+   0.87 → 1    the ivory manifesto page rises and trims to ActContact's page */
+const BEAT = { readFrom: 0.06, readTo: 0.78, chordFrom: 0.81, chordTo: 0.86 } as const;
 
 export function ActExpertise({ content }: Props) {
   const root = useRef<HTMLElement>(null);
@@ -23,8 +34,7 @@ export function ActExpertise({ content }: Props) {
     () => {
       const rootEl = root.current;
       const stageEl = stage.current;
-      const listEl = list.current;
-      if (!rootEl || !stageEl || !listEl) return;
+      if (!rootEl || !stageEl || !list.current) return;
       const q = gsap.utils.selector(stageEl);
       const sheet = q<HTMLElement>('[data-expertise-sheet]')[0];
       const fold = q<HTMLElement>('[data-expertise-fold]')[0];
@@ -40,13 +50,10 @@ export function ActExpertise({ content }: Props) {
             isReduced: boolean;
           };
           if (isReduced) return;
+          rootEl.dataset.enhanced = 'true';
 
-          // The actual Expertise page must not enter from the bottom as a
-          // second copy of Journey's last frame. Journey's pinned frame owns
-          // the transition until its final pixel; then the identical real
-          // page takes over at the exact same screen coordinates.
-          // Hide the entire incoming surface, not only its stage: even an empty
-          // ivory root would otherwise occlude the departing Journey frame.
+          // Journey's pinned last frame already shows this exact page. The
+          // real act only becomes visible at the pixel where that pin ends.
           gsap.set(rootEl, { autoAlpha: 0 });
           ScrollTrigger.create({
             trigger: rootEl,
@@ -60,40 +67,13 @@ export function ActExpertise({ content }: Props) {
             },
           });
 
-          const entryEls = q<HTMLElement>('[data-expertise-row]');
-          const liveNumber = q<HTMLElement>('[data-expertise-number]')[0];
-          const viewport = listEl.parentElement as HTMLElement;
-          const count = entryEls.length;
-          let shown = -1;
-
-          /* The list's actual y is the single source of truth. Numeral,
-             active marker and plate opacity are all derived from it, so the
-             chapter number can never disagree with the plate on screen,
-             whatever the scrub lag or scroll direction. */
-          const syncChapter = () => {
-            const y = Number(gsap.getProperty(listEl, 'y')) || 0;
-            const plate = Math.max(viewport.clientHeight, 1);
-            let nearest = 0;
-            let nearestDistance = Infinity;
-            entryEls.forEach((entry, index) => {
-              const distance = Math.abs(entry.offsetTop + y) / plate;
-              if (distance < nearestDistance) {
-                nearestDistance = distance;
-                nearest = index;
-              }
-              // Physical page mask handles passage. Do not independently
-              // fade actual words: 06 / Digital Marketing was nearly invisible
-              // in the REAL 390px screenshot despite sitting inside the
-              // viewport. One moving typographic plate stays ink-dark.
-              entry.style.opacity = '1';
-            });
-            if (nearest === shown) return;
-            shown = nearest;
-            entryEls.forEach((entry, index) => {
-              if (index === nearest) entry.dataset.active = 'true';
-              else delete entry.dataset.active;
-            });
-            if (liveNumber) liveNumber.textContent = String(nearest + 1).padStart(2, '0');
+          const count = q<HTMLElement>('[data-expertise-row]').length;
+          const painter = createExpertisePainter(sheet, isDesktop);
+          const driver = { t: 0 };
+          const render = () => {
+            const pos = heldSteps(segment(driver.t, BEAT.readFrom, BEAT.readTo), count, 0.2);
+            const chord = settle(segment(driver.t, BEAT.chordFrom, BEAT.chordTo));
+            painter.paint(pos, chord);
           };
 
           // Handoff geometry mirrors ActContact's manifesto page exactly:
@@ -104,15 +84,13 @@ export function ActExpertise({ content }: Props) {
             return Math.min(Math.max(window.innerWidth * 0.03, rem), rem * 2.75);
           };
 
-          gsap.set(listEl, { y: 0 });
           gsap.set(fold, { scale: 0, transformOrigin: 'right top' });
           gsap.set(handoff, { yPercent: 100 });
           gsap.set(sheet, { clipPath: 'inset(0px 0px 0px 0px)' });
-          syncChapter();
+          render();
 
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
-            onUpdate: syncChapter,
             scrollTrigger: {
               trigger: rootEl,
               start: 'top top',
@@ -121,55 +99,31 @@ export function ActExpertise({ content }: Props) {
               scrub: SCRUB.narrative,
               anticipatePin: 1,
               invalidateOnRefresh: true,
-              onRefresh: syncChapter,
+              onRefresh: () => {
+                painter.measure();
+                render();
+              },
             },
           });
 
-          // Seven plates share 0..0.8 of the film. Every plate owns a full
-          // still hold (64 % of its slot) followed by a short turn. The list
-          // always lands on a row's own top edge, so the last chapter is as
-          // complete as the first — never aligned to the list's bottom.
-          const slot = 0.8 / count;
-          const hold = slot * 0.64;
-          for (let i = 0; i < count - 1; i += 1) {
-            tl.fromTo(
-              listEl,
-              { y: () => -(entryEls[i]?.offsetTop ?? 0) },
-              {
-                y: () => -(entryEls[i + 1]?.offsetTop ?? 0),
-                duration: slot - hold,
-                ease: EASE.handoff,
-                immediateRender: false,
-              },
-              i * slot + hold,
-            );
-          }
-
-          // 0.8 → 1: the Manifesto sheet rises over the opaque Expertise
-          // page (no ghosting), then the sheet is trimmed to the exact inset
-          // page ActContact continues with, fold corner included.
-          tl
-            .to(handoff, { yPercent: 0, duration: 0.12, ease: EASE.handoff }, 0.8)
+          tl.to(driver, { t: 1, duration: 1, onUpdate: render }, 0)
+            .to(handoff, { yPercent: 0, duration: 0.09, ease: EASE.handoff }, 0.87)
             .to(
               sheet,
               {
                 clipPath: () => `inset(0px ${pageInset()}px 0px ${pageInset()}px)`,
-                duration: 0.08,
+                duration: 0.03,
                 ease: EASE.handoff,
               },
-              0.91,
+              0.96,
             )
-            .to(fold, { scale: 1, duration: 0.07 }, 0.93)
-            .set({}, {}, 1);
+            .to(fold, { scale: 1, duration: 0.03 }, 0.97);
 
-          return () => {
-            entryEls.forEach((entry, index) => {
-              entry.style.opacity = '';
-              if (index === 0) entry.dataset.active = 'true';
-              else delete entry.dataset.active;
-            });
-            if (liveNumber) liveNumber.textContent = '01';
-          };
+          const unregister = registerVisualFilm('expertise', tl, {
+            first: 0.06, second: 0.18, third: 0.3, fourth: 0.42,
+            fifth: 0.54, sixth: 0.66, seventh: 0.78, all: 0.86, contact: 1,
+          });
+          return () => { unregister(); delete rootEl.dataset.enhanced; clearExpertisePaint(sheet); };
         },
       );
       return () => mm.revert();
@@ -178,7 +132,7 @@ export function ActExpertise({ content }: Props) {
   );
 
   return (
-    <section ref={root} className={`act surface-paper ${styles.act}`} aria-labelledby="expertise-title">
+    <section ref={root} className={`act surface-bordeaux ${styles.act}`} aria-labelledby="expertise-title">
       <div ref={stage} className={styles.stage}>
         <div className={styles.sheet} data-expertise-sheet>
           <ExpertiseOpeningFrame content={content} listRef={list} />

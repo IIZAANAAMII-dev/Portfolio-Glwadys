@@ -5,11 +5,13 @@ import { useRef } from 'react';
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
+import { registerVisualFilm } from '@/lib/visualQa';
+import { clamp01, heldSteps, segment, settle } from '@/lib/holdScalar';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
 import { ExpertiseOpeningFrame } from '@/acts/ActExpertise/ExpertiseOpeningFrame';
 import expertiseStyles from '@/acts/ActExpertise/ActExpertise.module.css';
 
-import { JourneyOpeningFrame } from './JourneyOpeningFrame';
+import { JourneyArchive } from './JourneyArchive';
 
 import styles from './ActJourney.module.css';
 
@@ -18,17 +20,31 @@ interface Props {
   locale: Locale;
 }
 
+/* Beat map of the archive (fractions of the pinned scroll).
+   0    → 0.03  still: the wine page (end of Comptoir) frames the first print
+   0.03 → 0.15  the passe-partout is lifted off, wine → wood
+   0.17 → 0.85  six prints, each one held for reading, one settle between them
+   0.85 → 0.88  last print held
+   0.88 → 1     the wine index page rises over the archive (Expertise frame 0) */
+const BEAT = {
+  liftFrom: 0.03,
+  liftTo: 0.15,
+  readFrom: 0.17,
+  readTo: 0.85,
+  riseFrom: 0.88,
+} as const;
+
 export function ActJourney({ content, locale }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const track = useRef<HTMLDivElement>(null);
+  const strip = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const rootEl = root.current;
       const stageEl = stage.current;
-      const trackEl = track.current;
-      if (!rootEl || !stageEl || !trackEl) return;
+      const stripEl = strip.current;
+      if (!rootEl || !stageEl || !stripEl) return;
       const q = gsap.utils.selector(stageEl);
 
       const mm = gsap.matchMedia();
@@ -37,156 +53,111 @@ export function ActJourney({ content, locale }: Props) {
         (context) => {
           const { isDesktop, isReduced } = context.conditions as {
             isDesktop: boolean;
-            isMobile: boolean;
             isReduced: boolean;
           };
           if (isReduced) return;
-
-          // The Work bridge already renders this exact frame at its end.
-          // Hide incoming section background until that sticky film ends.
+          rootEl.dataset.enhanced = 'true';
           gsap.set(rootEl, { autoAlpha: 0 });
           ScrollTrigger.create({
-            trigger: rootEl,
-            start: 'top top',
-            end: 'bottom top',
+            trigger: rootEl, start: 'top top', end: 'bottom top',
             onEnter: () => gsap.set(rootEl, { autoAlpha: 1 }),
             onEnterBack: () => gsap.set(rootEl, { autoAlpha: 1 }),
             onLeaveBack: () => gsap.set(rootEl, { autoAlpha: 0 }),
-            onRefresh: (self) => {
-              gsap.set(rootEl, { autoAlpha: self.scroll() >= self.start ? 1 : 0 });
-            },
+            onRefresh: (self) => gsap.set(rootEl, { autoAlpha: self.scroll() >= self.start ? 1 : 0 }),
           });
 
-          const entries = q<HTMLElement>('[data-journey-entry]');
-          const chapters = q<HTMLElement>('[data-journey-chapter]');
-          const mobileNow = q<HTMLElement>('[data-journey-now]');
-          const media = q<HTMLElement>('[data-journey-media]');
-          const progressBar = q<HTMLElement>('[data-journey-progress]')[0];
-          const counter = q<HTMLElement>('[data-journey-counter]')[0];
-          const handoff = q<HTMLElement>('[data-journey-handoff]')[0];
-          if (!progressBar || !counter || !handoff || entries.length === 0) return;
+          const gate = q<HTMLElement>('[data-archive-gate]')[0];
+          const mat = q<HTMLElement>('[data-archive-mat]')[0];
+          const handoff = q<HTMLElement>('[data-archive-handoff]')[0];
+          const riseEdge = q<HTMLElement>('[data-archive-edge]')[0];
+          const counter = q<HTMLElement>('[data-archive-counter]')[0];
+          const prints = q<HTMLElement>('[data-archive-print]');
+          const photos = q<HTMLElement>('[data-archive-photo]');
+          const shades = q<HTMLElement>('[data-archive-shade]');
+          const chapters = q<HTMLElement>('[data-archive-chapter]');
+          const rolls = q<HTMLElement>('[data-archive-roll]');
+          if (!gate || !mat || !handoff || !riseEdge || !counter || prints.length === 0) return;
 
-          const driver = { value: 0 };
-          let activeIndex = -1;
-          const updateFocus = () => {
-            // Desktop remains the author's cinematic horizontal contact-sheet
-            // travel. Mobile is deliberately a different director: one
-            // full-page photograph per chapter, cross-dissolving on scroll.
-            // A vertical rail showed two cut-off years and too much dead space.
-            if (!isDesktop) {
-              const frame = driver.value * (entries.length - 1);
-              const nextActive = Math.min(entries.length - 1, Math.max(0, Math.round(frame)));
-              gsap.set(trackEl, { x: 0, y: 0 });
-              const outgoing = Math.floor(frame);
-              const incoming = Math.min(entries.length - 1, outgoing + 1);
-              // Long readable holds, short editorial transitions:
-              // 40% of each beat is fully readable, 20% is the paper
-              // reveal, and 40% holds the next finished composition.
-              const local = frame - outgoing;
-              const wipe = Math.max(0, Math.min(1, (local - 0.4) / 0.2));
-              entries.forEach((entry, index) => {
-                // Real editorial page wipe, NOT two translucent cards
-                // stacked on one another. The old photo always fills the
-                // image while the new shot is physically revealed across it.
-                const isOutgoing = index === outgoing;
-                const isIncoming = incoming !== outgoing && index === incoming;
-                const onScreen = isOutgoing || isIncoming;
-                gsap.set(entry, {
-                  x: 0,
-                  yPercent: 0,
-                  scale: 1,
-                  autoAlpha: onScreen ? 1 : 0,
-                  clipPath: isIncoming
-                    ? 'inset(0 ' + ((1 - wipe) * 100).toFixed(2) + '% 0 0)'
-                    : isOutgoing ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
-                  pointerEvents: index === nextActive ? 'auto' : 'none',
-                  zIndex: isIncoming ? 2 : isOutgoing ? 1 : 0,
-                });
-                if (nextActive === index) entry.dataset.active = 'true';
-                else delete entry.dataset.active;
-                // Letterforms dissolve before the photographic wipe.
-                // Never splice two half-readable words during a cross-frame.
-                const ink = entry.querySelectorAll<HTMLElement>('[data-journey-ink]');
-                const inkAlpha = isOutgoing
-                  ? Math.max(0, 1 - wipe / 0.2)
-                  : isIncoming ? Math.max(0, (wipe - 0.8) / 0.2) : 0;
-                gsap.set(ink, { autoAlpha: inkAlpha });
-                const mediaEl = media[index];
-                if (mediaEl) gsap.set(mediaEl, { scale: 1, y: 0 });
-              });
-              gsap.set(progressBar, { scaleY: driver.value });
-              if (activeIndex !== nextActive) {
-                activeIndex = nextActive;
-                counter.textContent = String(nextActive + 1).padStart(2, '0') + ' / ' + String(entries.length).padStart(2, '0');
-                chapters.forEach((chapter, index) => {
-                  if (index === nextActive) {
-                    chapter.dataset.active = 'true';
-                    chapter.setAttribute('aria-current', 'step');
-                  mobileNow[index]?.setAttribute('data-active', 'true');
-                  } else {
-                    delete chapter.dataset.active;
-                    chapter.removeAttribute('aria-current');
-                  mobileNow[index]?.removeAttribute('data-active');
-                  }
-                });
-              }
-              return;
-            }
-            const offsets = entries.map((entry) => entry.offsetLeft);
-            const first = offsets[0]!;
-            const position = first + driver.value * (offsets[offsets.length - 1]! - first);
-            const nextActive = offsets.reduce((closest, offset, index) =>
-              Math.abs(offset - position) < Math.abs(offsets[closest]! - position) ? index : closest, 0);
-            // Le compteur désigne la carte réellement sous la tête de lecture.
-            gsap.set(trackEl, isDesktop
-              ? { x: window.innerWidth * 0.28 - position, y: 0 }
-              : { x: 0, y: -position });
+          const count = prints.length;
+          const total = String(count).padStart(2, '0');
+          let gateX = 0;
+          let firstX = 0;
+          let pitch = 0;
+          let stageH = 1;
+          let shown = -1;
 
-            entries.forEach((entry, index) => {
-              const spacing = Math.max(1, offsets[index + 1] !== undefined
-                ? offsets[index + 1]! - offsets[index]!
-                : offsets[index]! - offsets[index - 1]!);
-              const focus = Math.max(0, 1 - Math.abs(offsets[index]! - position) / spacing);
-              gsap.set(entry, {
-                scale: 0.94 + focus * 0.06,
-                autoAlpha: 0.8 + focus * 0.2,
-                y: (1 - focus) * 12,
-              });
-              if (nextActive === index) entry.dataset.active = 'true';
-              else delete entry.dataset.active;
+          const measure = () => {
+            gateX = gate.offsetLeft;
+            firstX = prints[0]!.offsetLeft;
+            pitch = (prints[1]?.offsetLeft ?? firstX + prints[0]!.offsetWidth) - firstX;
+            stageH = stageEl.clientHeight || window.innerHeight;
+          };
 
-              const mediaEl = media[index];
-              if (mediaEl) {
-                gsap.set(mediaEl, { scale: 0.94 + focus * 0.06, y: (1 - focus) * 16 });
-              }
+          const driver = { t: 0 };
+          const render = () => {
+            const t = driver.t;
+            const lift = settle(segment(t, BEAT.liftFrom, BEAT.liftTo));
+            const pos = heldSteps(segment(t, BEAT.readFrom, BEAT.readTo), count, 0.22);
+            const rise = settle(segment(t, BEAT.riseFrom, 1));
+
+            // 1. The passe-partout leaves upwards, carrying its title.
+            mat.style.transform = `translate3d(0, ${(-lift * 100).toFixed(3)}%, 0)`;
+            mat.style.visibility = lift >= 1 ? 'hidden' : 'visible';
+
+            // 2. The prints travel as one physical row: x is a single value.
+            const x = gateX - (firstX + pos * pitch);
+            stripEl.style.transform = `translate3d(${x.toFixed(2)}px, 0, 0)`;
+            prints.forEach((print, index) => {
+              const d = index - pos;
+              const ad = Math.abs(d);
+              if (ad > 2.6) return;
+              // Resting print: exactly flat. Prints in passage sink a few
+              // pixels and turn by less than a degree, like paper slid by hand.
+              const sink = Math.min(ad, 1.4) * stageH * 0.014;
+              const turn = Math.max(-1, Math.min(1, d)) * 0.7 * Math.min(1, ad);
+              print.style.transform = `translate3d(0, ${sink.toFixed(2)}px, 0) rotate(${turn.toFixed(3)}deg)`;
+              const shade = shades[index];
+              if (shade) shade.style.opacity = (Math.min(1, ad) * 0.6).toFixed(3);
+              const photo = photos[index];
+              if (photo) photo.style.transform = `translate3d(${(-d * 3.2).toFixed(3)}%, 0, 0) scale(1.08)`;
             });
 
-            gsap.set(progressBar, { scaleY: driver.value });
-            if (activeIndex !== nextActive) {
-              activeIndex = nextActive;
-              counter.textContent = `${String(nextActive + 1).padStart(2, '0')} / ${String(entries.length).padStart(2, '0')}`;
+            // 3. The reading column derives from the same position.
+            chapters.forEach((chapter, index) => {
+              const d = index - pos;
+              const alpha = clamp01(1 - Math.abs(d) * 2.6);
+              chapter.style.opacity = alpha.toFixed(3);
+              chapter.style.transform = `translate3d(0, ${(d * 14).toFixed(2)}px, 0)`;
+              chapter.style.visibility = alpha < 0.002 ? 'hidden' : 'visible';
+            });
+            rolls.forEach((roll) => {
+              const lines = roll.childElementCount || 1;
+              roll.style.transform = `translate3d(0, ${((-pos / lines) * 100).toFixed(4)}%, 0)`;
+            });
+            const active = Math.round(pos);
+            if (shown !== active) {
+              shown = active;
+              counter.textContent = `${String(active + 1).padStart(2, '0')} / ${total}`;
               chapters.forEach((chapter, index) => {
-                if (index === nextActive) {
+                if (index === active) {
                   chapter.dataset.active = 'true';
                   chapter.setAttribute('aria-current', 'step');
-                  mobileNow[index]?.setAttribute('data-active', 'true');
                 } else {
                   delete chapter.dataset.active;
                   chapter.removeAttribute('aria-current');
-                  mobileNow[index]?.removeAttribute('data-active');
                 }
               });
             }
+
+            // 4. The wine index page rises from the lower paper edge.
+            handoff.style.setProperty('--rise', rise.toFixed(4));
+            handoff.style.visibility = rise <= 0 ? 'hidden' : 'visible';
+            riseEdge.style.transform = `translate3d(0, ${((1 - rise) * stageH).toFixed(2)}px, 0)`;
+            riseEdge.style.opacity = rise > 0 && rise < 1 ? '1' : '0';
           };
 
-          gsap.set(progressBar, { scaleY: 0, transformOrigin: 'center top' });
-          gsap.set(handoff, { autoAlpha: 1, clipPath: 'inset(0 100% 0 0)' });
-          // La timeline entre depuis la droite, comme une continuité du mouvement
-          // des folios qui sortent à droite dans le pont précédent.
-          gsap.set(trackEl, { x: 0, y: 0 });
-          // The page is already typeset behind its reveal mask. This keeps the
-          // handoff readable even when someone scrolls through it quickly.
-          updateFocus();
+          measure();
+          render();
 
           const tl = gsap.timeline({
             defaults: { ease: EASE.scrub },
@@ -195,33 +166,42 @@ export function ActJourney({ content, locale }: Props) {
               start: 'top top',
               end: () => scrollLength(SCROLL.journey, !isDesktop),
               pin: stageEl,
-              scrub: SCRUB.rail,
+              scrub: SCRUB.narrative,
               anticipatePin: 1,
               invalidateOnRefresh: true,
-              onRefresh: updateFocus,
+              onRefresh: () => {
+                measure();
+                render();
+              },
               onToggle: ({ isActive }) => {
-                trackEl.style.willChange = isActive ? 'transform' : '';
+                stripEl.style.willChange = isActive ? 'transform' : '';
               },
             },
           });
+          tl.to(driver, { t: 1, duration: 1, onUpdate: render }, 0);
 
-          tl
-            .to(driver, { value: 1, duration: 0.82, onUpdate: updateFocus }, 0)
-            .to(handoff, { clipPath: 'inset(0 0% 0 0)', duration: 0.18 }, 0.82)
-            .to(
-              q<HTMLElement>('[data-journey-chrome]'),
-              { autoAlpha: 0, y: -8, duration: 0.12 },
-              0.82,
-            );
-
+          const unregister = registerVisualFilm('journey', tl, {
+            aperture: 0, first: 0.17, second: 0.306, third: 0.442,
+            fourth: 0.578, fifth: 0.714, sixth: 0.85, index: 1,
+          });
           return () => {
-            trackEl.style.willChange = '';
-            entries.forEach((entry) => delete entry.dataset.active);
-            chapters.forEach((chapter) => {
-              chapter.removeAttribute('aria-current');
-              delete chapter.dataset.active;
+            unregister();
+            delete rootEl.dataset.enhanced;
+            stripEl.style.willChange = '';
+            [mat, stripEl, riseEdge, ...prints, ...photos, ...rolls, ...chapters].forEach((node) => {
+              node.style.transform = '';
+              node.style.visibility = '';
+              node.style.opacity = '';
             });
-            mobileNow.forEach((node) => node.removeAttribute('data-active'));
+            shades.forEach((node) => (node.style.opacity = ''));
+            handoff.style.removeProperty('--rise');
+            handoff.style.visibility = '';
+            chapters.forEach((chapter, index) => {
+              chapter.removeAttribute('aria-current');
+              if (index === 0) chapter.dataset.active = 'true';
+              else delete chapter.dataset.active;
+            });
+            counter.textContent = `01 / ${total}`;
           };
         },
       );
@@ -231,16 +211,22 @@ export function ActJourney({ content, locale }: Props) {
   );
 
   return (
-    <section ref={root} className={`act surface-ink ${styles.act}`} aria-labelledby="journey-title">
-      <div ref={stage} className={styles.stage} data-cursor="drag">
-        <JourneyOpeningFrame content={content} locale={locale} trackRef={track} />
-        <div className={[styles.handoff, 'surface-paper'].join(' ')} data-journey-handoff aria-hidden="true">
-          {/* Same DOM and styling as the first image of Expertise.
-              The next chapter is physically revealed, not presented on a separate card. */}
+    <section ref={root} className={`act surface-wood ${styles.act}`} aria-labelledby="journey-title">
+      <ol className="visually-hidden" aria-label={content.journey.heading}>
+        {content.journey.entries.map((entry) => (
+          <li key={entry.year}>{entry.year} — {entry.chapter}. {entry.label}. {entry.place}.</li>
+        ))}
+      </ol>
+      <div ref={stage} className={styles.stage}>
+        <JourneyArchive content={content} locale={locale} stripRef={strip} />
+        <div className={[styles.handoff, 'surface-bordeaux'].join(' ')} data-archive-handoff aria-hidden="true">
+          {/* Same DOM, CSS and painter state as Expertise's first frame:
+              the index page physically rises over the archive. */}
           <div className={expertiseStyles.sheet}>
             <ExpertiseOpeningFrame content={content} decorative />
           </div>
         </div>
+        <span className={styles.riseEdge} data-archive-edge aria-hidden="true" />
       </div>
     </section>
   );
