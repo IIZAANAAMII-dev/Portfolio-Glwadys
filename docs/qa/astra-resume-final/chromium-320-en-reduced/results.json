@@ -1,0 +1,1304 @@
+{
+  "sourceSha256": "2c5bf417e4b516257de1a0d6b978fa3d009adb7a77732cb718b0748488d9bc1e",
+  "engine": "chromium",
+  "browserVersion": "153.0.8010.12",
+  "width": 320,
+  "height": 568,
+  "locale": "en",
+  "mode": "reduced",
+  "errors": [],
+  "failures": [],
+  "assertions": [],
+  "states": [
+    {
+      "selector": "[data-project=\"yuna\"]",
+      "scrollY": 7253,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "rule": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "activeRow": {
+        "x": 20,
+        "y": 9879.796875,
+        "w": 280,
+        "h": 113.859375
+      },
+      "band": null,
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 50.390625,
+          "y": 9896.796875,
+          "w": 163.234375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 50.390625,
+          "y": 10009.65625,
+          "w": 220.984375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 50.390625,
+          "y": 10122.515625,
+          "w": 217.984375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 50.390625,
+          "y": 10213.34375,
+          "w": 249.609375,
+          "h": 60.8125,
+          "alpha": "1"
+        },
+        {
+          "text": "Community",
+          "x": 50.390625,
+          "y": 10334.578125,
+          "w": 152.4375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 50.390625,
+          "y": 10447.4375,
+          "w": 224.921875,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "International",
+          "x": 50.390625,
+          "y": 10560.296875,
+          "w": 168.171875,
+          "h": 30.40625,
+          "alpha": "1"
+        }
+      ],
+      "journey": "2021CreateFirst content, first brandsFreelance",
+      "photo": {
+        "x": 25.109375,
+        "y": 6552.296875,
+        "w": 269.78125,
+        "h": 337.21875
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 20,
+              "y": -708.09375,
+              "w": 280,
+              "h": 41.265625,
+              "fontSize": 48
+            },
+            {
+              "text": "Bringing delicate jewellery collections forward: product storytelling, visual creation and engaging an audience that notices detail.",
+              "x": 20,
+              "y": -278.03125,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -195.25,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Isolate gesture and detail: one lead visual, with macros as a counterpoint.",
+              "x": 42.390625,
+              "y": -101.625,
+              "w": 235.21875,
+              "h": 55.640625,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -101.625,
+            "w": 235.21875,
+            "h": 55.640625
+          },
+          "decisionAlpha": "1"
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 20,
+              "y": 1522.25,
+              "w": 280,
+              "h": 91.1875,
+              "fontSize": 48
+            },
+            {
+              "text": "Growing a Mediterranean women’s club: scrapbook formats, event coverage, engagement and authenticity.",
+              "x": 20,
+              "y": 2002.234375,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": 2085.015625,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Put the group before the format: alternate shared scenes and closer framing.",
+              "x": 42.390625,
+              "y": 2178.640625,
+              "w": 235.21875,
+              "h": 55.640625,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": 2178.640625,
+            "w": 235.21875,
+            "h": 55.640625
+          },
+          "decisionAlpha": "1"
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 20,
+              "y": 3826.375,
+              "w": 280,
+              "h": 82.53125,
+              "fontSize": 48
+            },
+            {
+              "text": "Immersed in artisanal fine food retail: personal advice, meticulous merchandising and in-store brand storytelling.",
+              "x": 20,
+              "y": 4297.703125,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": 4380.484375,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Begin with material, then return to the product and in-store advice.",
+              "x": 42.390625,
+              "y": 4474.109375,
+              "w": 235.21875,
+              "h": 37.09375,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": 4474.109375,
+            "w": 235.21875,
+            "h": 37.09375
+          },
+          "decisionAlpha": "1"
+        }
+      ]
+    },
+    {
+      "selector": "[data-project=\"mgc\"]",
+      "scrollY": 9520,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "rule": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "activeRow": {
+        "x": 20,
+        "y": 7612.796875,
+        "w": 280,
+        "h": 113.859375
+      },
+      "band": null,
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 50.390625,
+          "y": 7629.796875,
+          "w": 163.234375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 50.390625,
+          "y": 7742.65625,
+          "w": 220.984375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 50.390625,
+          "y": 7855.515625,
+          "w": 217.984375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 50.390625,
+          "y": 7946.34375,
+          "w": 249.609375,
+          "h": 60.8125,
+          "alpha": "1"
+        },
+        {
+          "text": "Community",
+          "x": 50.390625,
+          "y": 8067.578125,
+          "w": 152.4375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 50.390625,
+          "y": 8180.4375,
+          "w": 224.921875,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "International",
+          "x": 50.390625,
+          "y": 8293.296875,
+          "w": 168.171875,
+          "h": 30.40625,
+          "alpha": "1"
+        }
+      ],
+      "journey": "2021CreateFirst content, first brandsFreelance",
+      "photo": {
+        "x": 25.109375,
+        "y": 4285.296875,
+        "w": 269.78125,
+        "h": 337.21875
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 20,
+              "y": -2975.09375,
+              "w": 280,
+              "h": 41.265625,
+              "fontSize": 48
+            },
+            {
+              "text": "Bringing delicate jewellery collections forward: product storytelling, visual creation and engaging an audience that notices detail.",
+              "x": 20,
+              "y": -2545.03125,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -2462.25,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Isolate gesture and detail: one lead visual, with macros as a counterpoint.",
+              "x": 42.390625,
+              "y": -2368.625,
+              "w": 235.21875,
+              "h": 55.640625,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -2368.625,
+            "w": 235.21875,
+            "h": 55.640625
+          },
+          "decisionAlpha": "1"
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 20,
+              "y": -744.75,
+              "w": 280,
+              "h": 91.1875,
+              "fontSize": 48
+            },
+            {
+              "text": "Growing a Mediterranean women’s club: scrapbook formats, event coverage, engagement and authenticity.",
+              "x": 20,
+              "y": -264.765625,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -181.984375,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Put the group before the format: alternate shared scenes and closer framing.",
+              "x": 42.390625,
+              "y": -88.359375,
+              "w": 235.21875,
+              "h": 55.640625,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -88.359375,
+            "w": 235.21875,
+            "h": 55.640625
+          },
+          "decisionAlpha": "1"
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 20,
+              "y": 1559.375,
+              "w": 280,
+              "h": 82.53125,
+              "fontSize": 48
+            },
+            {
+              "text": "Immersed in artisanal fine food retail: personal advice, meticulous merchandising and in-store brand storytelling.",
+              "x": 20,
+              "y": 2030.703125,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": 2113.484375,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Begin with material, then return to the product and in-store advice.",
+              "x": 42.390625,
+              "y": 2207.109375,
+              "w": 235.21875,
+              "h": 37.09375,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": 2207.109375,
+            "w": 235.21875,
+            "h": 37.09375
+          },
+          "decisionAlpha": "1"
+        }
+      ]
+    },
+    {
+      "selector": "[data-project=\"comptoir\"]",
+      "scrollY": 11884,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "rule": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "activeRow": {
+        "x": 20,
+        "y": 5248.796875,
+        "w": 280,
+        "h": 113.859375
+      },
+      "band": null,
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 50.390625,
+          "y": 5265.796875,
+          "w": 163.234375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 50.390625,
+          "y": 5378.65625,
+          "w": 220.984375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 50.390625,
+          "y": 5491.515625,
+          "w": 217.984375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 50.390625,
+          "y": 5582.34375,
+          "w": 249.609375,
+          "h": 60.8125,
+          "alpha": "1"
+        },
+        {
+          "text": "Community",
+          "x": 50.390625,
+          "y": 5703.578125,
+          "w": 152.4375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 50.390625,
+          "y": 5816.4375,
+          "w": 224.921875,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "International",
+          "x": 50.390625,
+          "y": 5929.296875,
+          "w": 168.171875,
+          "h": 30.40625,
+          "alpha": "1"
+        }
+      ],
+      "journey": "2021CreateFirst content, first brandsFreelance",
+      "photo": {
+        "x": 25.109375,
+        "y": 1921.296875,
+        "w": 269.78125,
+        "h": 337.21875
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 20,
+              "y": -5339.09375,
+              "w": 280,
+              "h": 41.265625,
+              "fontSize": 48
+            },
+            {
+              "text": "Bringing delicate jewellery collections forward: product storytelling, visual creation and engaging an audience that notices detail.",
+              "x": 20,
+              "y": -4909.03125,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -4826.25,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Isolate gesture and detail: one lead visual, with macros as a counterpoint.",
+              "x": 42.390625,
+              "y": -4732.625,
+              "w": 235.21875,
+              "h": 55.640625,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -4732.625,
+            "w": 235.21875,
+            "h": 55.640625
+          },
+          "decisionAlpha": "1"
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 20,
+              "y": -3108.75,
+              "w": 280,
+              "h": 91.1875,
+              "fontSize": 48
+            },
+            {
+              "text": "Growing a Mediterranean women’s club: scrapbook formats, event coverage, engagement and authenticity.",
+              "x": 20,
+              "y": -2628.765625,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -2545.984375,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Put the group before the format: alternate shared scenes and closer framing.",
+              "x": 42.390625,
+              "y": -2452.359375,
+              "w": 235.21875,
+              "h": 55.640625,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -2452.359375,
+            "w": 235.21875,
+            "h": 55.640625
+          },
+          "decisionAlpha": "1"
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 20,
+              "y": -804.625,
+              "w": 280,
+              "h": 82.53125,
+              "fontSize": 48
+            },
+            {
+              "text": "Immersed in artisanal fine food retail: personal advice, meticulous merchandising and in-store brand storytelling.",
+              "x": 20,
+              "y": -333.296875,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -250.515625,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Begin with material, then return to the product and in-store advice.",
+              "x": 42.390625,
+              "y": -156.890625,
+              "w": 235.21875,
+              "h": 37.09375,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -156.890625,
+            "w": 235.21875,
+            "h": 37.09375
+          },
+          "decisionAlpha": "1"
+        }
+      ]
+    },
+    {
+      "selector": "section[aria-labelledby=\"journey-title\"]",
+      "scrollY": 14869,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "rule": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "activeRow": {
+        "x": 20,
+        "y": 2263.796875,
+        "w": 280,
+        "h": 113.859375
+      },
+      "band": null,
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 50.390625,
+          "y": 2280.796875,
+          "w": 163.234375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 50.390625,
+          "y": 2393.65625,
+          "w": 220.984375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 50.390625,
+          "y": 2506.515625,
+          "w": 217.984375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 50.390625,
+          "y": 2597.34375,
+          "w": 249.609375,
+          "h": 60.8125,
+          "alpha": "1"
+        },
+        {
+          "text": "Community",
+          "x": 50.390625,
+          "y": 2718.578125,
+          "w": 152.4375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 50.390625,
+          "y": 2831.4375,
+          "w": 224.921875,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "International",
+          "x": 50.390625,
+          "y": 2944.296875,
+          "w": 168.171875,
+          "h": 30.40625,
+          "alpha": "1"
+        }
+      ],
+      "journey": "2021CreateFirst content, first brandsFreelance",
+      "photo": {
+        "x": 25.109375,
+        "y": -1063.703125,
+        "w": 269.78125,
+        "h": 337.21875
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 20,
+              "y": -8324.09375,
+              "w": 280,
+              "h": 41.265625,
+              "fontSize": 48
+            },
+            {
+              "text": "Bringing delicate jewellery collections forward: product storytelling, visual creation and engaging an audience that notices detail.",
+              "x": 20,
+              "y": -7894.03125,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -7811.25,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Isolate gesture and detail: one lead visual, with macros as a counterpoint.",
+              "x": 42.390625,
+              "y": -7717.625,
+              "w": 235.21875,
+              "h": 55.640625,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -7717.625,
+            "w": 235.21875,
+            "h": 55.640625
+          },
+          "decisionAlpha": "1"
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 20,
+              "y": -6093.75,
+              "w": 280,
+              "h": 91.1875,
+              "fontSize": 48
+            },
+            {
+              "text": "Growing a Mediterranean women’s club: scrapbook formats, event coverage, engagement and authenticity.",
+              "x": 20,
+              "y": -5613.765625,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -5530.984375,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Put the group before the format: alternate shared scenes and closer framing.",
+              "x": 42.390625,
+              "y": -5437.359375,
+              "w": 235.21875,
+              "h": 55.640625,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -5437.359375,
+            "w": 235.21875,
+            "h": 55.640625
+          },
+          "decisionAlpha": "1"
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 20,
+              "y": -3789.625,
+              "w": 280,
+              "h": 82.53125,
+              "fontSize": 48
+            },
+            {
+              "text": "Immersed in artisanal fine food retail: personal advice, meticulous merchandising and in-store brand storytelling.",
+              "x": 20,
+              "y": -3318.296875,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -3235.515625,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Begin with material, then return to the product and in-store advice.",
+              "x": 42.390625,
+              "y": -3141.890625,
+              "w": 235.21875,
+              "h": 37.09375,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -3141.890625,
+            "w": 235.21875,
+            "h": 37.09375
+          },
+          "decisionAlpha": "1"
+        }
+      ]
+    },
+    {
+      "selector": "section[aria-labelledby=\"expertise-title\"]",
+      "scrollY": 17181,
+      "overflow": 0,
+      "active": "Social Media",
+      "counter": "01 / 07",
+      "rule": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "activeRow": {
+        "x": 20,
+        "y": -48.203125,
+        "w": 280,
+        "h": 113.859375
+      },
+      "band": null,
+      "terms": [
+        {
+          "text": "Social Media",
+          "x": 50.390625,
+          "y": -31.203125,
+          "w": 163.234375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Creation",
+          "x": 50.390625,
+          "y": 81.65625,
+          "w": 220.984375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Content Strategy",
+          "x": 50.390625,
+          "y": 194.515625,
+          "w": 217.984375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Brand Communication",
+          "x": 50.390625,
+          "y": 285.34375,
+          "w": 249.609375,
+          "h": 60.8125,
+          "alpha": "1"
+        },
+        {
+          "text": "Community",
+          "x": 50.390625,
+          "y": 406.578125,
+          "w": 152.4375,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "Digital Marketing",
+          "x": 50.390625,
+          "y": 519.4375,
+          "w": 224.921875,
+          "h": 30.40625,
+          "alpha": "1"
+        },
+        {
+          "text": "International",
+          "x": 50.390625,
+          "y": 632.296875,
+          "w": 168.171875,
+          "h": 30.40625,
+          "alpha": "1"
+        }
+      ],
+      "journey": "2021CreateFirst content, first brandsFreelance",
+      "photo": {
+        "x": 25.109375,
+        "y": -3375.703125,
+        "w": 269.78125,
+        "h": 337.21875
+      },
+      "projects": [
+        {
+          "id": "yuna",
+          "texts": [
+            {
+              "text": "Yuna Bijoux",
+              "x": 20,
+              "y": -10636.09375,
+              "w": 280,
+              "h": 41.265625,
+              "fontSize": 48
+            },
+            {
+              "text": "Bringing delicate jewellery collections forward: product storytelling, visual creation and engaging an audience that notices detail.",
+              "x": 20,
+              "y": -10206.03125,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -10123.25,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Isolate gesture and detail: one lead visual, with macros as a counterpoint.",
+              "x": 42.390625,
+              "y": -10029.625,
+              "w": 235.21875,
+              "h": 55.640625,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -10029.625,
+            "w": 235.21875,
+            "h": 55.640625
+          },
+          "decisionAlpha": "1"
+        },
+        {
+          "id": "mgc",
+          "texts": [
+            {
+              "text": "Marseille Girls Club",
+              "x": 20,
+              "y": -8405.75,
+              "w": 280,
+              "h": 91.1875,
+              "fontSize": 48
+            },
+            {
+              "text": "Growing a Mediterranean women’s club: scrapbook formats, event coverage, engagement and authenticity.",
+              "x": 20,
+              "y": -7925.765625,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -7842.984375,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Put the group before the format: alternate shared scenes and closer framing.",
+              "x": 42.390625,
+              "y": -7749.359375,
+              "w": 235.21875,
+              "h": 55.640625,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -7749.359375,
+            "w": 235.21875,
+            "h": 55.640625
+          },
+          "decisionAlpha": "1"
+        },
+        {
+          "id": "comptoir",
+          "texts": [
+            {
+              "text": "Le Comptoir de Mathilde",
+              "x": 20,
+              "y": -6101.625,
+              "w": 280,
+              "h": 82.53125,
+              "fontSize": 48
+            },
+            {
+              "text": "Immersed in artisanal fine food retail: personal advice, meticulous merchandising and in-store brand storytelling.",
+              "x": 20,
+              "y": -5630.296875,
+              "w": 280,
+              "h": 58.78125,
+              "fontSize": 14
+            },
+            {
+              "text": "Concept visuals generated for this portfolio.",
+              "x": 20,
+              "y": -5547.515625,
+              "w": 280,
+              "h": 14.84375,
+              "fontSize": 11
+            },
+            {
+              "text": "Begin with material, then return to the product and in-store advice.",
+              "x": 42.390625,
+              "y": -5453.890625,
+              "w": 235.21875,
+              "h": 37.09375,
+              "fontSize": 16
+            }
+          ],
+          "disclosure": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "disclosureSize": 11,
+          "slot": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          },
+          "decision": {
+            "x": 42.390625,
+            "y": -5453.890625,
+            "w": 235.21875,
+            "h": 37.09375
+          },
+          "decisionAlpha": "1"
+        }
+      ]
+    }
+  ]
+}

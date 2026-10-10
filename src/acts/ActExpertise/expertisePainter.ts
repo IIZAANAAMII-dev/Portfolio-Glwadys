@@ -23,7 +23,7 @@ export interface ExpertisePainter {
   paint: (pos: number, chord: number) => void;
 }
 
-const REST_ALPHA = { desktop: 0.6, mobile: 0.74 } as const;
+const REST_ALPHA = { desktop: 0.78, mobile: 0.82 } as const;
 // Mobile: short disciplines open to ~1.9× (≈ 33px at 320, 42px at 390);
 // long ones stop at the measure (painter `heroes`), never clipped.
 const HERO_CAP = { desktop: 2.05, mobile: 1.9 } as const;

@@ -145,7 +145,7 @@
   line-height: 1;
   letter-spacing: -0.035em;
   white-space: nowrap;
-  opacity: 0.6;
+  opacity: 0.78;
   transform-origin: left center;
   will-change: transform, opacity;
 }
@@ -349,6 +349,7 @@
      11.4 em-widths: 7vw − 5.2px keeps it opening to ≥ 1.25× at 320, 390 and
      430, while the resting index grows with the phone (17px → 22px → 25px). */
   .term {
+    opacity: 0.82;
     font-size: min(calc(var(--row-h) * 0.56), calc(7vw - 5.2px));
   }
 

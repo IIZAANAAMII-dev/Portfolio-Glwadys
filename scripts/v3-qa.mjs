@@ -20,7 +20,7 @@ const sourceSha256 = hash.digest('hex');
 // A bounded runner owns exactly one production server and one browser.
 const [engine = 'chromium', widthArg = '1440', locale = 'fr', mode = 'motion'] = process.argv.slice(2);
 const width = Number(widthArg), height = width === 320 ? 568 : width === 1440 ? 900 : 844;
-const out = `docs/qa/v3-final/${engine}-${width}-${locale}-${mode}`;
+const out = `${process.env.QA_OUTPUT_ROOT ?? 'docs/qa/v3-final'}/${engine}-${width}-${locale}-${mode}`;
 await mkdir(out, { recursive: true });
 const server = spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '-p', '3187'], { stdio: ['ignore', 'pipe', 'pipe'] });
 let log = '';
@@ -37,7 +37,10 @@ try {
     await new Promise((r) => setTimeout(r, 250));
   }
   if (!ready) throw new Error(`Server readiness failed: ${log}`);
-  browser = await ({ chromium, webkit }[engine]).launch({ headless: true });
+  browser = await ({ chromium, webkit }[engine]).launch({
+    headless: true,
+    executablePath: process.env.QA_BROWSER_EXECUTABLE || undefined,
+  });
   const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1,
     reducedMotion: mode === 'reduced' ? 'reduce' : 'no-preference', javaScriptEnabled: mode !== 'nojs' });
   const page = await context.newPage();
@@ -65,7 +68,10 @@ try {
       photo: journey?.querySelector('[data-archive-photo] img') ? box(journey.querySelector('[data-archive-photo] img')) : null,
       projects: [...document.querySelectorAll('[data-feature-stage]')].map((stage) => ({
         id: stage.closest('[data-project]').dataset.project,
-        texts: [...stage.querySelectorAll('h3, p')].map((e) => ({ text: e.textContent, ...box(e) })),
+        texts: [...stage.querySelectorAll('h3, p')].map((e) => ({ text: e.textContent, ...box(e), fontSize: parseFloat(getComputedStyle(e).fontSize) })),
+        disclosure: box(stage.querySelector('[data-spread-left] > span:last-child')),
+        disclosureSize: parseFloat(getComputedStyle(stage.querySelector('[data-spread-left] > span:last-child')).fontSize),
+        slot: box(stage.querySelector('[data-spread-slot]')),
         decision: box(stage.querySelector('[data-spread] p')),
         decisionAlpha: getComputedStyle(stage.querySelector('[data-spread] p')).opacity,
       })),
@@ -197,7 +203,7 @@ try {
     const forward = states.find((s) => !s.reverse && s.film === reverse.film && s.state === reverse.state);
     if (forward?.active !== reverse.active || forward?.journey !== reverse.journey) assertions.push(`Reverse mismatch: ${reverse.film}`);
   }
-  await writeFile(`${out}/results.json`, JSON.stringify({ sourceSha256, engine, width, height, locale, mode, errors, failures, assertions, states }, null, 2));
+  await writeFile(`${out}/results.json`, JSON.stringify({ sourceSha256, engine, browserVersion: browser.version(), width, height, locale, mode, errors, failures, assertions, states }, null, 2));
   console.log(JSON.stringify({ out, sourceSha256, errors, failures, assertions, states: states.length, overflows: states.filter((s) => s.overflow > 1).length }));
   if (errors.length || failures.length || assertions.length) process.exitCode = 1;
 } finally {

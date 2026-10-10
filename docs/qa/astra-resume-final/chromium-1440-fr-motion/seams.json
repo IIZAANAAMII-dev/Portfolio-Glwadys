@@ -1,0 +1,80 @@
+[
+  {
+    "beforeFilm": "notebook",
+    "afterFilm": "work-yuna",
+    "frames": [
+      {
+        "x": 918.4119873046875,
+        "y": 128.1436004638672,
+        "w": 395.207275390625,
+        "h": 494.5096435546875,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fyuna%2Fyuna-campaign-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "50% 46%",
+        "opacity": "1"
+      },
+      {
+        "x": 918.4119873046875,
+        "y": 128.1436004638672,
+        "w": 395.207275390625,
+        "h": 494.5096435546875,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fyuna%2Fyuna-campaign-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "50% 46%",
+        "opacity": "1"
+      }
+    ]
+  },
+  {
+    "beforeFilm": "work-journey",
+    "afterFilm": "journey",
+    "frames": [
+      {
+        "x": 579.1265258789062,
+        "y": 111.21607971191406,
+        "w": 513.7157592773438,
+        "h": 642.1615600585938,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fcomptoir%2Fcomptoir-craft-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "61% 50%",
+        "opacity": "1"
+      },
+      {
+        "x": 579.1265258789062,
+        "y": 111.21607971191406,
+        "w": 513.7157592773438,
+        "h": 642.1615600585938,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fcomptoir%2Fcomptoir-craft-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "61% 50%",
+        "opacity": "1"
+      }
+    ]
+  },
+  {
+    "beforeFilm": "journey",
+    "afterFilm": "expertise",
+    "frames": [
+      {
+        "x": 164.140625,
+        "y": 208.77899169921875,
+        "w": 427.5211181640625,
+        "h": 80.36639404296875,
+        "source": null,
+        "fit": "fill",
+        "position": "50% 50%",
+        "opacity": "1"
+      },
+      {
+        "x": 164.140625,
+        "y": 208.77899169921875,
+        "w": 427.5211181640625,
+        "h": 80.36639404296875,
+        "source": null,
+        "fit": "fill",
+        "position": "50% 50%",
+        "opacity": "1"
+      }
+    ]
+  }
+]

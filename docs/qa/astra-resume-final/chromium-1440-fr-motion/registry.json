@@ -1,0 +1,131 @@
+{
+  "reducedMotion": false,
+  "scrollY": 0,
+  "triggerCount": 15,
+  "films": {
+    "opening": {
+      "start": -0.001,
+      "end": 8208,
+      "time": 0.0000011,
+      "duration": 9.12,
+      "states": {
+        "hero": 0.2,
+        "develop": 0.89,
+        "social": 1.7200000000000002,
+        "moodboard": 2.5,
+        "planning": 3.12,
+        "direction": 3.74,
+        "screen": 4.58,
+        "feed": 4.92,
+        "focus": 5.38,
+        "story": 5.84,
+        "campaign": 6.3,
+        "immersion": 7.66,
+        "print": 8.540000000000001,
+        "paper": 9.069999999999999,
+        "seam": 9.12
+      }
+    },
+    "notebook": {
+      "start": 8208,
+      "end": 13878,
+      "time": 0,
+      "duration": 6.3,
+      "states": {
+        "entry": 0,
+        "sheet": 0.6,
+        "intention": 1.4300000000000002,
+        "method": 2.05,
+        "decision": 3.9099999999999997,
+        "campaign": 5.15,
+        "vault": 5.72,
+        "selection": 6.21,
+        "seam": 6.3
+      }
+    },
+    "work-yuna": {
+      "start": 13878,
+      "end": 16308,
+      "time": 0,
+      "duration": 1,
+      "states": {
+        "entry": 0,
+        "reveal": 0.3,
+        "read": 0.4,
+        "spread": 0.9,
+        "end": 1
+      }
+    },
+    "work-mgc": {
+      "start": 18473,
+      "end": 20363,
+      "time": 0,
+      "duration": 1,
+      "states": {
+        "entry": 0,
+        "reveal": 0.3,
+        "read": 0.4,
+        "spread": 0.9,
+        "end": 1
+      }
+    },
+    "work-comptoir": {
+      "start": 22528,
+      "end": 24418,
+      "time": 0,
+      "duration": 1,
+      "states": {
+        "entry": 0,
+        "reveal": 0.3,
+        "read": 0.4,
+        "spread": 0.9,
+        "end": 1
+      }
+    },
+    "work-journey": {
+      "start": 26577,
+      "end": 27837,
+      "time": 0,
+      "duration": 1,
+      "states": {
+        "cover": 0.12,
+        "turn": 0.47,
+        "aperture": 0.96
+      }
+    },
+    "journey": {
+      "start": 27837,
+      "end": 32697,
+      "time": 0,
+      "duration": 1,
+      "states": {
+        "aperture": 0,
+        "filing": 0.09,
+        "first": 0.17,
+        "second": 0.306,
+        "third": 0.442,
+        "fourth": 0.578,
+        "fifth": 0.714,
+        "sixth": 0.85,
+        "index": 1
+      }
+    },
+    "expertise": {
+      "start": 32697,
+      "end": 36837,
+      "time": 0,
+      "duration": 1,
+      "states": {
+        "first": 0.06,
+        "second": 0.18,
+        "third": 0.3,
+        "fourth": 0.42,
+        "fifth": 0.54,
+        "sixth": 0.66,
+        "seventh": 0.78,
+        "all": 0.86,
+        "contact": 1
+      }
+    }
+  }
+}

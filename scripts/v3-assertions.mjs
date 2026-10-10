@@ -41,16 +41,20 @@ export function assertReading(state, width, height) {
     assert.equal(Number(project.decisionAlpha), 1, `${project.id}: decision page not settled`);
     assert.ok(d.x >= -1 && d.x + d.w <= width + 1, `${project.id}: decision clipped horizontally`);
     assert.ok(d.y >= 0 && d.y + d.h <= height - 100, `${project.id}: decision under navigation`);
+    assert.ok(project.disclosureSize >= 11, `${project.id}: spread disclosure too small`);
+    assert.ok(project.slot.y + project.slot.h <= project.disclosure.y + 1, `${project.id}: disclosure overlaps photograph`);
   }
   if (state.state === 'read') {
     const project = state.projects.find((p) => `work-${p.id}` === state.film);
     const [title, summary, note] = project.texts;
+    assert.ok(note.fontSize >= 11, `${project.id}: cover disclosure too small`);
+    assert.ok(summary.fontSize >= 14, `${project.id}: summary too small`);
     for (const text of [title, summary, note]) {
       assert.ok(text.x >= -1 && text.x + text.w <= width + 1, `${project.id}: ${text.text} clipped horizontally`);
       assert.ok(text.y >= 0 && text.y + text.h <= height - 60, `${project.id}: copy under navigation`);
     }
     assert.ok(title.y + title.h <= summary.y + 1, `${project.id}: title overlaps summary`);
-    assert.ok(summary.y + summary.h <= note.y + 1, `${project.id}: summary overlaps image disclosure`);
+    assert.ok(summary.y + summary.h + 12 <= note.y + 1, `${project.id}: summary overlaps or crowds image disclosure`);
   }
   if (state.resized) assert.equal(state.countBefore, state.countAfter, 'Resize leaked ScrollTriggers');
 }

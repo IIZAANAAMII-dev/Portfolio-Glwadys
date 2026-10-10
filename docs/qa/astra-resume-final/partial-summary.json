@@ -1,0 +1,175 @@
+{
+  "status": "PARTIAL — Chromium only; required WebKit matrix blocked by unavailable browser/network 403",
+  "sourceSha256": "2c5bf417e4b516257de1a0d6b978fa3d009adb7a77732cb718b0748488d9bc1e",
+  "buildId": "0IhtZ76ltChO5vPBt7XNt",
+  "browserVersions": [
+    "153.0.8010.12"
+  ],
+  "cases": 10,
+  "expected": [
+    "chromium-1440-fr-motion",
+    "chromium-390-fr-motion",
+    "chromium-390-ko-motion",
+    "chromium-320-fr-motion",
+    "chromium-320-en-motion",
+    "chromium-320-ko-motion",
+    "chromium-320-fr-reduced",
+    "chromium-320-en-reduced",
+    "chromium-320-ko-reduced",
+    "chromium-320-fr-nojs"
+  ],
+  "states": 242,
+  "screenshots": 172,
+  "maxSeamError": 0,
+  "errors": 0,
+  "failures": 0,
+  "assertions": 0,
+  "measurements": [
+    {
+      "case": "chromium-1440-fr-motion",
+      "project": "yuna",
+      "summaryPx": 18.72,
+      "disclosurePx": 12,
+      "summaryToNoteGap": 41.40625
+    },
+    {
+      "case": "chromium-1440-fr-motion",
+      "project": "mgc",
+      "summaryPx": 20.88,
+      "disclosurePx": 12,
+      "summaryToNoteGap": 349.484375
+    },
+    {
+      "case": "chromium-1440-fr-motion",
+      "project": "comptoir",
+      "summaryPx": 18.72,
+      "disclosurePx": 12,
+      "summaryToNoteGap": 41.40625
+    },
+    {
+      "case": "chromium-1440-fr-motion",
+      "state": "expertise-sixth",
+      "textToRuleGap": 8.64837646484375
+    },
+    {
+      "case": "chromium-1440-fr-motion",
+      "state": "expertise-sixth",
+      "textToRuleGap": 8.64837646484375
+    },
+    {
+      "case": "chromium-1440-fr-motion",
+      "state": "expertise-sixth",
+      "textToRuleGap": 8.64837646484375
+    },
+    {
+      "case": "chromium-1440-fr-motion",
+      "state": "expertise-sixth",
+      "textToRuleGap": 8.64837646484375
+    },
+    {
+      "case": "chromium-390-fr-motion",
+      "project": "yuna",
+      "summaryPx": 14.82,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 109.90625
+    },
+    {
+      "case": "chromium-390-fr-motion",
+      "project": "mgc",
+      "summaryPx": 14.82,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 93.03125
+    },
+    {
+      "case": "chromium-390-fr-motion",
+      "project": "comptoir",
+      "summaryPx": 14.82,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 101.46875
+    },
+    {
+      "case": "chromium-390-ko-motion",
+      "project": "yuna",
+      "summaryPx": 14.82,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 109.90625
+    },
+    {
+      "case": "chromium-390-ko-motion",
+      "project": "mgc",
+      "summaryPx": 14.82,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 115.25
+    },
+    {
+      "case": "chromium-390-ko-motion",
+      "project": "comptoir",
+      "summaryPx": 14.82,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 123.6875
+    },
+    {
+      "case": "chromium-320-fr-motion",
+      "project": "yuna",
+      "summaryPx": 14,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 20.109375
+    },
+    {
+      "case": "chromium-320-fr-motion",
+      "project": "mgc",
+      "summaryPx": 14,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 14.71875
+    },
+    {
+      "case": "chromium-320-fr-motion",
+      "project": "comptoir",
+      "summaryPx": 14,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 20.109375
+    },
+    {
+      "case": "chromium-320-en-motion",
+      "project": "yuna",
+      "summaryPx": 14,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 20.109375
+    },
+    {
+      "case": "chromium-320-en-motion",
+      "project": "mgc",
+      "summaryPx": 14,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 34.3125
+    },
+    {
+      "case": "chromium-320-en-motion",
+      "project": "comptoir",
+      "summaryPx": 14,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 20.109375
+    },
+    {
+      "case": "chromium-320-ko-motion",
+      "project": "yuna",
+      "summaryPx": 14,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 20.109375
+    },
+    {
+      "case": "chromium-320-ko-motion",
+      "project": "mgc",
+      "summaryPx": 14,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 53.90625
+    },
+    {
+      "case": "chromium-320-ko-motion",
+      "project": "comptoir",
+      "summaryPx": 14,
+      "disclosurePx": 11,
+      "summaryToNoteGap": 39.703125
+    }
+  ]
+}

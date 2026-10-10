@@ -1,0 +1,80 @@
+[
+  {
+    "beforeFilm": "notebook",
+    "afterFilm": "work-yuna",
+    "frames": [
+      {
+        "x": 170.796875,
+        "y": 281.46875,
+        "w": 187.8125,
+        "h": 235.265625,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fyuna%2Fyuna-campaign-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "50% 46%",
+        "opacity": "1"
+      },
+      {
+        "x": 170.796875,
+        "y": 281.46875,
+        "w": 187.8125,
+        "h": 235.265625,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fyuna%2Fyuna-campaign-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "50% 46%",
+        "opacity": "1"
+      }
+    ]
+  },
+  {
+    "beforeFilm": "work-journey",
+    "afterFilm": "journey",
+    "frames": [
+      {
+        "x": 39.14373779296875,
+        "y": 47.05436706542969,
+        "w": 311.6812744140625,
+        "h": 389.6099853515625,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fcomptoir%2Fcomptoir-craft-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "61% 50%",
+        "opacity": "1"
+      },
+      {
+        "x": 39.14373779296875,
+        "y": 47.05436706542969,
+        "w": 311.6812744140625,
+        "h": 389.6099853515625,
+        "source": "/_next/image?url=%2Fmedia%2Fgenerated%2Fcomptoir%2Fcomptoir-craft-v2.jpg&w=3840&q=75",
+        "fit": "cover",
+        "position": "61% 50%",
+        "opacity": "1"
+      }
+    ]
+  },
+  {
+    "beforeFilm": "journey",
+    "afterFilm": "expertise",
+    "frames": [
+      {
+        "x": 50.390625,
+        "y": 128.1765594482422,
+        "w": 227.46563720703125,
+        "h": 41.97813415527344,
+        "source": null,
+        "fit": "fill",
+        "position": "50% 50%",
+        "opacity": "1"
+      },
+      {
+        "x": 50.390625,
+        "y": 128.1765594482422,
+        "w": 227.46563720703125,
+        "h": 41.97813415527344,
+        "source": null,
+        "fit": "fill",
+        "position": "50% 50%",
+        "opacity": "1"
+      }
+    ]
+  }
+]
