@@ -196,7 +196,7 @@ export function ProjectFeature({ project, content, locale, index }: {
           <span>{project.place} · {project.period}</span>
         </header>
         <div className={styles.photo} data-feature-photo>
-          <Media item={hero} locale={locale} compact sizes="(max-width: 1023px) 100vw, 75vw" />
+          <Media item={hero} locale={locale} compact loading="eager" sizes="(max-width: 1023px) 100vw, 75vw" />
         </div>
         <div className={styles.titleBlock} data-cover-copy>
           <span className={`${styles.role} micro`}>{project.role}</span>

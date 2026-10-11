@@ -109,6 +109,7 @@ export function BottomNav({ content, locale }: { content: Content; locale: Local
 
   useEffect(() => {
     const panel = dialog.current;
+    const triggerElement = trigger.current;
     if (!indexOpen || !panel) return;
     panel.showModal(); // Native modal: inert background, focus containment, Escape.
     const previousOverflow = document.body.style.overflow;
@@ -121,7 +122,7 @@ export function BottomNav({ content, locale }: { content: Content; locale: Local
       panel.close();
       document.body.style.overflow = previousOverflow;
       media.removeEventListener('change', onDesktop);
-      if (!media.matches) trigger.current?.focus({ preventScroll: true });
+      if (!media.matches) triggerElement?.focus({ preventScroll: true });
     };
   }, [indexOpen]);
 

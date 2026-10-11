@@ -204,6 +204,13 @@
   .project[data-project='mgc'] .stage .summary { top: 60.5%; }
   .project[data-project='mgc'] .name { font-size: 12vw; }
   .project[data-project='comptoir'] .titleBlock { top: 37%; }
+  /* Short-phone reading gate: the project summary and photo disclosure
+     must have a real margin, not a half-pixel seam. */
+  .project[data-project='comptoir'] .stage .summary {
+    top: 60%;
+    font-size: 0.84rem;
+    line-height: 1.35;
+  }
   .spread { top: 0.75rem; grid-template-rows: 0.95fr 1fr; }
   .project:not([data-project='yuna']) .spread { grid-template-rows: minmax(0, 0.78fr) minmax(0, 1.22fr); }
   .pageRight { gap: 0.5rem; padding: 0.85rem 0.95rem 0.75rem; }

@@ -17,7 +17,7 @@ export function createExpertisePainter(scope: HTMLElement, isDesktop: boolean): 
   let printTravel = 0;
 
   const measure = () => { printTravel = Math.min(isDesktop ? 24 : 10, (print?.clientHeight ?? 0) * 0.05); };
-  const paint = (position: number, _chord: number) => {
+  const paint = (position: number) => {
     const pos = Math.max(0, Math.min(rows.length - 1, position));
     const active = Math.round(pos);
     const offset = active - pos;
