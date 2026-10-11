@@ -14,7 +14,7 @@ import {
 } from '@/content/media';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { MQ } from '@/lib/motion';
-import { emitReady, lockScroll, unlockScroll } from '@/lib/scrollControl';
+import { emitReady, unlockScroll } from '@/lib/scrollControl';
 import { useReducedMotion } from '@/lib/useReducedMotion';
 import { registerVisualFilm } from '@/lib/visualQa';
 import { Media } from '@/ui/Media';
@@ -79,10 +79,10 @@ const STORY_ACT_MARKERS = [
 ] as const;
 
 /** Libellés de mise en scène (le contenu factuel reste dans `content`). */
-const LABELS: Record<Locale, { develop: string; frame: string; layers: string; screen: string; reel: string }> = {
-  fr: { develop: 'Développer', frame: 'Photogramme', layers: 'Les strates', screen: 'Écran 9:16', reel: 'Bobine 01' },
-  en: { develop: 'Develop', frame: 'Frame', layers: 'The layers', screen: 'Screen 9:16', reel: 'Reel 01' },
-  ko: { develop: '현상', frame: '프레임', layers: '레이어', screen: '스크린 9:16', reel: '릴 01' },
+const LABELS: Record<Locale, { issue: string; frame: string; layers: string; screen: string; reel: string }> = {
+  fr: { issue: 'Nº 01', frame: 'Tirage', layers: 'Les strates', screen: 'Écran 9:16', reel: 'Format UGC' },
+  en: { issue: 'No. 01', frame: 'Print', layers: 'The layers', screen: 'Screen 9:16', reel: 'UGC format' },
+  ko: { issue: 'No. 01', frame: '프린트', layers: '레이어', screen: '스크린 9:16', reel: 'UGC 포맷' },
 };
 
 /** Les trois photogrammes du monde social et la strate qu'ils incarnent. */
@@ -131,15 +131,23 @@ function ReducedStory({ content, locale }: Props) {
   const formats = [phoneFeed[0]!, phoneFeed[2]!, phoneStory, socialPortal];
   return (
     <div className={styles.reducedStory}>
-      <article className={`${styles.reducedPanel} ${styles.reducedInk}`}>
-        <span className="micro">01 / {opening.edition}</span>
-        <figure className={styles.reducedHero}>
-          <Media item={heroVertical} locale={locale} preload={false} sizes="(max-width: 1023px) 64vw, 28vw" />
-        </figure>
+      <article className={`${styles.reducedPanel} ${styles.reducedInk} ${styles.reducedCover}`}>
+        <div className={`${styles.reducedChrome} micro`}>
+          <span>{LABELS[locale].issue} — {opening.edition}</span>
+          <span>{opening.topics}</span>
+        </div>
         <h2 className={styles.reducedName}>
           <span>{hero.firstName}</span>
           <span>{hero.lastName}</span>
         </h2>
+        <p className={styles.reducedRole}>
+          <span>{opening.role[0]}</span>
+          <span>{opening.role[1]}</span>
+        </p>
+        <figure className={styles.reducedHero}>
+          <Media item={heroVertical} locale={locale} preload={false} sizes="(max-width: 1023px) 64vw, 28vw" />
+          <figcaption className={styles.reducedCredit}>{opening.credit}</figcaption>
+        </figure>
         <p className="lead">{opening.tagline}</p>
       </article>
 
@@ -202,11 +210,10 @@ export function ActScrollStory({ content, locale }: Props) {
       const one = <E extends HTMLElement>(sel: string): E | null => q<E>(sel)[0] ?? null;
 
       const aperture = one('[data-aperture]');
-      const apertureIntro = one('[data-aperture-intro]');
       const heroSlot = one('[data-slot="hero"]');
       const screenSlot = one('[data-slot="screen"]');
       const printImage = one('[data-notebook-frame="story"] [data-notebook-frame-image]');
-      if (!aperture || !apertureIntro || !heroSlot || !screenSlot || !printImage) return;
+      if (!aperture || !heroSlot || !screenSlot || !printImage) return;
 
       const mm = gsap.matchMedia();
 
@@ -226,6 +233,7 @@ export function ActScrollStory({ content, locale }: Props) {
         const nameWraps = q<HTMLElement>('[data-name]');
         const nameLines = q<HTMLElement>('[data-name-line]');
         const tagline = one('[data-tagline]');
+        const glint = one('[data-glint]');
         const safelight = one('[data-safelight]');
         const scrim = one('[data-scrim]');
         const heroImage = one('[data-reel-layer="hero"] [data-reel-image]');
@@ -298,19 +306,24 @@ export function ActScrollStory({ content, locale }: Props) {
           return index < 2 ? s.top + inset - r.top : s.bottom - inset - r.bottom;
         };
 
-        /* ---------- ÉTATS INITIAUX ---------- */
+        /* ---------- ÉTATS INITIAUX ----------
+           La couverture est déjà peinte par le CSS (tirage, titre, métier,
+           crédit) : ces valeurs reprennent l'état SSR à l'identique, aucun
+           élément visible n'est masqué à l'hydratation. */
         const openingSeen = document.documentElement.dataset.shellReady === 'true';
-        if (!openingSeen) lockScroll();
 
         gsap.set(aperture, { ...heroWindow, autoAlpha: 1 });
-        gsap.set(apertureIntro, { '--intro': 50 });
+        aperture.dataset.armed = 'true';
         gsap.set(trace, { scaleX: 0, autoAlpha: 1 });
         gsap.set(marks, { autoAlpha: 0, x: 0, y: 0 });
-        gsap.set(metas, { autoAlpha: 0 });
-        gsap.set(nameLines, { yPercent: 112 });
+        gsap.set(metas, { autoAlpha: 1 });
+        gsap.set(nameLines, { yPercent: 0 });
         gsap.set(nameWraps, { xPercent: 0, autoAlpha: 1 });
         gsap.set(tagline, { autoAlpha: 0, y: 12 });
-        gsap.set(safelight, { autoAlpha: 0.48 });
+        gsap.set(glint, { xPercent: -130 });
+        // Un voile léger : la couverture doit se lire comme une vraie photo
+        // dès la première seconde ; le « développement » la libère au scroll.
+        gsap.set(safelight, { autoAlpha: 0.26 });
         gsap.set(scrim, { autoAlpha: 0 });
         gsap.set(heroImage, { scale: 1.16, yPercent: 0 });
 
@@ -343,21 +356,35 @@ export function ActScrollStory({ content, locale }: Props) {
         gsap.set(paperRoom, { autoAlpha: 0 });
 
         /* ================================================================
-           OUVERTURE AUTONOME (~2 s). N'écrit que des propriétés qu'aucun
-           tween scrubé ne touche : trace.scaleX, apertureIntro --intro,
-           nameLines.yPercent, marks/metas/tagline (fade d'entrée).
+           RÉGLAGE AUTONOME (~2,2 s), SANS VERROU DE SCROLL. Tout est déjà
+           lisible : l'intro ne fait que « mettre au point ». Elle n'écrit
+           que des propriétés qu'aucun tween scrubé ne touche : interlettrage
+           du titre, x de la signature, échelle du tirage (nœud enfant de
+           [data-reel-image]), trace.scaleX, marks/tagline, glint.xPercent.
            ================================================================ */
+        const heroPrint = heroImage.firstElementChild as HTMLElement | null;
         const intro = gsap.timeline({ defaults: { ease: 'expo.out', overwrite: false } });
         intro
-          .to(trace, { scaleX: 1, duration: 0.95 }, 0)
-          .to(metas, { autoAlpha: 1, duration: 0.6, stagger: 0.08 }, 0.25)
-          .to(apertureIntro, { '--intro': 0, duration: 1.15, ease: 'power3.inOut' }, 0.5)
-          .to(nameLines, { yPercent: 0, duration: 1.05, stagger: 0.12 }, 0.85)
-          .to(marks, { autoAlpha: 1, duration: 0.5, stagger: 0.05 }, 1.25)
-          .to(tagline, { autoAlpha: 1, y: 0, duration: 0.7 }, 1.35)
-          .add(() => unlockScroll(), 1.7)
-          .add(() => emitReady(), 2.0);
+          // L'objectif fait le point : le tirage se pose, sans jamais disparaître.
+          .to(heroPrint, { scale: 1, duration: 2.2, ease: 'power3.out' }, 0)
+          .to(trace, { scaleX: 1, duration: 0.9 }, 0)
+          // Le titre de tête se resserre comme un logotype que l'on cale.
+          .to(nameLines.slice(0, 1), { letterSpacing: '-0.02em', duration: 1.6, ease: 'power4.out' }, 0.05)
+          // x (px) sur l'enveloppe : le scrub n'y écrit que xPercent.
+          .to(nameWraps.slice(1), { x: 0, duration: 1.4, ease: 'power3.out' }, 0.2)
+          .to(marks, { autoAlpha: 1, duration: 0.45, stagger: 0.05 }, 0.4)
+          .to(tagline, { autoAlpha: 1, y: 0, duration: 0.7 }, 0.5)
+          // Un seul reflet d'argent traverse la bague : la matière, pas un effet.
+          .to(glint, { xPercent: 130, duration: 1.5, ease: 'power2.inOut' }, 0.45)
+          .add(() => emitReady(), 0.8);
         if (openingSeen) intro.progress(1);
+
+        // Le visiteur prend la main dès qu'il le veut : l'intro est conclue
+        // AVANT que le scrub ne lise ses valeurs de départ (scroll → tick).
+        const finishIntro = () => {
+          if (intro.progress() < 1) intro.progress(1);
+        };
+        window.addEventListener('scroll', finishIntro, { once: true, passive: true });
 
         /* ================================================================
            PARTITION SCROLLÉE — un seul propriétaire, `ease: none` par défaut,
@@ -400,12 +427,15 @@ export function ActScrollStory({ content, locale }: Props) {
             immediateRender: false,
           }, T.develop)
           .to(marks, { autoAlpha: 0, duration: 0.2 }, T.socialIn - 0.1)
-          .to(nameWraps, {
-            xPercent: (i: number) => (i === 0 ? -64 : 64),
-            autoAlpha: 0,
-            duration: 0.64,
+          // Le titre de couverture remonte dans son propre masque, comme une
+          // page qu'on soulève ; le nom de famille glisse hors du cadre.
+          .fromTo(nameLines.slice(0, 1), { yPercent: 0 }, {
+            yPercent: -118,
+            duration: 0.54,
             ease: 'power2.in',
-          }, T.develop + 0.04)
+            immediateRender: false,
+          }, T.develop + 0.02)
+          .to(nameWraps.slice(1), { xPercent: 52, autoAlpha: 0, duration: 0.6, ease: 'power2.in' }, T.develop + 0.04)
           .to([tagline, ...metas], { autoAlpha: 0, duration: 0.3 }, T.develop)
           .to(scrim, { autoAlpha: 1, duration: 0.4 }, T.develop + 0.5)
           // Le plein cadre est atteint : la phrase entre en traversant l'image.
@@ -510,24 +540,21 @@ export function ActScrollStory({ content, locale }: Props) {
 
         return () => {
           unregisterQA();
+          window.removeEventListener('scroll', finishIntro);
           intro.kill();
-          unlockScroll();
+          delete aperture.dataset.armed;
         };
       });
 
-      /* Filet de sécurité : un scroll verrouillé est un défaut bloquant. */
-      const release = () => unlockScroll();
-      window.addEventListener('keydown', release, { once: true });
-      const safety = window.setTimeout(() => {
-        release();
-        emitReady();
-      }, 4200);
+      /* Filet de sécurité : la navigation apparaît même si l'intro n'a pas
+         tourné. Le scroll n'est plus jamais verrouillé par la couverture ;
+         on libère tout verrou hérité d'une version précédente. */
+      unlockScroll();
+      const safety = window.setTimeout(emitReady, 1600);
 
       return () => {
         mm.revert();
-        window.removeEventListener('keydown', release);
         window.clearTimeout(safety);
-        unlockScroll();
       };
     },
     { scope: root },
@@ -545,7 +572,7 @@ export function ActScrollStory({ content, locale }: Props) {
 
       <div ref={stage} className={styles.stage}>
         <h1 className="visually-hidden">
-          {hero.firstName} {hero.lastName} — {opening.tagline}
+          {hero.firstName} {hero.lastName} — {opening.role.join(' · ')}
         </h1>
 
         <div className={styles.motionStory}>
@@ -562,6 +589,11 @@ export function ActScrollStory({ content, locale }: Props) {
             {[0, 1, 2, 3].map((i) => (
               <span className={styles.mark} data-mark data-corner={i} key={i} />
             ))}
+            {/* Crédit photo de couverture, posé le long du tirage. */}
+            <span className={styles.coverCredit} data-meta>
+              <span className={styles.coverCreditFull}>{opening.credit}</span>
+              <span className={styles.coverCreditShort}>{opening.credit.split(', ').pop()}</span>
+            </span>
           </span>
           <span className={`${styles.screenGeom} ${styles.screenSlot}`} data-slot="screen" aria-hidden="true" />
 
@@ -572,6 +604,7 @@ export function ActScrollStory({ content, locale }: Props) {
                 <div className={styles.reelImage} data-reel-image>
                   <Media item={heroVertical} locale={locale} className={styles.fill} sizes="100vw" />
                 </div>
+                <span className={styles.glint} data-glint />
               </div>
 
               {SOCIAL_FRAMES.map(({ media, layer }, index) => (
@@ -627,19 +660,35 @@ export function ActScrollStory({ content, locale }: Props) {
             </div>
           </div>
 
-          {/* ---------- 1 · BLACK ROOM ---------- */}
+          {/* ---------- 1 · COUVERTURE ----------
+              Un numéro de magazine : bandeau, titre de tête, métier, titres
+              de couverture, crédit. Une seule image, beaucoup d'air. */}
           <div className={styles.openingChrome}>
-            <span className={`${styles.edition} micro`} data-meta>{opening.edition}</span>
+            <span className={`${styles.edition} micro`} data-meta>
+              {labels.issue}<span className={styles.editionLong}> — {opening.edition}</span>
+            </span>
+            <span className={`${styles.counter} micro`} data-meta>{opening.topics}</span>
             <span className={`${styles.axis} micro`} data-meta>{opening.axis}</span>
-            <span className={`${styles.counter} micro`} data-meta>00 — {labels.develop}</span>
           </div>
 
           <div className={`${styles.name} ${styles.nameFirst}`} data-name aria-hidden="true">
             <span className={styles.mask}><span data-name-line>{hero.firstName}</span></span>
           </div>
+          <p className={styles.role} data-meta aria-hidden="true">
+            <span>{opening.role[0]}</span>
+            <span>{opening.role[1]}</span>
+          </p>
           <div className={`${styles.name} ${styles.nameLast}`} data-name aria-hidden="true">
             <span className={styles.mask}><span data-name-line>{hero.lastName}</span></span>
           </div>
+          <ol className={styles.coverLines} data-meta>
+            {opening.coverLines.map((line) => (
+              <li key={line.folio}>
+                <span className={styles.coverFolio}>{line.folio}</span>
+                <span>{line.text}</span>
+              </li>
+            ))}
+          </ol>
           <p className={`${styles.tagline} lead`} data-tagline>{opening.tagline}</p>
 
           {/* ---------- 2 · FULL BLEED ---------- */}

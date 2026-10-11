@@ -90,33 +90,145 @@
   color: rgb(var(--ink-rgb) / 0.86);
 }
 
-/* Une vraie planche : quatre photogrammes numérotés, sur une bande. */
-.contactStrip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.45rem;
-  margin-top: auto;
-  padding: 0.45rem;
-  list-style: none;
-  background: var(--ink);
-}
-
-.contactStrip li {
+/* La table : trois tirages réels posés en quinconce, annotés à l'encre.
+   Conteneur de taille : les tirages se dimensionnent sur la place réelle
+   laissée par le titre (cqw / cqh de la table), jamais de vide ni de
+   débordement, de 1024 à 1920 px. */
+.table {
   position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+  margin-top: 1.4rem;
+  list-style: none;
+  container-type: size;
 }
 
-.contactStrip li > div {
-  aspect-ratio: 1 / 1 !important;
+.tablePrint {
+  position: absolute;
+  margin: 0;
+  padding: 0.45rem 0.45rem 1.9rem;
+  background: var(--ivory);
+  box-shadow:
+    0 1.1rem 2.6rem rgb(var(--wood-rgb) / 0.2),
+    0 0.15rem 0.45rem rgb(var(--wood-rgb) / 0.14);
+  rotate: var(--tilt);
+}
+
+.tablePrint > div {
   border: 0 !important;
   box-shadow: none !important;
 }
 
-.contactStrip .micro {
+/* 02 — le bijou en macro : le tirage d'appel, le plus grand. */
+.tablePrint[data-print='0'] {
+  --tilt: -2.4deg;
+  left: 0;
+  top: 5%;
+  z-index: 1;
+  width: min(29cqw, 60cqh);
+}
+
+/* 03 — la planche d'humeur, à cheval, scotchée. */
+.tablePrint[data-print='1'] {
+  --tilt: 1.6deg;
+  left: 33cqw;
+  top: 0;
+  z-index: 2;
+  width: min(24cqw, calc((70cqh - 2.4rem) * 0.8));
+}
+
+/* 04 — les outils, plus bas : la diagonale de lecture. */
+.tablePrint[data-print='2'] {
+  --tilt: -1deg;
+  left: 63cqw;
+  top: 27%;
+  z-index: 1;
+  width: min(23cqw, 52cqh);
+}
+
+.tape {
   position: absolute;
-  left: 0.3rem;
-  bottom: 0.25rem;
-  font-size: 0.55rem;
-  color: var(--champagne);
+  left: 50%;
+  top: -0.55rem;
+  z-index: 1;
+  width: 3.4rem;
+  height: 1.05rem;
+  translate: -50% 0;
+  rotate: -4deg;
+  background: rgb(var(--champagne-rgb) / 0.5);
+  border-inline: 1px solid rgb(var(--ink-rgb) / 0.08);
+}
+
+.tablePrint[data-print='0'] .tape {
+  left: 0.9rem;
+  rotate: -38deg;
+  translate: 0 0.2rem;
+}
+
+.tablePrint .printLabel {
+  position: absolute;
+  left: 0.55rem;
+  bottom: 0.6rem;
+  font-size: 0.6875rem;
+  color: var(--rich-wine);
+  white-space: nowrap;
+}
+
+/* L'encre : une note manuscrite par tirage, posée sur le papier. */
+.tablePrint .printNote {
+  position: absolute;
+  left: 0.35rem;
+  top: calc(100% + 0.45rem);
+  width: max-content;
+  max-width: 30cqw;
+  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
+  color: var(--rich-wine);
+  rotate: calc(var(--tilt) * -1);
+}
+
+.tablePrint[data-print='2'] .printNote {
+  top: auto;
+  bottom: calc(100% + 0.6rem);
+  max-width: 34cqw;
+}
+
+/* Le nuancier : la matière nommée, au pied de la page. */
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.3rem;
+  margin-top: 1.1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.18);
+  list-style: none;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(var(--ink-rgb) / 0.8);
+}
+
+.swatches li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.swatches i {
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 1px solid rgb(var(--ink-rgb) / 0.2);
+}
+
+.swatches li:nth-child(1) i { background: var(--ivory); }
+.swatches li:nth-child(2) i { background: var(--ink); }
+.swatches li:nth-child(3) i { background: var(--rich-wine); }
+.swatches li:nth-child(4) i { background: #b9b8b4; }
+.swatches li:nth-child(5) i { background: var(--champagne); }
+
+/* Mobile seulement : le second tirage glissé sur le premier. */
+.mobilePrint {
+  display: none;
 }
 
 /* L'ombre portée qu'un feuillet en mouvement jette sur la page dessous. */
@@ -527,6 +639,39 @@
     font-size: 0.6rem;
   }
 
+  /* Le bijou en macro, glissé en biais sur le coin du tirage retenu :
+     deux images qui dialoguent, légendées dans la marge du papier. */
+  .mobilePrint {
+    position: absolute;
+    right: 3cqw;
+    top: calc(4cqh + 44cqw);
+    z-index: 1;
+    display: block;
+    width: 32cqw;
+    margin: 0;
+    padding: 0.35rem 0.35rem 1.55rem;
+    background: var(--ivory);
+    box-shadow:
+      0 0.9rem 2rem rgb(var(--wood-rgb) / 0.24),
+      0 0.12rem 0.4rem rgb(var(--wood-rgb) / 0.16);
+    rotate: 3deg;
+  }
+
+  .mobilePrint > div {
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .mobilePrint figcaption {
+    position: absolute;
+    left: 0.45rem;
+    bottom: 0.42rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+    color: var(--rich-wine);
+    white-space: nowrap;
+  }
+
   .mobileText {
     position: absolute;
     left: 6cqw;
@@ -648,6 +793,14 @@
 @media (max-width: 359px) {
   .mobileNote {
     font-size: 0.88rem;
+  }
+}
+
+/* Téléphones courts : le second tirage remonte pour laisser le titre libre. */
+@media (max-width: 1023px) and (max-height: 620px) {
+  .mobilePrint {
+    top: calc(4cqh + 30cqw);
+    width: 30cqw;
   }
 }
 

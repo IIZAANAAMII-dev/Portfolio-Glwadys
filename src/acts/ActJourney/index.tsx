@@ -270,7 +270,7 @@ export function ActJourney({ content, locale }: Props) {
           {/* Same DOM, CSS and painter state as Expertise's first frame:
               the index page physically rises over the archive. */}
           <div className={expertiseStyles.sheet} data-index-clone>
-            <ExpertiseOpeningFrame content={content} decorative />
+            <ExpertiseOpeningFrame content={content} locale={locale} decorative />
           </div>
         </div>
         <span className={styles.riseEdge} data-archive-edge aria-hidden="true" />

@@ -58,6 +58,14 @@ export interface Content {
     edition: string;
     axis: string;
     tagline: string;
+    /** Le métier, lisible en moins de deux secondes : deux lignes. */
+    role: [string, string];
+    /** Thème du numéro (goût personnel, pas un employeur). */
+    topics: string;
+    /** Mention de l'image de couverture générée. */
+    credit: string;
+    /** Titres de couverture : renvoient aux chapitres réels du portfolio. */
+    coverLines: Array<{ folio: string; text: string }>;
   };
   hero: {
     firstName: string;
@@ -92,6 +100,8 @@ export interface Content {
     systemStatement: string;
     materialNote: string;
     choiceNote: string;
+    /** Annotation à l'encre du tirage qui part vers le projet Yuna. */
+    yunaNote: string;
     /** Tokens du système de marque rendus visibles. */
     systemTokens: string[];
   };
@@ -120,6 +130,8 @@ export interface Content {
   };
   expertise: {
     heading: string;
+    studyCaption: string;
+    indexLabel: string;
     entries: ExpertiseEntry[];
   };
   manifesto: {
@@ -163,14 +175,22 @@ const LINKEDIN = 'https://www.linkedin.com/in/glwadysdalleau';
 
 const fr: Content = {
   meta: {
-    title: 'Glwadys Dalleau — Social Media & Brand Communication',
+    title: 'Glwadys Dalleau — Community Manager & Créatrice de contenu UGC',
     description:
-      'Je transforme les marques en histoires dont on se souvient. Social media, création de contenu et communication de marque. Paris ↔ Seoul.',
+      'Community Manager et créatrice de contenu UGC. Je transforme les marques en histoires dont on se souvient : social media, contenus et moodboards, avec un goût pour le luxe, la mode et la joaillerie.',
   },
   opening: {
     edition: 'Portfolio 2026',
     axis: 'Paris ↔ Seoul',
     tagline: 'Je transforme les marques en histoires dont on se souvient.',
+    role: ['Community Manager', 'Créatrice de contenu UGC'],
+    topics: 'Luxe · Mode · Joaillerie',
+    credit: 'Couverture — nature morte conceptuelle, image générée',
+    coverLines: [
+      { folio: '05', text: 'Le moodboard, du tirage au feed' },
+      { folio: '06.01', text: 'Yuna Bijoux — le détail raconté en social' },
+      { folio: '06.02', text: 'Marseille Girls Club — une communauté en récits' },
+    ],
   },
   hero: {
     firstName: 'Glwadys',
@@ -203,6 +223,7 @@ const fr: Content = {
     systemStatement: 'Faire d’un choix un langage cohérent.',
     materialNote: 'La matière, avant le choix.',
     choiceNote: 'Un tirage. Une intention.',
+    yunaNote: 'Retenu pour Yuna Bijoux : le geste, la matière, le détail.',
     systemTokens: ['Palette', 'Typographie', 'Ton', 'Message', 'Cadrage'],
   },
   strategy: {
@@ -317,12 +338,14 @@ const fr: Content = {
   },
   expertise: {
     heading: 'Expertise',
+    studyCaption: 'Étude de contenu · Image générée',
+    indexLabel: 'Sept disciplines, une même intention',
     entries: [
-      { term: 'Social Media', context: 'Stratégie, publication, animation, analyse.' },
-      { term: 'Content Creation', context: 'Photo, vidéo courte, copy, direction visuelle.' },
+      { term: 'Community Management', context: 'Animer les échanges, modérer et cultiver le lien avec votre communauté.' },
+      { term: 'Création UGC', context: 'Photos et vidéos courtes : raconter le produit à travers les gestes du quotidien.' },
       { term: 'Content Strategy', context: 'Ligne éditoriale, formats, calendrier.' },
       { term: 'Brand Communication', context: 'Positionnement, ton, cohérence.' },
-      { term: 'Community', context: 'Animation, modération, relation, fidélisation.' },
+      { term: 'Social Media', context: 'Publier, adapter les formats et analyser les contenus.' },
       { term: 'Digital Marketing', context: 'Acquisition organique, campagnes, performance.' },
       { term: 'International', context: 'Français, anglais, coréen. Paris ↔ Seoul.' },
     ],
@@ -364,14 +387,22 @@ const fr: Content = {
 
 const en: Content = {
   meta: {
-    title: 'Glwadys Dalleau — Social Media & Brand Communication',
+    title: 'Glwadys Dalleau — Community Manager & UGC Content Creator',
     description:
-      'I turn brands into stories people remember. Social media, content creation and brand communication. Paris ↔ Seoul.',
+      'Community Manager and UGC content creator. I turn brands into stories people remember: social media, content and moodboards, with a taste for luxury, fashion and jewellery.',
   },
   opening: {
     edition: 'Portfolio 2026',
     axis: 'Paris ↔ Seoul',
     tagline: 'I turn brands into stories people remember.',
+    role: ['Community Manager', 'UGC Content Creator'],
+    topics: 'Luxury · Fashion · Jewellery',
+    credit: 'Cover — conceptual still life, generated image',
+    coverLines: [
+      { folio: '05', text: 'The moodboard, from print to feed' },
+      { folio: '06.01', text: 'Yuna Bijoux — detail, told through social' },
+      { folio: '06.02', text: 'Marseille Girls Club — a community in stories' },
+    ],
   },
   hero: {
     firstName: 'Glwadys',
@@ -404,6 +435,7 @@ const en: Content = {
     systemStatement: 'Turn one choice into a consistent language.',
     materialNote: 'Raw material, before the choice.',
     choiceNote: 'One print. One intention.',
+    yunaNote: 'Chosen for Yuna Bijoux: gesture, material, detail.',
     systemTokens: ['Palette', 'Typography', 'Tone', 'Message', 'Framing'],
   },
   strategy: {
@@ -518,12 +550,14 @@ const en: Content = {
   },
   expertise: {
     heading: 'Expertise',
+    studyCaption: 'Content study · Generated image',
+    indexLabel: 'Seven disciplines, one intention',
     entries: [
-      { term: 'Social Media', context: 'Strategy, publishing, community, analysis.' },
-      { term: 'Content Creation', context: 'Photo, short video, copy, visual direction.' },
+      { term: 'Community Management', context: 'Start conversations, moderate exchanges and nurture your community.' },
+      { term: 'UGC Creation', context: 'Photos and short videos that tell a product’s story through everyday gestures.' },
       { term: 'Content Strategy', context: 'Editorial line, formats, calendar.' },
       { term: 'Brand Communication', context: 'Positioning, tone, consistency.' },
-      { term: 'Community', context: 'Engagement, moderation, relationships, loyalty.' },
+      { term: 'Social Media', context: 'Publish, adapt formats and analyse content.' },
       { term: 'Digital Marketing', context: 'Organic growth, campaigns, performance.' },
       { term: 'International', context: 'French, English, Korean. Paris ↔ Seoul.' },
     ],
@@ -565,14 +599,22 @@ const en: Content = {
 
 const ko: Content = {
   meta: {
-    title: 'Glwadys Dalleau — 소셜 미디어 & 브랜드 커뮤니케이션',
+    title: 'Glwadys Dalleau — 커뮤니티 매니저 & UGC 콘텐츠 크리에이터',
     description:
-      '브랜드를 기억에 남는 이야기로 만듭니다. 소셜 미디어, 콘텐츠 제작, 브랜드 커뮤니케이션. 파리 ↔ 서울.',
+      '커뮤니티 매니저이자 UGC 콘텐츠 크리에이터. 브랜드를 기억에 남는 이야기로 만듭니다. 소셜 미디어, 콘텐츠, 무드보드 — 럭셔리, 패션, 주얼리에 대한 취향과 함께.',
   },
   opening: {
     edition: 'Portfolio 2026',
     axis: '파리 ↔ 서울',
     tagline: '브랜드를 기억에 남는 이야기로 만듭니다.',
+    role: ['커뮤니티 매니저', 'UGC 콘텐츠 크리에이터'],
+    topics: '럭셔리 · 패션 · 주얼리',
+    credit: '표지 — 콘셉트 정물, 생성 이미지',
+    coverLines: [
+      { folio: '05', text: '무드보드, 프린트에서 피드까지' },
+      { folio: '06.01', text: 'Yuna Bijoux — 소셜로 전하는 디테일' },
+      { folio: '06.02', text: 'Marseille Girls Club — 이야기가 되는 커뮤니티' },
+    ],
   },
   hero: {
     firstName: 'Glwadys',
@@ -605,6 +647,7 @@ const ko: Content = {
     systemStatement: '하나의 선택을 일관된 언어로 만듭니다.',
     materialNote: '선택 전의 소재.',
     choiceNote: '한 장의 이미지, 하나의 의도.',
+    yunaNote: 'Yuna Bijoux를 위해 고른 한 장: 손짓, 소재, 디테일.',
     systemTokens: ['팔레트', '타이포그래피', '톤', '메시지', '프레이밍'],
   },
   strategy: {
@@ -719,12 +762,14 @@ const ko: Content = {
   },
   expertise: {
     heading: '전문 분야',
+    studyCaption: '콘텐츠 연구 · 생성 이미지',
+    indexLabel: '일곱 가지 전문 분야, 하나의 방향',
     entries: [
-      { term: 'Social Media', context: '전략, 발행, 커뮤니티, 분석.' },
-      { term: 'Content Creation', context: '사진, 숏폼 영상, 카피, 비주얼 디렉션.' },
+      { term: '커뮤니티 운영', context: '대화를 이끌고 소통을 관리하며 커뮤니티와의 관계를 키웁니다.' },
+      { term: 'UGC 콘텐츠', context: '사진과 짧은 영상으로 일상 속 제품의 이야기를 전합니다.' },
       { term: 'Content Strategy', context: '에디토리얼 라인, 포맷, 캘린더.' },
       { term: 'Brand Communication', context: '포지셔닝, 톤, 일관성.' },
-      { term: 'Community', context: '참여, 모더레이션, 관계, 로열티.' },
+      { term: 'Social Media', context: '콘텐츠 발행, 포맷 조정, 성과 분석.' },
       { term: 'Digital Marketing', context: '오가닉 성장, 캠페인, 퍼포먼스.' },
       { term: 'International', context: '프랑스어, 영어, 한국어. 파리 ↔ 서울.' },
     ],

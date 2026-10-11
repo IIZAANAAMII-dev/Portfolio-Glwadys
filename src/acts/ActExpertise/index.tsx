@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 
 import type { Content } from '@/content';
+import type { Locale } from '@/content/locales';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { registerVisualFilm } from '@/lib/visualQa';
 import { heldSteps, segment, settle } from '@/lib/holdScalar';
@@ -15,17 +16,18 @@ import styles from './ActExpertise.module.css';
 
 interface Props {
   content: Content;
+  locale: Locale;
 }
 
-/* Beat map of the wine index (fractions of the pinned scroll).
+/* Beat map of the editorial spread (fractions of the pinned scroll).
    0 → 0.06   still: discipline 01 is read, the page is exactly Journey's last frame
    0.06 → 0.78 seven readings, each one held, a short settle between them
    0.78 → 0.81 the last discipline keeps a full reading hold
-   0.81 → 0.86 chord: the seven disciplines light together (payoff of the index)
+   0.81 → 0.86 final reading hold; the compact index remains legible throughout
    0.87 → 1    the ivory manifesto page rises and trims to ActContact's page */
 const BEAT = { readFrom: 0.06, readTo: 0.78, chordFrom: 0.81, chordTo: 0.86 } as const;
 
-export function ActExpertise({ content }: Props) {
+export function ActExpertise({ content, locale }: Props) {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLOListElement>(null);
@@ -119,7 +121,7 @@ export function ActExpertise({ content }: Props) {
             )
             .to(fold, { scale: 1, duration: 0.03 }, 0.97);
 
-          // The hero scale depends on the display face's real widths.
+          // Remeasure the print after the display faces have loaded.
           let alive = true;
           document.fonts?.ready.then(() => {
             if (!alive) return;
@@ -148,7 +150,7 @@ export function ActExpertise({ content }: Props) {
     <section ref={root} className={`act surface-bordeaux ${styles.act}`} aria-labelledby="expertise-title">
       <div ref={stage} className={styles.stage}>
         <div className={styles.sheet} data-expertise-sheet>
-          <ExpertiseOpeningFrame content={content} listRef={list} />
+          <ExpertiseOpeningFrame content={content} locale={locale} listRef={list} />
           <div className={styles.handoffLayer} data-expertise-handoff aria-hidden="true">
             <span className={styles.sheetFold} data-expertise-fold />
             <div className={styles.handoffMeta}>

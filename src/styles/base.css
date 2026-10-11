@@ -17,6 +17,8 @@ html {
   /* Le smooth scroll est piloté par Lenis, jamais par CSS : les deux
      ensemble se combattent. */
   scroll-behavior: auto;
+  /* Keep the editorial grid still when the mobile contents modal opens. */
+  scrollbar-gutter: stable;
   -webkit-text-size-adjust: 100%;
 }
 

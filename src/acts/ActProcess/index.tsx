@@ -68,6 +68,28 @@ const workMarkerStyle: WorkMarkerStyle = {
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
+/** Annotations d'atelier (mise en scène, aucune donnée factuelle). */
+const TABLE: Record<Locale, { prints: [string, string, string]; notes: [string, string, string]; swatches: string[] }> = {
+  fr: {
+    prints: ['Matière', 'Palette', 'Outils'],
+    notes: ['lumière rasante, métal froid', 'ivoire, vin, champagne', 'cadrer serré, écrire court'],
+    swatches: ['Ivoire', 'Encre', 'Vin', 'Argent', 'Champagne'],
+  },
+  en: {
+    prints: ['Material', 'Palette', 'Tools'],
+    notes: ['raking light, cool metal', 'ivory, wine, champagne', 'crop tight, write short'],
+    swatches: ['Ivory', 'Ink', 'Wine', 'Silver', 'Champagne'],
+  },
+  ko: {
+    prints: ['소재', '팔레트', '도구'],
+    notes: ['낮게 스치는 빛, 차가운 금속', '아이보리, 와인, 샴페인', '좁게 자르고, 짧게 쓰기'],
+    swatches: ['아이보리', '잉크', '와인', '실버', '샴페인'],
+  },
+};
+
+/** Les trois tirages posés sur la page de gauche : bijou, planche, outils. */
+const TABLE_PRINTS = [contactSheet[4]!, contactSheet[5]!, contactSheet[1]!] as const;
+
 /** La preuve de chaque étape. La dernière est la campagne Yuna réelle. */
 function evidenceFor(index: number, total: number): MediaItem {
   return index === total - 1 ? yunaMedia[0]! : contactSheet[(index + 4) % contactSheet.length]!;
@@ -141,6 +163,7 @@ export function ActProcess({ content, locale }: Props) {
   const stage = useRef<HTMLDivElement>(null);
   const { process, strategy, work } = content;
   const steps = strategy.steps;
+  const table = TABLE[locale];
 
   useGSAP(
     () => {
@@ -176,7 +199,8 @@ export function ActProcess({ content, locale }: Props) {
            l'original, le feuillet prend sa place sans un pixel d'écart. */
         gsap.set([entryImage, entryFolio], { autoAlpha: 0 });
         gsap.set(baseBits, { autoAlpha: 0, y: 14 });
-        gsap.set(contactThumbs, { autoAlpha: 0, yPercent: 18 });
+        // Les tirages tombent sur la table : un léger vrillage qui se pose.
+        gsap.set(contactThumbs, { autoAlpha: 0, yPercent: 18, rotation: (i: number) => [-5, 4, -3][i % 3] ?? 0 });
         gsap.set(leafIntro, { autoAlpha: 0, y: 12 });
         gsap.set(sweep, { autoAlpha: 0 });
         leaves.forEach((leaf, index) => {
@@ -224,7 +248,7 @@ export function ActProcess({ content, locale }: Props) {
         /* ---- La planche s'écrit sur la page de gauche ---- */
         tl.addLabel('entry', 0)
           .to(baseBits, { autoAlpha: 1, y: 0, duration: 0.3, stagger: 0.06, ease: 'power3.out' }, P.intro)
-          .to(contactThumbs, { autoAlpha: 1, yPercent: 0, duration: 0.24, stagger: 0.05, ease: 'power3.out' }, P.intro + 0.18)
+          .to(contactThumbs, { autoAlpha: 1, yPercent: 0, rotation: 0, duration: 0.26, stagger: 0.05, ease: 'power3.out' }, P.intro + 0.14)
           .to(leafIntro, { autoAlpha: 1, y: 0, duration: 0.24, stagger: 0.06, ease: 'power3.out' }, P.intro + 0.12);
         // Mobile : le titre de la planche prend la place du folio d'atelier.
         if (!isDesktop) tl.to(leafFolio, { autoAlpha: 0, duration: 0.12 }, P.intro);
@@ -330,14 +354,23 @@ export function ActProcess({ content, locale }: Props) {
             <span className={`${styles.pageChapter} micro`} data-base-bit>05 / {process.heading}</span>
             <h2 className={styles.pageTitle} data-base-bit>{process.sheet}</h2>
             <p className={`${styles.pageNote} hand-note`} data-base-bit>{process.materialNote}</p>
-            <ol className={styles.contactStrip} aria-hidden="true">
-              {contactSheet.slice(1, 5).map((item, index) => (
-                <li data-contact-thumb key={item.id}>
-                  <Media item={item} locale={locale} compact sizes="9vw" />
-                  <span className="micro">{pad(index + 2)}</span>
+            {/* La table : trois vrais tirages posés en quinconce, chacun
+                annoté à l'encre, puis un nuancier de matière. */}
+            <ol className={styles.table} aria-hidden="true">
+              {TABLE_PRINTS.map((item, index) => (
+                <li className={styles.tablePrint} data-contact-thumb data-print={index} key={item.id}>
+                  <span className={styles.tape} />
+                  <Media item={item} locale={locale} compact loading="eager" sizes="(max-width: 1023px) 10vw, 14vw" />
+                  <span className={`${styles.printLabel} micro`}>{pad(index + 2)} · {table.prints[index]}</span>
+                  <span className={`${styles.printNote} hand-note`}>{table.notes[index]}</span>
                 </li>
               ))}
             </ol>
+            <ul className={styles.swatches} data-base-bit aria-hidden="true">
+              {table.swatches.map((name) => (
+                <li key={name}><i />{name}</li>
+              ))}
+            </ul>
           </div>
 
           <span className={styles.sweep} data-sweep aria-hidden="true" />
@@ -357,6 +390,12 @@ export function ActProcess({ content, locale }: Props) {
                           <Media item={contactSheet[0]!} locale={locale} compact loading="eager" sizes="(max-width: 1023px) 64vw, 28vw" />
                         </figure>
                         <span className={`${styles.entryFolio} micro`} data-leaf-folio>01 / ATELIER</span>
+                        {/* Mobile : un second tirage glissé sur le coin du
+                            premier — le bijou, légendé dans sa marge. */}
+                        <figure className={styles.mobilePrint} data-leaf-intro aria-hidden="true">
+                          <Media item={TABLE_PRINTS[0]} locale={locale} compact loading="eager" sizes="(max-width: 1023px) 34vw, 4vw" />
+                          <figcaption className="micro">02 · {table.prints[0]}</figcaption>
+                        </figure>
                         <div className={styles.mobileText} data-mobile-text>
                           <span className="micro" data-leaf-intro>05 / {process.heading}</span>
                           <h2 className={styles.mobileTitle} data-leaf-intro>{process.sheet}</h2>

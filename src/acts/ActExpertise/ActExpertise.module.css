@@ -1,219 +1,45 @@
-/* ── 08 EXPERTISE — the wine index ───────────────────────────────────────
-   Seven communication disciplines composed as ONE typographic page on rich
-   wine. All seven stay readable; the active one is lit to full ivory, a
-   champagne reading rule sits under it and its context appears in a single
-   slot. Every moving value is written by expertisePainter.ts from one scroll
-   scalar (transform / opacity only, rows have a fixed height).
-   Journey renders this same frame as its last image: keep the pos-0 state
-   expressible in plain CSS. */
-
-.act {
-  position: relative;
-  z-index: 2;
-  min-height: 100svh;
-  overflow: clip;
-  /* Journey's pin ends one screen before its spacer ends: the identical
-     first Expertise frame overlays that outgoing frame at the same pixel. */
-  margin-top: -100svh;
-}
-
-.stage {
-  position: relative;
-  height: 100vh;
-  height: 100svh;
-  overflow: hidden;
-  background: var(--wood-brown);
-}
-
+/* The same editorial spread is used on both sides of Journey's handoff. */
+.act { position: relative; z-index: 2; min-height: 100svh; overflow: clip; margin-top: -100svh; }
+.stage { position: relative; height: 100svh; overflow: hidden; background: var(--wood-brown); }
 .sheet {
   --hx: clamp(1rem, 3vw, 2.75rem);
-  --mx: 8vw;
-  --list-top: 22svh;
-  /* Resting rows are deliberately modest: the active discipline is set at
-     hero size by the painter (about twice this) and needs the measure. */
-  --row-h: min(6.6svh, 4.6vw);
-  --num-w: 3.4vw;
-  --slot-x: 70vw;
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse 70% 60% at 28% 42%, rgb(var(--ivory-rgb) / 0.045), transparent 70%),
-    radial-gradient(ellipse 60% 70% at 100% 100%, rgb(0 0 0 / 0.28), transparent 70%),
-    var(--rich-wine);
-  color: var(--ivory);
+  background: #57232d;
+  color: #f2ede5;
 }
-
-.chapter {
+.composition {
   position: absolute;
-  top: var(--margin);
-  left: var(--mx);
-  color: var(--champagne);
-  letter-spacing: 0.16em;
-}
-
-.counter {
-  position: absolute;
-  top: var(--margin);
-  right: var(--margin);
-  color: var(--champagne);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.14em;
-}
-
-.heading {
-  position: absolute;
-  top: calc(var(--margin) + 1.5rem);
-  left: var(--mx);
-  margin: 0;
-  color: rgb(var(--ivory-rgb) / 0.92);
-  font-family: var(--font-display);
-  font-size: clamp(2.2rem, 3.4vw, 3.9rem);
-  font-style: italic;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.03em;
-}
-
-/* The editorial margin: one champagne hairline between disciplines and
-   their context, the only vertical in the composition. */
-.margin {
-  position: absolute;
-  top: var(--list-top);
-  left: calc(var(--slot-x) - 2vw);
-  width: 1px;
-  height: calc(var(--row-h) * 7.7);
-  background: linear-gradient(180deg, transparent, rgb(var(--champagne-rgb) / 0.26) 12%, rgb(var(--champagne-rgb) / 0.26) 88%, transparent);
-  pointer-events: none;
-}
-
-.index {
-  position: absolute;
-  top: var(--list-top);
-  left: var(--mx);
-  right: calc(100vw - var(--slot-x) + 3vw);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.row {
-  position: relative;
+  inset: clamp(24px, 4svh, 48px) clamp(24px, 6vw, 96px) var(--nav-clearance);
   display: grid;
-  grid-template-columns: var(--num-w) minmax(0, 1fr);
-  align-items: center;
-  height: var(--row-h);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(20px, 3svh, 36px);
 }
-
-.row:first-child {
-  border-top: 1px solid rgb(var(--ivory-rgb) / 0.07);
-}
-
-/* The row's hairline sits under its band (--band, written by the painter),
-   so an opened hero row keeps its own ruled space. */
-.row::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgb(var(--ivory-rgb) / 0.07);
-  transform: translate3d(0, calc(var(--band, var(--row-h)) - 1px), 0);
-  pointer-events: none;
-}
-
-.num {
-  align-self: center;
-  color: var(--champagne);
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  font-variant-numeric: tabular-nums;
-  opacity: 0.5;
-}
-
-.term {
-  display: block;
-  justify-self: start;
-  color: var(--ivory);
-  font-family: var(--font-display);
-  font-size: calc(var(--row-h) * 0.66);
-  font-style: italic;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.035em;
-  white-space: nowrap;
-  opacity: 0.78;
-  transform-origin: left center;
-  will-change: transform, opacity;
-}
-
-.row[data-active='true'] .num {
-  opacity: 1;
-}
-
-.row[data-active='true'] .term {
-  opacity: 1;
-}
-
-.rowContext {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-/* The single reading rule: under the active discipline, linking it to
-   its context across the margin. */
-.rule {
-  position: absolute;
-  top: 0;
-  left: var(--mx);
-  width: calc(var(--slot-x) - var(--mx) - 2vw);
-  height: 1px;
-  background: linear-gradient(90deg, var(--champagne), rgb(var(--champagne-rgb) / 0.55) 70%, var(--champagne));
-  pointer-events: none;
-  transform: translate3d(0, calc(var(--list-top) + var(--row-h) - 1px), 0);
-  transform-origin: 0 0;
-  will-change: transform;
-}
-
-.contexts {
-  position: absolute;
-  top: 0;
-  left: var(--slot-x);
-  right: var(--margin);
-  height: var(--row-h);
-  transform: translate3d(0, var(--list-top), 0);
-  pointer-events: none;
-}
-
-.context {
-  position: absolute;
-  inset: 0 0 auto;
-  display: flex;
-  align-items: center;
-  height: var(--row-h);
-  margin: 0;
-  max-width: 34ch;
-  color: rgb(var(--ivory-rgb) / 0.88);
-  font-family: var(--font-sans);
-  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
-  line-height: 1.45;
-  letter-spacing: -0.005em;
-  text-wrap: pretty;
-  opacity: 0;
-  visibility: hidden;
-}
-
-.context[data-first='true'] {
-  opacity: 1;
-  visibility: visible;
-}
+.masthead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-top: 1px solid #ad8485; padding-top: 12px; }
+.heading { margin: 0; font: 500 13px / 1.4 var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; }
+.chapter { color: #e3ceba; margin-right: 12px; font-variant-numeric: tabular-nums; }
+.counter { font: 400 12px / 1.4 var(--font-sans); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; color: #e3ceba; }
+.editorial { min-height: 0; display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; column-gap: 4vw; row-gap: 16px; }
+.heroTerms { position: relative; min-width: 0; align-self: center; height: 2.35em; font-size: clamp(42px, 6.1vw, 100px); }
+.heroTerm { position: absolute; inset: 0; margin: 0; font-family: var(--font-display); font-weight: 400; font-style: italic; font-size: inherit; line-height: 1.08; letter-spacing: -0.045em; text-wrap: balance; overflow-wrap: break-word; opacity: 0; visibility: hidden; }
+.heroTerm[data-first='true'], .context[data-first='true'] { opacity: 1; visibility: visible; }
+.contexts { position: relative; grid-column: 1; min-height: 5rem; max-width: 38ch; }
+.context { position: absolute; inset: 0; margin: 0; font: 400 clamp(16px, 1.4vw, 19px) / 1.5 var(--font-sans); text-wrap: pretty; color: #f2ede5; opacity: 0; visibility: hidden; }
+.print { grid-column: 2; grid-row: 1 / 3; display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; margin: 0; padding: 8px; background: #f2ede5; color: #171411; transform: rotate(2deg); }
+.printCrop { position: relative; overflow: hidden; min-height: 0; }
+.printImage { position: absolute; inset: 0 0 -8%; }
+.print figcaption { padding: 10px 2px 2px; font: 400 11px / 1.4 var(--font-sans); }
+.disciplines { border-top: 1px solid #ad8485; }
+.indexLabel { margin: 12px 0; color: #e3ceba; font: 400 11px / 1.4 var(--font-sans); letter-spacing: 0.04em; }
+.index { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 24px; row-gap: 4px; margin: 0; padding: 0; list-style: none; }
+.row { position: relative; display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: baseline; gap: 6px; padding: 8px 0; border-bottom: 1px solid #90616a; }
+.num { font: 400 11px / 1.4 var(--font-sans); font-variant-numeric: tabular-nums; color: #e3ceba; }
+.term { font: 400 13px / 1.4 var(--font-sans); color: #f2ede5; }
+.row[data-active='true'] { border-bottom-color: #f2ede5; }
+.row[data-active='true'] .num { text-decoration: underline; text-underline-offset: 4px; color: #fff; }
+.row[data-active='true'] .term { font-weight: 600; }
+.rowContext { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* ── Manifesto handoff page (shared geometry with ActContact) ─────────── */
 .sheetFold {
@@ -314,169 +140,61 @@
   bottom: var(--margin);
 }
 
-/* ── 390 / 320: a composed phone page, not a shrunk desktop ──────────── */
+
 @media (max-width: 1023px) {
-  .sheet {
-    --hx: 0.75rem;
-    --mx: max(var(--margin), 1.25rem);
-    --list-top: calc(var(--margin) + 5.4rem);
-    /* Seven rows, the opened hero band (≤ 0.45 row at 320) and a two-line
-       context all end above the language control and the nav, at 320×568
-       too (context ends ≈ 423px, control line 428px). */
-    --row-h: clamp(2.25rem, calc((100svh - var(--list-top) - var(--control-clearance) - 4.4rem) / 7.25), 4.1rem);
-    --num-w: 1.9rem;
-    background:
-      radial-gradient(ellipse 90% 50% at 20% 35%, rgb(var(--ivory-rgb) / 0.045), transparent 70%),
-      radial-gradient(ellipse 80% 60% at 100% 100%, rgb(0 0 0 / 0.26), transparent 70%),
-      var(--rich-wine);
-  }
-
-  .heading {
-    top: calc(var(--margin) + 1.35rem);
-    font-size: clamp(2rem, 9.6vw, 2.75rem);
-  }
-
-  .margin {
-    display: none;
-  }
-
-  .index {
-    right: var(--margin);
-  }
-
-  /* Resting size leaves the measure for the active term's hero scale
-     (painter). The longest discipline, "Brand Communication", needs about
-     11.4 em-widths: 7vw − 5.2px keeps it opening to ≥ 1.25× at 320, 390 and
-     430, while the resting index grows with the phone (17px → 22px → 25px). */
-  .term {
-    opacity: 0.82;
-    font-size: min(calc(var(--row-h) * 0.56), calc(7vw - 5.2px));
-  }
-
-  /* A 2px champagne bar beside the active discipline, as tall as its band. */
-  .rule {
-    left: calc(var(--mx) - 0.7rem);
-    width: 2px;
-    height: var(--row-h);
-    background: var(--champagne);
-    transform: translate3d(0, var(--list-top), 0);
-  }
-
-  /* One caption band directly under the index, above nav and language. */
-  .contexts {
-    top: calc(var(--list-top) + var(--row-h) * 7 + 0.9rem);
-    left: calc(var(--mx) + var(--num-w));
-    right: var(--margin);
-    height: 2.9rem;
-    transform: none;
-  }
-
-  .context {
-    align-items: flex-start;
-    height: auto;
-    max-width: 32ch;
-    font-size: clamp(0.78rem, 3.5vw, 0.92rem);
-    line-height: 1.4;
-  }
-
-  .handoffTitle {
-    top: 19%;
-    font-size: clamp(3rem, 13.4vw, 6.5rem);
-    line-height: 0.96;
-  }
-
-  .handoffTitle > span:last-child {
-    margin-top: 0.3em;
-    padding-left: 0;
-    text-align: left;
-  }
-
-  .handoffRule {
-    bottom: 24%;
-  }
-
-  .handoffNote {
-    left: var(--margin);
-    bottom: 13%;
-  }
+  .sheet { --hx: 0.75rem; }
+  .composition { inset: 24px max(20px, env(safe-area-inset-right)) calc(84px + env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); gap: 18px; }
+  .editorial { grid-template-columns: minmax(0, 1fr) 30%; grid-template-rows: minmax(100px, 1fr) minmax(100px, 0.85fr); gap: 14px; }
+  .heroTerms { grid-column: 1 / -1; font-size: clamp(32px, 10vw, 64px); height: 2.4em; }
+  .contexts { grid-column: 1; grid-row: 2; min-height: 0; align-self: stretch; }
+  .context { font-size: 16px; line-height: 1.5; }
+  .print { grid-column: 2; grid-row: 2; padding: 4px; transform: rotate(2deg); }
+  .print figcaption { padding: 6px 1px 1px; font-size: 11px; line-height: 1.3; }
+  .index { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+  .indexLabel { margin-block: 8px; }
+  .row { padding: 6px 0; grid-template-columns: 18px minmax(0, 1fr); gap: 4px; }
+  .term { font-size: 12px; }
+  .handoffTitle { top: 19%; font-size: clamp(3rem, 13.4vw, 6.5rem); line-height: 0.96; }
+  .handoffTitle > span:last-child { margin-top: 0.3em; padding-left: 0; text-align: left; }
+  .handoffRule { bottom: 24%; }
+  .handoffNote { left: var(--margin); bottom: 13%; }
 }
-
-/* ── Reduced motion: the whole index printed, every context visible ──── */
+@media (max-width: 359px) {
+  .composition { inset-inline: 16px; gap: 12px; }
+  .editorial { column-gap: 12px; }
+  .index { column-gap: 10px; }
+  .term { font-size: 11px; }
+  .indexLabel { font-size: 11px; }
+}
+@media (min-width: 600px) and (max-width: 1023px) {
+  .editorial { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+  .heroTerms { grid-column: 1; font-size: clamp(36px, 6vw, 60px); }
+  .print { grid-column: 2; grid-row: 1 / 3; }
+}
+@media (max-height: 650px) and (min-width: 1024px) {
+  .composition { gap: 16px; inset-block-start: 20px; }
+  .heroTerms { font-size: clamp(40px, 5vw, 70px); }
+  .contexts { min-height: 3.5rem; }
+  .indexLabel { margin-block: 6px; }
+  .row { padding-block: 4px; }
+}
+/* Static reading keeps the hero and exposes every discipline's description. */
 @media (prefers-reduced-motion: reduce), (scripting: none) {
-  .act {
-    margin-top: 0;
-  }
-
-  .act,
-  .stage {
-    min-height: auto;
-    height: auto;
-  }
-
-  .sheet {
-    position: relative;
-    inset: auto;
-    padding: var(--space-act) var(--margin);
-  }
-
-  .chapter,
-  .counter,
-  .heading,
-  .index {
-    position: relative;
-    inset: auto;
-  }
-
-  .counter,
-  .margin,
-  .rule,
-  .contexts,
-  .sheetFold,
-  .handoffLayer {
-    display: none;
-  }
-
-  .heading {
-    display: block;
-    margin: 1rem 0 2.5rem;
-  }
-
-  .row {
-    height: auto;
-    padding: 1rem 0;
-    grid-template-columns: var(--num-w) minmax(0, 1fr);
-    row-gap: 0.4rem;
-  }
-
-  .row::after {
-    top: auto;
-    bottom: 0;
-    transform: none;
-  }
-
-  .term,
-  .row[data-active='true'] .term {
-    opacity: 1;
-    transform: none;
-    white-space: normal;
-    font-size: clamp(1.9rem, 5vw, 4rem);
-  }
-
-  .num {
-    opacity: 1;
-  }
-
-  .rowContext {
-    position: static;
-    grid-column: 2;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    clip-path: none;
-    white-space: normal;
-    color: rgb(var(--ivory-rgb) / 0.86);
-    font-family: var(--font-sans);
-    font-size: 0.95rem;
-    line-height: 1.45;
-  }
+  .act { margin-top: 0; }
+  .act, .stage { height: auto; min-height: 0; }
+  .sheet { position: relative; inset: auto; overflow: visible; }
+  .composition { position: relative; inset: auto; padding: 48px max(20px, 6vw) var(--nav-clearance); gap: 32px; }
+  .editorial { min-height: 380px; }
+  .heroTerms { height: auto; min-height: 2.4em; }
+  .heroTerm:not([data-first='true']), .contexts, .handoffLayer { display: none; }
+  .print { grid-row: 1 / 3; }
+  .index { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .row { align-content: start; }
+  .term { font-size: 16px; }
+  .rowContext { position: static; grid-column: 2; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; font: 400 16px / 1.5 var(--font-sans); padding-top: 8px; }
+}
+@media (max-width: 599px) and (prefers-reduced-motion: reduce), (max-width: 599px) and (scripting: none) {
+  .editorial { grid-template-rows: auto 180px; min-height: 0; }
+  .print { grid-column: 1 / -1; grid-row: 2; max-width: 240px; width: 100%; justify-self: end; }
+  .index { grid-template-columns: 1fr; }
 }
