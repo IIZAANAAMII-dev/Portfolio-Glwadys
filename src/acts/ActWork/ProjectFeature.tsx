@@ -94,12 +94,16 @@ export function ProjectFeature({ project, content, locale, index }: {
       const fromPage = !opening;
       gsap.set(photo, { transformOrigin: '0 0', clipPath: 'inset(0% 0% 0% 0%)' });
       gsap.set([desk, pageLeft], { autoAlpha: fromPage ? 1 : 0 });
-      if (fromPage) gsap.set(cover, { autoAlpha: 0, y: 16 });
-      // The right page lies folded on the gutter: closed like a magazine.
+      // Every feature gets an authored entrance. Yuna no longer inherits a
+      // hidden cover from the notebook handoff during its reading hold.
+      gsap.set(cover, { autoAlpha: 0, y: 16 });
+      // Incoming chapters arrive as a complete printed spread. The leaf
+      // closes as the photograph lifts, then opens again for the decision.
+      const folded = desktop ? { rotationY: -96 } : { rotationX: 96 };
       gsap.set(leaf, desktop
-        ? { autoAlpha: 1, rotationY: -96, transformOrigin: 'left center', transformPerspective: 2200 }
-        : { autoAlpha: 1, rotationX: 96, transformOrigin: 'center top', transformPerspective: 1600 });
-      gsap.set(pageCopy, { autoAlpha: 0, y: 18 });
+        ? { autoAlpha: 1, rotationY: fromPage ? 0 : -96, transformOrigin: 'left center', transformPerspective: 2200 }
+        : { autoAlpha: 1, rotationX: fromPage ? 0 : 96, transformOrigin: 'center top', transformPerspective: 1600 });
+      gsap.set(pageCopy, { autoAlpha: fromPage ? 1 : 0, y: fromPage ? 0 : 18 });
 
       const tl = gsap.timeline({ scrollTrigger: {
         trigger: stage, start: 'top top', end: opening ? '+=270%' : '+=210%',
@@ -114,8 +118,11 @@ export function ProjectFeature({ project, content, locale, index }: {
 
       // 1. Entry.
       if (opening) {
-        // The notebook's print is wiped away like a sheet lifted from a desk.
-        tl.to(opening, { clipPath: 'inset(0 0 100% 0)', duration: 0.24, ease: 'power2.inOut' }, 0.06);
+        // The print is lifted away, then the complete feature is revealed
+        // before the 0.30–0.52 reading hold.
+        tl.to(opening, { clipPath: 'inset(0 0 100% 0)', duration: 0.24, ease: 'power2.inOut' }, 0.06)
+          .fromTo(cover, { autoAlpha: 0, y: 16 },
+            { autoAlpha: 1, y: 0, duration: 0.11, stagger: 0.012, ease: 'power2.out', immediateRender: false }, 0.19);
       } else {
         // The photograph scrolls in laid on the left page, then lifts off it
         // to its cover box while the page and desk fall away beneath it.
@@ -123,6 +130,10 @@ export function ProjectFeature({ project, content, locale, index }: {
           x: () => land().x, y: () => land().y, scale: () => land().scale,
           clipPath: () => land().clipPath, '--veil': 0,
         }, { ...cover0, duration: 0.24, ease: 'power3.inOut' }, 0.04)
+          .fromTo(pageCopy, { autoAlpha: 1, y: 0 },
+            { autoAlpha: 0, y: 18, duration: 0.08, ease: 'power1.in', ...later }, 0.1)
+          .fromTo(leaf, { rotationX: 0, rotationY: 0 },
+            { ...folded, duration: 0.12, ease: 'power2.inOut', ...later }, 0.12)
           .fromTo(pageLeft, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.08, ease: 'none', ...later }, 0.12)
           .fromTo(desk, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.12, ease: 'none', ...later }, 0.14)
           .fromTo(cover, { autoAlpha: 0, y: 16 },
@@ -147,10 +158,10 @@ export function ProjectFeature({ project, content, locale, index }: {
           duration: 0.16, ease: 'power3.inOut', ...later,
         }, s + 0.02)
         // 3. The right page opens on its gutter and carries the decision.
-        .fromTo(leaf, desktop ? { rotationY: -96 } : { rotationX: 96 },
-          { rotationY: 0, rotationX: 0, duration: 0.12, ease: 'power2.out', ...later }, s + 0.14)
+        .fromTo(leaf, folded,
+          { rotationY: 0, rotationX: 0, duration: 0.12, ease: 'power2.out', ...later }, s + (desktop ? 0.14 : 0.08))
         .fromTo(pageCopy, { autoAlpha: 0, y: 18 },
-          { autoAlpha: 1, y: 0, duration: 0.06, stagger: 0.015, ease: 'power2.out', ...later }, s + 0.2)
+          { autoAlpha: 1, y: 0, duration: 0.06, stagger: 0.015, ease: 'power2.out', ...later }, s + (desktop ? 0.2 : 0.12))
         .to({}, { duration: 1 - BEAT.spreadTo }, BEAT.spreadTo);
 
       const unregister = registerVisualFilm(`work-${project.id}`, tl, {
@@ -202,6 +213,12 @@ export function ProjectFeature({ project, content, locale, index }: {
             <span className={`${styles.pageFolio} micro`}>{labels.visualNote}</span>
           </div>
           <div className={styles.pageRight} data-spread-leaf>
+            {project.id !== 'yuna' && (
+              <div className={styles.pageMasthead} data-spread-copy aria-hidden="true">
+                <span className={styles.printNumber}>{folio}</span>
+                <span className={styles.printName}>{project.name}</span>
+              </div>
+            )}
             <span className={`${styles.pageLabel} micro`} data-spread-copy>{folio} / {labels.decision}</span>
             <p className={styles.decision} data-spread-copy>{project.caseStudy.editorialDecision}</p>
             <span className={`${styles.pageMeta} micro`} data-spread-copy aria-hidden="true">
@@ -213,6 +230,11 @@ export function ProjectFeature({ project, content, locale, index }: {
       </div>
 
       <div className={styles.dossier} data-project-dossier>
+        <div className={styles.dossierHeading}>
+          <span className={`${styles.dossierIndex} micro`}>06.{folio} / {project.place}</span>
+          <p className={styles.dossierName}>{project.name}</p>
+          <span className={`${styles.dossierRole} micro`}>{project.role}</span>
+        </div>
         <div className={styles.details}>
           {details.map((item) => (
             <EditorialZoom key={item.id} item={item} locale={locale} label={project.name}
