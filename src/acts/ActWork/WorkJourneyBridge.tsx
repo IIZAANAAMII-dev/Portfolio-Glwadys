@@ -13,9 +13,10 @@ import styles from './WorkJourneyBridge.module.css';
 /* Beat map (fractions of the pinned scroll).
    0    → 0.24  still: the Comptoir photograph, enlarged, is read as a cover
    0.24 → 0.70  the same print settles into Journey's wine window
-   0.56 → 0.78  the passe-partout's own copy is set around the settling print
+   0.40 → 0.54  the imprint gives way to the archive's own typography
+   0.54 → 0.78  the passe-partout's own copy is set around the settling print
    0.78 → 1     still: exactly Journey's first frame */
-const BEAT = { settleFrom: 0.24, settleTo: 0.7, copyFrom: 0.56, still: 0.78 } as const;
+const BEAT = { settleFrom: 0.24, settleTo: 0.7, imprintFrom: 0.4, copyFrom: 0.54, still: 0.78 } as const;
 
 /**
  * The last Work photograph becomes the first archive print. The print, its
@@ -82,7 +83,7 @@ export function WorkJourneyBridge({ content, locale }: { content: Content; local
         { x: 0, y: 0, scale: 1, duration: BEAT.settleTo - BEAT.settleFrom, ease: 'power2.inOut' },
         BEAT.settleFrom)
         .fromTo(imprint, { autoAlpha: 1, y: 0 },
-          { autoAlpha: 0, y: -16, duration: 0.14, ease: 'power1.in' }, BEAT.settleFrom)
+          { autoAlpha: 0, y: -16, duration: 0.14, ease: 'power1.in' }, BEAT.imprintFrom)
         .fromTo(q('[data-mat-copy]'), { autoAlpha: 0, y: 14 },
           { autoAlpha: 1, y: 0, duration: 0.14, stagger: 0.02, ease: 'power2.out' }, BEAT.copyFrom)
         .to({}, { duration: 1 - BEAT.still }, BEAT.still);

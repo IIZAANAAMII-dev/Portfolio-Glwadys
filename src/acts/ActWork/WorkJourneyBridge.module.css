@@ -4,6 +4,7 @@
 .imprint {
   position: absolute; z-index: 8; left: var(--margin); bottom: var(--nav-clearance);
   width: min(30vw, 28rem); display: grid; gap: 1.25rem; color: var(--ivory);
+  border-top: 1px solid rgb(var(--ivory-rgb) / 0.35); padding-top: 1rem;
 }
 .imprint > :first-child { color: var(--champagne); }
 .title { font-family: var(--font-display); font-style: italic; font-size: clamp(2.6rem, 4.2vw, 4.6rem); line-height: 0.95; letter-spacing: -0.04em; text-wrap: balance; }
@@ -11,7 +12,7 @@
 @media (max-width: 1023px) {
   /* Above the nav AND the language control, and compact: at 320 × 568 the
      mat window ends at ~315px, so a two-line title would sit on the print. */
-  .imprint { right: var(--margin); bottom: var(--control-clearance); width: auto; gap: 0.45rem; }
+  .imprint { right: var(--margin); bottom: var(--control-clearance); width: auto; gap: 0.45rem; padding-top: 0.65rem; }
   .title { font-size: clamp(1.45rem, 7.4vw, 2.4rem); line-height: 1; }
   .imprint > :last-child { max-width: none; }
 }

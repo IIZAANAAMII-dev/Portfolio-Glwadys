@@ -136,8 +136,11 @@ export function ProjectFeature({ project, content, locale, index }: {
             { ...folded, duration: 0.12, ease: 'power2.inOut', ...later }, 0.12)
           .fromTo(pageLeft, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.08, ease: 'none', ...later }, 0.12)
           .fromTo(desk, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.12, ease: 'none', ...later }, 0.14)
+          // Couture arrival: the editorial copy joins the moving photograph
+          // before the full-bleed settles, avoiding an empty wine half-page
+          // on smaller screens between two printed magazine spreads.
           .fromTo(cover, { autoAlpha: 0, y: 16 },
-            { autoAlpha: 1, y: 0, duration: 0.07, stagger: 0.012, ease: 'power2.out', ...later }, 0.2);
+            { autoAlpha: 1, y: 0, duration: 0.09, stagger: 0.01, ease: 'power2.out', ...later }, 0.085);
         // Comptoir keeps its material accent: the print opens from a close
         // crop of the paper and chocolate to the full campaign frame.
         if (project.id === 'comptoir') {
