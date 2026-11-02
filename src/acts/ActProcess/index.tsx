@@ -466,7 +466,7 @@ export function ActProcess({ content, locale }: Props) {
             <p className={styles.workStatement} data-work-copy>{strategy.sentence}</p>
             <span className={styles.workRule} data-work-rule />
             <div className={styles.workProof} data-work-proof>
-              <Media item={yunaMedia[0]!} locale={locale} preload sizes="29vw" />
+              <Media item={yunaMedia[0]!} locale={locale} loading="eager" sizes="29vw" />
               <span className={`${styles.proofStamp} micro`}>Campaign / Yuna Bijoux</span>
               <span className={styles.proofCrop} />
             </div>

@@ -2,7 +2,7 @@ import type { RefObject } from 'react';
 
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
-import { socialSatellites } from '@/content/media';
+import { expertiseStudies } from '@/content/media';
 import { Media } from '@/ui/Media';
 
 import styles from './ActExpertise.module.css';
@@ -42,8 +42,15 @@ export function ExpertiseOpeningFrame({ content, locale, listRef, decorative = f
         <figure className={styles.print}>
           <div className={styles.printCrop}>
             <div className={styles.printImage} data-expertise-print>
-              <Media item={socialSatellites[4]!} locale={locale} preload={false} className="fill-frame"
-                sizes="(max-width: 1023px) 30vw, 34vw" />
+              {/* One study per discipline, stacked; the painter lays each
+                  next print over the last as the reading advances. Journey's
+                  printed twin only ever shows the first frame. */}
+              {(decorative ? expertiseStudies.slice(0, 1) : expertiseStudies).map((study) => (
+                <div className={styles.printLayer} data-expertise-layer key={study.id}>
+                  <Media item={study} locale={locale} preload={false} className="fill-frame"
+                    sizes="(max-width: 1023px) 30vw, 34vw" />
+                </div>
+              ))}
             </div>
           </div>
           <figcaption>{expertise.studyCaption}</figcaption>

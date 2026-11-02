@@ -4,7 +4,7 @@ import { useRef } from 'react';
 
 import type { Content } from '@/content';
 import type { Locale } from '@/content/locales';
-import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
+import { gsap, useGSAP } from '@/lib/gsap';
 import { registerVisualFilm } from '@/lib/visualQa';
 import { heldSteps, segment, settle } from '@/lib/holdScalar';
 import { EASE, MQ, SCROLL, SCRUB, scrollLength } from '@/lib/motion';
@@ -55,19 +55,14 @@ export function ActExpertise({ content, locale }: Props) {
           rootEl.dataset.enhanced = 'true';
 
           // Journey's pinned last frame already shows this exact page. The
-          // real act only becomes visible at the pixel where that pin ends.
+          // real act only becomes visible at the pixel where that pin ends —
+          // and it hands over again at its own pin end: the manifesto page
+          // printed in its last frame IS ActContact's sticky manifesto page,
+          // laid exactly beneath. If this section kept painting while it
+          // scrolled away, the replica slid up over the real page and the
+          // visitor read the manifesto twice. Ownership = the pinned range.
           gsap.set(rootEl, { autoAlpha: 0 });
-          ScrollTrigger.create({
-            trigger: rootEl,
-            start: 'top top',
-            end: 'bottom top',
-            onEnter: () => gsap.set(rootEl, { autoAlpha: 1 }),
-            onEnterBack: () => gsap.set(rootEl, { autoAlpha: 1 }),
-            onLeaveBack: () => gsap.set(rootEl, { autoAlpha: 0 }),
-            onRefresh: (self) => {
-              gsap.set(rootEl, { autoAlpha: self.scroll() >= self.start ? 1 : 0 });
-            },
-          });
+          const own = (owned: boolean) => gsap.set(rootEl, { autoAlpha: owned ? 1 : 0 });
 
           const count = q<HTMLElement>('[data-expertise-row]').length;
           const painter = createExpertisePainter(sheet, isDesktop);
@@ -101,7 +96,13 @@ export function ActExpertise({ content, locale }: Props) {
               scrub: SCRUB.narrative,
               anticipatePin: 1,
               invalidateOnRefresh: true,
-              onRefresh: () => {
+              onEnter: () => own(true),
+              onEnterBack: () => own(true),
+              onLeave: () => own(false),
+              onLeaveBack: () => own(false),
+              onRefresh: (self) => {
+                const y = self.scroll();
+                own(y >= self.start && y <= self.end);
                 painter.measure();
                 render();
               },

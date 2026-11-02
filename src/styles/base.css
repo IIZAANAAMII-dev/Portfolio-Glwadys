@@ -19,6 +19,9 @@ html {
   scroll-behavior: auto;
   /* Keep the editorial grid still when the mobile contents modal opens. */
   scrollbar-gutter: stable;
+  /* Une barre fine, champagne sur bois : le repère reste, le gris système part. */
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--champagne-rgb) / 0.5) var(--wood-brown);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -254,6 +257,20 @@ body[data-locale='ko'] {
   position: relative;
   background: var(--surface);
   color: var(--on-surface);
+}
+
+/* Les actes se chevauchent d'un viewport (marges négatives des raccords) :
+   c'est exact une fois les pins posés, faux avant. Entre le premier rendu et
+   l'hydratation, seule la couverture peint — sinon le carnet et Yuna, plus
+   loin dans le DOM, la recouvraient pendant le chargement. */
+html[data-js]:not([data-hydrated]) main > :not(#act-scroll-story) {
+  visibility: hidden;
+}
+
+/* Sans JavaScript, aucun pin n'existe : les actes se suivent à plat. */
+html:not([data-js]) main .act {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .act-pin {

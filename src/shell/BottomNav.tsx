@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 
 import type { Content } from '@/content';
 import { localeLabels, locales, type Locale } from '@/content/locales';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { MQ } from '@/lib/motion';
-import { SHELL_EVENTS, unlockScroll } from '@/lib/scrollControl';
+import { requestChapter, SHELL_EVENTS, unlockScroll } from '@/lib/scrollControl';
 
 import styles from './BottomNav.module.css';
 
@@ -136,10 +136,22 @@ export function BottomNav({ content, locale }: { content: Content; locale: Local
     return () => mm.revert();
   }, { dependencies: [indexOpen], revertOnUpdate: true });
 
-  const navigate = () => {
+  /* Le lien reste un vrai lien (clic molette, nouvel onglet, sans JS) ; un
+     clic simple est confié au rideau de chapitre, qui joue le saut derrière
+     une page d'encre. Sous mouvement réduit, le saut natif est conservé. */
+  const navigate = (event: MouseEvent<HTMLAnchorElement>, index: number) => {
     setIndexOpen(false);
     setLanguageOpen(false);
     unlockScroll();
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const chapter = chapters[index];
+    if (!chapter) return;
+    const handled = requestChapter({
+      id: chapter.id,
+      label: chapter.label,
+      folio: `${String(index + 1).padStart(2, '0')} / ${String(chapters.length).padStart(2, '0')}`,
+    });
+    if (handled) event.preventDefault();
   };
 
   const languageLinks = locales.map((language) => (
@@ -156,7 +168,7 @@ export function BottomNav({ content, locale }: { content: Content; locale: Local
         <div className={styles.navItems}>
           {chapters.map((chapter, index) => (
             <a key={chapter.key} className={styles.item} href={`#${chapter.id}`}
-              aria-current={active === chapter.key ? 'location' : undefined} onClick={navigate}>
+              aria-current={active === chapter.key ? 'location' : undefined} onClick={(event) => navigate(event, index)}>
               <span className={styles.folio}>{String(index + 1).padStart(2, '0')}</span>
               <span>{chapter.label}</span>
             </a>
@@ -194,7 +206,7 @@ export function BottomNav({ content, locale }: { content: Content; locale: Local
             <ol className={styles.chapterList}>
               {chapters.map((chapter, index) => (
                 <li key={chapter.key} data-index-row>
-                  <a href={`#${chapter.id}`} aria-current={active === chapter.key ? 'location' : undefined} onClick={navigate}>
+                  <a href={`#${chapter.id}`} aria-current={active === chapter.key ? 'location' : undefined} onClick={(event) => navigate(event, index)}>
                     <span className={styles.folio}>{String(index + 1).padStart(2, '0')}</span>
                     <span>{chapter.label}</span><span className={styles.chapterArrow} aria-hidden="true">↗</span>
                   </a>

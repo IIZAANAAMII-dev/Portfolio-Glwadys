@@ -1,7 +1,7 @@
 # Local font provenance
 
 Unmodified WOFF2 distributions from Fontsource 5.3.0 (npm registry):
-- @fontsource-variable/bodoni-moda: Latin `standard` (weight + optical-size axes).
+- @fontsource-variable/bodoni-moda: Latin `standard` (weight + optical-size axes), roman AND italic. The italic is the real drawn Bodoni Moda Italic: without it every `font-style: italic` (signature, Expertise, manifesto, decisions) was a slanted roman synthesised by the browser.
 - @fontsource-variable/inter-tight: Latin weight axis.
 - @fontsource/kalam: Latin regular 400.
 - @fontsource-variable/noto-sans-kr: original unicode-range CSS and WOFF2 subsets; browser loads only glyph ranges it needs, no preload.

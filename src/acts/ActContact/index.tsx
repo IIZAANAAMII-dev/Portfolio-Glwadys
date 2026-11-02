@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { Content } from '@/content';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
-import { EASE, MQ, SCRUB, STAGGER } from '@/lib/motion';
-import { emitContact } from '@/lib/scrollControl';
+import { EASE, MQ, SCRUB } from '@/lib/motion';
+import { emitContact, requestChapter } from '@/lib/scrollControl';
 
 import styles from './ActContact.module.css';
 
@@ -30,7 +30,35 @@ export function ActContact({ content }: Props) {
   const contactSection = useRef<HTMLElement>(null);
   const masthead = useRef<HTMLHeadingElement>(null);
   const familyName = useRef<HTMLSpanElement>(null);
+  const copyTimer = useRef(0);
+  const [copied, setCopied] = useState(false);
   const { contact } = content;
+
+  useEffect(() => () => window.clearTimeout(copyTimer.current), []);
+
+  /* The woven label is a mailto link, and many visitors have no mail client:
+     the address must be one click away from their clipboard. */
+  const copyEmail = async () => {
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(contact.email);
+      ok = true;
+    } catch {
+      // Insecure context or denied permission: the legacy path still works.
+      const field = document.createElement('textarea');
+      field.value = contact.email;
+      field.setAttribute('readonly', '');
+      field.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+      document.body.append(field);
+      field.select();
+      ok = document.execCommand('copy');
+      field.remove();
+    }
+    if (!ok) return;
+    setCopied(true);
+    window.clearTimeout(copyTimer.current);
+    copyTimer.current = window.setTimeout(() => setCopied(false), 2400);
+  };
 
   /* Fit the surname to the exact measure of the sheet. Width is linear in
      font-size, so one measurement gives the exact size; re-run on resize and
@@ -100,46 +128,32 @@ export function ActContact({ content }: Props) {
 
           if (isReduced) return;
 
-          /* ---------- Manifesto: the page handed over by Expertise ---------- */
-          gsap.set(manifestoPage, { autoAlpha: 0 });
+          /* ---------- Manifesto: the page handed over by Expertise ----------
+             Expertise's last pinned frame prints this exact sheet (title set,
+             rule drawn, note written, corner folded) and stops painting at
+             its pin end, where this sticky page sits beneath it. So the page
+             starts complete, in that state; only what follows the seam moves:
+             the corner settles flat, the copy drifts, the sheet is set aside
+             as the back cover arrives. Scrubbed from the seam: reversible. */
           gsap.set(manifestoFold, { scale: 1, transformOrigin: 'right top' });
 
           const manifestoTl = gsap.timeline({
             defaults: { ease: EASE.scrub },
             scrollTrigger: {
               trigger: manifestoEl,
-              start: 'top 78%',
-              end: 'bottom 42%',
+              start: 'top top',
+              end: 'bottom top',
               scrub: SCRUB.narrative,
             },
           });
 
           manifestoTl
-            .to(manifestoPage, { autoAlpha: 1, duration: 0.18 }, 0)
-            .to(manifestoFold, { scale: 0, duration: 0.24 }, 0.02)
-            .fromTo(
-              q<HTMLElement>('[data-manifesto-line]'),
-              { yPercent: 112 },
-              { yPercent: 0, duration: 0.42, stagger: STAGGER.tight },
-              0,
-            )
-            .fromTo(
-              q<HTMLElement>('[data-manifesto-rule]'),
-              { scaleX: 0 },
-              { scaleX: 1, duration: 0.32 },
-              0.26,
-            )
-            .fromTo(
-              q<HTMLElement>('[data-manifesto-note]'),
-              { yPercent: 45, autoAlpha: 0 },
-              { yPercent: 0, autoAlpha: 1, duration: 0.28 },
-              0.38,
-            )
-            .to(q<HTMLElement>('[data-manifesto-copy]'), { yPercent: -5, duration: 0.3 }, 0.7)
+            .to(manifestoFold, { scale: 0, duration: 0.22 }, 0.04)
+            .to(q<HTMLElement>('[data-manifesto-copy]'), { yPercent: -5, duration: 0.4 }, 0.3)
             .to(
               manifestoPage,
-              { scale: 0.97, yPercent: -1.8, rotation: -0.35, autoAlpha: 0.82, duration: 0.2 },
-              0.8,
+              { scale: 0.97, yPercent: -1.8, rotation: -0.35, autoAlpha: 0.82, duration: 0.28 },
+              0.66,
             );
 
           /* ---------- Back cover: the closing reveal ----------
@@ -202,6 +216,33 @@ export function ActContact({ content }: Props) {
               { opacity: 1, scale: 1, duration: 0.2, stagger: 0.03 },
               0.78,
             );
+
+          /* The house label leans toward a fine pointer, its shadow at 40 %:
+             the label reads as lifted off the page. Only x / y are written
+             here; the scrubbed timeline owns opacity, scale, rotation and
+             yPercent, and GSAP composes both into one transform. */
+          if (isMobile || !window.matchMedia(MQ.finePointer).matches) return;
+          const slot = label.parentElement;
+          if (!slot) return;
+          const follow = { duration: 0.7, ease: 'power3.out' };
+          const lx = gsap.quickTo(label, 'x', follow);
+          const ly = gsap.quickTo(label, 'y', follow);
+          const sx = gsap.quickTo(labelShadow, 'x', follow);
+          const sy = gsap.quickTo(labelShadow, 'y', follow);
+          const reach = gsap.utils.clamp(-14, 14);
+          const onMove = (event: PointerEvent) => {
+            const box = slot.getBoundingClientRect();
+            const dx = reach((event.clientX - box.left - box.width / 2) * 0.12);
+            const dy = reach((event.clientY - box.top - box.height / 2) * 0.16);
+            lx(dx); ly(dy); sx(dx * 0.4); sy(dy * 0.4);
+          };
+          const onLeave = () => { lx(0); ly(0); sx(0); sy(0); };
+          slot.addEventListener('pointermove', onMove);
+          slot.addEventListener('pointerleave', onLeave);
+          return () => {
+            slot.removeEventListener('pointermove', onMove);
+            slot.removeEventListener('pointerleave', onLeave);
+          };
         },
       );
 
@@ -295,6 +336,12 @@ export function ActContact({ content }: Props) {
                     <span>{contact.axis}</span>
                   </span>
                 </a>
+                <button type="button" className={`${styles.copy} micro`} onClick={copyEmail}
+                  data-copied={copied ? 'true' : undefined} data-contact-copy>
+                  <span className={styles.copyMark} aria-hidden="true" />
+                  {copied ? contact.copiedEmail : contact.copyEmail}
+                </button>
+                <span className="visually-hidden" role="status">{copied ? contact.copiedEmail : ''}</span>
               </div>
 
               <div className={styles.colophon} data-contact-copy>
@@ -316,7 +363,10 @@ export function ActContact({ content }: Props) {
 
             <div className={`${styles.foot} micro`} data-contact-copy>
               <span className={styles.copyright}>{contact.copyright}</span>
-              <a className={styles.backTop} href="#act-opening">
+              <a className={styles.backTop} href="#act-opening" onClick={(event) => {
+                if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                if (requestChapter({ id: 'act-opening', label: content.nav.home, folio: '01 / 05' })) event.preventDefault();
+              }}>
                 {contact.backToTop} <span aria-hidden="true">↑</span>
               </a>
             </div>

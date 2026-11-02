@@ -283,6 +283,13 @@ export function ActScrollStory({ content, locale }: Props) {
             l: ((r.left - s.left) / s.width) * 100,
           };
         };
+        /* Desktop : la boîte du tirage a le ratio de la photographie et sa
+           taille de plein cadre ; la couverture la réduit à la fenêtre (×1,02)
+           autour du centre de la fenêtre. offsetTop ignore les transforms :
+           la mesure reste juste à chaque refresh, quel que soit l'état. */
+        const coverScale = () => (heroSlot.offsetWidth * 1.02) / Math.max(1, stageEl.clientWidth);
+        const coverOrigin = () => `50% ${heroSlot.offsetTop - heroImage.offsetTop}px`;
+
         const SCREEN_RADIUS = isDesktop ? 30 : 24;
         const windowOf = (el: HTMLElement, radius: number) => ({
           '--ap-t': () => boxOf(el).t,
@@ -325,7 +332,9 @@ export function ActScrollStory({ content, locale }: Props) {
         // dès la première seconde ; le « développement » la libère au scroll.
         gsap.set(safelight, { autoAlpha: 0.26 });
         gsap.set(scrim, { autoAlpha: 0 });
-        gsap.set(heroImage, { scale: 1.16, yPercent: 0 });
+        gsap.set(heroImage, isDesktop
+          ? { scale: coverScale(), transformOrigin: coverOrigin(), yPercent: 0 }
+          : { scale: 1.16, yPercent: 0 });
 
         gsap.set(frontBits, { autoAlpha: 0, yPercent: 40 });
         gsap.set(behindBits, { autoAlpha: 0, y: 18 });
@@ -415,8 +424,17 @@ export function ActScrollStory({ content, locale }: Props) {
           // immediateRender:true : l'état « tirage » est l'état AVANT ce tween,
           // et il est réappliqué à chaque refresh/retour (le simple set initial
           // était effacé sur desktop par l'invalidation du refresh).
-          .fromTo(aperture, { ...heroWindow }, { ...FULL, duration: 0.86, ease: 'power2.inOut', immediateRender: true }, T.develop)
-          .to(heroImage, { scale: 1, duration: 0.86, ease: 'power2.inOut' }, T.develop)
+          .fromTo(aperture, { ...heroWindow }, { ...FULL, duration: 0.86, ease: 'power2.inOut', immediateRender: true }, T.develop);
+        // Même durée, même courbe que la fenêtre : la photographie grandit
+        // AVEC le cadre, sans jamais laisser de bord vide.
+        if (isDesktop) {
+          tl.fromTo(heroImage, { scale: coverScale, transformOrigin: coverOrigin }, {
+            scale: 1, duration: 0.86, ease: 'power2.inOut', immediateRender: true,
+          }, T.develop);
+        } else {
+          tl.to(heroImage, { scale: 1, duration: 0.86, ease: 'power2.inOut' }, T.develop);
+        }
+        tl
           .to(safelight, { autoAlpha: 0, duration: 0.7, ease: 'power1.in' }, T.develop + 0.12)
           .to(trace, { autoAlpha: 0, duration: 0.24 }, T.develop)
           .fromTo(marks, { x: 0, y: 0 }, {
@@ -457,7 +475,10 @@ export function ActScrollStory({ content, locale }: Props) {
           tl.to(layer, { '--wipe': 0, duration: 0.38, ease: 'power3.inOut' }, at);
           if (image) tl.to(image, { yPercent: 0, scale: 1, duration: 0.5, ease: 'power2.out' }, at);
           // Contre-mouvement : l'image quittée remonte, la profondeur se lit.
-          if (below) tl.to(below, { yPercent: -7, duration: 0.38, ease: 'power3.inOut' }, at);
+          // (Desktop : la boîte du tirage fait 16:9 × largeur, ~2,5× plus
+          // haute qu'un calque : -3 % y donnent le même trajet d'environ 7 %.)
+          const lift = index === 0 && isDesktop ? -3 : -7;
+          if (below) tl.to(below, { yPercent: lift, duration: 0.38, ease: 'power3.inOut' }, at);
         });
 
         /* ---- 2 → 3 : LA SALLE DEVIENT VIN, LE CADRE DEVIENT ÉCRAN ---- */

@@ -232,6 +232,36 @@
   transform-origin: 50% 46%;
 }
 
+/* Desktop : un portrait 9:16 en plein cadre 16:10 n'a que 941 px de large ;
+   la fenêtre de couverture n'en montrait qu'un détail agrandi 2,3×, flou.
+   Le tirage de couverture est donc la photographie ENTIÈRE, à sa taille
+   d'épreuve (2 % de fond perdu), nette ; le développement l'agrandit avec la
+   fenêtre jusqu'au plein cadre. Le cadre garde le ratio de la photo :
+   object-fit n'a plus rien à rogner. */
+@media (min-width: 1024px) {
+  /* SSR : même boîte que l'état initial GSAP (largeur de la fenêtre × 1,02,
+     point 52,65 % de la photo au centre de la fenêtre). */
+  .layer[data-reel-layer='hero'] > .reelImage {
+    inset: auto;
+    left: 50%;
+    top: 52%;
+    width: calc(68svh * 2 / 3 * 1.02);
+    aspect-ratio: 9 / 16;
+    transform: translate(-50%, -52.65%);
+  }
+
+  /* Armée : boîte naturelle du plein cadre (point focal 52 % au centre du
+     stage). GSAP la réduit à l'échelle de la fenêtre autour de son centre.
+     Une marge en % se rapporte à la LARGEUR : 52 % × 16/9 de la largeur. */
+  .aperture[data-armed] .layer[data-reel-layer='hero'] > .reelImage {
+    left: 0;
+    top: 50%;
+    width: 100%;
+    margin-top: calc(-52% * 16 / 9);
+    transform: none;
+  }
+}
+
 .layer {
   position: absolute;
   inset: 0;

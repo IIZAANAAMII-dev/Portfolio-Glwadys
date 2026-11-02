@@ -398,6 +398,20 @@ export const comptoirTexture: MediaItem = item('comptoir-texture', 'texture', '1
   project: 'comptoir',
 });
 
+/* ---------- ACT 08 — expertise ----------
+   Une étude photographique PAR discipline, dans l'ordre exact de
+   `content.expertise.entries` (identique en FR/EN/KO). Quatre prises de la
+   série générée n'avaient encore aucun rôle : elles en ont un ici. */
+export const expertiseStudies: MediaItem[] = [
+  item('study-community', 'social', '4:5', 'blush', PHOTO.socialCommunity), // Community Management
+  item('study-ugc', 'social', '4:5', 'graphite', PHOTO.yunaSocial), // Création UGC — le geste du quotidien
+  item('study-strategy', 'planning', '4:5', 'paper', PHOTO.planning), // Content Strategy — la grille éditoriale
+  item('study-brand', 'campaign', '4:5', 'blush', PHOTO.heroFrame), // Brand Communication — la table de direction
+  item('study-social', 'note', '4:5', 'paper', PHOTO.socialObject), // Social Media — boîtier, planche, crayon
+  item('study-marketing', 'campaign', '4:5', 'blush', PHOTO.socialCampaign), // Digital Marketing — la campagne assemblée
+  item('study-international', 'story', '4:5', 'bordeaux', PHOTO.socialReel), // International — vers la mer
+];
+
 /* ---------- ACT 07 — parcours ---------- */
 export const portfolioThread: MediaItem = item(
   'portfolio-thread',
@@ -451,6 +465,7 @@ export const allMedia: MediaItem[] = [
   ...comptoirMedia,
   comptoirTexture,
   portfolioThread,
+  ...expertiseStudies,
   ...journeyMedia,
 ];
 

@@ -1,0 +1,86 @@
+/* Intercalaire de chapitre : une page d'encre, un titre Didone italique,
+   un filet champagne. Hors champ par défaut (clip-path), jamais cliquable
+   sauf pendant sa course. */
+
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: grid;
+  place-items: center;
+  padding: var(--margin);
+  background:
+    radial-gradient(90% 70% at 50% 120%, rgb(var(--champagne-rgb) / 0.12), transparent 60%),
+    #0b0908;
+  color: var(--ivory);
+  clip-path: inset(100% 0% 0% 0%);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.curtain[data-active] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.inner {
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.9rem, 2.2svh, 1.6rem);
+  text-align: center;
+}
+
+.mask {
+  display: block;
+  overflow: hidden;
+  /* Les jambages de l'italique ne doivent pas être rognés par le masque. */
+  padding-block: 0.06em 0.16em;
+  margin-block: -0.06em -0.16em;
+}
+
+.mask > span {
+  display: block;
+}
+
+.folio,
+.signature {
+  font-family: var(--font-sans);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: var(--tr-micro);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.folio {
+  color: var(--champagne);
+}
+
+.signature {
+  color: rgb(var(--ivory-rgb) / 0.62);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 11vw, 10rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.rule {
+  display: block;
+  width: min(14rem, 40vw);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--champagne), transparent);
+  transform: scaleX(0);
+}
+
+:global(body[data-locale='ko']) .title {
+  font-family: var(--font-kr);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}

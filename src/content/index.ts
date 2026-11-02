@@ -153,6 +153,9 @@ export interface Content {
     languages: string;
     backToTop: string;
     copyright: string;
+    /** Copie de l'adresse : le libellé de l'étiquette n'est pas sélectionnable. */
+    copyEmail: string;
+    copiedEmail: string;
   };
   nav: {
     label: string;
@@ -369,6 +372,8 @@ const fr: Content = {
     languages: 'FR · EN · KO',
     backToTop: 'Revenir au début',
     copyright: '© 2026 Glwadys Dalleau',
+    copyEmail: 'Copier l’adresse',
+    copiedEmail: 'Adresse copiée',
   },
   nav: {
     label: 'Navigation principale',
@@ -581,6 +586,8 @@ const en: Content = {
     languages: 'FR · EN · KO',
     backToTop: 'Back to the beginning',
     copyright: '© 2026 Glwadys Dalleau',
+    copyEmail: 'Copy address',
+    copiedEmail: 'Address copied',
   },
   nav: {
     label: 'Main navigation',
@@ -793,6 +800,8 @@ const ko: Content = {
     languages: 'FR · EN · KO',
     backToTop: '처음으로 돌아가기',
     copyright: '© 2026 Glwadys Dalleau',
+    copyEmail: '주소 복사',
+    copiedEmail: '주소가 복사되었습니다',
   },
   nav: {
     label: '주요 내비게이션',

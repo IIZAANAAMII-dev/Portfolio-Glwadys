@@ -41,13 +41,50 @@ export function restoreScroll(y: number) {
   } else window.scrollTo(0, target);
 }
 
+/** Gèle la molette/le tactile sans déplacer la page (rideau de chapitre). */
+export function pauseScroll() {
+  instance?.stop();
+}
+
+export function resumeScroll() {
+  if (!isScrollLocked()) instance?.start();
+}
+
 /** Événements du shell. Évite le prop drilling et tout state partagé. */
 export const SHELL_EVENTS = {
   /** L'Opening est terminé : la navigation peut apparaître. */
   ready: 'gd:ready',
   /** Le Contact est actif : la navigation se recompose en CTA final. */
   contact: 'gd:contact',
+  /** Demande de saut vers un chapitre, joué derrière le rideau. */
+  chapter: 'gd:chapter',
 } as const;
+
+export interface ChapterRequest {
+  /** Id de l'ancre physique du chapitre (`act-*`). */
+  id: string;
+  label: string;
+  folio: string;
+}
+
+/**
+ * Demande un saut de chapitre. Renvoie `false` si personne ne l'a pris en
+ * charge (mouvement réduit, rideau absent) : l'appelant laisse alors le lien
+ * natif faire son saut.
+ */
+export function requestChapter(detail: ChapterRequest): boolean {
+  const event = new CustomEvent<ChapterRequest>(SHELL_EVENTS.chapter, { detail, cancelable: true });
+  // Le rideau appelle preventDefault() : c'est lui qui pilote le saut.
+  return !document.dispatchEvent(event);
+}
+
+/** Position de scroll d'une ancre, identique au saut natif (scroll-margin compris). */
+export function anchorScrollY(id: string): number | null {
+  const node = document.getElementById(id);
+  if (!node) return null;
+  const margin = parseFloat(getComputedStyle(node).scrollMarginTop) || 0;
+  return node.getBoundingClientRect().top + window.scrollY - margin;
+}
 
 export function emitReady() {
   document.documentElement.dataset.shellReady = 'true';

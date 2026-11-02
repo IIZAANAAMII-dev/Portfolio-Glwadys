@@ -50,6 +50,9 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     window.addEventListener('scroll', observe, { passive: true });
     mediaEvents.addEventListener('matchMediaInit', beforeMedia);
     mediaEvents.addEventListener('matchMedia', afterMedia);
+    // Les effets parents passent après ceux des enfants : chaque acte a déjà
+    // posé ses états initiaux et ses pins. Les actes suivants peuvent peindre.
+    document.documentElement.dataset.hydrated = 'true';
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', observe);

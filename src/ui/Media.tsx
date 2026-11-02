@@ -56,6 +56,7 @@ export function Media({
     .join(' ');
 
   if (item.src) {
+    const preloaded = preload ?? item.priority;
     return (
       <div
         className={classes}
@@ -70,8 +71,12 @@ export function Media({
           alt={item.alt?.[locale] ?? ''}
           fill
           sizes={sizes}
-          preload={preload ?? item.priority}
-          loading={preload ?? item.priority ? undefined : loading}
+          preload={preloaded}
+          loading={preloaded ? undefined : loading}
+          /* React 19 précharge en SSR toute <img> non lazy : les médias de
+             raccord, chargés tôt mais loin dans le film, ne doivent pas
+             disputer la bande passante à la couverture (LCP). */
+          fetchPriority={!preloaded && loading === 'eager' ? 'low' : undefined}
         />
       </div>
     );
