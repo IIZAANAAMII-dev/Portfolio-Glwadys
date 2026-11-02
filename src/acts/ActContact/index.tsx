@@ -295,7 +295,7 @@ export function ActContact({ content }: Props) {
               <span className={styles.runningEdition}>Portfolio 2026</span>
             </header>
 
-            <h2 id="contact-title" ref={masthead} className={styles.masthead}>
+            <h2 id="contact-title" ref={masthead} className={styles.masthead} translate="no">
               <span className={`${styles.given} line-mask`}>
                 <span data-contact-name>Glwadys</span>
               </span>
@@ -330,7 +330,7 @@ export function ActContact({ content }: Props) {
                     <span className={styles.labelCta}>{contact.cta}</span>
                     <span className={styles.labelArrow}>↗</span>
                   </span>
-                  <span className={styles.labelEmail}>{contact.email}</span>
+                  <span className={styles.labelEmail} translate="no">{contact.email}</span>
                   <span className={`${styles.labelFoot} micro`} aria-hidden="true">
                     <span>Glwadys Dalleau</span>
                     <span>{contact.axis}</span>

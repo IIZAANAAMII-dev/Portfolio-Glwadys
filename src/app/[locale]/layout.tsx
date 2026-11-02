@@ -49,6 +49,10 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+/* Seules les trois langues existent : toute autre première partie d'URL est
+   une route inconnue, servie par app/global-not-found.tsx. */
+export const dynamicParams = false;
+
 /* Adresse publique : variable explicite, sinon le domaine de production
    Vercel du projet. Les URL de partage (canonical, og:image) sont absolues. */
 const SITE_URL =

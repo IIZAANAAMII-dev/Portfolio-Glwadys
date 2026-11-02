@@ -1,0 +1,128 @@
+/* 404 — une page d'encre, un chiffre Didone, une seule sortie. */
+
+.body {
+  margin: 0;
+  min-height: 100svh;
+  background:
+    radial-gradient(80% 60% at 50% 115%, rgb(var(--champagne-rgb) / 0.14), transparent 62%),
+    #0b0908;
+  color: var(--ivory);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.page {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: clamp(1.25rem, 3svh, 2rem);
+  min-height: 100svh;
+  padding: var(--margin);
+  box-sizing: border-box;
+}
+
+.chrome {
+  position: absolute;
+  top: var(--margin);
+  left: var(--margin);
+  right: var(--margin);
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid rgb(var(--ivory-rgb) / 0.16);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: var(--tr-micro);
+  text-transform: uppercase;
+}
+
+.title {
+  display: grid;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+.numeral {
+  font-size: clamp(6rem, 24vw, 19rem);
+  font-style: italic;
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  color: var(--champagne);
+}
+
+.line {
+  font-size: clamp(2rem, 5.5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.lead {
+  max-width: 34ch;
+  margin: 0;
+  font-size: var(--t-lead);
+  line-height: var(--lh-lead);
+  color: rgb(var(--ivory-rgb) / 0.86);
+  text-wrap: pretty;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  min-height: 48px;
+  padding: 0 1.4rem;
+  border: 1px solid rgb(var(--champagne-rgb) / 0.7);
+  color: var(--ivory);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 240ms var(--ease-move), color 240ms var(--ease-move);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cta:hover {
+  background: var(--champagne);
+  color: #0b0908;
+}
+
+.cta:focus-visible,
+.langs a:focus-visible {
+  outline: 2px solid var(--champagne);
+  outline-offset: 4px;
+}
+
+.langs {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.langs a {
+  color: rgb(var(--ivory-rgb) / 0.78);
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+  text-decoration-color: rgb(var(--ivory-rgb) / 0.3);
+}
+
+.signature {
+  position: absolute;
+  right: var(--margin);
+  bottom: var(--margin);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-style: italic;
+  color: var(--champagne);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta {
+    transition: none;
+  }
+}

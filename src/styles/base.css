@@ -66,6 +66,13 @@ a {
   text-decoration: none;
 }
 
+/* Pas de voile gris iOS au toucher : chaque contrôle porte son propre état
+   (hover, :active, :focus-visible). */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   html[data-custom-cursor='true'],
   html[data-custom-cursor='true'] * {

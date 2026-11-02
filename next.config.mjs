@@ -7,6 +7,11 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+  experimental: {
+    // La mise en page racine est le segment dynamique [locale] : une URL
+    // inconnue n'a pas de layout où composer un 404 → app/global-not-found.tsx.
+    globalNotFound: true,
+  },
   // Le layout racine vit dans [locale] pour porter le bon `lang`.
   // La racine redirige donc vers la langue par défaut.
   async redirects() {

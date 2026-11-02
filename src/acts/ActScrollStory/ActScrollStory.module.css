@@ -223,10 +223,6 @@
 
 /* Le tirage de couverture part légèrement « hors point » : l'intro fait le
    point (scale → 1) sans jamais le masquer. Valeurs SSR = valeurs GSAP. */
-.layer[data-reel-layer='hero'] > .reelImage {
-  transform: scale(1.16);
-}
-
 .layer[data-reel-layer='hero'] > .reelImage > * {
   transform: scale(1.045);
   transform-origin: 50% 46%;
@@ -259,6 +255,39 @@
     width: 100%;
     margin-top: calc(-52% * 16 / 9);
     transform: none;
+  }
+}
+
+/* Mobile : même mécanique, cadrage serré sur le bijou (×1,5 de la largeur
+   de la fenêtre) — lisible en petit, et ~1,1 px source par px d'écran sur un
+   iPhone 3× au lieu de 2,6. La boîte naturelle couvre le stage avec la
+   réserve de parallaxe des autres calques (116 % de haut), centrée. */
+@media (max-width: 1023px) {
+  .layer[data-reel-layer='hero'] > .reelImage {
+    inset: auto;
+    left: 50%;
+    top: 48%;
+    width: calc(60vw * 1.53);
+    aspect-ratio: 9 / 16;
+    transform: translate(-50%, -48.28%);
+  }
+
+  .aperture[data-armed] .layer[data-reel-layer='hero'] > .reelImage {
+    top: 50%;
+    width: max(100%, 116svh * 9 / 16);
+    /* Moitié de la largeur ; moitié de la hauteur (= largeur × 8/9). Les %
+       de marge se rapportent à la largeur du stage. */
+    margin-left: calc(-1 * max(50%, 116svh * 9 / 32));
+    margin-top: calc(-1 * max(88.889%, 58svh));
+    transform: none;
+  }
+}
+
+@media (max-width: 1023px) and (max-height: 700px) {
+  .layer[data-reel-layer='hero'] > .reelImage {
+    top: 49%;
+    width: calc(40vw * 1.53);
+    transform: translate(-50%, -49.14%);
   }
 }
 

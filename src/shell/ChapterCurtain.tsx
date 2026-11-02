@@ -106,7 +106,7 @@ export function ChapterCurtain() {
           <span className={styles.mask}><span data-curtain-line>{chapter?.label ?? ''}</span></span>
         </span>
         <span className={styles.rule} data-curtain-rule />
-        <span className={styles.signature}>
+        <span className={styles.signature} translate="no">
           <span className={styles.mask}><span data-curtain-line>Glwadys Dalleau — Portfolio 2026</span></span>
         </span>
       </div>
