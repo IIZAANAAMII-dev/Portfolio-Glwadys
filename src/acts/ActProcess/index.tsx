@@ -444,6 +444,11 @@ export function ActProcess({ content, locale }: Props) {
 
                   {back && (
                     <div className={`${styles.face} ${styles.back}`}>
+                      {/* Le chiffre d'ouverture de rubrique : la page gauche
+                          n'est plus un aplat vide au-dessus du terme. */}
+                      <span className={styles.backNumeral} data-back-term aria-hidden="true">
+                        {back.index ? back.index.split(' / ')[0] : '“'}
+                      </span>
                       <span className={`${styles.pageChapter} micro`}>{back.chapter}</span>
                       {back.index && <span className={`${styles.backIndex} micro`}>{back.index}</span>}
                       <h3 className={styles.backTerm}>

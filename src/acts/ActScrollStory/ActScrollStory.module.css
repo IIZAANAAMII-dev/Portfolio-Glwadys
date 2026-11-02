@@ -1324,3 +1324,148 @@
   .reducedLayers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .reducedFormats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* ============================================================
+   SIGNATURE D'OUVERTURE — LE LAVIS
+   Le titre de tête puis la signature naissent d'un lavis : un bord fondu
+   balaie le mot comme l'encre qui prend sur le papier (le motif des études
+   Expertise, de l'intercalaire et des titres de projets). Masque sur
+   l'enveloppe : aucune lettre découpée, le crénage Didone reste intact.
+
+   Propriétaire : la timeline d'intro GSAP (--wash, --sheen en ligne). Une
+   animation CSS ne peut pas l'être — la pose du pin déplace la scène dans le
+   DOM, ce qui relancerait le lavis en plein vol. Le CSS ne garde qu'un filet
+   de sécurité si l'hydratation tarde ; GSAP reprend sa valeur courante.
+   Sans JavaScript ou en mouvement réduit : aucun masque, le nom est là.
+   ============================================================ */
+
+@property --wash {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+
+@property --sheen {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+@keyframes coverWash {
+  from { --wash: 0; }
+  to { --wash: 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global(html[data-js]) .nameFirst,
+  :global(html[data-js]) .nameLast {
+    --wash: 0;
+    -webkit-mask-image: linear-gradient(100deg, #000 calc(var(--wash) * 130% - 30%), transparent calc(var(--wash) * 130%));
+    mask-image: linear-gradient(100deg, #000 calc(var(--wash) * 130% - 30%), transparent calc(var(--wash) * 130%));
+  }
+
+  :global(html[data-js]:not([data-hydrated])) .nameFirst {
+    animation: coverWash 1.5s cubic-bezier(0.22, 1, 0.36, 1) 1.2s both;
+  }
+
+  :global(html[data-js]:not([data-hydrated])) .nameLast {
+    animation: coverWash 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.7s both;
+  }
+
+  /* Un seul reflet traverse le titre : la lumière sur le métal de la bague,
+     reprise sur les lettres. Calque de texte superposé (même boîte, même
+     interlettrage hérité), sans ombre portée ; --sheen est écrit sur la
+     ligne par l'intro et hérité par le calque. */
+  :global(html[data-js]) .nameFirst [data-name-line] {
+    position: relative;
+    --sheen: 0;
+  }
+
+  :global(html[data-js]) .nameFirst [data-name-line]::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    text-shadow: none;
+    background: linear-gradient(
+      100deg,
+      transparent calc(var(--sheen) * 160% - 46%),
+      rgb(var(--champagne-rgb) / 0.55) calc(var(--sheen) * 160% - 36%),
+      rgb(255 252 244 / 0.95) calc(var(--sheen) * 160% - 31%),
+      rgb(var(--champagne-rgb) / 0.55) calc(var(--sheen) * 160% - 26%),
+      transparent calc(var(--sheen) * 160% - 16%)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    pointer-events: none;
+  }
+}
+
+/* ---------- INTERCALAIRE « LE CARNET » ----------
+   Posé dans le salon vin pendant que le cadre se referme sur le tirage : la
+   fenêtre se retire à droite, le titre occupe la gauche. Le papier du carnet
+   (plus haut dans la pile) le recouvre quand il se déplie. */
+.chapterCard {
+  position: absolute;
+  z-index: var(--z-copy);
+  left: var(--margin);
+  top: 50%;
+  display: grid;
+  gap: 1.1rem;
+  max-width: 40vw;
+  transform: translateY(-50%);
+  color: var(--ivory);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.chapterCardMask {
+  display: block;
+  overflow: hidden;
+  padding: 0.04em 0.08em 0.16em;
+  margin: -0.04em -0.08em -0.16em;
+}
+
+.chapterCardMask > span {
+  display: block;
+}
+
+.chapterCard > .micro:first-child {
+  color: var(--champagne);
+}
+
+.chapterCardTitle {
+  font-family: var(--font-display);
+  font-size: clamp(3.6rem, 8.4vw, 9.5rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+
+:global(body[data-locale='ko']) .chapterCardTitle {
+  font-family: var(--font-kr);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+@media (max-width: 1023px) {
+  .chapterCard {
+    top: calc(var(--margin) + 3.2rem);
+    right: var(--margin);
+    max-width: none;
+    transform: none;
+  }
+
+  .chapterCardTitle {
+    font-size: clamp(2.9rem, 14vw, 4.6rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chapterCard {
+    display: none;
+  }
+}

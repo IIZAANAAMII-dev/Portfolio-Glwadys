@@ -79,10 +79,10 @@ const STORY_ACT_MARKERS = [
 ] as const;
 
 /** Libellés de mise en scène (le contenu factuel reste dans `content`). */
-const LABELS: Record<Locale, { issue: string; frame: string; layers: string; screen: string; reel: string }> = {
-  fr: { issue: 'Nº 01', frame: 'Tirage', layers: 'Les strates', screen: 'Écran 9:16', reel: 'Format UGC' },
-  en: { issue: 'No. 01', frame: 'Print', layers: 'The layers', screen: 'Screen 9:16', reel: 'UGC format' },
-  ko: { issue: 'No. 01', frame: '프린트', layers: '레이어', screen: '스크린 9:16', reel: 'UGC 포맷' },
+const LABELS: Record<Locale, { issue: string; frame: string; layers: string; screen: string; reel: string; chapter: string }> = {
+  fr: { issue: 'Nº 01', frame: 'Tirage', layers: 'Les strates', screen: 'Écran 9:16', reel: 'Format UGC', chapter: 'Chapitre 05' },
+  en: { issue: 'No. 01', frame: 'Print', layers: 'The layers', screen: 'Screen 9:16', reel: 'UGC format', chapter: 'Chapter 05' },
+  ko: { issue: 'No. 01', frame: '프린트', layers: '레이어', screen: '스크린 9:16', reel: 'UGC 포맷', chapter: '챕터 05' },
 };
 
 /** Les trois photogrammes du monde social et la strate qu'ils incarnent. */
@@ -258,6 +258,8 @@ export function ActScrollStory({ content, locale }: Props) {
         const campaignPan = one('[data-campaign-pan]');
 
         const immersionBits = q<HTMLElement>('[data-immersion-bit]');
+        const chapterCard = one('[data-chapter-card]');
+        const chapterLines = q<HTMLElement>('[data-chapter-line]');
         const notebook = one('[data-notebook-frame="story"]');
         const notebookPaper = one('[data-notebook-frame="story"] [data-notebook-paper]');
         const notebookFolio = one('[data-notebook-frame="story"] [data-notebook-folio]');
@@ -358,6 +360,8 @@ export function ActScrollStory({ content, locale }: Props) {
         gsap.set(campaignPan, { xPercent: isDesktop ? 18 : 0 });
 
         gsap.set(immersionBits, { autoAlpha: 0, y: 22 });
+        gsap.set(chapterCard, { autoAlpha: 0 });
+        gsap.set(chapterLines, { yPercent: 112 });
         gsap.set(notebook, { autoAlpha: 0 });
         gsap.set(printImage, { autoAlpha: 0 });
         gsap.set(notebookPaper, { autoAlpha: 0, scaleX: 0.3, scaleY: 0.8 });
@@ -372,6 +376,24 @@ export function ActScrollStory({ content, locale }: Props) {
            [data-reel-image]), trace.scaleX, marks/tagline, glint.xPercent.
            ================================================================ */
         const heroPrint = heroImage.firstElementChild as HTMLElement | null;
+
+        /* Le lavis du titre : GSAP en devient propriétaire AVANT la pose du
+           pin (qui déplace la scène et relancerait une animation CSS). On
+           reprend la valeur courante — le filet CSS a pu commencer si
+           l'hydratation a tardé — et on coupe l'animation CSS : la reprise
+           est continue, jamais un nom qui disparaît puis revient. */
+        const [mastWrap, signatureWrap] = nameWraps;
+        const washNow = (el: HTMLElement | undefined) => {
+          const v = el ? parseFloat(getComputedStyle(el).getPropertyValue('--wash')) : 1;
+          return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 1;
+        };
+        const mastFrom = washNow(mastWrap);
+        const signatureFrom = washNow(signatureWrap);
+        gsap.set(nameWraps, { animation: 'none' });
+        if (mastWrap) gsap.set(mastWrap, { '--wash': mastFrom });
+        if (signatureWrap) gsap.set(signatureWrap, { '--wash': signatureFrom });
+        const mastLine = nameLines[0];
+
         const intro = gsap.timeline({ defaults: { ease: 'expo.out', overwrite: false } });
         intro
           // L'objectif fait le point : le tirage se pose, sans jamais disparaître.
@@ -385,6 +407,15 @@ export function ActScrollStory({ content, locale }: Props) {
           .to(tagline, { autoAlpha: 1, y: 0, duration: 0.7 }, 0.5)
           // Un seul reflet d'argent traverse la bague : la matière, pas un effet.
           .to(glint, { xPercent: 130, duration: 1.5, ease: 'power2.inOut' }, 0.45)
+          // Le lavis pose le titre puis la signature ; un reflet champagne
+          // traverse ensuite les lettres, comme sur le métal du tirage.
+          .fromTo(mastWrap ?? {}, { '--wash': mastFrom }, {
+            '--wash': 1, duration: 0.3 + 1.3 * (1 - mastFrom), ease: 'power2.out',
+          }, 0)
+          .fromTo(signatureWrap ?? {}, { '--wash': signatureFrom }, {
+            '--wash': 1, duration: 0.3 + 1.0 * (1 - signatureFrom), ease: 'power2.out',
+          }, 0.55)
+          .fromTo(mastLine ?? {}, { '--sheen': 0 }, { '--sheen': 1, duration: 1.6, ease: 'power2.inOut' }, 1.05)
           .add(() => emitReady(), 0.8);
         if (openingSeen) intro.progress(1);
 
@@ -525,6 +556,13 @@ export function ActScrollStory({ content, locale }: Props) {
         /* ---- 4 → 5 : LE CADRE SE REFERME SUR LE TIRAGE, LA LUMIÈRE REVIENT ---- */
         tl.addLabel('print', T.print)
           .fromTo(aperture, { ...FULL }, { ...printWindow, duration: 0.46, ease: 'power3.inOut', immediateRender: false }, T.print)
+          // Le salon vin n'est plus un vide : tandis que le cadre se referme
+          // sur le tirage, un intercalaire de magazine annonce le carnet — le
+          // même geste que le rideau de chapitre de la navigation.
+          .set(chapterCard, { autoAlpha: 1 }, T.print + 0.18)
+          .to(chapterLines, { yPercent: 0, duration: 0.26, stagger: 0.06, ease: 'power3.out' }, T.print + 0.18)
+          .to(chapterLines, { yPercent: -112, duration: 0.18, stagger: 0.04, ease: 'power2.in' }, T.paper - 0.02)
+          .set(chapterCard, { autoAlpha: 0 }, T.paper + 0.24)
           // Le tirage s'expose dans la fenêtre : même géométrie que le carnet
           // d'ActProcess. Un fondu d'exposition, puis la fenêtre se retire
           // derrière son jumeau exact.
@@ -688,7 +726,7 @@ export function ActScrollStory({ content, locale }: Props) {
           </div>
 
           <div className={`${styles.name} ${styles.nameFirst}`} data-name aria-hidden="true">
-            <span className={styles.mask}><span data-name-line>{hero.firstName}</span></span>
+            <span className={styles.mask}><span data-name-line data-text={hero.firstName}>{hero.firstName}</span></span>
           </div>
           <p className={styles.role} data-meta aria-hidden="true">
             <span>{opening.role[0]}</span>
@@ -757,6 +795,12 @@ export function ActScrollStory({ content, locale }: Props) {
             <span className={`${styles.chapter} micro`} data-immersion-bit>04 / {immersion.heading}</span>
             <h2 className={styles.immersionTitle} data-immersion-bit>{immersion.heading}</h2>
             <p className={`${styles.immersionStatement} lead`} data-immersion-bit>{immersion.statement}</p>
+          </div>
+
+          {/* ---------- 4 → 5 · INTERCALAIRE : le carnet s'annonce ---------- */}
+          <div className={styles.chapterCard} data-chapter-card aria-hidden="true">
+            <span className={`${styles.chapterCardMask} micro`}><span data-chapter-line>{labels.chapter}</span></span>
+            <span className={`${styles.chapterCardMask} ${styles.chapterCardTitle}`}><span data-chapter-line>{content.process.heading}</span></span>
           </div>
 
           {/* ---------- 5 · TIRAGE → relais ActProcess ---------- */}

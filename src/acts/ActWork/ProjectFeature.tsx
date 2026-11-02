@@ -75,6 +75,7 @@ export function ProjectFeature({ project, content, locale, index }: {
       const pageLeft = q<HTMLElement>('[data-spread-left]')[0]!;
       const pageCopy = q<HTMLElement>('[data-spread-copy]');
       const cover = q<HTMLElement>('[data-cover-copy]');
+      const name = q<HTMLElement>('[data-cover-name]');
       const opening = q<HTMLElement>('[data-yuna-handoff]')[0];
 
       if (opening) {
@@ -97,6 +98,8 @@ export function ProjectFeature({ project, content, locale, index }: {
       // Every feature gets an authored entrance. Yuna no longer inherits a
       // hidden cover from the notebook handoff during its reading hold.
       gsap.set(cover, { autoAlpha: 0, y: 16 });
+      // The project name is laid by the cover's wash (feathered mask).
+      gsap.set(name, { '--name-wash': 0 });
       // Incoming chapters arrive as a complete printed spread. The leaf
       // closes as the photograph lifts, then opens again for the decision.
       const folded = desktop ? { rotationY: -96 } : { rotationX: 96 };
@@ -122,7 +125,9 @@ export function ProjectFeature({ project, content, locale, index }: {
         // before the 0.30–0.52 reading hold.
         tl.to(opening, { clipPath: 'inset(0 0 100% 0)', duration: 0.24, ease: 'power2.inOut' }, 0.06)
           .fromTo(cover, { autoAlpha: 0, y: 16 },
-            { autoAlpha: 1, y: 0, duration: 0.11, stagger: 0.012, ease: 'power2.out', immediateRender: false }, 0.19);
+            { autoAlpha: 1, y: 0, duration: 0.11, stagger: 0.012, ease: 'power2.out', immediateRender: false }, 0.19)
+          .fromTo(name, { '--name-wash': 0 },
+            { '--name-wash': 1, duration: 0.16, ease: 'power2.out', immediateRender: false }, 0.2);
       } else {
         // The photograph scrolls in laid on the left page, then lifts off it
         // to its cover box while the page and desk fall away beneath it.
@@ -140,7 +145,9 @@ export function ProjectFeature({ project, content, locale, index }: {
           // before the full-bleed settles, avoiding an empty wine half-page
           // on smaller screens between two printed magazine spreads.
           .fromTo(cover, { autoAlpha: 0, y: 16 },
-            { autoAlpha: 1, y: 0, duration: 0.09, stagger: 0.01, ease: 'power2.out', ...later }, 0.085);
+            { autoAlpha: 1, y: 0, duration: 0.09, stagger: 0.01, ease: 'power2.out', ...later }, 0.085)
+          .fromTo(name, { '--name-wash': 0 },
+            { '--name-wash': 1, duration: 0.15, ease: 'power2.out', ...later }, 0.09);
         // Comptoir keeps its material accent: the print opens from a close
         // crop of the paper and chocolate to the full campaign frame.
         if (project.id === 'comptoir') {
@@ -200,7 +207,7 @@ export function ProjectFeature({ project, content, locale, index }: {
         </div>
         <div className={styles.titleBlock} data-cover-copy>
           <span className={`${styles.role} micro`}>{project.role}</span>
-          <h3 id={`${project.id}-title`} className={styles.name}>{project.name}</h3>
+          <h3 id={`${project.id}-title`} className={styles.name} data-cover-name translate="no">{project.name}</h3>
         </div>
         <p className={styles.summary} data-cover-copy>{project.summary}</p>
         <span className={styles.folio} aria-hidden="true" data-cover-copy>{folio}</span>

@@ -9,6 +9,13 @@
 .photo::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, #221719 0%, transparent 22%); opacity: var(--veil); }
 .titleBlock { position: absolute; z-index: 6; top: 23%; left: var(--margin); width: 44%; }
 .role { display: block; max-width: 36ch; margin-bottom: 2rem; color: var(--champagne); }
+/* The name is laid by the same wash as the cover masthead (GSAP drives
+   --name-wash inside the scrub; without motion the mask is never set). */
+@property --name-wash { syntax: '<number>'; inherits: false; initial-value: 1; }
+.project[data-enhanced] .name {
+  -webkit-mask-image: linear-gradient(105deg, #000 calc(var(--name-wash) * 130% - 30%), transparent calc(var(--name-wash) * 130%));
+  mask-image: linear-gradient(105deg, #000 calc(var(--name-wash) * 130% - 30%), transparent calc(var(--name-wash) * 130%));
+}
 .name { margin: 0; max-width: 9ch; font-family: var(--font-display); font-size: clamp(4.5rem, 9.6vw, 10rem); line-height: 0.86; font-weight: 400; letter-spacing: -0.065em; text-wrap: balance; }
 /* The summary keeps a clear line of air above the disclosure, which stands
    on the navigation line: nothing the visitor must read sits under the nav. */
