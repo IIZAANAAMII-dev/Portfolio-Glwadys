@@ -28,7 +28,7 @@ import { galleryFlatSlots } from '@/acts/ActScrollStory/galleryLayout';
  * deux la mémoire GPU.
  */
 
-const M = '/media/generated';
+const M = '/media/portfolio';
 
 export const SRC = {
   campaign: `${M}/social/social-portal-v2.jpg`,

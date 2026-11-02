@@ -57,7 +57,7 @@ body { position: relative; background: radial-gradient(70% 90% at 50% 112%, rgb(
 html[lang='ko'] .role, html[lang='ko'] .tagline { letter-spacing: 0; word-break: keep-all; }
 </style></head><body>
 <div class="bar"><span>Nº 01 — Portfolio 2026</span><span class="gold">${c.topics}</span><span>${c.axis}</span></div>
-<div class="print"><img src="${file('public/media/generated/editorial/hero-vertical.jpg')}" alt=""></div>
+<div class="print"><img src="${file('public/media/portfolio/editorial/hero-vertical.jpg')}" alt=""></div>
 <span class="mark m0"></span><span class="mark m1"></span><span class="mark m2"></span><span class="mark m3"></span>
 <div class="name">Glwadys</div>
 <div class="family">Dalleau</div>

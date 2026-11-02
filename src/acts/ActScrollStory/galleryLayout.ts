@@ -70,7 +70,7 @@ export const galleryFlatSlots: GalleryFlatSlot[] = [
   },
 ];
 
-const M = '/media/generated';
+const M = '/media/portfolio';
 
 export const galleryPlanes: GalleryPlane[] = [
   {

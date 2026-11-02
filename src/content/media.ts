@@ -70,7 +70,7 @@ function generated(
   focus = '50% 50%',
 ): Partial<MediaItem> {
   return {
-    src: `/media/generated/${path}`,
+    src: `/media/portfolio/${path}`,
     alt,
     focus,
   };

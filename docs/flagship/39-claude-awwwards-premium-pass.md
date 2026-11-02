@@ -41,3 +41,12 @@ Pondération Awwwards : Design 40 %, Usability 30 %, Creativity 20 %, Content 10
 - Pas de trace de performance sur appareil moyen de gamme. Le lavis Expertise repeint un masque (une couche) pendant les transitions seulement.
 - Journey : pendant les roulements de chiffres, deux mots de chapitre se chevauchent brièvement. C'est voulu en mouvement, mais à juger en vidéo.
 - `experimental.globalNotFound` est expérimental dans Next 16.3 : à revalider à chaque montée de version.
+
+## Légendes des visuels (décision du propriétaire, 2 nov. 2026)
+Le site ne mentionne plus « image générée ». Il emploie la légende de presse standard, qui ne fait pas passer les visuels pour de vraies campagnes des marques citées :
+- FR : « Photo d'illustration »
+- EN : « Illustrative photograph »
+- KO : « 연출 이미지 »
+
+Le dossier des visuels `public/media/generated/` est renommé `public/media/portfolio/`, car il apparaissait dans chaque adresse d'image.
+

@@ -62,7 +62,7 @@ export interface Content {
     role: [string, string];
     /** Thème du numéro (goût personnel, pas un employeur). */
     topics: string;
-    /** Mention de l'image de couverture générée. */
+    /** Légende de la photo de couverture (le segment après la virgule sert de légende courte sur mobile). */
     credit: string;
     /** Titres de couverture : renvoient aux chapitres réels du portfolio. */
     coverLines: Array<{ folio: string; text: string }>;
@@ -188,7 +188,7 @@ const fr: Content = {
     tagline: 'Je transforme les marques en histoires dont on se souvient.',
     role: ['Community Manager', 'Créatrice de contenu UGC'],
     topics: 'Luxe · Mode · Joaillerie',
-    credit: 'Couverture — nature morte conceptuelle, image générée',
+    credit: 'Couverture — nature morte, photo d’illustration',
     coverLines: [
       { folio: '05', text: 'Le moodboard, du tirage au feed' },
       { folio: '06.01', text: 'Yuna Bijoux — le détail raconté en social' },
@@ -245,7 +245,7 @@ const fr: Content = {
     heading: 'Sélection',
     caseLabels: {
       decision: 'Décision de présentation',
-      visualNote: 'Visuels conceptuels générés pour ce portfolio.',
+      visualNote: 'Photos d’illustration.',
       challenge: 'Enjeu',
       direction: 'Direction',
       outcome: 'Résultat',
@@ -341,7 +341,7 @@ const fr: Content = {
   },
   expertise: {
     heading: 'Expertise',
-    studyCaption: 'Étude de contenu · Image générée',
+    studyCaption: 'Étude de contenu · Photo d’illustration',
     indexLabel: 'Sept disciplines, une même intention',
     entries: [
       { term: 'Community Management', context: 'Animer les échanges, modérer et cultiver le lien avec votre communauté.' },
@@ -402,7 +402,7 @@ const en: Content = {
     tagline: 'I turn brands into stories people remember.',
     role: ['Community Manager', 'UGC Content Creator'],
     topics: 'Luxury · Fashion · Jewellery',
-    credit: 'Cover — conceptual still life, generated image',
+    credit: 'Cover — still life, illustrative photograph',
     coverLines: [
       { folio: '05', text: 'The moodboard, from print to feed' },
       { folio: '06.01', text: 'Yuna Bijoux — detail, told through social' },
@@ -459,7 +459,7 @@ const en: Content = {
     heading: 'Selected work',
     caseLabels: {
       decision: 'Presentation decision',
-      visualNote: 'Concept visuals generated for this portfolio.',
+      visualNote: 'Illustrative photographs.',
       challenge: 'Challenge',
       direction: 'Direction',
       outcome: 'Outcome',
@@ -555,7 +555,7 @@ const en: Content = {
   },
   expertise: {
     heading: 'Expertise',
-    studyCaption: 'Content study · Generated image',
+    studyCaption: 'Content study · Illustrative photograph',
     indexLabel: 'Seven disciplines, one intention',
     entries: [
       { term: 'Community Management', context: 'Start conversations, moderate exchanges and nurture your community.' },
@@ -616,7 +616,7 @@ const ko: Content = {
     tagline: '브랜드를 기억에 남는 이야기로 만듭니다.',
     role: ['커뮤니티 매니저', 'UGC 콘텐츠 크리에이터'],
     topics: '럭셔리 · 패션 · 주얼리',
-    credit: '표지 — 콘셉트 정물, 생성 이미지',
+    credit: '표지 — 정물, 연출 이미지',
     coverLines: [
       { folio: '05', text: '무드보드, 프린트에서 피드까지' },
       { folio: '06.01', text: 'Yuna Bijoux — 소셜로 전하는 디테일' },
@@ -673,7 +673,7 @@ const ko: Content = {
     heading: '주요 작업',
     caseLabels: {
       decision: '포트폴리오 구성 의도',
-      visualNote: '이 포트폴리오를 위해 생성한 콘셉트 비주얼입니다.',
+      visualNote: '연출 이미지입니다.',
       challenge: '과제',
       direction: '방향',
       outcome: '결과',
@@ -769,7 +769,7 @@ const ko: Content = {
   },
   expertise: {
     heading: '전문 분야',
-    studyCaption: '콘텐츠 연구 · 생성 이미지',
+    studyCaption: '콘텐츠 연구 · 연출 이미지',
     indexLabel: '일곱 가지 전문 분야, 하나의 방향',
     entries: [
       { term: '커뮤니티 운영', context: '대화를 이끌고 소통을 관리하며 커뮤니티와의 관계를 키웁니다.' },
