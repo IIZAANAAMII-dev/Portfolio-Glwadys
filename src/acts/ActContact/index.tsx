@@ -311,6 +311,18 @@ export function ActContact({ content }: Props) {
                 >
                   {contact.linkedinLabel} <span aria-hidden="true">↗</span>
                 </a>
+                <a
+                  className={`${styles.linkedin} micro`}
+                  href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/job-hub/`}
+                >
+                  Espace candidatures <span aria-hidden="true">↗</span>
+                </a>
+                <a
+                  className={`${styles.linkedin} micro`}
+                  href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/cv/`}
+                >
+                  CV professionnel <span aria-hidden="true">↗</span>
+                </a>
               </div>
             </div>
 
