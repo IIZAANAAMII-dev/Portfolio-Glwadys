@@ -36,6 +36,18 @@ jobs:
           python3 -m http.server 4173 --bind 127.0.0.1 --directory public/job-hub > /tmp/glwadys-server.log 2>&1 &
           sleep 2
           node scripts/ux_smoke.cjs
+      - name: Verify one A4 page for CV and letter
+        run: |
+          python3 -m pip install --quiet pypdf
+          python3 - <<'PY'
+          from pypdf import PdfReader
+          from pathlib import Path
+          for file in ["CV-exemple-fictif-QA.pdf", "Lettre-exemple-fictif-QA.pdf"]:
+              path=Path("ux-proof") / file
+              pages=len(PdfReader(str(path)).pages)
+              print(file, "pages:", pages)
+              assert pages == 1, file + " spills over " + str(pages) + " pages"
+          PY
       - name: Preserve visual proof and PDF prints
         if: always()
         uses: actions/upload-artifact@v4
