@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Atelier Glwadys : CV premium ciblé et lettre de motivation personnalisée, à partir d'expériences professionnelles vérifiées.">
+<title>Atelier de candidature — Glwadys Career Studio</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2395495e'/%3E%3Ctext x='32' y='44' fill='white' text-anchor='middle' font-family='Georgia' font-size='37'%3EG%3C/text%3E%3C/svg%3E">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=EB+Garamond:wght@400;500;600&display=swap');
+:root{--bg:#fbf8f6;--paper:#fffcfa;--ink:#25232a;--wine:#95495e;--wine-dark:#783a4b;--pale:#f2eae7;--rule:#ded3d0;--muted:#625d63;--rose:#ccb0ae;--sans:'DM Sans',Arial,sans-serif;--serif:'EB Garamond',Georgia,serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);font:14px/1.56 var(--sans);color:var(--ink)}
+a{color:inherit;text-underline-offset:3px}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--wine);outline-offset:3px}
+.site-header{padding:17px clamp(20px,3vw,52px);display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--paper);border-bottom:1px solid var(--rule)}.logo{font:500 25px var(--serif);text-decoration:none}.logo b{color:var(--wine);font-weight:500}.site-nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap}.site-nav a{font-size:12px;font-weight:600;text-decoration:none}.site-nav a:hover{color:var(--wine)}
+.wrap{margin:auto;max-width:1600px;padding:35px clamp(18px,3.5vw,57px) 90px}.eyebrow{color:var(--wine);letter-spacing:.16em;font-size:10px;text-transform:uppercase;font-weight:700;margin:0 0 11px}
+h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:0}.headline{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px;margin-bottom:28px}.headline em{color:var(--wine);font-style:normal}.headline p:last-child{max-width:390px;color:var(--muted);font-size:12px;margin:12px 0 0}
+.masthead-tools{display:flex;flex-wrap:wrap;gap:8px}.pill{display:inline-flex;gap:7px;align-items:center;padding:7px 11px;border:1px solid var(--rule);border-radius:30px;color:var(--muted);background:#fffdfa;font-size:10px;font-weight:600}
+.app-layout{display:grid;grid-template-columns:minmax(300px,390px) minmax(0,1fr);align-items:start;gap:30px}
+.panel{background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:23px 23px 18px;box-shadow:0 12px 35px #5b28390b}
+.panel h2{font:500 27px/1.15 var(--serif);margin:0 0 4px}.panel small{color:var(--muted);font-size:11px}.step{display:flex;align-items:center;gap:8px;color:var(--wine);font-size:10px;font-weight:700;letter-spacing:.1em;margin:24px 0 9px}.step:before{content:"";display:block;width:19px;height:19px;border:1px solid var(--wine);border-radius:50%}
+.field{display:grid;gap:7px;margin:13px 0}.field>span{font-size:10px;text-transform:uppercase;font-weight:700;letter-spacing:.055em;color:var(--muted)}
+.field input,.field textarea,.field select{background:#fcfaf8;color:var(--ink);width:100%;border:1px solid var(--rule);border-radius:6px;padding:11px 12px;min-height:43px;outline:none}
+.field textarea{min-height:142px;resize:vertical;line-height:1.5}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--wine)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.button{display:inline-flex;justify-content:center;align-items:center;padding:12px 16px;background:var(--wine);border:1px solid var(--wine);color:white;border-radius:6px;text-decoration:none;font-size:12px;font-weight:700;min-height:42px}.button:hover{background:var(--wine-dark)}.button.alt{color:var(--wine);background:transparent}.button.alt:hover{background:var(--pale)}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin:19px 0}
+.helper{background:var(--pale);border-radius:8px;padding:13px 14px;font-size:11px;line-height:1.65;color:#5c5156}
+.result-box{padding:16px 0 0;border-top:1px solid var(--rule);margin-top:17px}.result-box h3{margin:0 0 9px;font-size:11px;letter-spacing:.055em;text-transform:uppercase}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{display:inline-flex;padding:5px 9px;border-radius:30px;background:#f4ebe9;color:var(--wine);font-size:10px;font-weight:600}
+.warning{font-size:11px;color:var(--muted);line-height:1.65;margin:9px 0}.warning strong{color:var(--wine)}
+.doc-area{min-width:0}.tabs{display:flex;align-items:center;gap:8px;margin:0 0 16px;flex-wrap:wrap}
+.tab{background:#fff9f7;border:1px solid var(--rule);border-radius:32px;padding:10px 19px;font-weight:700;font-size:12px;color:var(--muted)}
+.tab[aria-selected=true]{background:var(--wine);border-color:var(--wine);color:white}.tabs .right{margin-left:auto}.note{color:var(--muted);font-size:11px}
+.doc-shell{max-width:810px;margin:0 auto;background:white;box-shadow:0 23px 70px #321d2816;border-radius:3px;overflow:hidden}
+.document{background:var(--bg);min-height:1030px;padding:32px 42px 28px;border-top:5px solid var(--wine);position:relative}
+.document[hidden]{display:none!important}
+.pdf-overline{font-size:10px;letter-spacing:.09em;color:var(--wine);font-weight:700;margin:0 0 24px;position:relative;z-index:1}
+.doc-name{font:400 clamp(44px,4.6vw,66px)/.93 var(--serif);letter-spacing:-.015em;margin:0 0 17px;position:relative;z-index:1}
+.doc-subtitle{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--wine);font-weight:700;max-width:70%;min-height:16px}
+.doc-photo{position:absolute;right:47px;top:34px;width:132px;height:132px;z-index:1;border:2px solid var(--wine);border-radius:50%;padding:6px;background:var(--bg)}
+.doc-photo .photo-inner{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:var(--pale);overflow:hidden;font:500 45px var(--serif);color:var(--wine)}
+.doc-photo img{width:100%;height:100%;object-fit:cover;object-position:center 30%;filter:grayscale(1)}
+.photo-orbit{position:absolute;right:-26px;top:-30px;width:160px;height:160px;border-radius:50%;background:var(--pale)}
+.photo-dot{position:absolute;right:33px;top:185px;width:10px;height:10px;background:var(--rose);border-radius:50%}
+.doc-contact{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:9px 0;margin:22px 0 20px;font-size:10px}
+.doc-contact a{text-decoration:none}
+.doc-heading{display:flex;align-items:center;gap:9px;letter-spacing:.065em;font-size:11px;font-weight:700;text-transform:uppercase;margin:17px 0 9px}
+.doc-heading:before{content:"";width:8px;height:8px;background:var(--wine);border-radius:50%;flex:none}
+.doc-heading:after{content:"";height:1px;background:var(--rule);flex:1}
+.doc-intro{color:#555159;font-size:11.1px;line-height:1.5;margin:0}.doc-skill-text{font-size:10.6px;line-height:1.6;margin:0}
+.cv-inner{display:grid;grid-template-columns:minmax(0,1fr) 155px;gap:21px;margin-top:17px;align-items:stretch}
+.timeline{min-width:0}.timeline .doc-heading{margin-top:0}.job{border-bottom:1px solid var(--rule);padding:6px 0 9px;position:relative}.job:last-of-type{border:0}.job-title{font-size:11px;line-height:1.35;margin:0;font-weight:700}.job-company{font-size:10px;color:var(--muted);margin:2px 0}.job-date{font-size:9px;color:var(--wine);font-weight:700;margin:2px 0}
+.job ul{margin:5px 0 0;padding-left:15px;font-size:10px;line-height:1.45}.job li::marker{color:var(--wine)}
+.cv-side{display:flex;align-items:center;justify-content:flex-start;flex-direction:column;gap:17px;background:var(--pale);border-radius:13px;padding:28px 8px 21px;position:relative;min-height:340px}
+.cv-side:after{content:"";position:absolute;width:7px;height:7px;right:8px;top:8px;border-radius:50%;background:var(--wine)}
+.stat{text-align:center}.stat-circle{width:77px;height:77px;border:2px solid var(--wine);outline:1px solid var(--rose);outline-offset:-7px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fffdfa;color:var(--wine);font:400 36px/1 var(--serif)}
+.stat-label{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#524750;font-weight:700;margin-top:8px}
+.doc-formations{font-size:10.5px;line-height:1.5}.doc-formations p{margin:0 0 8px}.doc-footer{font-size:9px;color:var(--muted);border-top:1px solid var(--rule);padding-top:9px;margin-top:22px;display:flex;justify-content:space-between}
+.letter-doc{padding-top:44px}.letter-doc .pdf-overline{margin-bottom:17px}.letter-doc .doc-name{font-size:55px}.letter-meta{border-bottom:1px solid var(--rule);padding:14px 0 19px;color:var(--muted);font-size:11px;margin-bottom:32px;max-width:100%}
+.letter-to{font-size:12px;margin:0 0 20px}.letter-date{font-size:11px;color:var(--muted);margin-bottom:20px}
+.letter-subject{font-size:12px;font-weight:700;color:var(--wine);margin:0 0 27px}
+.letter-body{font-size:12px;line-height:1.85;max-width:670px;white-space:normal}.letter-body p{margin:0 0 18px}.letter-signature{margin-top:26px;font:400 26px var(--serif);color:var(--wine)}
+.letter-ornament{position:absolute;right:55px;top:190px;width:65px;height:65px;border:2px solid var(--wine);border-radius:50%;outline:1px solid var(--rose);outline-offset:6px}
+.print-guide{font-size:11px;color:var(--muted);margin:12px auto 0;max-width:810px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;padding:12px 22px;border-radius:8px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:100}.toast.visible{opacity:1}
+@media(max-width:1100px){.app-layout{grid-template-columns:1fr}.headline{grid-template-columns:1fr}.panel{position:static}.doc-shell{max-width:780px}}
+@media(max-width:650px){.site-header{align-items:flex-start;flex-direction:column}.site-nav{gap:12px}.wrap{padding:24px 12px 60px}.headline{margin:0 10px 24px}.panel{padding:18px}.doc-shell{width:100%}.document{padding:24px 17px;min-height:auto}.doc-photo{width:86px;height:86px;right:19px;top:29px}.photo-orbit{width:105px;height:105px;right:0;top:0}.doc-name{font-size:45px}.doc-subtitle{max-width:75%}.cv-inner{grid-template-columns:minmax(0,1fr) 86px;gap:9px}.cv-side{padding:15px 5px;gap:12px}.stat-circle{width:61px;height:61px;font-size:27px}.doc-contact{font-size:9px}.letter-doc .doc-name{font-size:45px}.letter-ornament{display:none}.letter-body{font-size:11px}}
+@page{size:A4;margin:10mm}
+@media print{
+  html,body{margin:0;padding:0;background:white!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .site-header,.headline,.panel,.tabs,.print-guide,.toast{display:none!important}
+  .wrap,.app-layout,.doc-area,.doc-shell{display:block!important;max-width:none!important;width:100%!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+  .document{display:none!important;position:relative!important;width:100%!important;min-height:0!important;height:auto!important;border-top:4px solid var(--wine)!important;margin:0!important;padding:10mm 11mm 7mm!important;overflow:visible!important;border-radius:0!important;background:var(--bg)!important}
+  body[data-print="cv"] #cv-preview{display:block!important}
+  body[data-print="letter"] #letter-preview{display:block!important}
+  .doc-name{font-size:47pt!important;margin-bottom:11pt}.doc-photo{top:9mm;right:12mm;width:35mm;height:35mm}.photo-orbit{top:3mm;right:3mm;width:42mm;height:42mm}
+  .doc-subtitle{font-size:9pt}.doc-contact{font-size:8.3pt;margin:12pt 0 10pt;padding:6pt 0}
+  .doc-heading{font-size:9pt;margin:11pt 0 5pt}.doc-intro{font-size:9pt;line-height:1.38}.doc-skill-text{font-size:8.7pt}
+  .cv-inner{grid-template-columns:minmax(0,1fr) 35mm;gap:10mm;margin-top:9pt}
+  .job{padding:3pt 0 5pt;break-inside:avoid}.job-title{font-size:9pt}.job-company,.job-date{font-size:8pt}.job ul{font-size:8.3pt;margin-top:3pt;line-height:1.35}
+  .cv-side{padding:6mm 1mm;gap:4mm;min-height:0}.stat-circle{width:20mm;height:20mm;font-size:29pt}.stat-label{font-size:7pt;margin-top:3pt}.doc-formations{font-size:8.5pt}.doc-footer{font-size:7.3pt;margin-top:11pt}
+  .letter-doc{padding:11mm 12mm 8mm!important}.letter-doc .doc-name{font-size:49pt!important}.letter-meta{font-size:9pt;margin:11pt 0 25pt}.letter-date{font-size:9pt}.letter-to,.letter-subject{font-size:10pt}.letter-body{font-size:10.2pt;line-height:1.65}.letter-body p{margin:0 0 12pt}.letter-signature{margin-top:20pt}
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="../">Glwadys <b>·</b> Career Studio</a>
+  <nav class="site-nav"><a href="../">Recherche d’offres</a><a href="https://glwadys-portfolio.vercel.app/fr">Portfolio</a><a href="https://glwadys-portfolio.vercel.app/cv/">CV de référence</a></nav>
+</header>
+<div class="wrap">
+  <div class="headline">
+    <div><p class="eyebrow">Candidature / Atelier personnalisé</p><h1>Une annonce.<br><em>Une histoire qui convainc.</em></h1></div>
+    <div><div class="masthead-tools"><span class="pill">◯ Template premium unique</span><span class="pill">✓ Expériences vérifiées</span><span class="pill">↗ PDF imprimable</span></div><p>CV et lettre de motivation préparés ensemble, sans inventer de résultats ni faire passer des compétences supposées pour des acquis.</p></div>
+  </div>
+  <div class="app-layout">
+    <aside class="panel">
+      <p class="eyebrow">01 / Comprendre l’offre</p>
+      <h2>Préparer sa candidature</h2><small>Tout se passe ici, dans ce navigateur. Aucun compte supplémentaire nécessaire.</small>
+      <form id="atelier-form">
+        <label class="field"><span>Intitulé du poste *</span><input id="role" required maxlength="120" value="Chargée de communication" placeholder="Chargée de communication"></label>
+        <label class="field"><span>Nom de l’entreprise *</span><input id="company" required maxlength="110" placeholder="Ex. Maison Martin"></label>
+        <label class="field"><span>Annonce (missions, attentes, compétences) *</span><textarea id="ad" required maxlength="18000" placeholder="Colle ici le texte de l’offre, les missions et les compétences attendues…"></textarea></label>
+        <div class="split">
+          <label class="field"><span>Type de poste</span><select id="focus"><option value="auto">Détection automatique</option><option value="communication">Communication</option><option value="retail">Retail / management</option><option value="event">Événementiel</option></select></label>
+          <label class="field"><span>Ton de la lettre</span><select id="tone"><option value="professional">Professionnel</option><option value="warm">Chaleureux</option><option value="direct">Direct et concis</option></select></label>
+        </div>
+        <label class="field"><span>Nom du destinataire (optionnel)</span><input id="recipient" maxlength="120" placeholder="Ex. Madame Durand"></label>
+        <label class="field"><span>Réalisation supplémentaire vérifiée (optionnel)</span><textarea id="fact" maxlength="450" style="min-height:72px" placeholder="À renseigner uniquement si Glwadys confirme ce fait, avec un exemple précis."></textarea></label>
+        <div class="actions"><button class="button" type="submit">Générer le dossier ↗</button><button class="button alt" type="button" id="save-draft">Sauvegarder le brouillon</button></div>
+      </form>
+      <div class="helper">Le dossier utilise les cinq expériences du CV original : Le Comptoir de Mathilde, Marseille Girls Club (bénévolat), Kiko Milano, AGLAIA × Une à Une et Yuna Bijoux. Les chiffres commerciaux et les outils non prouvés ne sont jamais ajoutés automatiquement.</div>
+      <div class="result-box">
+        <h3>Compétences attestées et pertinentes</h3><div class="chips" id="matches"><span class="chip">En attente de l’annonce</span></div>
+        <h3 style="margin-top:16px">À confirmer avant envoi</h3><p id="gaps" class="warning">Les exigences de l’annonce non présentes dans son parcours seront signalées ici.</p>
+        <p id="source-note" class="warning"></p>
+      </div>
+    </aside>
+    <section class="doc-area" aria-label="Prévisualisation des documents">
+      <div class="tabs" role="tablist" aria-label="Documents du dossier">
+        <button type="button" class="tab" id="tab-cv" role="tab" aria-controls="cv-preview" aria-selected="true">01 / CV premium</button>
+        <button type="button" class="tab" id="tab-letter" role="tab" aria-controls="letter-preview" aria-selected="false">02 / Lettre de motivation</button>
+        <button type="button" class="button alt right" id="print-current">Enregistrer en PDF ↗</button>
+        <button type="button" class="button alt" id="copy-letter">Copier la lettre</button>
+      </div>
+      <div class="doc-shell">
+        <article id="cv-preview" class="document" role="tabpanel" aria-labelledby="tab-cv">
+          <span class="photo-orbit" aria-hidden="true"></span><span class="photo-dot" aria-hidden="true"></span>
+          <div class="doc-photo" aria-hidden="true"><div class="photo-inner"><img src="../portrait-glwadys.jpg" alt="" onerror="this.remove();this.parentElement.textContent='GD'"></div></div>
+          <p class="pdf-overline">GLWADYS / DOSSIER PROFESSIONNEL · 2026</p>
+          <h2 class="doc-name">Glwadys<br>Dalleau</h2>
+          <div id="cv-subtitle" class="doc-subtitle">COMMUNICATION / MARKETING / MANAGEMENT</div>
+          <div class="doc-contact"><span>Vannes, France</span><span>06 21 97 12 50</span><span>glwadys.dalleau29@gmail.com</span><a href="https://glwadys-portfolio.vercel.app/fr">glwadys-portfolio.vercel.app/fr</a></div>
+          <h3 class="doc-heading">Profil professionnel</h3><p id="cv-summary" class="doc-intro"></p>
+          <h3 class="doc-heading">Compétences clés</h3><p id="cv-skills" class="doc-skill-text"></p>
+          <div class="cv-inner">
+            <div class="timeline"><h3 class="doc-heading">Expériences professionnelles</h3><div id="cv-jobs"></div>
+              <h3 class="doc-heading">Formation</h3><div class="doc-formations"><p><b>Bachelor - Commerce, marketing et négociation</b><br>IPAC Bachelor Factory</p><p><b>Certificat Inside LVMH</b><br>Creation &amp; Branding, Retail &amp; Customer Experience</p></div>
+              <h3 class="doc-heading">Langues</h3><p class="doc-skill-text">Français : langue maternelle · Anglais : niveau B2</p>
+            </div>
+            <aside class="cv-side" aria-label="Chiffres du parcours professionnel">
+              <div class="stat"><div class="stat-circle">24</div><div class="stat-label">mois</div></div>
+              <div class="stat"><div class="stat-circle">5</div><div class="stat-label">expériences</div></div>
+              <div class="stat"><div class="stat-circle">3</div><div class="stat-label">univers retail</div></div>
+            </aside>
+          </div>
+          <div class="doc-footer"><span>GLWADYS DALLEAU · CV 2026</span><span>PORTFOLIO · EN LIGNE</span></div>
+        </article>
+        <article id="letter-preview" hidden class="document letter-doc" role="tabpanel" aria-labelledby="tab-letter">
+          <span class="photo-orbit" aria-hidden="true"></span><span class="photo-dot" aria-hidden="true"></span>
+          <p class="pdf-overline">GLWADYS / CORRESPONDANCE PROFESSIONNELLE · 2026</p>
+          <h2 class="doc-name">Glwadys<br>Dalleau</h2>
+          <p class="doc-subtitle">CANDIDATURE PERSONNALISÉE</p>
+          <div class="letter-meta">Vannes, France · 06 21 97 12 50 · glwadys.dalleau29@gmail.com<br>glwadys-portfolio.vercel.app/fr</div>
+          <p id="letter-to" class="letter-to"></p><p id="letter-date" class="letter-date"></p>
+          <p id="letter-subject" class="letter-subject"></p>
+          <div id="letter-body" class="letter-body"></div>
+          <p class="letter-signature">Glwadys Dalleau</p>
+          <div class="doc-footer" style="margin-top:53px"><span>CV & PORTFOLIO DISPONIBLES</span><span>MERCI DE VOTRE ATTENTION</span></div>
+        </article>
+      </div>
+      <p class="print-guide">L'impression ouvre la fenêtre native du navigateur : sélectionne « Enregistrer en PDF ». Le rendu est conçu pour une page A4. Relire et personnaliser chaque document avant l’envoi reste indispensable.</p>
+    </section>
+  </div>
+</div>
+<div id="toast" class="toast" role="status"></div>
+<script>
+'use strict';
+const JOBS=[
+ {role:'Responsable adjointe de magasin',company:'Le Comptoir de Mathilde',date:'10/2024 - 09/2026',weight:['management','vente','merchandising','stocks','client'],bullets:['Pilotage opérationnel du magasin et coordination de l’équipe.','Merchandising, valorisation de l’offre et expérience client.','Création de contenus digitaux pour la marque.']},
+ {role:'Bénévole - communication et événementiel',company:'Marseille Girls Club',date:'04/2024 - 04/2025',weight:['communication','event','content','partnership'],bullets:['Organisation d’événements et contribution aux partenariats.','Création de contenus pour les réseaux sociaux et coordination.']},
+ {role:'Conseillère de vente en cosmétique',company:'Kiko Milano',date:'06/2024 - 08/2024',weight:['vente','client','beauty'],bullets:['Conseil personnalisé et accompagnement de la clientèle.','Mise en valeur des collections et dynamisation de la vente.']},
+ {role:'Responsable de corner éphémère',company:'AGLAIA x Une à Une / Printemps',date:'04/2024 - 06/2024',weight:['vente','stocks','content','merchandising'],bullets:['Gestion d’un corner bijouterie, des ventes et des stocks.','Création de contenus pour les réseaux sociaux.']},
+ {role:'Responsable de magasin - Alternance',company:'Yuna Bijoux',date:'09/2022 - 09/2023',weight:['management','content','event'],bullets:['Pilotage opérationnel et organisation d’événements.','Création de contenus visuels et communication digitale.']}
+];
+const SKILLS=[
+ {id:'management',label:'Coordination d’équipe',terms:['management','équipe','equipe','encadrement','coordination','pilotage'],source:'Le Comptoir de Mathilde, Yuna Bijoux'},
+ {id:'merchandising',label:'Merchandising',terms:['merchandising','vitrine','mise en valeur','implantation','visual'],source:'Le Comptoir de Mathilde, Kiko Milano'},
+ {id:'client',label:'Expérience client',terms:['client','clientèle','fidelisation','satisfaction','service'],source:'Le Comptoir de Mathilde, Kiko Milano'},
+ {id:'vente',label:'Vente conseil',terms:['commerce','vente','boutique','retail','commercial','business'],source:'Le Comptoir de Mathilde, Kiko Milano, AGLAIA'},
+ {id:'stocks',label:'Gestion des stocks',terms:['stock','inventaire','logistique'],source:'AGLAIA × Une à Une'},
+ {id:'communication',label:'Communication digitale',terms:['communication','marketing digital','digital','identité de marque'],source:'Marseille Girls Club, Yuna Bijoux'},
+ {id:'content',label:'Contenus social media',terms:['social media','réseau social','réseaux sociaux','community','contenu','photo','video','vidéo','storytelling'],source:'Marseille Girls Club, Yuna Bijoux'},
+ {id:'event',label:'Événementiel',terms:['événement','evenement','event','animation','salon'],source:'Marseille Girls Club, Yuna Bijoux'},
+ {id:'partnership',label:'Partenariats',terms:['partenariat','partenaires','partner','collaboration'],source:'Marseille Girls Club'},
+ {id:'beauty',label:'Conseil cosmétique',terms:['cosmétique','cosmetique','beauté','beauty'],source:'Kiko Milano'}
+];
+const UNKNOWN=[
+ {label:'SEO / référencement',terms:['seo','référencement']},{label:'Google Analytics / GA4',terms:['google analytics','ga4']},
+ {label:'Google Ads / SEA',terms:['google ads','sea','adwords']},{label:'Meta Ads',terms:['meta ads','facebook ads']},
+ {label:'Adobe Photoshop / InDesign',terms:['photoshop','indesign']},{label:'Canva',terms:['canva']},
+ {label:'CRM / Salesforce',terms:['crm','salesforce']},{label:'Excel avancé',terms:['excel avancé','tableau croisé']},
+ {label:'Budget média',terms:['budget média','budget media','budget publicitaire']},{label:'Campagnes payantes',terms:['paid media','publicité payante','ads management']}
+];
+const BASE={
+ communication:{subtitle:'COMMUNICATION / SOCIAL MEDIA / ÉVÉNEMENTIEL',summary:'Professionnelle de la communication et du commerce, j’ai créé des contenus pour les réseaux sociaux et contribué à l’organisation d’événements et de partenariats. Mon expérience en boutique renforce ma compréhension des marques et de leurs clients.',skills:['Communication digitale','Contenus social media','Événementiel','Partenariats','Relation client','Merchandising'],experienceOrder:[1,0,4,3,2]},
+ retail:{subtitle:'RESPONSABLE ADJOINTE / RETAIL / MANAGEMENT',summary:'Avec 24 mois d’expérience comme responsable adjointe, je maîtrise le pilotage opérationnel d’un magasin, la coordination d’équipe, le merchandising et la relation client. Mon parcours couvre l’épicerie fine, la bijouterie et la cosmétique.',skills:['Gestion de magasin','Coordination d’équipe','Merchandising','Gestion des stocks','Vente conseil','Communication digitale'],experienceOrder:[0,3,4,2,1]},
+ event:{subtitle:'ÉVÉNEMENTIEL / PARTENARIATS / COMMUNICATION',summary:'Professionnelle de la communication et du commerce, j’ai contribué à l’organisation d’événements, à des partenariats et à la création de contenus pour le Marseille Girls Club. J’apporte aussi une expérience opérationnelle en boutique et relation client.',skills:['Événementiel','Partenariats','Communication digitale','Contenus social media','Coordination d’équipe','Expérience client'],experienceOrder:[1,4,0,3,2]}
+};
+const $=id=>document.getElementById(id);
+const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+const has=(hay,terms)=>terms.some(term=>hay.includes(norm(term)));
+function element(tag,text,klass){const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el}
+function getState(){return {role:$('role').value.trim(),company:$('company').value.trim(),ad:$('ad').value.trim(),focus:$('focus').value,tone:$('tone').value,recipient:$('recipient').value.trim(),fact:$('fact').value.trim()}}
+function chooseFocus(s){if(s.focus!=='auto')return s.focus;const n=norm(s.role+' '+s.ad.slice(0,900));if(/evenement|event|partenariat/.test(n) && !/magasin|boutique|retail/.test(n))return 'event';if(/vente|magasin|boutique|retail|responsable adjointe|merchandising/.test(n))return 'retail';return 'communication'}
+function evidenceOrder(base,s){const n=norm(s.role+' '+s.ad);const scored=base.experienceOrder.map((id,order)=>{const job=JOBS[id];let score=0;for(const skill of SKILLS){if(job.weight.includes(skill.id)&&has(n,skill.terms))score++}return {id,order,score}});scored.sort((a,b)=>b.score-a.score||a.order-b.order);return scored.map(x=>x.id)}
+function rankSkills(s,base){const n=norm(s.role+' '+s.ad);const hits=SKILLS.filter(x=>has(n,x.terms));const names=[...hits.map(x=>x.label),...base.skills];return {hits,selected:[...new Set(names)].slice(0,7)}}
+function oneOfSkills(hits){if(!hits.length)return 'les missions de communication, d’organisation et de relation client';return hits.slice(0,3).map(x=>x.label.toLowerCase()).join(', ')}
+function createJob(job){const section=element('section',undefined,'job');section.append(element('h4',job.role,'job-title'),element('p',job.company,'job-company'),element('p',job.date,'job-date'));const ul=element('ul');for(const b of job.bullets.slice(0,2))ul.append(element('li',b));section.append(ul);return section}
+function paragraphs(s,focus,hits){
+ const c=s.company||'[entreprise]';const role=s.role||'[intitulé du poste]';const hasExtra=Boolean(s.fact);
+ const opener=s.tone==='warm'
+  ?'Votre annonce pour le poste de '+role+' a retenu mon attention. Je serais heureuse de mettre mon expérience au service de '+c+'.'
+  :s.tone==='direct'
+  ?'Je vous propose ma candidature au poste de '+role+' chez '+c+'.'
+  :'Je vous adresse ma candidature pour le poste de '+role+' au sein de '+c+'.';
+ let story=focus==='retail'
+  ?'Au Comptoir de Mathilde, où j’ai exercé comme responsable adjointe d’octobre 2024 à septembre 2026, j’ai participé au pilotage du magasin, à la coordination de l’équipe et à la valorisation de l’expérience client. J’ai également travaillé dans les univers de la bijouterie et de la cosmétique.'
+  :focus==='event'
+  ?'Dans le cadre de mon bénévolat au Marseille Girls Club, j’ai contribué à l’organisation d’événements, à des partenariats et à des contenus social media. Mes expériences en boutique m’ont aussi apporté le sens du service, de la coordination et des priorités opérationnelles.'
+  :'Mon parcours associe des expériences concrètes en communication digitale et création de contenus à une pratique du terrain commercial. Au Marseille Girls Club, j’ai contribué aux événements et aux partenariats ; chez Yuna Bijoux et au Comptoir de Mathilde, j’ai également participé à la communication de marque.';
+ let bridge=hits.length?'Votre annonce met notamment en avant '+oneOfSkills(hits)+'. Ces attentes rejoignent des missions que j’ai déjà réalisées dans mon parcours.':'Je souhaite mettre à profit mon expérience de la relation client, de la communication et de l’organisation, en l’adaptant aux priorités de votre équipe.';
+ if(hasExtra) bridge+=' '+s.fact;
+ let closing=s.tone==='warm'
+  ?'Je serais ravie d’échanger avec vous sur votre équipe, vos projets et la manière dont je pourrais y contribuer. Je vous remercie pour l’attention portée à ma candidature.'
+  :s.tone==='direct'
+  ?'Je serais disponible pour un échange afin de vous présenter plus précisément mon expérience et ma motivation. Je vous remercie de votre attention.'
+  :'Je souhaiterais avoir l’occasion de vous présenter ma motivation et de comprendre plus précisément les enjeux du poste. Je vous remercie pour votre considération.';
+ return ['Madame, Monsieur,',opener,story,bridge,closing,'Je vous prie d’agréer, Madame, Monsieur, l’expression de mes salutations distinguées.']
+}
+function render(){
+ const s=getState(),mode=chooseFocus(s),base=BASE[mode],info=rankSkills(s,base),sorted=evidenceOrder(base,s);
+ $('cv-subtitle').textContent=base.subtitle;
+ $('cv-summary').textContent=base.summary;
+ $('cv-skills').textContent=info.selected.join(' · ');
+ const jobs=$('cv-jobs');jobs.replaceChildren();for(const id of sorted)jobs.append(createJob(JOBS[id]));
+ const chips=$('matches');chips.replaceChildren();for(const skill of info.hits)chips.append(element('span',skill.label,'chip'));if(!info.hits.length)chips.append(element('span','Aucune correspondance directe — à analyser','chip'));
+ const unknown=UNKNOWN.filter(z=>has(norm(s.ad+' '+s.role),z.terms));
+ $('gaps').textContent=unknown.length?'Non attestées dans le CV transmis : '+unknown.map(z=>z.label).join(' · ')+'. Demander confirmation avant de les ajouter.':'Aucune compétence supplémentaire non vérifiée détectée dans la liste de contrôle. Relire chaque exigence de l’annonce.';
+ $('source-note').textContent='Source : CV-FR de Glwadys, sans estimation de chiffre d’affaires ou de performance. '+(s.fact?'La réalisation saisie manuellement devra être confirmée avant envoi.':'');
+ $('letter-to').textContent=s.recipient||'À l’attention de l’équipe de recrutement de '+(s.company||'[entreprise]');
+ $('letter-date').textContent='Vannes, le '+new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'long',year:'numeric'}).format(new Date());
+ $('letter-subject').textContent='Objet : candidature au poste de '+(s.role||'[intitulé du poste]');
+ const txt=paragraphs(s,mode,info.hits);const body=$('letter-body');body.replaceChildren();for(const p of txt)body.append(element('p',p));
+ document.title=(s.role?s.role+' | ':'')+'Atelier Glwadys Career Studio';
+ return txt.join('\n\n')+'\n\nGlwadys Dalleau';
+}
+function toast(t){const v=$('toast');v.textContent=t;v.classList.add('visible');clearTimeout(toast._id);toast._id=setTimeout(()=>v.classList.remove('visible'),2800)}
+function selectTab(kind){
+ const cv=kind==='cv';$('cv-preview').hidden=!cv;$('letter-preview').hidden=cv;
+ $('tab-cv').setAttribute('aria-selected',String(cv));$('tab-letter').setAttribute('aria-selected',String(!cv));
+ document.body.dataset.tab=kind;
+}
+function print(kind){render();document.body.dataset.print=kind;selectTab(kind);window.print()}
+$('atelier-form').addEventListener('submit',e=>{e.preventDefault();render();selectTab('cv');try{localStorage.setItem('glwadys-atelier-draft-v1',JSON.stringify(getState()))}catch{}toast('Dossier préparé : vérifier les faits et enregistrer en PDF.')});
+$('tab-cv').addEventListener('click',()=>selectTab('cv'));
+$('tab-letter').addEventListener('click',()=>selectTab('letter'));
+$('print-current').addEventListener('click',()=>print(document.body.dataset.tab==='letter'?'letter':'cv'));
+$('copy-letter').addEventListener('click',async()=>{const letter=render();try{await navigator.clipboard.writeText(letter);toast('Lettre copiée dans le presse-papiers.')}catch{toast('Copie bloquée : sélectionne le texte de la lettre.')}});
+$('save-draft').addEventListener('click',()=>{try{localStorage.setItem('glwadys-atelier-draft-v1',JSON.stringify(getState()));toast('Brouillon conservé dans ce navigateur.')}catch{toast('Enregistrement local indisponible.')}});
+try{const s=JSON.parse(localStorage.getItem('glwadys-atelier-draft-v1')||'null');if(s&&typeof s==='object')for(const k of ['role','company','ad','focus','tone','recipient','fact'])if(typeof s[k]==='string'&&$(k))$(k).value=s[k]}catch{}
+for(const id of ['role','company','ad','focus','tone','recipient','fact'])$(id).addEventListener('input',()=>render());
+render();
+selectTab('cv');
+</script>
+</body>
+</html>
