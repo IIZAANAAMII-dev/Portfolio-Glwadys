@@ -210,7 +210,7 @@ export function BottomNav({ content, locale }: Props) {
           <a
             key={l}
             className={styles.lang}
-            href={`/${l}`}
+            href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/${l}/`}
             hrefLang={l}
             aria-current={l === locale ? 'true' : undefined}
           >

@@ -70,7 +70,7 @@ function generated(
   focus = '50% 50%',
 ): Partial<MediaItem> {
   return {
-    src: `/media/generated/${path}`,
+    src: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/media/generated/${path}`,
     alt,
     focus,
   };
