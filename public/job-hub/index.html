@@ -15,6 +15,15 @@
 @media(max-width:620px){.hero{padding-top:36px}.hero h1{letter-spacing:-1.4px;font-size:48px}.search-panel{padding:17px}.search-grid{grid-template-columns:1fr}.search-grid .field:last-child{grid-column:auto}.search-bottom{flex-direction:column;align-items:stretch}.quick-tags button{font-size:10px}.search-bottom .btn{width:100%}.section-heading{margin-top:50px}.section-heading h2{font-size:31px}.heading-aside{display:none}.source-grid{grid-template-columns:1fr 1fr;gap:8px}.source-card{padding:14px;min-height:155px}.source-name{font-size:14px!important}.source-card p{font-size:10.5px}.inner-hero{padding:43px 0 21px}.inner-hero h1{font-size:42px}.summary-bar{padding:18px;gap:10px}.summary-number{font-size:30px}.summary-label{font-size:10px}.jobs-grid{grid-template-columns:1fr}.toolbar label{min-width:calc(50% - 7px);flex:1}.application-row{grid-template-columns:1fr;gap:10px}.application-row select{width:100%}.assistant-layout{grid-template-columns:1fr}.draft-form,.draft-preview{padding:18px}.toolbar-actions{width:100%}.toolbar-actions .btn{flex:1}.role-list button{font-size:12px}.top-right{font-size:9px;gap:9px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
 
+
+/* Radar : nouveau travail, actions directes, titres accessibles */
+.radar-head{display:flex;align-items:center;flex-wrap:wrap;gap:11px;margin:13px 0 22px}
+.radar-pill{display:inline-flex;align-items:center;min-height:38px;border-radius:99px;border:1px solid #e3c7cf;background:#f6e9eb;color:#873f55;font-size:11px;font-weight:700;padding:8px 14px}
+.radar-note{color:var(--muted);font-size:11px;flex:1 1 220px}
+.job-new{font:700 9px var(--mono);color:#824451;background:#f3e4e8;padding:5px 8px;border-radius:99px;letter-spacing:.05em}
+.job-actions{display:flex;flex-wrap:wrap;gap:7px}
+.job-actions .btn{flex:1 1 auto;white-space:normal;text-align:center}
+@media(max-width:650px){.radar-head{align-items:stretch}.radar-head .btn{width:100%}.job-actions .btn{flex:1 1 100%}}
 </style>
 <script>
 /* Glwadys Career Studio — statique, sans serveur ni collecte de données personnelles. */
@@ -61,42 +70,64 @@ function locationValue(){return $('#location').value}
 function selectedKeyword(){const q=$('#keyword').value.trim();return q || 'communication'}
 function shouldShowSource(s,loc){if(isBelgium(loc))return s.zone==='BE'||s.zone.includes('BE')||s.zone==='REMOTE';if(isRemote(loc))return s.zone==='REMOTE'||s.name==='LinkedIn Jobs'||s.name==='Indeed';return s.zone.includes('FR')||s.zone==='REMOTE'}
 function renderSources(){const q=selectedKeyword(),l=locationValue();const sources=PLATFORMS.filter(s=>shouldShowSource(s,l));$('#source-grid').innerHTML=sources.map(s=>`<a class="source-card" target="_blank" rel="noopener noreferrer" href="${esc(s.fn(q,l))}" aria-label="Rechercher ${esc(q)} sur ${esc(s.name)}"><span class="source-arrow">↗</span><span class="source-badge">${esc(s.zone)}</span><span class="source-name">${esc(s.name)}</span><p>${esc(s.blurb)}</p></a>`).join('');}
-function normalJob(raw){if(!raw||typeof raw!=='object'||!validUrl(raw.url))return null;return {id:String(raw.id||raw.url),title:String(raw.title||'').slice(0,160),company:String(raw.company||'Entreprise').slice(0,90),location:String(raw.location||'Lieu non précisé').slice(0,100),description:String(raw.description||'').slice(0,800),source:String(raw.source||'Source externe').slice(0,40),url:raw.url,remote:!!raw.remote,date:raw.date||null};}
+function normalJob(raw){if(!raw||typeof raw!=='object'||!validUrl(raw.url))return null;return {id:String(raw.id||raw.url),title:String(raw.title||'').slice(0,160),company:String(raw.company||'Entreprise').slice(0,90),location:String(raw.location||'Lieu non précisé').slice(0,100),description:String(raw.description||'').slice(0,3300),source:String(raw.source||'Source externe').slice(0,40),url:raw.url,remote:!!raw.remote,date:raw.date||null};}
+const RADAR_SEEN_KEY='glwadys-radar-seen-v1';
+let newJobIds=new Set(), radarFirstVisit=false;
+function markNewJobs(){
+  try{
+    const raw=localStorage.getItem(RADAR_SEEN_KEY);
+    radarFirstVisit=raw===null;
+    const previous=new Set(JSON.parse(raw||'[]'));
+    newJobIds=new Set(radarFirstVisit?[]:jobs.filter(j=>!previous.has(j.id)).map(j=>j.id));
+    localStorage.setItem(RADAR_SEEN_KEY,JSON.stringify(jobs.map(j=>j.id).slice(0,1000)));
+  }catch{newJobIds=new Set()}
+  const alerts=$('#new-job-count');
+  if(alerts)alerts.textContent=newJobIds.size?newJobIds.size+' nouvelles offres':'Nouveautés surveillées';
+  if(newJobIds.size&&!radarFirstVisit){
+    toast(newJobIds.size+' nouvelle(s) annonce(s) dans le radar.');
+    try{
+      if(localStorage.getItem('glwadys-alerts-enabled')==='true'&&'Notification' in window&&Notification.permission==='granted'){
+        new Notification('Glwadys Career Studio',{body:newJobIds.size+' nouvelles offres à découvrir. Ouvre le radar pour les voir.'});
+      }
+    }catch{}
+  }
+}
 async function loadFeed(){
-  try {
-    const response=await fetch('./jobs-feed.json',{cache:'no-store'});
-    if(!response.ok)throw Error('Le catalogue local est indisponible');
-    const data=await response.json();
-    jobs=(Array.isArray(data.jobs)?data.jobs:[]).map(normalJob).filter(Boolean);
-    feedUpdated=data.generated_at||null;
-    if(!jobs.length)throw Error('Le catalogue local est encore vide');
-    $('#feed-status').textContent=feedUpdated?'Actualisé le '+formatDate(feedUpdated):'Catalogue disponible';
-    $('#feed-side-count').textContent=jobs.length;
-  } catch (localError) {
-    try {
-      // Public Remotive endpoint. Fetch only after a missing/empty local feed,
-      // once per page load. Remotive lists can be delayed by at least 24h.
-      const response=await fetch('https://remotive.com/api/remote-jobs?category=marketing&limit=200',{cache:'default'});
-      if(!response.ok)throw Error('API Remotive indisponible');
+  feedError=null;
+  const urls=['./api/jobs','./jobs-feed.json'];
+  for(const url of urls){
+    try{
+      const response=await fetch(url,{cache:url.includes('/api/')?'default':'no-store'});
+      if(!response.ok)throw Error('HTTP '+response.status);
       const data=await response.json();
-      const rolePattern=/communication|marketing|social|content|community|brand|partnership|event|retail|sales|customer experience/i;
-      jobs=(Array.isArray(data.jobs)?data.jobs:[]).filter(x=>rolePattern.test(x.title||'')).map(x=>normalJob({
-        id:'remotive-'+x.id,
-        title:x.title,
-        company:x.company_name,
-        location:x.candidate_required_location||'Télétravail',
-        description:String(x.description||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').slice(0,800),
-        source:'Remotive',url:x.url,remote:true,date:x.publication_date
-      })).filter(Boolean);
-      if(!jobs.length)throw Error('Aucune offre disponible');
-      feedError=null;
-      $('#feed-status').textContent='Remotive · annonces différées d’au moins 24 h';
+      jobs=(Array.isArray(data.jobs)?data.jobs:[]).map(normalJob).filter(Boolean);
+      feedUpdated=data.generated_at||null;
+      if(!jobs.length)throw Error('Source sans offres');
+      const label=(data.sources||[]).join(' · ')||'Sources publiques';
+      $('#feed-status').textContent=label+' · '+(feedUpdated?'Actualisé le '+formatDate(feedUpdated):'Catalogue disponible');
       $('#feed-side-count').textContent=jobs.length;
-    } catch (remoteError) {
-      feedError=String(remoteError.message||remoteError);
-      $('#feed-status').textContent='Flux indisponible ; recherches externes accessibles';
-      $('#feed-side-count').textContent='—';
-    }
+      markNewJobs();renderJobs();return;
+    }catch(e){feedError=String(e.message||e)}
+  }
+  // Browser fallback: one public Remotive call if the server / feed are unavailable.
+  try{
+    const response=await fetch('https://remotive.com/api/remote-jobs?category=marketing&limit=200',{cache:'default'});
+    if(!response.ok)throw Error('Remotive indisponible');
+    const data=await response.json();
+    const re=/communication|marketing|social|content|community|brand|partnership|event|retail|sales|customer experience/i;
+    jobs=(Array.isArray(data.jobs)?data.jobs:[]).filter(x=>re.test(x.title||'')).map(x=>normalJob({
+      id:'remotive-'+x.id,title:x.title,company:x.company_name,
+      location:x.candidate_required_location||'Remote',
+      description:String(x.description||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' '),
+      source:'Remotive',url:x.url,remote:true,date:x.publication_date
+    })).filter(Boolean);
+    $('#feed-status').textContent='Remotive · annonces décalées d’au moins 24 h';
+    $('#feed-side-count').textContent=jobs.length;
+    markNewJobs();
+  }catch(e){
+    jobs=[];feedError=String(e.message||e);
+    $('#feed-status').textContent='Flux temporairement indisponible ; recherches externes accessibles';
+    $('#feed-side-count').textContent='—';
   }
   renderJobs();
 }
@@ -104,7 +135,7 @@ function jobScore(job){let txt=lower([job.title,job.description].join(' '));let 
 function regionMatch(job,region){const loc=lower(job.location);if(region==='all')return true;if(region==='remote')return job.remote;if(region==='fr')return /france|paris|lyon|rennes|nantes|brest|vannes|marseille|bordeaux|lille|nice|toulouse/i.test(loc);if(region==='be')return /belgium|belgique|brussels|bruxelles|liege|liège|antwerp|namur|ghent|gent/i.test(loc);return !(/france|belgium|belgique/i.test(loc))}
 function renderJobs(){if(!$('#jobs-grid'))return;const q=lower($('#offer-query').value.trim());const fam=$('#family').value;const reg=$('#offer-region').value;let list=jobs.filter(job=>regionMatch(job,reg));if(q)list=list.filter(job=>lower(job.title+' '+job.company+' '+job.description).includes(q));if(fam!=='all')list=list.filter(job=>familyKeywords[fam].some(t=>lower(job.title+' '+job.description).includes(lower(t))));list.sort((a,b)=>$('#offer-sort').value==='newest'?(new Date(b.date||0)-new Date(a.date||0)):jobScore(b)-jobScore(a));$('#total-jobs').textContent=jobs.length;$('#matching-jobs').textContent=list.length;
 if(!list.length){$('#jobs-grid').innerHTML=`<div class="empty-state"><h3>${jobs.length?'Aucune offre avec ces filtres.':'À la recherche des prochaines offres.'}</h3><p>${jobs.length?'Essaie un autre mot-clé ou sélectionne une autre zone.':'Les flux automatiques ne sont pas encore alimentés ou aucune annonce pertinente n’a été détectée. Tu peux dès maintenant chercher sur les plateformes françaises et belges.'}</p><button class="btn btn-primary" type="button" data-go-search>Explorer les plateformes ↗</button></div>`;return;}
-$('#jobs-grid').innerHTML=list.slice(0,90).map(job=>{const saved=applications.some(a=>a.url===job.url);return `<article class="job-card"><div class="job-top"><span class="job-source">${esc(job.source)}</span><span class="job-score">Indice ${jobScore(job)}/99</span></div><h3>${esc(job.title)}</h3><div class="job-company">${esc(job.company)}</div><div class="job-details">${esc(job.location)}${job.remote?' · Remote':''} ${job.date?' · '+formatDate(job.date):''}</div><p class="job-description">${esc(job.description||'Ouvre l’annonce pour découvrir les missions et les conditions proposées.').slice(0,260)}</p><div class="job-actions"><a class="btn btn-primary" href="${esc(job.url)}" target="_blank" rel="noopener noreferrer">Voir l’annonce ↗</a><button class="btn btn-outline" type="button" data-save-job="${esc(job.id)}" ${saved?'disabled':''}>${saved?'Enregistrée ✓':'+ Suivre cette offre'}</button></div></article>`;}).join('');}
+$('#jobs-grid').innerHTML=list.slice(0,90).map(job=>{const saved=applications.some(a=>a.url===job.url);return `<article class="job-card"><div class="job-top"><span class="job-source">${esc(job.source)}</span>${newJobIds.has(job.id)?'<span class="job-new">NOUVEAU</span>':''}<span class="job-score">Indice ${jobScore(job)}/99</span></div><h3>${esc(job.title)}</h3><div class="job-company">${esc(job.company)}</div><div class="job-details">${esc(job.location)}${job.remote?' · Remote':''} ${job.date?' · '+formatDate(job.date):''}</div><p class="job-description">${esc(job.description||'Ouvre l’annonce pour découvrir les missions et les conditions proposées.').slice(0,260)}</p><div class="job-actions"><a class="btn btn-primary" href="${esc(job.url)}" target="_blank" rel="noopener noreferrer">Voir l’annonce ↗</a><button class="btn btn-outline" type="button" data-generate-job="${esc(job.id)}">✦ CV + lettre</button><button class="btn btn-outline" type="button" data-save-job="${esc(job.id)}" ${saved?'disabled':''}>${saved?'Enregistrée ✓':'+ Suivre cette offre'}</button></div></article>`;}).join('');}
 function makeId(){return (globalThis.crypto?.randomUUID?.()??('g'+Date.now()+'-'+Math.random().toString(16).slice(2)))}
 function addApplication(data){if(!validUrl(data.url)){toast('Entre un lien d’annonce valide (https://…).');return false;}if(applications.some(v=>v.url===data.url)){toast('Cette offre est déjà enregistrée.');return false;}applications.unshift({id:makeId(),title:String(data.title||'').slice(0,150),company:String(data.company||'').slice(0,150),city:String(data.city||''),url:data.url,notes:String(data.notes||'').slice(0,2000),status:'A étudier',createdAt:new Date().toISOString(),sentAt:null});persist();renderApplications();renderJobs();toast('Offre enregistrée dans ton suivi !');return true;}
 function updateCounts(){const sent=applications.filter(a=>['Envoyée','Entretien','Relance faite','Offre reçue'].includes(a.status)).length;const reminders=applications.filter(a=>a.status==='Envoyée'&&a.sentAt&&daysSince(a.sentAt)>=7).length;$('#app-count').textContent=applications.length;$('#count-total').textContent=applications.length;$('#count-sent').textContent=sent;$('#count-reminders').textContent=reminders;}
@@ -120,8 +151,27 @@ async function importJson(file){if(!file)return;try{if(file.size>3_000_000)throw
 function openApplicationModal(){const dialog=$('#application-dialog');$('#application-form').reset();dialog.showModal();$('#app-title').focus()}
 function init(){const date=new Date();$('#today-label').textContent=date.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});$$('[data-view]').forEach(n=>n.addEventListener('click',()=>showView(n.dataset.view)));$$('[data-role]').forEach(n=>n.addEventListener('click',()=>{$('#keyword').value=n.dataset.role;renderSources();showView('recherche');$('#source-grid').scrollIntoView({behavior:'smooth',block:'start'});}));$('#keyword').addEventListener('input',renderSources);$('#location').addEventListener('change',renderSources);$('#family').addEventListener('change',()=>{renderSources();renderJobs()});$('#search-all').addEventListener('click',()=>{renderSources();$('#source-grid').scrollIntoView({behavior:'smooth',block:'start'});toast('Sélectionne un site pour ouvrir les offres correspondant à tes critères.');});
 $('#offer-query').addEventListener('input',renderJobs);$('#offer-region').addEventListener('change',renderJobs);$('#offer-sort').addEventListener('change',renderJobs);$('#application-filter').addEventListener('change',renderApplications);$('#add-application').addEventListener('click',openApplicationModal);$('#dialog-close').addEventListener('click',()=>$('#application-dialog').close());$('#application-form').addEventListener('submit',event=>{event.preventDefault();const ok=addApplication({title:$('#app-title').value,company:$('#app-company').value,city:$('#app-city').value,url:$('#app-url').value,notes:$('#app-notes').value});if(ok)$('#application-dialog').close()});$('#export-json').addEventListener('click',exportJson);$('#export-csv').addEventListener('click',exportCsv);$('#import-file').addEventListener('change',e=>{importJson(e.target.files?.[0]);e.target.value=''});$('#draft-form').addEventListener('submit',e=>{e.preventDefault();draft();toast('Brouillon généré, à personnaliser avant envoi.')});$('#copy-draft').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('#draft-result').textContent);toast('Message copié.')}catch{toast('La copie automatique n’est pas disponible ici.')}});
-document.addEventListener('click',event=>{const target=event.target.closest('[data-save-job],[data-go-search],[data-open-add],[data-delete-id],[data-draft-id]');if(!target)return;if(target.hasAttribute('data-go-search'))showView('recherche');if(target.hasAttribute('data-open-add'))openApplicationModal();if(target.hasAttribute('data-save-job')){const found=jobs.find(j=>j.id===target.dataset.saveJob);if(found)addApplication({title:found.title,company:found.company,city:found.location,url:found.url,notes:`Source : ${found.source}`})}if(target.hasAttribute('data-delete-id')){const id=target.dataset.deleteId;if(window.confirm('Supprimer cette offre du suivi ?')){applications=applications.filter(a=>a.id!==id);persist();renderApplications();renderJobs()}}if(target.hasAttribute('data-draft-id')){const a=applications.find(a=>a.id===target.dataset.draftId);if(a){$('#draft-role').value=a.title;$('#draft-company').value=a.company;$('#draft-detail').value=a.notes||'';showView('assistant');draft()}}});document.addEventListener('change',event=>{const target=event.target.closest('[data-status-id]');if(!target)return;const a=applications.find(a=>a.id===target.dataset.statusId);if(!a)return;const wasSent=a.status==='Envoyée';a.status=target.value;if(a.status==='Envoyée'&&!wasSent)a.sentAt=new Date().toISOString();if(a.status==='A étudier')a.sentAt=null;persist();renderApplications()});
-updateCounts();renderSources();renderApplications();showView(location.hash.replace('#','')||'recherche');loadFeed();}
+document.addEventListener('click',event=>{const target=event.target.closest('[data-save-job],[data-generate-job],[data-go-search],[data-open-add],[data-delete-id],[data-draft-id]');if(!target)return;if(target.hasAttribute('data-go-search'))showView('recherche');if(target.hasAttribute('data-open-add'))openApplicationModal();if(target.hasAttribute('data-generate-job')){
+ const found=jobs.find(j=>j.id===target.dataset.generateJob);
+ if(found){
+   try{sessionStorage.setItem('glwadys-job-selection-v1',JSON.stringify({
+     role:found.title,company:found.company,ad:found.description,source:found.source,url:found.url,
+     location:found.location,date:found.date
+   }));}catch{}
+   window.location.href='atelier/?source=offre';
+ }
+}if(target.hasAttribute('data-save-job')){const found=jobs.find(j=>j.id===target.dataset.saveJob);if(found)addApplication({title:found.title,company:found.company,city:found.location,url:found.url,notes:`Source : ${found.source}`})}if(target.hasAttribute('data-delete-id')){const id=target.dataset.deleteId;if(window.confirm('Supprimer cette offre du suivi ?')){applications=applications.filter(a=>a.id!==id);persist();renderApplications();renderJobs()}}if(target.hasAttribute('data-draft-id')){const a=applications.find(a=>a.id===target.dataset.draftId);if(a){$('#draft-role').value=a.title;$('#draft-company').value=a.company;$('#draft-detail').value=a.notes||'';showView('assistant');draft()}}});document.addEventListener('change',event=>{const target=event.target.closest('[data-status-id]');if(!target)return;const a=applications.find(a=>a.id===target.dataset.statusId);if(!a)return;const wasSent=a.status==='Envoyée';a.status=target.value;if(a.status==='Envoyée'&&!wasSent)a.sentAt=new Date().toISOString();if(a.status==='A étudier')a.sentAt=null;persist();renderApplications()});
+$('#enable-radar-alerts')?.addEventListener('click',async()=>{
+ try{
+  if(!('Notification' in window)){toast('Ce navigateur ne prend pas en charge les notifications de page.');return}
+  const state=await Notification.requestPermission();
+  localStorage.setItem('glwadys-alerts-enabled',String(state==='granted'));
+  toast(state==='granted'?'Alertes activées lorsque le site est ouvert.':'Notifications non autorisées ; les nouveautés restent signalées dans l’app.');
+ }catch{toast('Notifications indisponibles sur cet appareil.')}
+});
+updateCounts();renderSources();renderApplications();showView(location.hash.replace('#','')||'recherche');loadFeed();
+setInterval(()=>{if(document.visibilityState==='visible')loadFeed()},30*60*1000);
+}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 
 </script>
@@ -157,9 +207,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    <div class="source-grid" id="source-grid"></div>
    <div class="split-section"><div><p class="eyebrow">02 — LES MÉTIERS QUI TE CORRESPONDENT</p><h2>Ton champ des possibles.</h2><p>Ton parcours mêle gestion de boutique, conseil client, merchandising, contenus digitaux et organisation d’événements. Une double approche, c’est un atout quand on choisit les bons postes.</p></div><div class="role-list"><button type="button" data-role="Chargée de communication">Chargée de communication <span>01 ↗</span></button><button type="button" data-role="Community manager">Community manager <span>02 ↗</span></button><button type="button" data-role="Responsable adjointe de magasin">Responsable adjointe <span>03 ↗</span></button><button type="button" data-role="Chargée événementiel">Chargée d'événementiel <span>04 ↗</span></button><button type="button" data-role="Chargée de marketing">Chargée de marketing <span>05 ↗</span></button></div></div>
   </section>
-  <section class="view" id="view-offres" aria-labelledby="offers-title"><div class="inner-hero"><p class="eyebrow accent">OPPORTUNITÉS / FLUX PUBLICS</p><h1 id="offers-title">Des offres, <em>pas des promesses.</em></h1><p>Offres issues des API publiques Remotive (télétravail) et Arbeitnow (Europe), mises à jour lors des publications du site. Consulte toujours la date et l’annonce d’origine avant de postuler.</p></div>
+  <section class="view" id="view-offres" aria-labelledby="offers-title"><div class="inner-hero"><p class="eyebrow accent">OPPORTUNITÉS / FLUX PUBLICS</p><h1 id="offers-title">Votre radar. <em>Vos opportunités.</em></h1><p>Offres issues des sources publiques Remotive, Jobicy et Arbeitnow lorsque disponibles. Les annonces sont actualisées par le serveur et le tableau est rechargé lorsque l'application est ouverte. Le lien de l'annonce officielle fait foi.</p></div>
    <div class="summary-bar"><div><span class="summary-number" id="total-jobs">—</span><span class="summary-label">offres dans le flux</span></div><div><span class="summary-number" id="matching-jobs">—</span><span class="summary-label">selon tes filtres</span></div><div><span class="summary-label" id="feed-status">Chargement du catalogue…</span><span class="summary-label">Source affichée sur chaque annonce</span></div></div>
    <div class="toolbar"><label>Mot clé <input id="offer-query" placeholder="Ex. content, communication, sales"></label><label>Zone <select id="offer-region"><option value="all">Toutes les zones</option><option value="fr">France</option><option value="be">Belgique</option><option value="remote">Remote</option><option value="anywhere">Europe / autres</option></select></label><label>Trier <select id="offer-sort"><option value="match">Pertinence</option><option value="newest">Plus récentes</option></select></label></div>
+   <div class="radar-head"><span id="new-job-count" class="radar-pill" aria-live="polite">Détection des nouveautés…</span><button type="button" id="enable-radar-alerts" class="btn btn-outline">🔔 Alertes quand l’app est ouverte</button><span class="radar-note">Les alertes externes lorsque l'app est fermée nécessitent un service de notification distinct.</span></div>
    <div id="jobs-grid" class="jobs-grid" aria-live="polite"></div><div class="end-note">Les scores sont de simples indices basés sur les mots-clés du CV, pas une prédiction de recrutement. Les plateformes d’emploi locales sont accessibles via « Rechercher ».</div>
   </section>
   <section class="view" id="view-candidatures" aria-labelledby="applications-title"><div class="inner-hero"><p class="eyebrow accent">TABLEAU DE BORD / CANDIDATURES</p><h1 id="applications-title">Un suivi <em>sans stress.</em></h1><p>Enregistre les offres qui t'intéressent, note tes envois et n'oublie aucune relance. Rien n’est envoyé à un serveur.</p></div>
