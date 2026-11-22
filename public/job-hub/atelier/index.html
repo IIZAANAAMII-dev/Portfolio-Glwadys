@@ -404,6 +404,19 @@ try {
  if(['communication','retail','event'].includes(focus))$('focus').value=focus;
  if(title&&title.length<120)$('role').value=title;
 } catch {}
+try {
+  const raw=sessionStorage.getItem('glwadys-job-selection-v1');
+  const offer=raw?JSON.parse(raw):null;
+  if(offer&&typeof offer.role==='string'&&typeof offer.company==='string'){
+    $('role').value=offer.role.slice(0,120);
+    $('company').value=offer.company.slice(0,110);
+    const brief=String(offer.ad||'').trim();
+    $('ad').value=(brief||['Poste : '+offer.role,'Entreprise : '+offer.company,'Lieu : '+(offer.location||'non précisé'),'Ouvrir l’annonce d’origine pour vérifier les missions avant envoi.'].join('\n')).slice(0,18000);
+    $('focus').value='auto';
+    sessionStorage.removeItem('glwadys-job-selection-v1');
+    toast('Annonce importée. Le CV et la lettre sont prêts à être personnalisés.');
+  }
+}catch{}
 for(const id of ['role','company','ad','focus','tone','recipient','fact'])$(id).addEventListener('input',()=>render());
 render();
 selectTab('cv');
