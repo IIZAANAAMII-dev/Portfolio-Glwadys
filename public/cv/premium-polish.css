@@ -1,0 +1,91 @@
+/* Recruiter-facing page: same premium visual language as Glwadys's right-circle CV. */
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Lato:wght@400;500;700&display=swap');
+:root{--bg:#faf7f5;--ink:#262329;--wine:#93495c;--line:#e3d5d1;--muted:#645d63;--panel:#f2e9e7}
+body{font-family:'Lato',Arial,sans-serif;background:radial-gradient(circle at 100% -10%,rgba(148,73,92,.09),transparent 32rem),var(--bg)}
+.wrap{max-width:1160px}
+header{min-height:80px}
+.brand{font-family:'EB Garamond',Georgia,serif;font-size:34px}
+nav a{font-size:12px;transition:color .2s}
+nav a:hover{color:var(--wine)}
+.hero{grid-template-columns:minmax(0,1fr) 204px;padding:85px 0 50px;position:relative}
+.hero h1{font-family:'EB Garamond',Georgia,serif;font-size:clamp(66px,9vw,126px);letter-spacing:-.042em;line-height:.9;margin:20px 0 25px}
+.hero .eyebrow{letter-spacing:.16em}
+.hero .sub{font-size:13px;letter-spacing:.065em}
+.mark{position:relative;width:183px;height:183px;padding:9px;border:2px solid var(--wine);border-radius:50%;background:var(--bg);color:var(--wine);font:400 64px/1 'EB Garamond',Georgia,serif;box-shadow:0 0 0 7px var(--bg),0 0 0 8px #e4cace;overflow:visible}
+.mark:before{content:'';position:absolute;z-index:-1;right:-42px;top:-38px;width:220px;height:220px;border-radius:50%;background:#f1e8e6}
+.mark img{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:center 24%;filter:grayscale(1)}
+.contact{padding:19px 0;font-size:13px;line-height:1.65}
+.grid{grid-template-columns:minmax(0,1.7fr) minmax(240px,.8fr);gap:45px;margin:52px 0 76px}
+.lead{font-size:15px;line-height:1.78;max-width:69ch;color:#514b52}
+h2{letter-spacing:.08em;font-size:12px;padding-bottom:12px;margin-top:37px}
+h2:before{width:9px;height:9px;border-radius:50%;vertical-align:middle;margin:0 14px 2px 0}
+.job{padding:0 0 25px;margin-bottom:22px}
+.job h3{font-size:16px;line-height:1.5}
+.job .meta{font-size:12px;margin:8px 0}
+.job li{font-size:13px;line-height:1.7}
+aside{background:#f7f0ed;border:1px solid #e8d7d4;border-top:5px solid var(--wine);border-radius:15px;padding:24px 22px;box-shadow:0 18px 37px #35252c09}
+.kpis{background:#efe6e3;border:1px solid #e8d3d3;padding:23px 9px 26px;border-radius:13px;display:grid;grid-template-columns:1fr;gap:19px;margin:0 0 32px}
+.kpis>div{border:0!important;text-align:center;display:flex;flex-direction:column;align-items:center;gap:9px}
+.kpis strong{font:400 43px/1 'EB Garamond',Georgia,serif;display:grid;place-items:center;width:100px;height:100px;background:#fffdfa;color:var(--wine);border-radius:50%;border:2px solid var(--wine);outline:1px solid #c9a4aa;outline-offset:-8px;white-space:nowrap}
+.kpis span{font-size:10px;color:#5b5156;max-width:16ch;line-height:1.5;letter-spacing:.07em;font-weight:700}
+.downloads{gap:10px}
+.btn{border-radius:9px;min-height:48px;display:flex;align-items:center;justify-content:center;padding:14px 11px;transition:background .2s,transform .2s;line-height:1.4}
+.btn:hover{transform:translateY(-2px)}
+.btn.secondary:hover{background:#f7e8e8}
+.tags span{border-color:#d8c5c5;border-radius:99px;padding:6px 11px;background:#fff9f8}
+.small{line-height:1.7;font-size:12px}
+footer{padding:29px 0;font-size:11px}
+@media(max-width:720px){.wrap{padding:0 20px}.hero{grid-template-columns:1fr;padding:45px 0 30px}.hero h1{font-size:clamp(63px,14vw,91px)}.mark{display:block;width:116px;height:116px;position:absolute;right:10px;top:45px;padding:6px}.mark:before{width:135px;height:135px;right:-18px;top:-17px}.hero .sub{max-width:70%}.grid{grid-template-columns:1fr;gap:25px;margin-top:30px}.kpis{grid-template-columns:repeat(3,1fr);padding:16px 7px;gap:8px}.kpis strong{height:73px;width:73px;font-size:31px;outline-offset:-6px}.kpis span{font-size:8px}aside{padding:20px}.contact{gap:9px 20px}}
+@media(max-width:420px){.hero h1{font-size:59px}.mark{width:95px;height:95px;top:41px}.mark:before{width:116px;height:116px}.hero .sub{max-width:90%;padding-top:10px}.kpis strong{width:64px;height:64px;font-size:26px}}
+@media print{.mark{display:none}.kpis{grid-template-columns:repeat(3,1fr);margin:0 0 10mm}.kpis strong{height:15mm;width:15mm;font-size:18pt}.kpis span{font-size:7pt}.grid{grid-template-columns:1fr;gap:0}.job{break-inside:avoid}.job li{font-size:9pt}body{background:white}}
+
+
+/* v3 - precision: metrics never protrude from their right-hand box. */
+aside#telechargements .kpis{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:12px;
+  padding:24px 12px 22px;
+  border-radius:15px;
+  overflow:hidden;
+}
+aside#telechargements .kpis>div{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-width:0;
+  text-align:center;
+  padding:4px 0;
+}
+aside#telechargements .kpis strong{
+  flex:none;
+  display:grid;
+  place-items:center;
+  margin:0 auto;
+  width:87px;
+  height:87px;
+  border-radius:50%;
+  outline-offset:-7px;
+  font-size:38px;
+  white-space:nowrap;
+}
+aside#telechargements .kpis span{
+  max-width:100%;
+  line-height:1.45;
+  overflow-wrap:break-word;
+  letter-spacing:.04em;
+  margin:0;
+}
+@media(max-width:720px){
+  aside#telechargements .kpis{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    padding:15px 7px;
+    gap:5px;
+  }
+  aside#telechargements .kpis strong{width:68px;height:68px;font-size:29px}
+  aside#telechargements .kpis span{font-size:8px}
+}
+@media(max-width:390px){
+  aside#telechargements .kpis strong{width:60px;height:60px;font-size:25px}
+}
