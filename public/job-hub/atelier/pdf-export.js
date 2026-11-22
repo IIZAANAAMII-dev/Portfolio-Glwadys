@@ -151,8 +151,8 @@ function basePage(page,label){
  page.text(42,828,'GLWADYS DALLEAU / DOSSIER PROFESSIONNEL 2026',7.4,'F2',C.muted);
  page.text(437,828,'PORTFOLIO EN LIGNE',7.1,'F2',C.wine);
 }
-function titleHeader(page,focus,target){
- page.photo(502,88,47);
+function titleHeader(page,focus,target,clean=false){
+ if(!clean)page.photo(502,88,47);
  page.text(43,86,'Glwadys',45,'F3');
  page.text(43,129,'Dalleau',45,'F3');
  const source=target?('CANDIDATURE : '+target):focus;
@@ -181,7 +181,7 @@ function drawStats(page){
 function cvDoc(s){
  const focus=A.chooseFocus(s),base=A.BASE[focus],skills=A.rankSkills(s,base);
  const clean=!!document.getElementById('ats-clean')?.checked;
- const page=new Page();basePage(page,'CV 2026 · Glwadys Dalleau');titleHeader(page,base.subtitle, s.role?.trim() && s.company?.trim()?s.role:'');
+ const page=new Page();basePage(page,'CV 2026 · Glwadys Dalleau');titleHeader(page,base.subtitle, s.role?.trim() && s.company?.trim()?s.role:'',clean);
  const x=43,w=clean?508:369;
  if(!clean)drawStats(page);
  let y=234;
@@ -249,9 +249,13 @@ function letterDoc(s){
  return buildFile(pages,'Lettre de motivation - '+s.company+' - Glwadys Dalleau');
 }
 let lastUrl=null;
+const generatedUrls=[];
 function showBackup(blob,name,kind){
- if(lastUrl)URL.revokeObjectURL(lastUrl);
+ // Safari can still be opening a previous PDF. Keep the last twelve Blob URLs
+ // alive rather than revoking them while a share/download sheet is active.
  lastUrl=URL.createObjectURL(blob);
+ generatedUrls.push(lastUrl);
+ if(generatedUrls.length>12)URL.revokeObjectURL(generatedUrls.shift());
  const link=document.getElementById('open-generated-pdf');
  if(link){
   link.href=lastUrl;link.hidden=false;link.textContent='Ouvrir le PDF '+(kind==='cv'?'du CV':'de la lettre')+' ↗';
@@ -297,6 +301,6 @@ for(const [id,kind] of [['download-cv-pdf','cv'],['download-letter-pdf','letter'
 }
 const ready=document.getElementById('open-generated-pdf');
 if(ready)ready.addEventListener('click',()=>{A.toast?.('Sur iPhone : utiliser Partager puis Enregistrer dans Fichiers.')});
-window.addEventListener('pagehide',()=>{if(lastUrl)URL.revokeObjectURL(lastUrl)});
+// No immediate pagehide revocation: iOS may still be loading the PDF Blob URL.
 window.GlwadysPDF={generateCv:()=>cvDoc(A.getState()),generateLetter:()=>letterDoc(A.getState()),exportPdf};
 })();
