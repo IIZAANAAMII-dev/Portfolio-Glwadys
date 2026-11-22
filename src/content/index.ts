@@ -231,7 +231,7 @@ const fr: Content = {
       {
         id: 'yuna',
         name: 'Yuna Bijoux',
-        role: 'Social Media & Communication — alternance',
+        role: 'Gestion de boutique & communication — alternance',
         place: 'Brest',
         period: '2022 — 2023',
         summary:
@@ -255,9 +255,9 @@ const fr: Content = {
       {
         id: 'mgc',
         name: 'Marseille Girls Club',
-        role: 'Community & Communication — CDI temps partiel',
+        role: 'Community & Communication — bénévolat',
         place: 'Marseille / hybride',
-        period: '2025 — 2026',
+        period: 'Avril 2024 — Avril 2025',
         summary:
           'Animer et faire grandir un club féminin méditerranéen : formats scrapbook, couverture d’événements, engagement et authenticité.',
         skills: ['Community', 'Contenu digital', 'Événementiel', 'Cohérence de marque'],
@@ -279,9 +279,9 @@ const fr: Content = {
       {
         id: 'comptoir',
         name: 'Le Comptoir de Mathilde',
-        role: 'Expérience client & support vente — CDD',
+        role: 'Responsable adjointe de magasin',
         place: 'Marseille',
-        period: '2024 — aujourd’hui',
+        period: 'Octobre 2024 — Septembre 2026',
         summary:
           'Immersion dans l’épicerie fine artisanale : conseil personnalisé, merchandising soigné et valorisation de marque en boutique.',
         skills: ['Expérience client', 'Merchandising', 'Storytelling de marque', 'Retail'],
@@ -432,7 +432,7 @@ const en: Content = {
       {
         id: 'yuna',
         name: 'Yuna Bijoux',
-        role: 'Social Media & Communication — work-study',
+        role: 'Store management & communication — work-study',
         place: 'Brest',
         period: '2022 — 2023',
         summary:
@@ -456,9 +456,9 @@ const en: Content = {
       {
         id: 'mgc',
         name: 'Marseille Girls Club',
-        role: 'Community & Communication — part-time permanent',
+        role: 'Community & Communication — volunteer',
         place: 'Marseille / hybrid',
-        period: '2025 — 2026',
+        period: 'Avril 2024 — Avril 2025',
         summary:
           'Growing a Mediterranean women’s club: scrapbook formats, event coverage, engagement and authenticity.',
         skills: ['Community', 'Digital Content', 'Event Communication', 'Brand Consistency'],
@@ -480,9 +480,9 @@ const en: Content = {
       {
         id: 'comptoir',
         name: 'Le Comptoir de Mathilde',
-        role: 'Customer Experience & Sales Support — fixed term',
+        role: 'Assistant Store Manager & Customer Experience',
         place: 'Marseille',
-        period: '2024 — present',
+        period: 'October 2024 — September 2026',
         summary:
           'Immersed in artisanal fine food retail: personal advice, meticulous merchandising and in-store brand storytelling.',
         skills: ['Customer Experience', 'Merchandising', 'Brand Storytelling', 'Retail'],
@@ -657,9 +657,9 @@ const ko: Content = {
       {
         id: 'mgc',
         name: 'Marseille Girls Club',
-        role: 'Community & Communication — 파트타임 정규직',
+        role: '커뮤니티 & 커뮤니케이션 — 자원봉사',
         place: '마르세유 / 하이브리드',
-        period: '2025 — 2026',
+        period: 'Avril 2024 — Avril 2025',
         summary:
           '지중해 여성 커뮤니티의 성장. 스크랩북 포맷, 이벤트 기록, 참여와 진정성.',
         skills: ['커뮤니티', '디지털 콘텐츠', '이벤트 커뮤니케이션', '브랜드 일관성'],
@@ -682,7 +682,7 @@ const ko: Content = {
         id: 'comptoir',
         name: 'Le Comptoir de Mathilde',
         role: 'Customer Experience & Sales Support — 계약직',
-        period: '2024 — 현재',
+        period: '2024.10 — 2026.09',
         place: '마르세유',
         summary:
           '수공예 식품 리테일 현장. 맞춤 상담, 정교한 머천다이징, 매장에서의 브랜드 스토리텔링.',
