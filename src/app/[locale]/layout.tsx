@@ -26,12 +26,13 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {};
 
   const { meta } = getContent(locale);
+  const base = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
   return {
     title: meta.title,
     description: meta.description,
     alternates: {
-      canonical: `/${locale}`,
-      languages: Object.fromEntries(locales.map((l) => [htmlLang[l], `/${l}`])),
+      canonical: `${base}/${locale}/`,
+      languages: Object.fromEntries(locales.map((l) => [htmlLang[l], `${base}/${l}/`])),
     },
     openGraph: {
       title: meta.title,
