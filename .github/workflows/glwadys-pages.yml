@@ -1,0 +1,79 @@
+name: Glwadys - Portfolio and Career Studio (GitHub Pages)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/glwadys-pages.yml'
+      - 'next.config.mjs'
+      - 'package*.json'
+      - 'src/**'
+      - 'public/**'
+      - 'scripts/fetch_jobs.py'
+  schedule:
+    - cron: '23 7,19 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: glwadys-github-pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Load Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Collect public job API data (no credentials)
+        run: python3 scripts/fetch_jobs.py
+      - name: Install dependencies
+        run: npm ci
+      - name: Export Next.js portfolio
+        id: portfolio
+        continue-on-error: true
+        env:
+          GITHUB_PAGES: 'true'
+          NEXT_PUBLIC_BASE_PATH: '/Portfolio-Glwadys'
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: npm run build
+      - name: Prepare static Pages site
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f out/fr/index.html ]; then
+            echo 'Portfolio export incomplete; publishing job tool as fallback.'
+            rm -rf out
+            mkdir -p out/job-hub
+            cp public/job-hub/index.html public/job-hub/jobs-feed.json out/job-hub/
+          fi
+          cat > out/index.html <<'EOF'
+          <!doctype html>
+          <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=fr/"><title>Portfolio Glwadys Dalleau</title></head>
+          <body><h1>Glwadys Dalleau</h1><p><a href="fr/">Voir le portfolio</a> · <a href="job-hub/">Career Studio</a></p></body></html>
+          EOF
+          touch out/.nojekyll
+          test -f out/job-hub/index.html
+          test -f out/job-hub/jobs-feed.json
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment: github-pages
+    steps:
+      - name: Publish GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
