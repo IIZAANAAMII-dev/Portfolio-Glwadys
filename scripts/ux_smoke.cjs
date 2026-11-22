@@ -64,6 +64,7 @@ async function main(){
   await page.screenshot({path:path.join(output,'lettre-desktop.png'),fullPage:true});
   await page.evaluate(()=>{document.body.dataset.print='letter';document.body.dataset.tab='letter';});
   await page.pdf({path:path.join(output,'Lettre-exemple-fictif-QA.pdf'),format:'A4',printBackground:true});
+  page.once('dialog',async dialog=>{await dialog.accept()});
   await page.locator('#example-offer').click();
   assert.match(await page.locator('#ad').inputValue(),/OFFRE FICTIVE/);
   await page.locator('#save-draft').click();
