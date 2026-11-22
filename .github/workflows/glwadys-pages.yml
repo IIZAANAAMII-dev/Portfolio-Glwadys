@@ -9,6 +9,7 @@ on:
       - 'src/**'
       - 'public/**'
       - 'scripts/fetch_jobs.py'
+      - 'scripts/build_cvs.py'
   schedule:
     - cron: '23 7,19 * * *'
   workflow_dispatch:
@@ -30,8 +31,16 @@ jobs:
         with:
           node-version: '22'
           cache: npm
+      - name: Load Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Collect public job API data (no credentials)
         run: python3 scripts/fetch_jobs.py
+      - name: Generate premium and ATS CV PDFs
+        run: |
+          python -m pip install --quiet 'reportlab>=4.2,<5'
+          python scripts/build_cvs.py
       - name: Install dependencies
         run: npm ci
       - name: Export Next.js portfolio
@@ -65,6 +74,12 @@ jobs:
           touch out/.nojekyll
           test -f out/job-hub/index.html
           test -f out/job-hub/jobs-feed.json
+      - name: Upload downloadable CVs (also available if Pages is not enabled)
+        uses: actions/upload-artifact@v4
+        with:
+          name: glwadys-cv-pdf
+          path: public/cv/*.pdf
+          retention-days: 30
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload site artifact
