@@ -65,6 +65,84 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;padding:12px 22px;border-radius:8px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:100}.toast.visible{opacity:1}
 @media(max-width:1100px){.app-layout{grid-template-columns:1fr}.headline{grid-template-columns:1fr}.panel{position:static}.doc-shell{max-width:780px}}
 @media(max-width:650px){.site-header{align-items:flex-start;flex-direction:column}.site-nav{gap:12px}.wrap{padding:24px 12px 60px}.headline{margin:0 10px 24px}.panel{padding:18px}.doc-shell{width:100%}.document{padding:24px 17px;min-height:auto}.doc-photo{width:86px;height:86px;right:19px;top:29px}.photo-orbit{width:105px;height:105px;right:0;top:0}.doc-name{font-size:45px}.doc-subtitle{max-width:75%}.cv-inner{grid-template-columns:minmax(0,1fr) 86px;gap:9px}.cv-side{padding:15px 5px;gap:12px}.stat-circle{width:61px;height:61px;font-size:27px}.doc-contact{font-size:9px}.letter-doc .doc-name{font-size:45px}.letter-ornament{display:none}.letter-body{font-size:11px}}
+
+/* === Atelier premium · Direction artistique unique 2026 === */
+:root{--bg:#FCF9F7;--paper:#FFFCFA;--ink:#26232B;--wine:#93465B;--wine-dark:#74384D;--pale:#F2E9E7;--rule:#D9CECB;--muted:#514B54}
+::selection{background:#ead7db;color:var(--wine-dark)}
+.site-header{border-top:3px solid var(--wine);position:relative;z-index:5}
+.logo{letter-spacing:-.024em}.site-nav a{transition:color .2s}
+.wrap{padding-top:43px}
+.headline{margin-bottom:35px;gap:40px}
+.headline h1{letter-spacing:-.037em;max-width:800px}
+.masthead-tools{justify-content:flex-start;gap:7px}
+.pill{border-radius:40px;min-height:28px;background:#fffdfa;border-color:#e5dbd8}
+.panel{border-radius:15px;border-top:4px solid var(--wine);box-shadow:0 20px 42px #4826320c}
+.panel h2{font-size:30px}
+.field{margin:16px 0}.field input,.field textarea,.field select{border-radius:8px;min-height:47px;background:#fffefa;border-color:#dcd3d0;transition:border-color .15s,box-shadow .15s}
+.field textarea{min-height:165px}
+.field input:focus,.field textarea:focus,.field select:focus{box-shadow:0 0 0 3px #95495e17;border-color:var(--wine)}
+.field input::placeholder,.field textarea::placeholder{color:#827b82}
+.actions{gap:10px}.actions .button:first-child{flex:1}
+.button{border-radius:8px;transition:background .2s,border-color .2s,transform .2s;white-space:normal;text-align:center}
+.button:hover{transform:translateY(-1px)}.button:active{transform:translateY(0)}
+.helper{border:1px solid #e5d6d5;background:#f7efed;border-radius:11px;padding:15px;line-height:1.7}
+.result-box{margin-top:22px}.result-box h3{font-size:10.5px;letter-spacing:.09em}.chip{background:#f1e5e6;border:1px solid #dfc9ce}
+.tabs{gap:8px;position:relative}.tab{transition:background .2s,color .2s;min-height:43px}.tab:hover{border-color:var(--wine)}.tabs .right{margin-inline-start:auto}
+.doc-shell{border:1px solid #e5dad6;border-top:0;box-shadow:0 14px 34px #402b3714,0 38px 92px #402b370d}
+.document{padding:37px 46px 31px;background:var(--bg);border-top-width:6px}
+.pdf-overline{font-size:10px;letter-spacing:.105em;margin-bottom:25px}
+.doc-name{font-size:clamp(49px,4.6vw,72px);line-height:.91;letter-spacing:-.024em;margin-bottom:21px}
+.doc-subtitle{font-size:10.7px;letter-spacing:.055em;line-height:1.55;font-weight:700}
+.doc-photo{width:141px;height:141px;right:47px;top:40px;padding:6px;border-width:1.7px}
+.doc-photo .photo-inner{background:#fff9f7;border:1px solid #e1d2d3}
+.photo-orbit{right:-16px;top:-27px;width:165px;height:165px;background:#f2e8e6}
+.photo-dot{right:22px;top:199px;width:9px;height:9px}
+.doc-contact{padding:10px 0;margin:23px 0 22px;line-height:1.5}
+.doc-heading{font-size:10.9px;gap:10px;margin:19px 0 10px}
+.doc-heading:before{background:var(--wine);width:7px;height:7px}
+.doc-intro{font-size:11.35px;line-height:1.57;max-width:69ch}
+.doc-skill-text{font-size:10.8px;line-height:1.7}
+.cv-inner{grid-template-columns:minmax(0,1fr) 158px;gap:26px;margin-top:24px}
+.job{padding:7px 0 10px}.job-title{font-size:11.25px;line-height:1.42}.job-company{font-size:10.2px}
+.job-date{font-size:9.5px;font-variant-numeric:tabular-nums}
+.job ul{font-size:10.35px;line-height:1.5}
+.cv-side{background:#f0e7e5;border-radius:14px;gap:19px;padding:31px 8px 24px;align-self:stretch}
+.cv-side:before{content:"";position:absolute;left:-7px;top:13px;height:1px;width:16px;background:var(--wine);opacity:.3}
+.stat-circle{border-width:1.8px;outline-offset:-8px;outline-color:#d9b6bd;background:#fffbfa;font-size:37px}
+.stat-label{font-size:8.8px;letter-spacing:.065em}
+.doc-footer{margin-top:24px;padding-top:12px}
+.letter-doc{padding-top:48px}
+.letter-meta{line-height:1.8;max-width:100%;padding:15px 0 20px}
+.letter-subject{color:var(--wine-dark);line-height:1.6}
+.letter-body{line-height:1.85;font-size:12.25px;max-width:66ch}
+.letter-ornament{border-color:var(--wine);width:60px;height:60px}
+.letter-signature{font-size:29px}
+@media(max-width:1160px){.app-layout{gap:22px}.panel{padding:21px}.doc-shell{max-width:780px}}
+@media(max-width:650px){
+ .site-header{padding:16px 18px}
+ .wrap{padding:26px 14px 60px}
+ .headline{margin:0 7px 25px}
+ .headline h1{font-size:clamp(41px,10.2vw,56px)}
+ .panel{padding:17px}
+ .field input,.field select,.field textarea{font-size:16px}
+ .doc-shell{border-radius:0}
+ .document{padding:27px 20px 23px}
+ .doc-name{font-size:clamp(40px,10vw,52px)}
+ .doc-subtitle{font-size:9px;max-width:72%}
+ .photo-orbit{right:-19px;top:-6px;width:117px;height:117px}
+ .doc-photo{width:91px;height:91px;right:16px;top:26px}
+ .photo-dot{top:139px;right:22px}
+ .cv-inner{grid-template-columns:minmax(0,1fr) 90px;gap:10px}
+ .cv-side{padding:17px 3px;gap:16px}
+ .stat-circle{width:60px;height:60px;font-size:28px}
+ .stat-label{font-size:8px;letter-spacing:0}
+ .job-title{font-size:10px}
+ .job ul{font-size:9.5px}
+ .tabs .right{margin-left:0}
+ .tabs .button{min-height:41px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
 @page{size:A4;margin:10mm}
 @media print{
   html,body{margin:0;padding:0;background:white!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
@@ -107,9 +185,9 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
         </div>
         <label class="field"><span>Nom du destinataire (optionnel)</span><input id="recipient" maxlength="120" placeholder="Ex. Madame Durand"></label>
         <label class="field"><span>Réalisation supplémentaire vérifiée (optionnel)</span><textarea id="fact" maxlength="450" style="min-height:72px" placeholder="À renseigner uniquement si Glwadys confirme ce fait, avec un exemple précis."></textarea></label>
-        <div class="actions"><button class="button" type="submit">Générer le dossier ↗</button><button class="button alt" type="button" id="save-draft">Sauvegarder le brouillon</button></div>
+        <div class="actions"><button class="button" type="submit">Générer CV + lettre ↗</button><button class="button alt" type="button" id="save-draft">Sauvegarder le brouillon</button></div>
       </form>
-      <div class="helper">Le dossier utilise les cinq expériences du CV original : Le Comptoir de Mathilde, Marseille Girls Club (bénévolat), Kiko Milano, AGLAIA × Une à Une et Yuna Bijoux. Les chiffres commerciaux et les outils non prouvés ne sont jamais ajoutés automatiquement.</div>
+      <div class="helper">La personnalisation conserve les cinq expériences et leurs dates, comme sur le CV original : Le Comptoir de Mathilde, Marseille Girls Club (bénévolat), Kiko Milano, AGLAIA × Une à Une et Yuna Bijoux. Les chiffres commerciaux et les outils non prouvés ne sont jamais ajoutés automatiquement.</div>
       <div class="result-box">
         <h3>Compétences attestées et pertinentes</h3><div class="chips" id="matches"><span class="chip">En attente de l’annonce</span></div>
         <h3 style="margin-top:16px">À confirmer avant envoi</h3><p id="gaps" class="warning">Les exigences de l’annonce non présentes dans son parcours seront signalées ici.</p>
@@ -159,7 +237,7 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
           <div class="doc-footer" style="margin-top:53px"><span>CV & PORTFOLIO DISPONIBLES</span><span>MERCI DE VOTRE ATTENTION</span></div>
         </article>
       </div>
-      <p class="print-guide">L'impression ouvre la fenêtre native du navigateur : sélectionne « Enregistrer en PDF ». Le rendu est conçu pour une page A4. Relire et personnaliser chaque document avant l’envoi reste indispensable.</p>
+      <p class="print-guide">CV et lettre suivent le même univers ivoire et bordeaux. Choisis le document, puis « Enregistrer en PDF ». Les deux fichiers se préparent séparément : vérifie les informations avant toute candidature.</p>
     </section>
   </div>
 </div>
@@ -256,10 +334,12 @@ function selectTab(kind){
  document.body.dataset.tab=kind;
 }
 function print(kind){render();document.body.dataset.print=kind;selectTab(kind);window.print()}
-$('atelier-form').addEventListener('submit',e=>{e.preventDefault();render();selectTab('cv');try{localStorage.setItem('glwadys-atelier-draft-v1',JSON.stringify(getState()))}catch{}toast('Dossier préparé : vérifier les faits et enregistrer en PDF.')});
+$('atelier-form').addEventListener('submit',e=>{e.preventDefault();render();selectTab('cv');try{localStorage.setItem('glwadys-atelier-draft-v1',JSON.stringify(getState()))}catch{}toast('CV et lettre préparés : relis chaque détail avant envoi.')});
 $('tab-cv').addEventListener('click',()=>selectTab('cv'));
 $('tab-letter').addEventListener('click',()=>selectTab('letter'));
 $('print-current').addEventListener('click',()=>print(document.body.dataset.tab==='letter'?'letter':'cv'));
+window.addEventListener('beforeprint',()=>{document.body.dataset.print=document.body.dataset.tab==='letter'?'letter':'cv'});
+
 $('copy-letter').addEventListener('click',async()=>{const letter=render();try{await navigator.clipboard.writeText(letter);toast('Lettre copiée dans le presse-papiers.')}catch{toast('Copie bloquée : sélectionne le texte de la lettre.')}});
 $('save-draft').addEventListener('click',()=>{try{localStorage.setItem('glwadys-atelier-draft-v1',JSON.stringify(getState()));toast('Brouillon conservé dans ce navigateur.')}catch{toast('Enregistrement local indisponible.')}});
 try{const s=JSON.parse(localStorage.getItem('glwadys-atelier-draft-v1')||'null');if(s&&typeof s==='object')for(const k of ['role','company','ad','focus','tone','recipient','fact'])if(typeof s[k]==='string'&&$(k))$(k).value=s[k]}catch{}
