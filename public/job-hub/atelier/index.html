@@ -352,6 +352,12 @@ $('copy-ai-brief').addEventListener('click',async()=>{
  try{await navigator.clipboard.writeText(prompt);toast('Brief IA copié : colle-le dans l’assistant de ton choix.')}catch{toast('Copie indisponible dans ce navigateur.')}
 });
 try{const s=JSON.parse(localStorage.getItem('glwadys-atelier-draft-v1')||'null');if(s&&typeof s==='object')for(const k of ['role','company','ad','focus','tone','recipient','fact'])if(typeof s[k]==='string'&&$(k))$(k).value=s[k]}catch{}
+try {
+ const params=new URLSearchParams(location.search);
+ const focus=params.get('focus'), title=params.get('role');
+ if(['communication','retail','event'].includes(focus))$('focus').value=focus;
+ if(title&&title.length<120)$('role').value=title;
+} catch {}
 for(const id of ['role','company','ad','focus','tone','recipient','fact'])$(id).addEventListener('input',()=>render());
 render();
 selectTab('cv');
