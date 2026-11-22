@@ -217,6 +217,20 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
 .pdf-download-feedback [hidden]{display:none!important}
 @media(max-width:650px){.tabs #download-cv-pdf,.tabs #download-letter-pdf{flex:1 1 160px;min-height:48px;font-size:13px}.tabs #print-current{flex:1 1 100%;min-height:39px}}
 @media print{.pdf-download-feedback{display:none!important}}
+
+/* One document = one export button. Never show the other document's action. */
+#download-cv-pdf[hidden],#download-letter-pdf[hidden],
+#open-generated-cv-pdf[hidden],#open-generated-letter-pdf[hidden]{display:none!important}
+body[data-tab="cv"] #download-letter-pdf,
+body[data-tab="letter"] #download-cv-pdf,
+body:not([data-tab="letter"]) #open-generated-letter-pdf,
+body[data-tab="letter"] #open-generated-cv-pdf{display:none!important}
+.tabs #download-cv-pdf,.tabs #download-letter-pdf{padding:13px 19px;font-size:13px;border-radius:7px}
+@media(max-width:650px){
+ .tabs #download-cv-pdf,.tabs #download-letter-pdf{flex:1 1 100%;font-size:15px;min-height:52px}
+ .tabs #print-current{display:none!important}
+ .pdf-download-feedback a{display:block;width:100%;text-align:center;min-height:44px}
+}
 </style>
 <link rel="stylesheet" href="./ux-polish.css">
 </head>
@@ -263,8 +277,8 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
       <div class="tabs" role="tablist" aria-label="Documents du dossier">
         <button type="button" class="tab" id="tab-cv" role="tab" aria-controls="cv-preview" aria-selected="true">01 / CV premium</button>
         <button type="button" class="tab" id="tab-letter" role="tab" aria-controls="letter-preview" aria-selected="false">02 / Lettre de motivation</button>
-        <button type="button" class="button right" id="download-cv-pdf">Télécharger le CV en PDF ↓</button>
-        <button type="button" class="button" id="download-letter-pdf">Télécharger la lettre en PDF ↓</button>
+        <button type="button" class="button right" id="download-cv-pdf" aria-label="Créer et enregistrer le CV en PDF">Télécharger MON CV (.pdf) ↓</button>
+        <button type="button" class="button" id="download-letter-pdf" hidden aria-label="Créer et enregistrer la lettre de motivation en PDF">Télécharger MA LETTRE (.pdf) ↓</button>
         <button type="button" class="button alt" id="print-current">Imprimer (secours)</button>
         <button type="button" class="button alt" id="copy-letter">Copier la lettre</button><button type="button" class="button alt" id="copy-ats">Copier le texte ATS</button>
       </div>
@@ -304,8 +318,11 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
           <div class="doc-footer" style="margin-top:53px"><span>CV & PORTFOLIO DISPONIBLES</span><span>MERCI DE VOTRE ATTENTION</span></div>
         </article>
       </div>
-      <div class="pdf-download-feedback" aria-live="polite" role="status"><p id="pdf-feedback" hidden></p><a id="open-generated-pdf" hidden target="_blank" rel="noopener noreferrer">Ouvrir le PDF ↗</a></div>
-      <p class="print-guide">CV et lettre suivent le même univers ivoire et bordeaux. Utilise « Télécharger le CV en PDF » ou « Télécharger la lettre en PDF ». Sur iPhone, les boutons PDF ouvrent la feuille de partage : choisis « Enregistrer dans Fichiers ». La fonction « Imprimer » est uniquement une alternative. Vérifie chaque candidature avant l’envoi.</p>
+      <div class="pdf-download-feedback" aria-live="polite" role="status"><p id="pdf-feedback" hidden></p>
+        <a id="open-generated-cv-pdf" hidden target="_blank" rel="noopener noreferrer" download="CV_Glwadys_Dalleau.pdf">Ouvrir mon CV PDF ↗</a>
+        <a id="open-generated-letter-pdf" hidden target="_blank" rel="noopener noreferrer" download="Lettre_Glwadys_Dalleau.pdf">Ouvrir ma lettre PDF ↗</a>
+      </div>
+      <p class="print-guide">CV et lettre suivent le même univers ivoire et bordeaux. Utilise « Télécharger le CV en PDF » ou « Télécharger la lettre en PDF ». Sur iPhone, ouvre ce lien dans Safari : sélectionne l’onglet « CV », puis « Télécharger MON CV ». Pour la lettre, utilise l’onglet « Lettre ». Dans le partage iOS, choisis « Enregistrer dans Fichiers ». « Imprimer » est réservé au secours sur ordinateur. Vérifie chaque candidature avant l’envoi.</p>
     </section>
   </div>
 </div>
@@ -402,6 +419,9 @@ function selectTab(kind){
  const cv=kind==='cv';$('cv-preview').hidden=!cv;$('letter-preview').hidden=cv;
  $('tab-cv').setAttribute('aria-selected',String(cv));$('tab-letter').setAttribute('aria-selected',String(!cv));
  document.body.dataset.tab=kind;
+ $('download-cv-pdf').hidden=!cv;
+ $('download-letter-pdf').hidden=cv;
+ window.GlwadysPDF?.syncUi?.(kind);
 }
 function print(kind){render();document.body.dataset.print=kind;selectTab(kind);window.print()}
 $('atelier-form').addEventListener('submit',e=>{e.preventDefault();render();selectTab('cv');try{localStorage.setItem('glwadys-atelier-draft-v1',JSON.stringify(getState()))}catch{}toast('CV et lettre préparés : relis chaque détail avant envoi.')});
@@ -443,7 +463,7 @@ render();
 selectTab('cv');
 window.GlwadysAtelier={getState,chooseFocus,rankSkills,paragraphs,render,toast,BASE,JOBS};
 </script>
-<script src="./pdf-export.js" defer></script>
+<script src="./pdf-export.js?v=20261122-2105" defer></script>
 <script src="./ux-polish.js" defer></script>
 </body>
 </html>
