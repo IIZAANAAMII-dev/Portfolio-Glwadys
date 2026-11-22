@@ -8,16 +8,16 @@
   /* ---------- COULEUR ----------
      Creative notebook premium : chaude, mate, jamais digitale.
      Les anciens noms restent en alias pour éviter les couleurs orphelines. */
-  --ivory: #f3ede3;
-  --paper: #e8ded1;
-  --warm-taupe: #bca991;
-  --ink: #17140f;
-  --charcoal: #28221c;
+  --ivory: #faf8f6;
+  --paper: #efeae6;
+  --warm-taupe: #b7a5a1;
+  --ink: #24242a;
+  --charcoal: #2e2b2e;
   --champagne: #d0ad72;
   --antique-gold: #986738;
-  --rich-wine: #592027;
-  --espresso: #4a2e21;
-  --wood-brown: #2b1d17;
+  --rich-wine: #9b495c;
+  --espresso: #3d2c31;
+  --wood-brown: #2c2327;
 
   --paper-deep: var(--paper);
   --graphite: var(--charcoal);
@@ -26,13 +26,13 @@
   --blush: var(--warm-taupe);
 
   /* Dérivés — filets et voiles. Écrits en rgb() pour composer l'alpha. */
-  --ink-rgb: 23 20 15;
-  --paper-rgb: 232 222 209;
-  --ivory-rgb: 243 237 227;
+  --ink-rgb: 36 36 42;
+  --paper-rgb: 239 234 230;
+  --ivory-rgb: 250 248 246;
   --champagne-rgb: 208 173 114;
-  --oxblood-rgb: 89 32 39;
+  --oxblood-rgb: 155 73 92;
   --rich-wine-rgb: var(--oxblood-rgb);
-  --wood-rgb: 43 29 23;
+  --wood-rgb: 44 35 39;
 
   /* ---------- SURFACE COURANTE ----------
      Chaque acte redéfinit ces deux variables. Tout le reste en hérite,
@@ -53,6 +53,13 @@
   --text-body: rgb(var(--on-surface-rgb) / 0.9);
   --text-muted: rgb(var(--on-surface-rgb) / 0.72);
   --text-faint: rgb(var(--on-surface-rgb) / 0.5);
+
+  /* Font stacks robustes : la version Web charge en CSS si disponible,
+     sinon Georgia/Arial/Polices systeme conservent une lecture propre. */
+  --font-bodoni: 'Bodoni Moda', Didot, 'Times New Roman', Georgia, serif;
+  --font-inter-tight: 'Inter Tight', Arial, Helvetica, sans-serif;
+  --font-kalam: 'Kalam', 'Segoe Print', cursive;
+  --font-noto-kr: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 
   /* ---------- TYPOGRAPHIE ----------
      Rapport monument/micro ≈ 28:1. C'est ce contraste qui produit le luxe. */
