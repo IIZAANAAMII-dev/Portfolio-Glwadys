@@ -205,6 +205,18 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
   .cv-side{padding:5.5mm 2.5mm!important;gap:3mm!important;min-height:0;justify-content:space-evenly!important;overflow:hidden!important}.stat-circle{width:19mm!important;height:19mm!important;font-size:27pt!important}.stat-label{font-size:7pt!important;margin:0!important;line-height:1.25!important}.doc-formations{font-size:8.5pt}.doc-footer{font-size:7.3pt;margin-top:11pt}
   .letter-doc{padding:11mm 12mm 8mm!important}.letter-doc .doc-name{font-size:49pt!important}.letter-meta{font-size:9pt;margin:11pt 0 25pt}.letter-date{font-size:9pt}.letter-to,.letter-subject{font-size:10pt}.letter-body{font-size:10.2pt;line-height:1.65}.letter-body p{margin:0 0 12pt}.letter-signature{margin-top:20pt}
 }
+
+/* iOS-ready direct PDF actions: comfortable touch targets and persistent recovery link */
+.tabs #download-cv-pdf,.tabs #download-letter-pdf{background:#93465b;color:#fff;border-color:#93465b;white-space:normal;text-align:center;min-height:44px}
+.tabs #download-cv-pdf:hover,.tabs #download-letter-pdf:hover{background:#74384d;border-color:#74384d}
+.tabs #print-current{font-size:11px}
+.pdf-download-feedback{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;max-width:810px;margin:0 auto 15px}
+.pdf-download-feedback p{font-size:12px;color:#60545a;margin:0;line-height:1.5;flex:1 1 310px}
+.pdf-download-feedback a{font-size:12px;color:#93465b;font-weight:700;padding:9px 14px;border:1px solid #93465b;border-radius:7px;text-decoration:none}
+.pdf-download-feedback a:hover{background:#f2e9e7}
+.pdf-download-feedback [hidden]{display:none!important}
+@media(max-width:650px){.tabs #download-cv-pdf,.tabs #download-letter-pdf{flex:1 1 160px;min-height:48px;font-size:13px}.tabs #print-current{flex:1 1 100%;min-height:39px}}
+@media print{.pdf-download-feedback{display:none!important}}
 </style>
 <link rel="stylesheet" href="./ux-polish.css">
 </head>
@@ -251,7 +263,9 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
       <div class="tabs" role="tablist" aria-label="Documents du dossier">
         <button type="button" class="tab" id="tab-cv" role="tab" aria-controls="cv-preview" aria-selected="true">01 / CV premium</button>
         <button type="button" class="tab" id="tab-letter" role="tab" aria-controls="letter-preview" aria-selected="false">02 / Lettre de motivation</button>
-        <button type="button" class="button alt right" id="print-current">Enregistrer en PDF ↗</button>
+        <button type="button" class="button right" id="download-cv-pdf">Télécharger le CV en PDF ↓</button>
+        <button type="button" class="button" id="download-letter-pdf">Télécharger la lettre en PDF ↓</button>
+        <button type="button" class="button alt" id="print-current">Imprimer (secours)</button>
         <button type="button" class="button alt" id="copy-letter">Copier la lettre</button><button type="button" class="button alt" id="copy-ats">Copier le texte ATS</button>
       </div>
       <div class="document-toolbar"><label class="print-ats-toggle"><input type="checkbox" id="ats-clean"> Export ATS épuré</label><a href="../">Retour à la recherche d’offres ↗</a></div><div class="doc-shell">
@@ -290,7 +304,8 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
           <div class="doc-footer" style="margin-top:53px"><span>CV & PORTFOLIO DISPONIBLES</span><span>MERCI DE VOTRE ATTENTION</span></div>
         </article>
       </div>
-      <p class="print-guide">CV et lettre suivent le même univers ivoire et bordeaux. Choisis le document, puis « Enregistrer en PDF ». Les deux fichiers se préparent séparément : vérifie les informations avant toute candidature.</p>
+      <div class="pdf-download-feedback" aria-live="polite" role="status"><p id="pdf-feedback" hidden></p><a id="open-generated-pdf" hidden target="_blank" rel="noopener noreferrer">Ouvrir le PDF ↗</a></div>
+      <p class="print-guide">CV et lettre suivent le même univers ivoire et bordeaux. Utilise « Télécharger le CV en PDF » ou « Télécharger la lettre en PDF ». Sur iPhone, les boutons PDF ouvrent la feuille de partage : choisis « Enregistrer dans Fichiers ». La fonction « Imprimer » est uniquement une alternative. Vérifie chaque candidature avant l’envoi.</p>
     </section>
   </div>
 </div>
@@ -426,7 +441,9 @@ try {
 for(const id of ['role','company','ad','focus','tone','recipient','fact'])$(id).addEventListener('input',()=>render());
 render();
 selectTab('cv');
+window.GlwadysAtelier={getState,chooseFocus,rankSkills,paragraphs,render,toast,BASE,JOBS};
 </script>
+<script src="./pdf-export.js" defer></script>
 <script src="./ux-polish.js" defer></script>
 </body>
 </html>
