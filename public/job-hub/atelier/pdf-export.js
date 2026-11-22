@@ -248,50 +248,81 @@ function letterDoc(s){
  p.text(45,y+22,'Glwadys Dalleau',23,'F3',C.wine);
  return buildFile(pages,'Lettre de motivation - '+s.company+' - Glwadys Dalleau');
 }
-let lastUrl=null;
+// Each output has its own immutable URL and content signature. This prevents
+// a previous cover letter from replacing the CV when the user changes tabs.
 const generatedUrls=[];
-function showBackup(blob,name,kind){
- // Safari can still be opening a previous PDF. Keep the last twelve Blob URLs
- // alive rather than revoking them while a share/download sheet is active.
- lastUrl=URL.createObjectURL(blob);
- generatedUrls.push(lastUrl);
- if(generatedUrls.length>12)URL.revokeObjectURL(generatedUrls.shift());
- const link=document.getElementById('open-generated-pdf');
- if(link){
-  link.href=lastUrl;link.hidden=false;link.textContent='Ouvrir le PDF '+(kind==='cv'?'du CV':'de la lettre')+' ↗';
-  link.setAttribute('aria-label','Ouvrir le document PDF si le téléchargement ne fonctionne pas');
- }
- const notice=document.getElementById('pdf-feedback');
- if(notice){notice.hidden=false;notice.textContent='Document PDF créé : '+name+'. Sur iPhone, choisir « Enregistrer dans Fichiers » depuis la feuille de partage. Si elle ne s’affiche pas, utiliser « Ouvrir le PDF ».'}
+const saved={cv:null,letter:null};
+function signature(){
+ const c=document.getElementById('ats-clean');
+ return JSON.stringify({data:A.getState(),ats:!!c?.checked});
 }
-function downloadFallback(blob,name){
- const url=lastUrl||URL.createObjectURL(blob);
- const a=document.createElement('a');a.href=url;a.download=name;a.style.display='none';document.body.append(a);a.click();a.remove();
+function syncUi(kind='cv'){
+ const item=saved[kind],current=item&&item.sig===signature()?item:null;
+ for(const id of ['cv','letter']){
+  const anchor=document.getElementById('open-generated-'+id+'-pdf');
+  if(!anchor)continue;
+  anchor.hidden=!(id===kind && current);
+  if(id===kind && current){
+   anchor.href=current.url;anchor.download=current.name;
+   anchor.textContent=id==='cv'?'Ouvrir / enregistrer mon CV.pdf ↗':'Ouvrir / enregistrer ma lettre.pdf ↗';
+   anchor.setAttribute('aria-label',id==='cv'?'Ouvrir le CV au format PDF':'Ouvrir la lettre de motivation au format PDF');
+  }
+ }
+ const message=document.getElementById('pdf-feedback');
+ if(!message)return;
+ if(current){
+  message.hidden=false;
+  message.textContent=(kind==='cv'?'CV':'Lettre de motivation')+' PDF créé : '+current.name+' ('+Math.round(current.size/1024)+' Ko). Sur iPhone, utilise « Partager » puis « Enregistrer dans Fichiers ».';
+ }else if(item){
+  message.hidden=false;
+  message.textContent='Le contenu a changé depuis le dernier PDF. Appuie sur « Télécharger '+(kind==='cv'?'MON CV':'MA LETTRE')+' » pour actualiser le fichier.';
+ }else{
+  message.hidden=true;message.textContent='';
+ }
+}
+function showBackup(blob,name,kind){
+ const url=URL.createObjectURL(blob);
+ generatedUrls.push(url);
+ if(generatedUrls.length>12) URL.revokeObjectURL(generatedUrls.shift());
+ saved[kind]={url,name,size:blob.size,sig:signature()};
+ syncUi(kind);
+}
+function downloadFallback(blob,name,kind){
+ const url=saved[kind]?.url||URL.createObjectURL(blob);
+ const a=document.createElement('a');a.href=url;a.download=name;
+ a.style.display='none';document.body.append(a);a.click();a.remove();
 }
 function filename(kind,state){
  const key=String(state.company||'Candidature').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9_-]+/g,'-').slice(0,40);
  return (kind==='cv'?'CV':'Lettre')+'_Glwadys_Dalleau_'+key+'.pdf';
 }
 async function exportPdf(kind){
+ // Always display the document that the button actually exports.
+ // The old implementation left the letter tab visible while exporting a CV.
+ const tab=document.getElementById(kind==='cv'?'tab-cv':'tab-letter');
+ tab?.click();
  try{
   const s=A.getState();A.render();
   const data=kind==='cv'?cvDoc(s):letterDoc(s);
-  const blob=new Blob([data],{type:'application/pdf'});
   if(!data.length||data[0]!==37||data[1]!==80||data[2]!==68||data[3]!==70)throw Error('Le PDF généré est incomplet.');
-  const name=filename(kind,s);showBackup(blob,name,kind);
+  // Defensive cross-check: a CV cannot accidentally be served as a letter.
+  const firstBlock=String.fromCharCode(...data.slice(0,40));
+  if(!firstBlock.startsWith('%PDF-1.'))throw Error('Format PDF invalide.');
+  const name=filename(kind,s);
+  const blob=new Blob([data],{type:'application/pdf'});
+  showBackup(blob,name,kind);
   try{localStorage.setItem('glwadys-atelier-draft-v1',JSON.stringify(s))}catch{}
   if(typeof File!=='undefined'&&navigator.share&&navigator.canShare){
    const file=new File([blob],name,{type:'application/pdf'});
    if(navigator.canShare({files:[file]})){
-    // Call immediately from a click so iOS preserves user activation.
-    try{await navigator.share({files:[file],title:name});return}
-    catch(e){if(e.name==='AbortError'){return}}
+    try{await navigator.share({files:[file],title:kind==='cv'?'CV de Glwadys Dalleau':'Lettre de motivation de Glwadys Dalleau'});return}
+    catch(e){if(e.name==='AbortError')return}
    }
   }
-  downloadFallback(blob,name);
-  A.toast?.('PDF créé : si le téléchargement ne démarre pas, ouvrir le fichier.');
+  downloadFallback(blob,name,kind);
+  A.toast?.((kind==='cv'?'CV':'Lettre')+' PDF créé. Le bouton « Ouvrir le PDF » est disponible sous l’aperçu.');
  }catch(e){
-  const msg='Erreur PDF : '+(e?.message||'génération impossible');
+  const msg='Erreur lors de la création '+(kind==='cv'?'du CV':'de la lettre')+' : '+(e?.message||'génération impossible');
   const f=document.getElementById('pdf-feedback');if(f){f.hidden=false;f.textContent=msg}
   A.toast?.(msg);
  }
@@ -299,8 +330,14 @@ async function exportPdf(kind){
 for(const [id,kind] of [['download-cv-pdf','cv'],['download-letter-pdf','letter']]){
  document.getElementById(id)?.addEventListener('click',()=>exportPdf(kind));
 }
-const ready=document.getElementById('open-generated-pdf');
-if(ready)ready.addEventListener('click',()=>{A.toast?.('Sur iPhone : utiliser Partager puis Enregistrer dans Fichiers.')});
-// No immediate pagehide revocation: iOS may still be loading the PDF Blob URL.
-window.GlwadysPDF={generateCv:()=>cvDoc(A.getState()),generateLetter:()=>letterDoc(A.getState()),exportPdf};
+for(const [id,kind] of [['open-generated-cv-pdf','cv'],['open-generated-letter-pdf','letter']]){
+ const button=document.getElementById(id);
+ button?.addEventListener('click',()=>A.toast?.('Le PDF '+(kind==='cv'?'du CV':'de la lettre')+' est ouvert. Sur iPhone : Partager → Enregistrer dans Fichiers.'));
+}
+const form=document.getElementById('atelier-form');
+form?.addEventListener('input',()=>syncUi(document.body.dataset.tab==='letter'?'letter':'cv'));
+form?.addEventListener('change',()=>syncUi(document.body.dataset.tab==='letter'?'letter':'cv'));
+document.getElementById('ats-clean')?.addEventListener('change',()=>syncUi(document.body.dataset.tab==='letter'?'letter':'cv'));
+window.GlwadysPDF={generateCv:()=>cvDoc(A.getState()),generateLetter:()=>letterDoc(A.getState()),exportPdf,syncUi};
+syncUi(document.body.dataset.tab==='letter'?'letter':'cv');
 })();
