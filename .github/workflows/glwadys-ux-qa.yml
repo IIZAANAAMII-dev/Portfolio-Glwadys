@@ -1,0 +1,46 @@
+name: Glwadys Career Studio - UX QA
+on:
+  push:
+    branches:
+      - feat/glwadys-atelier-premium-cv-letter
+    paths:
+      - public/job-hub/**
+      - scripts/ux_smoke.cjs
+      - .github/workflows/glwadys-ux-qa.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: glwadys-ux-qa
+  cancel-in-progress: true
+jobs:
+  browser-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Run desktop and mobile UX smoke checks
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory public/job-hub > /tmp/glwadys-server.log 2>&1 &
+          sleep 2
+          node scripts/ux_smoke.cjs
+      - name: Preserve visual proof and PDF prints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glwadys-ux-evidence
+          path: ux-proof/
+          if-no-files-found: warn
+          retention-days: 7
