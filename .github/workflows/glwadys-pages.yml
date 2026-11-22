@@ -52,10 +52,15 @@ jobs:
             mkdir -p out/job-hub
             cp public/job-hub/index.html public/job-hub/jobs-feed.json out/job-hub/
           fi
-          cat > out/index.html <<'EOF'
+          if [ -f out/fr/index.html ]; then
+            start_url='fr/'
+          else
+            start_url='job-hub/'
+          fi
+          cat > out/index.html <<EOF
           <!doctype html>
-          <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=fr/"><title>Portfolio Glwadys Dalleau</title></head>
-          <body><h1>Glwadys Dalleau</h1><p><a href="fr/">Voir le portfolio</a> · <a href="job-hub/">Career Studio</a></p></body></html>
+          <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=$start_url"><title>Glwadys Dalleau</title></head>
+          <body><h1>Glwadys Dalleau</h1><p><a href="$start_url">Ouvrir le site</a> · <a href="job-hub/">Career Studio</a></p></body></html>
           EOF
           touch out/.nojekyll
           test -f out/job-hub/index.html
