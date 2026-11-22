@@ -59,7 +59,7 @@ def line(c, x1, y, x2, color=RULE, thick=.7):
 
 def make_premium():
     path = ROOT/"CV_Glwadys_Dalleau_Premium_2026.pdf"
-    c = canvas.Canvas(str(path), pagesize=A4, pageCompression=1)
+    c = canvas.Canvas(str(path), pagesize=A4, pageCompression=1, invariant=1)
     c.setTitle("Glwadys Dalleau - CV Premium 2026")
     c.setAuthor("Glwadys Dalleau")
     c.setFillColor(BG);c.rect(0,0,W,H,stroke=0,fill=1)
@@ -131,7 +131,7 @@ def make_premium():
     print(path.name,"bottom",round(y),round(side))
 
 def make_ats(kind):
-    c = canvas.Canvas(str(ROOT/("CV_Glwadys_Dalleau_"+kind+"_ATS.pdf")),pagesize=A4,pageCompression=1)
+    c = canvas.Canvas(str(ROOT/("CV_Glwadys_Dalleau_"+kind+"_ATS.pdf")),pagesize=A4,pageCompression=1, invariant=1)
     c.setTitle("Glwadys Dalleau - CV "+kind+" ATS")
     c.setFillColor(BG);c.rect(0,0,W,H,stroke=0,fill=1)
     x,full=48,498
