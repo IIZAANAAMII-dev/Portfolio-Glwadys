@@ -123,3 +123,69 @@ body.ats-clean #cv-preview{border-top-width:4px}
   .onboard-strip,.atelier-quickguide,.document-toolbar{display:none!important}
   body.ats-clean #cv-preview .cv-inner{grid-template-columns:1fr!important}
 }
+
+/* v3: geometric alignment — all circles and outlines remain inside their panels. */
+#cv-preview .document,.document{overflow:hidden}
+#cv-preview .photo-orbit{right:32px;top:12px;width:171px;height:171px}
+#cv-preview .doc-photo{right:46px;top:29px;width:141px;height:141px}
+#cv-preview .cv-side{
+  width:100%;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:repeat(3,minmax(0,1fr));
+  justify-items:center;
+  align-items:stretch;
+  gap:0;
+  min-height:350px;
+  padding:22px 8px;
+  overflow:hidden;
+  border-radius:16px;
+}
+#cv-preview .cv-side .stat{
+  width:100%;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-align:center;
+  margin:0;
+  padding:0;
+}
+#cv-preview .cv-side .stat-circle{
+  flex:none;
+  margin:0 auto;
+  width:82px;
+  height:82px;
+  outline-offset:-7px;
+}
+#cv-preview .cv-side .stat-label{
+  max-width:100%;
+  padding-inline:3px;
+  margin:0;
+  line-height:1.35;
+  white-space:normal;
+  overflow-wrap:break-word;
+}
+@media(max-width:1190px){
+  #cv-preview .cv-side .stat-circle{width:72px;height:72px;font-size:35px}
+}
+@media(max-width:650px){
+  #cv-preview .document{overflow:hidden}
+  #cv-preview .photo-orbit{right:8px;top:12px;width:112px;height:112px}
+  #cv-preview .doc-photo{right:18px;top:22px;width:92px;height:92px}
+  #cv-preview .cv-side{padding:11px 5px;min-height:270px;gap:0}
+  #cv-preview .cv-side .stat{gap:4px}
+  #cv-preview .cv-side .stat-circle{width:58px;height:58px;font-size:28px}
+  #cv-preview .cv-side .stat-label{font-size:7.5px;line-height:1.2}
+}
+@media print{
+  #cv-preview.document{overflow:hidden!important}
+  #cv-preview .cv-side{grid-template-rows:repeat(3,minmax(0,1fr))!important;padding:5mm 2mm!important;gap:0!important}
+  #cv-preview .cv-side .stat{gap:2mm!important}
+  #cv-preview .cv-side .stat-circle{width:20mm!important;height:20mm!important;font-size:27pt!important}
+  #cv-preview .cv-side .stat-label{font-size:7pt!important}
+  #cv-preview .photo-orbit{right:9mm!important;top:3mm!important;width:42mm!important;height:42mm!important}
+  #cv-preview .doc-photo{right:12mm!important;top:6mm!important;width:36mm!important;height:36mm!important}
+}
