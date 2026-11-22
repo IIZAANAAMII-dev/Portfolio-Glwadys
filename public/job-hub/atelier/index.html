@@ -186,6 +186,7 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
         <label class="field"><span>Nom du destinataire (optionnel)</span><input id="recipient" maxlength="120" placeholder="Ex. Madame Durand"></label>
         <label class="field"><span>Réalisation supplémentaire vérifiée (optionnel)</span><textarea id="fact" maxlength="450" style="min-height:72px" placeholder="À renseigner uniquement si Glwadys confirme ce fait, avec un exemple précis."></textarea></label>
         <div class="actions"><button class="button" type="submit">Générer CV + lettre ↗</button><button class="button alt" type="button" id="save-draft">Sauvegarder le brouillon</button></div>
+        <button class="button alt" type="button" id="copy-ai-brief" style="width:100%;min-height:39px;font-weight:600">✦ Copier un brief de relecture IA (facultatif)</button>
       </form>
       <div class="helper">La personnalisation conserve les cinq expériences et leurs dates, comme sur le CV original : Le Comptoir de Mathilde, Marseille Girls Club (bénévolat), Kiko Milano, AGLAIA × Une à Une et Yuna Bijoux. Les chiffres commerciaux et les outils non prouvés ne sont jamais ajoutés automatiquement.</div>
       <div class="result-box">
@@ -308,7 +309,9 @@ function paragraphs(s,focus,hits){
   :s.tone==='direct'
   ?'Je serais disponible pour un échange afin de vous présenter plus précisément mon expérience et ma motivation. Je vous remercie de votre attention.'
   :'Je souhaiterais avoir l’occasion de vous présenter ma motivation et de comprendre plus précisément les enjeux du poste. Je vous remercie pour votre considération.';
- return ['Madame, Monsieur,',opener,story,bridge,closing,'Je vous prie d’agréer, Madame, Monsieur, l’expression de mes salutations distinguées.']
+ const salutation=s.recipient?'Bonjour '+s.recipient+',':'Madame, Monsieur,';
+ const signatureClosing=s.tone==='professional'?'Je vous prie d’agréer, Madame, Monsieur, l’expression de mes salutations distinguées.':'Bien cordialement,';
+ return [salutation,opener,story,bridge,closing,signatureClosing]
 }
 function render(){
  const s=getState(),mode=chooseFocus(s),base=BASE[mode],info=rankSkills(s,base),sorted=evidenceOrder(base,s);
@@ -342,6 +345,12 @@ window.addEventListener('beforeprint',()=>{document.body.dataset.print=document.
 
 $('copy-letter').addEventListener('click',async()=>{const letter=render();try{await navigator.clipboard.writeText(letter);toast('Lettre copiée dans le presse-papiers.')}catch{toast('Copie bloquée : sélectionne le texte de la lettre.')}});
 $('save-draft').addEventListener('click',()=>{try{localStorage.setItem('glwadys-atelier-draft-v1',JSON.stringify(getState()));toast('Brouillon conservé dans ce navigateur.')}catch{toast('Enregistrement local indisponible.')}});
+$('copy-ai-brief').addEventListener('click',async()=>{
+ const s=getState(),mode=chooseFocus(s),base=BASE[mode];
+ const verified=JOBS.map(j=>j.role+' - '+j.company+' ('+j.date+') : '+j.bullets.join(' ')).join('\n');
+ const prompt='Tu es spécialiste du recrutement français et de la rédaction de CV. À partir des faits ci-dessous et de l’annonce, propose (1) une accroche ATS de 45 mots maximum, (2) six compétences dont chacune est explicitement justifiée par les faits, et (3) une lettre française ciblée de 230 à 300 mots au ton '+s.tone+'. Ne crée aucun chiffre commercial, diplôme, outil, rôle ou résultat non vérifié. Signale les informations manquantes et les risques ATS, sans les dissimuler. Préserve la chronologie.\n\nCANDIDATE : Glwadys Dalleau. Ville : Vannes. Français natif, anglais B2. Bachelor commerce, marketing et négociation (IPAC Bachelor Factory). Certificat Inside LVMH Creation & Branding, Retail & Customer Experience.\n\nPARCOURS VÉRIFIÉ :\n'+verified+'\n\nPOSTE : '+s.role+'\nENTREPRISE : '+s.company+'\nANNONCE :\n'+s.ad+'\n\nAUTRES FAITS VALIDÉS PAR LA CANDIDATE : '+(s.fact||'Aucun')+'\n\nStyle visuel obligatoire : ivoire, bordeaux, photo circulaire en haut à droite, trois cercles à droite. Ne change pas le template.';
+ try{await navigator.clipboard.writeText(prompt);toast('Brief IA copié : colle-le dans l’assistant de ton choix.')}catch{toast('Copie indisponible dans ce navigateur.')}
+});
 try{const s=JSON.parse(localStorage.getItem('glwadys-atelier-draft-v1')||'null');if(s&&typeof s==='object')for(const k of ['role','company','ad','focus','tone','recipient','fact'])if(typeof s[k]==='string'&&$(k))$(k).value=s[k]}catch{}
 for(const id of ['role','company','ad','focus','tone','recipient','fact'])$(id).addEventListener('input',()=>render());
 render();
