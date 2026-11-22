@@ -7,8 +7,8 @@
 <title>Atelier de candidature — Glwadys Career Studio</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2395495e'/%3E%3Ctext x='32' y='44' fill='white' text-anchor='middle' font-family='Georgia' font-size='37'%3EG%3C/text%3E%3C/svg%3E">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=EB+Garamond:wght@400;500;600&display=swap');
-:root{--bg:#fbf8f6;--paper:#fffcfa;--ink:#25232a;--wine:#95495e;--wine-dark:#783a4b;--pale:#f2eae7;--rule:#ded3d0;--muted:#625d63;--rose:#ccb0ae;--sans:'DM Sans',Arial,sans-serif;--serif:'EB Garamond',Georgia,serif}
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&family=EB+Garamond:wght@400;500;600&display=swap');
+:root{--bg:#fbf8f6;--paper:#fffcfa;--ink:#25232a;--wine:#95495e;--wine-dark:#783a4b;--pale:#f2eae7;--rule:#ded3d0;--muted:#625d63;--rose:#ccb0ae;--sans:'Lato',Arial,sans-serif;--serif:'EB Garamond',Georgia,serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);font:14px/1.56 var(--sans);color:var(--ink)}
 a{color:inherit;text-underline-offset:3px}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--wine);outline-offset:3px}
 .site-header{padding:17px clamp(20px,3vw,52px);display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--paper);border-bottom:1px solid var(--rule)}.logo{font:500 25px var(--serif);text-decoration:none}.logo b{color:var(--wine);font-weight:500}.site-nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap}.site-nav a{font-size:12px;font-weight:600;text-decoration:none}.site-nav a:hover{color:var(--wine)}
@@ -126,7 +126,7 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
       <div class="doc-shell">
         <article id="cv-preview" class="document" role="tabpanel" aria-labelledby="tab-cv">
           <span class="photo-orbit" aria-hidden="true"></span><span class="photo-dot" aria-hidden="true"></span>
-          <div class="doc-photo" aria-hidden="true"><div class="photo-inner"><img src="../portrait-glwadys.jpg" alt="" onerror="this.remove();this.parentElement.textContent='GD'"></div></div>
+          <div class="doc-photo" aria-hidden="true"><div class="photo-inner"><img src="../portrait-glwadys.svg" alt="" onerror="this.remove();this.parentElement.textContent='GD'"></div></div>
           <p class="pdf-overline">GLWADYS / DOSSIER PROFESSIONNEL · 2026</p>
           <h2 class="doc-name">Glwadys<br>Dalleau</h2>
           <div id="cv-subtitle" class="doc-subtitle">COMMUNICATION / MARKETING / MANAGEMENT</div>
@@ -203,7 +203,11 @@ const has=(hay,terms)=>terms.some(term=>hay.includes(norm(term)));
 function element(tag,text,klass){const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el}
 function getState(){return {role:$('role').value.trim(),company:$('company').value.trim(),ad:$('ad').value.trim(),focus:$('focus').value,tone:$('tone').value,recipient:$('recipient').value.trim(),fact:$('fact').value.trim()}}
 function chooseFocus(s){if(s.focus!=='auto')return s.focus;const n=norm(s.role+' '+s.ad.slice(0,900));if(/evenement|event|partenariat/.test(n) && !/magasin|boutique|retail/.test(n))return 'event';if(/vente|magasin|boutique|retail|responsable adjointe|merchandising/.test(n))return 'retail';return 'communication'}
-function evidenceOrder(base,s){const n=norm(s.role+' '+s.ad);const scored=base.experienceOrder.map((id,order)=>{const job=JOBS[id];let score=0;for(const skill of SKILLS){if(job.weight.includes(skill.id)&&has(n,skill.terms))score++}return {id,order,score}});scored.sort((a,b)=>b.score-a.score||a.order-b.order);return scored.map(x=>x.id)}
+function evidenceOrder(base,s){
+ // La chronologie et la géométrie restent identiques dans chaque CV.
+ // La personnalisation valorise les compétences et l'accroche, sans réordonner les emplois.
+ return [0,1,2,3,4];
+}
 function rankSkills(s,base){const n=norm(s.role+' '+s.ad);const hits=SKILLS.filter(x=>has(n,x.terms));const names=[...hits.map(x=>x.label),...base.skills];return {hits,selected:[...new Set(names)].slice(0,7)}}
 function oneOfSkills(hits){if(!hits.length)return 'les missions de communication, d’organisation et de relation client';return hits.slice(0,3).map(x=>x.label.toLowerCase()).join(', ')}
 function createJob(job){const section=element('section',undefined,'job');section.append(element('h4',job.role,'job-title'),element('p',job.company,'job-company'),element('p',job.date,'job-date'));const ul=element('ul');for(const b of job.bullets.slice(0,2))ul.append(element('li',b));section.append(ul);return section}
