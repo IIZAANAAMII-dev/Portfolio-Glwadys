@@ -160,6 +160,7 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
   .letter-doc{padding:11mm 12mm 8mm!important}.letter-doc .doc-name{font-size:49pt!important}.letter-meta{font-size:9pt;margin:11pt 0 25pt}.letter-date{font-size:9pt}.letter-to,.letter-subject{font-size:10pt}.letter-body{font-size:10.2pt;line-height:1.65}.letter-body p{margin:0 0 12pt}.letter-signature{margin-top:20pt}
 }
 </style>
+<link rel="stylesheet" href="./ux-polish.css">
 </head>
 <body>
 <header class="site-header">
@@ -171,6 +172,11 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
     <div><p class="eyebrow">Candidature / Atelier personnalisé</p><h1>Une annonce.<br><em>Une histoire qui convainc.</em></h1></div>
     <div><div class="masthead-tools"><span class="pill">◯ Template premium unique</span><span class="pill">✓ Expériences vérifiées</span><span class="pill">↗ PDF imprimable</span></div><p>CV et lettre de motivation préparés ensemble, sans inventer de résultats ni faire passer des compétences supposées pour des acquis.</p></div>
   </div>
+  <div class="atelier-quickguide" aria-label="Les trois étapes d'une candidature">
+    <div><strong>01.</strong> Choisir une annonce réelle et ses missions prioritaires</div>
+    <div><strong>02.</strong> Adapter le CV tout en conservant les faits vérifiés</div>
+    <div><strong>03.</strong> Relire la lettre et exporter chaque document en PDF</div>
+  </div>
   <div class="app-layout">
     <aside class="panel">
       <p class="eyebrow">01 / Comprendre l’offre</p>
@@ -179,13 +185,15 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
         <label class="field"><span>Intitulé du poste *</span><input id="role" required maxlength="120" value="Chargée de communication" placeholder="Chargée de communication"></label>
         <label class="field"><span>Nom de l’entreprise *</span><input id="company" required maxlength="110" placeholder="Ex. Maison Martin"></label>
         <label class="field"><span>Annonce (missions, attentes, compétences) *</span><textarea id="ad" required maxlength="18000" placeholder="Colle ici le texte de l’offre, les missions et les compétences attendues…"></textarea></label>
+        <div class="atelier-help-row"><span id="ad-count">0 caractère · colle l'annonce pour personnaliser le dossier</span><button type="button" id="example-offer">Essayer avec une annonce fictive ↗</button></div>
         <div class="split">
           <label class="field"><span>Type de poste</span><select id="focus"><option value="auto">Détection automatique</option><option value="communication">Communication</option><option value="retail">Retail / management</option><option value="event">Événementiel</option></select></label>
           <label class="field"><span>Ton de la lettre</span><select id="tone"><option value="professional">Professionnel</option><option value="warm">Chaleureux</option><option value="direct">Direct et concis</option></select></label>
         </div>
         <label class="field"><span>Nom du destinataire (optionnel)</span><input id="recipient" maxlength="120" placeholder="Ex. Madame Durand"></label>
         <label class="field"><span>Réalisation supplémentaire vérifiée (optionnel)</span><textarea id="fact" maxlength="450" style="min-height:72px" placeholder="À renseigner uniquement si Glwadys confirme ce fait, avec un exemple précis."></textarea></label>
-        <div class="actions"><button class="button" type="submit">Générer CV + lettre ↗</button><button class="button alt" type="button" id="save-draft">Sauvegarder le brouillon</button></div>
+        <div class="actions"><button class="button" type="submit" id="generate-dossier">Actualiser le dossier ↗</button><button class="button alt" type="button" id="save-draft">Sauvegarder</button><button class="button alt" type="button" id="clear-draft">Effacer</button></div>
+        <div class="document-toolbar"><span id="draft-status" role="status" aria-live="polite">Prêt à personnaliser</span><span>Ctrl/⌘ + Entrée : actualiser</span></div>
         <button class="button alt" type="button" id="copy-ai-brief" style="width:100%;min-height:39px;font-weight:600">✦ Copier un brief de relecture IA (facultatif)</button>
       </form>
       <div class="helper">La personnalisation conserve les cinq expériences et leurs dates, comme sur le CV original : Le Comptoir de Mathilde, Marseille Girls Club (bénévolat), Kiko Milano, AGLAIA × Une à Une et Yuna Bijoux. Les chiffres commerciaux et les outils non prouvés ne sont jamais ajoutés automatiquement.</div>
@@ -200,8 +208,9 @@ h1{font:400 clamp(39px,5vw,72px)/.98 var(--serif);letter-spacing:-.025em;margin:
         <button type="button" class="tab" id="tab-cv" role="tab" aria-controls="cv-preview" aria-selected="true">01 / CV premium</button>
         <button type="button" class="tab" id="tab-letter" role="tab" aria-controls="letter-preview" aria-selected="false">02 / Lettre de motivation</button>
         <button type="button" class="button alt right" id="print-current">Enregistrer en PDF ↗</button>
-        <button type="button" class="button alt" id="copy-letter">Copier la lettre</button>
+        <button type="button" class="button alt" id="copy-letter">Copier la lettre</button><button type="button" class="button alt" id="copy-ats">Copier le texte ATS</button>
       </div>
+      <div class="document-toolbar"><label class="print-ats-toggle"><input type="checkbox" id="ats-clean"> Export ATS épuré</label><a href="../">Retour à la recherche d'offres ↗</a></div>
       <div class="doc-shell">
         <article id="cv-preview" class="document" role="tabpanel" aria-labelledby="tab-cv">
           <span class="photo-orbit" aria-hidden="true"></span><span class="photo-dot" aria-hidden="true"></span>
@@ -362,5 +371,6 @@ for(const id of ['role','company','ad','focus','tone','recipient','fact'])$(id).
 render();
 selectTab('cv');
 </script>
+<script src="./ux-polish.js" defer></script>
 </body>
 </html>
