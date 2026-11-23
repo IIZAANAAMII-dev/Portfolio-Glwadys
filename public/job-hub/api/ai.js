@@ -111,6 +111,8 @@ function cleanGenerated(raw){
  const str=(v,n)=>safeText(v,n),list=(v,max,n)=>Array.isArray(v)?v.filter(x=>typeof x==='string').map(x=>str(x,n)).filter(Boolean).slice(0,max):[];
  const skillSet=new Map(SKILLS.map(x=>[x.toLowerCase(),x]));
  const recommended=list(raw.cv.skills,9,90).map(s=>skillSet.get(s.toLowerCase())).filter(Boolean);
+ const claims=[raw.cv.summary,...(raw.letter.paragraphs||[])].join(' ');
+ if(/\b\d{1,3}\s?%|\bROI\b|\b\d{1,3}\s?(?:collaborateurs|salariés|personnes encadrées|ventes|clients gérés)\b/i.test(claims))throw new Error('Affirmation chiffrée non justifiée détectée dans le texte IA');
  const ints=Array.isArray(raw.cv.highlight_indices)?raw.cv.highlight_indices.filter(v=>Number.isInteger(v)&&v>=0&&v<=4).slice(0,5):[];
  return {
   analysis:{
@@ -123,13 +125,13 @@ function cleanGenerated(raw){
   },
   cv:{
    headline:str(raw.cv.headline,115),
-   summary:str(raw.cv.summary,680),
+   summary:str(raw.cv.summary,370),
    skills:[...new Set(recommended)],
    highlight_indices:[...new Set(ints)]
   },
   letter:{
    greeting:str(raw.letter.greeting,90),
-   paragraphs:list(raw.letter.paragraphs,6,760),
+   paragraphs:list(raw.letter.paragraphs,5,520),
    closing:str(raw.letter.closing,140)
   }
  }
@@ -176,7 +178,7 @@ export default async function handler(req,res){
    model:process.env.GLWADYS_AI_MODEL||'openai/gpt-6-luna',
    input:[{role:'system',content:system},{role:'user',content:JSON.stringify(data)}],
    text:{format:{type:'json_schema',name:'glwadys_candidature',strict:true,schema:SCHEMA}},
-   reasoning:{effort:'low'},max_output_tokens:2100,store:false
+   reasoning:{effort:'low'},max_output_tokens:3300,store:false
   },27000);
   if(response.status==='incomplete')throw new Error('La génération IA est incomplète');
   const parsed=JSON.parse(outputText(response));
