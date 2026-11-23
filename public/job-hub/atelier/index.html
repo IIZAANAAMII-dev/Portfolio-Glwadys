@@ -274,10 +274,12 @@ body[data-tab="letter"] #open-generated-cv-pdf{display:none!important}
           <span id="ai-status" class="ai-status" data-ready="false">Vérification de l’IA…</span>
         </div>
         <label class="ai-label"><input id="ai-consent" type="checkbox"><span>J’autorise l’envoi de l’annonce et des expériences professionnelles connues de Glwadys au service IA pour préparer cette candidature. Aucune candidature n’est envoyée à un employeur.</span></label>
-        <label class="ai-field"><span>Code d’accès IA (privé)</span><input type="password" id="ai-code" autocomplete="off" placeholder="Code communiqué par le responsable"></label>
+        <label class="ai-field"><span>Code d’accès IA (privé)</span><input type="password" id="ai-code" autocomplete="off" placeholder="Code communiqué par le responsable" aria-describedby="ai-feedback"></label>
+        <button type="button" class="button alt" id="ai-check-access" style="margin:2px 0 9px;min-height:42px;width:100%">Vérifier mon code (sans crédit IA)</button>
         <label class="ai-label"><input type="checkbox" id="ai-research"><span>Effectuer une recherche web IA sur l’entreprise, avec liens de sources (coût et durée supplémentaires).</span></label>
         <button type="button" class="button ai-go" id="ai-go" disabled>✦ Analyser et générer mon dossier par IA</button>
         <p id="ai-feedback" class="ai-feedback" aria-live="polite">L’analyse IA est facultative : le générateur premium local fonctionne toujours.</p>
+        <p id="ai-diagnostic" class="ai-feedback" role="alert" hidden style="padding:10px 12px;border-radius:8px;background:#fff4f2;border:1px solid #e6c7cc;color:#853a4a"></p>
         <div id="ai-results" class="ai-results" aria-live="polite"></div>
         <div id="ai-review" hidden>
           <label class="ai-field"><span>Relire et modifier l’accroche du CV</span><textarea id="ai-edit-summary" rows="4" maxlength="680"></textarea></label>
@@ -485,7 +487,7 @@ selectTab('cv');
 window.GlwadysAtelier={getState,chooseFocus,rankSkills,paragraphs,render,toast,BASE,JOBS};
 </script>
 <script src="./pdf-export.js?v=20261122-2105" defer></script>
-<script src="./ai-studio.js?v=20261123-ia" defer></script>
+<script src="./ai-studio.js?v=20261123-diagnostic-v2" defer></script>
 <script src="./ux-polish.js" defer></script>
 </body>
 </html>
