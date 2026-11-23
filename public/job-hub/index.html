@@ -135,12 +135,53 @@ async function loadFeed(){
   }
   renderJobs();
 }
-function jobScore(job){let txt=lower([job.title,job.description].join(' '));let title=lower(job.title);let q=lower($('#offer-query').value.trim()||selectedKeyword());let terms=[...new Set([...q.split(/\s+/).filter(t=>t.length>2),'communication','marketing','social','content','community','retail','store','customer','event','brand','vente'])];let score=0;for(const t of terms){if(title.includes(t))score+=5;else if(txt.includes(t))score+=2;}if(job.remote)score+=1;return Math.min(99,Math.max(0,score*3));}
+function jobScore(job){
+ if(window.GlwadysRadar)return window.GlwadysRadar.score(job);
+ const txt=lower(job.title+' '+job.description),terms=['communication','marketing','social','content','retail','vente','event'];
+ return Math.min(100,terms.reduce((score,term)=>score+(lower(job.title).includes(term)?12:txt.includes(term)?5:0),0));
+}
 function regionMatch(job,region){const loc=lower(job.location);if(region==='all')return true;if(region==='remote')return job.remote;if(region==='fr')return /france|paris|lyon|rennes|nantes|brest|vannes|marseille|bordeaux|lille|nice|toulouse/i.test(loc);if(region==='be')return /belgium|belgique|brussels|bruxelles|liege|liège|antwerp|namur|ghent|gent/i.test(loc);return !(/france|belgium|belgique/i.test(loc))}
 let visibleJobs=24;
-function renderJobs(){if(!$('#jobs-grid'))return;const q=lower($('#offer-query').value.trim());const fam=$('#family').value;const reg=$('#offer-region').value;let list=jobs.filter(job=>regionMatch(job,reg));if(q)list=list.filter(job=>lower(job.title+' '+job.company+' '+job.description).includes(q));if(fam!=='all')list=list.filter(job=>familyKeywords[fam].some(t=>lower(job.title+' '+job.description).includes(lower(t))));list.sort((a,b)=>$('#offer-sort').value==='newest'?(new Date(b.date||0)-new Date(a.date||0)):jobScore(b)-jobScore(a));$('#total-jobs').textContent=jobs.length;$('#matching-jobs').textContent=list.length;
-if(!list.length){$('#jobs-grid').innerHTML=`<div class="empty-state"><h3>${jobs.length?'Aucune offre avec ces filtres.':'À la recherche des prochaines offres.'}</h3><p>${jobs.length?'Essaie un autre mot-clé ou sélectionne une autre zone.':'Les flux automatiques ne sont pas encore alimentés ou aucune annonce pertinente n’a été détectée. Tu peux dès maintenant chercher sur les plateformes françaises et belges.'}</p><button class="btn btn-primary" type="button" data-go-search>Explorer les plateformes ↗</button></div>`;return;}
-$('#jobs-grid').innerHTML=list.slice(0,visibleJobs).map(job=>{const saved=applications.some(a=>a.url===job.url);return `<article class="job-card"><div class="job-top"><span class="job-source">${esc(job.source)}</span>${newJobIds.has(job.id)?'<span class="job-new">NOUVEAU</span>':''}<span class="job-score">Indice ${jobScore(job)}/99</span></div><h3>${esc(job.title)}</h3><div class="job-company">${esc(job.company)}</div><div class="job-details">${esc(job.location)}${job.remote?' · Remote':''} ${job.date?' · '+formatDate(job.date):''}</div><p class="job-description">${esc(job.description||'Ouvre l’annonce pour découvrir les missions et les conditions proposées.').slice(0,260)}</p><div class="job-actions"><a class="btn btn-primary" href="${esc(job.url)}" target="_blank" rel="noopener noreferrer">Voir l’annonce ↗</a><button class="btn btn-outline" type="button" data-prepare-job="${esc(job.id)}">✦ CV + lettre</button><button class="btn btn-outline" type="button" data-save-job="${esc(job.id)}" ${saved?'disabled':''}>${saved?'Enregistrée ✓':'+ Suivre cette offre'}</button></div></article>`;}).join('');const more=document.getElementById('offer-more');if(more){more.hidden=visibleJobs>=list.length;more.textContent='Afficher '+Math.min(24,list.length-visibleJobs)+' offres supplémentaires ↗';}const summary=document.getElementById('offer-visible-count');if(summary)summary.textContent=''+Math.min(visibleJobs,list.length)+' sur '+list.length+' offres affichées';}
+function renderJobs(){
+ if(!$('#jobs-grid'))return;
+ const q=lower($('#offer-query').value.trim()),fam=$('#family').value,reg=$('#offer-region').value,radar=window.GlwadysRadar;
+ let list=jobs.filter(job=>regionMatch(job,reg)&&(!radar||radar.keep(job)));
+ if(q){const words=q.split(/\s+/).filter(x=>x.length>=3);list=list.filter(job=>{const text=lower(job.title+' '+job.company+' '+job.description);return !words.length||words.some(word=>text.includes(word))})}
+ if(fam!=='all')list=list.filter(job=>familyKeywords[fam].some(t=>lower(job.title+' '+job.description).includes(lower(t))));
+ list.sort((a,b)=>$('#offer-sort').value==='newest'?(new Date(b.date||0)-new Date(a.date||0)):jobScore(b)-jobScore(a));
+ $('#total-jobs').textContent=jobs.length;
+ $('#matching-jobs').textContent=list.length;
+ radar?.summary?.(jobs,list);
+ if(!list.length){
+  $('#jobs-grid').innerHTML='<div class="empty-state"><h3>'+(jobs.length?'Aucune offre selon ces critères.':'Aucune offre récupérée pour le moment.')+'</h3><p>'+(jobs.length?'Élargis la zone, baisse le seuil d’affinité ou essaie un autre mot-clé.':'Le radar vérifie ses sources. Les recherches externes restent accessibles.')+'</p><button class="btn btn-primary" type="button" data-go-search>Explorer les plateformes ↗</button></div>';
+  const more=document.getElementById('offer-more');if(more)more.hidden=true;
+  const summary=document.getElementById('offer-visible-count');if(summary)summary.textContent='Aucune offre affichée';
+  return;
+ }
+ $('#jobs-grid').innerHTML=list.slice(0,visibleJobs).map(job=>{
+  const saved=applications.some(a=>a.url===job.url),match=radar?.explain(job);
+  const detail=radar?radar.renderDetails(job,esc):'';
+  const apply=validUrl(job.applyUrl)?job.applyUrl:job.url;
+  const metadata=[job.location,job.remote?'Télétravail':'',job.date?formatDate(job.date):'',job.employmentType].filter(Boolean).join(' · ');
+  return '<article class="job-card">'
+   +'<div class="job-top"><span class="job-source">'+esc(job.source)+'</span>'
+   +(newJobIds.has(job.id)?'<span class="job-new">NOUVEAU</span>':'')
+   +'<span class="job-score">'+(match?'Affinité indicative ':'Indice ')+jobScore(job)+'/100</span></div>'
+   +'<h3>'+esc(job.title)+'</h3><div class="job-company">'+esc(job.company)+'</div>'
+   +'<div class="job-details">'+esc(metadata)+'</div>'
+   +'<p class="job-description">'+esc((job.description||'Consulte l’annonce officielle pour connaître les missions et les conditions.').slice(0,380))+'</p>'
+   +detail
+   +'<div class="job-actions"><a class="btn btn-outline" href="'+esc(job.url)+'" target="_blank" rel="noopener noreferrer">Annonce officielle ↗</a>'
+   +(apply!==job.url?'<a class="btn btn-outline" href="'+esc(apply)+'" target="_blank" rel="noopener noreferrer">Postuler ↗</a>':'')
+   +'<button class="btn btn-primary" type="button" data-prepare-job="'+esc(job.id)+'">✦ Générer CV + lettre</button>'
+   +'<button class="btn btn-outline" type="button" data-save-job="'+esc(job.id)+'" '+(saved?'disabled':'')+'>'+(saved?'Enregistrée ✓':'+ Suivre')+'</button>'
+   +'</div><button type="button" class="radar-dismiss" data-ignore-job="'+esc(job.id)+'">Masquer cette annonce</button></article>';
+ }).join('');
+ const more=document.getElementById('offer-more');
+ if(more){more.hidden=visibleJobs>=list.length;more.textContent='Afficher '+Math.min(24,list.length-visibleJobs)+' offres supplémentaires ↗';}
+ const summary=document.getElementById('offer-visible-count');
+ if(summary)summary.textContent=Math.min(visibleJobs,list.length)+' sur '+list.length+' offres affichées';
+}
 function prepareJob(job){
  if(!job){toast('Offre introuvable : vérifie le lien source.');return;}
  try{sessionStorage.setItem('glwadys-job-selection-v1',JSON.stringify({
