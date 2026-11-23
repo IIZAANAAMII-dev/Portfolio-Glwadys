@@ -34,6 +34,7 @@ async function main(){
   await page.screenshot({path:path.join(output,'studio-desktop.png'),fullPage:true});
   await page.locator('.side-nav [data-view="offres"]').click();
   await page.locator('.job-card').first().waitFor();
+  await page.screenshot({path:path.join(output,'radar-desktop.png'),fullPage:true});
   assert.equal(await page.locator('.job-card').count(),24,'24 jobs in first page');
   assert.equal(await page.locator('#radar-zone').inputValue(),'frbe','France+Belgique is the default');
   assert.ok((await page.locator('#radar-top-picks').textContent()).length>15,'personalized top recommendations visible');
@@ -105,6 +106,9 @@ async function main(){
   await mp.locator('.mobile-studio-cta').waitFor();
   assert.equal(await mp.locator('.mobile-studio-cta').isVisible(),true);
   await mp.screenshot({path:path.join(output,'studio-mobile.png'),fullPage:true});
+  await mp.locator('.mobile-nav [data-view="offres"]').click();
+  await mp.locator('.job-card').first().waitFor();
+  await mp.screenshot({path:path.join(output,'radar-mobile.png'),fullPage:true});
   const overflow0=await mp.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
   assert.ok(overflow0<4,'mobile studio no horizontal overflow: '+overflow0);
   await mp.locator('.mobile-studio-cta').click();
