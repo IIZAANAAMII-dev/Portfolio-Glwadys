@@ -23,7 +23,8 @@
    APP_RATE_LIMIT:'Trop d’essais : laisse le délai de sécurité se réinitialiser avant de recommencer.',
    NOT_CONFIGURED:'Vercel ne reconnaît pas la configuration IA du projet gratuit.',
    GATEWAY_MISSING_CREDENTIALS:'Le serveur n’a pas de jeton Vercel valide.',
-   GATEWAY_AUTH:'Le projet Izanami n’est pas autorisé auprès d’AI Gateway. Vérifier les réglages du compte Vercel.',
+   GATEWAY_AUTH:'L’accès au modèle IA est refusé par Vercel. Vérifie les permissions du projet.',
+   GATEWAY_VERIFICATION_REQUIRED:'Vercel exige un moyen de paiement valide sur Izanami Hobby pour activer les crédits IA gratuits. La vérification doit être effectuée par le propriétaire du compte Vercel.',
    GATEWAY_CREDIT:'Crédit IA indisponible ou budget du projet atteint.',
    GATEWAY_RATE_LIMIT:'Le modèle reçoit trop de demandes ; une nouvelle tentative sera nécessaire.',
    GATEWAY_TIMEOUT:'Le service IA a dépassé le délai. Désactive la recherche entreprise puis réessaie.',
@@ -43,7 +44,10 @@
   const label=classifyError(code,detail,statusCode);
   diagnostic('Cause : '+label+(traceId?' · Référence technique '+traceId:''));
   note(label+' Le CV et la lettre classiques restent disponibles.');
-  status(code==='INVALID_ACCESS_CODE'?'IA : code à vérifier':code==='GATEWAY_CREDIT'?'IA : crédit indisponible':'IA : erreur identifiée',false);
+  const blocked=code==='GATEWAY_VERIFICATION_REQUIRED';
+  status(blocked?'IA suspendue : vérification Vercel':code==='INVALID_ACCESS_CODE'?'IA : code à vérifier':code==='GATEWAY_CREDIT'?'IA : crédit indisponible':'IA : erreur identifiée',false);
+  const link=$('ai-account-verification');if(link && blocked)link.hidden=false;
+  if(blocked){ready=false;$('ai-go').disabled=true;$('ai-check-access').disabled=true;}
   if(code==='INVALID_ACCESS_CODE'){try{sessionStorage.removeItem(codeKey)}catch{} const f=$('ai-code');if(f){f.value='';f.focus()}}
  }
  const el=(tag,text,cls)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
@@ -84,9 +88,14 @@
    const response=await fetch('../api/ai',{cache:'no-store'});
    const data=await response.json();
    ready=!!data.enabled;
-   status(ready?'IA configurée · test du code disponible':'IA en attente de configuration',ready);
-   note(ready?'Vercel détecte la configuration, mais n’a pas encore vérifié une vraie génération. Commence par « Vérifier mon code » : ce test ne consomme aucun crédit.':'Le générateur premium local reste disponible. Le responsable du site doit activer l’accès IA.');
+   const blocked=!!data.requiresVerification;
+   const link=$('ai-account-verification');
+   if(link){link.hidden=!blocked;if(blocked && data.verificationUrl)link.href=data.verificationUrl;}
+   status(blocked?'Vérification Izanami requise':ready?'IA configurée · test du code disponible':'IA en attente de configuration',ready);
+   note(blocked?'Vercel bloque les générations IA tant que le compte Izanami Hobby n’a pas été vérifié avec un moyen de paiement valide. Seul le propriétaire du compte peut effectuer cette action. Le CV et la lettre classiques restent disponibles.':ready?'Le jeton Vercel est reconnu. Commence par « Vérifier mon code » ; ce test ne consomme aucun crédit.':'Le générateur premium local reste disponible. Le responsable du site doit activer l’accès IA.');
    $('ai-go').disabled=!ready;
+   $('ai-check-access').disabled=!ready;
+   if(blocked)diagnostic('Cause confirmée : customer_verification_required — vérification du compte Izanami requise, pas une erreur du code de Glwadys.');
   }catch{
    status('IA temporairement indisponible');
    $('ai-go').disabled=true;
