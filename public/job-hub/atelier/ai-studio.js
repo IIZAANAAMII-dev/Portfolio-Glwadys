@@ -76,7 +76,7 @@
    // Send only public professional facts (not phone/email, not the whole CV file).
    const resp=await fetch('../api/ai',{
     method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({...s,code:passcode,consent:true,research,sourceUrl:sessionStorage.getItem('glwadys-ai-offer-url')||''}),
+    body:JSON.stringify({role:s.role,company:s.company,ad:s.ad,focus:s.focus,tone:s.tone,code:passcode,consent:true,research,sourceUrl:(()=>{try{const x=JSON.parse(sessionStorage.getItem('glwadys-ai-offer-context')||'null');return x?.role===s.role&&x?.company===s.company?x.url:''}catch{return ''}})()}),
     signal:controller.signal,cache:'no-store'
    });
    let data={};try{data=await resp.json()}catch{}
