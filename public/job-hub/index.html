@@ -26,6 +26,7 @@
 @media(max-width:650px){.radar-head{align-items:stretch}.radar-head .btn{width:100%}.job-actions .btn{flex:1 1 100%}}
 </style>
 <link rel="stylesheet" href="./studio-polish.css">
+<link rel="stylesheet" href="./radar-v2.css">
 <script>
 /* Glwadys Career Studio — statique, sans serveur ni collecte de données personnelles. */
 'use strict';
@@ -71,7 +72,7 @@ function locationValue(){return $('#location').value}
 function selectedKeyword(){const q=$('#keyword').value.trim();return q || 'communication'}
 function shouldShowSource(s,loc){if(isBelgium(loc))return s.zone==='BE'||s.zone.includes('BE')||s.zone==='REMOTE';if(isRemote(loc))return s.zone==='REMOTE'||s.name==='LinkedIn Jobs'||s.name==='Indeed';return s.zone.includes('FR')||s.zone==='REMOTE'}
 function renderSources(){const q=selectedKeyword(),l=locationValue();const sources=PLATFORMS.filter(s=>shouldShowSource(s,l));$('#source-grid').innerHTML=sources.map(s=>`<a class="source-card" target="_blank" rel="noopener noreferrer" href="${esc(s.fn(q,l))}" aria-label="Rechercher ${esc(q)} sur ${esc(s.name)}"><span class="source-arrow">↗</span><span class="source-badge">${esc(s.zone)}</span><span class="source-name">${esc(s.name)}</span><p>${esc(s.blurb)}</p></a>`).join('');}
-function normalJob(raw){if(!raw||typeof raw!=='object'||!validUrl(raw.url))return null;return {id:String(raw.id||raw.url),title:String(raw.title||'').slice(0,160),company:String(raw.company||'Entreprise').slice(0,90),location:String(raw.location||'Lieu non précisé').slice(0,100),description:String(raw.description||'').slice(0,3300),source:String(raw.source||'Source externe').slice(0,40),url:raw.url,remote:!!raw.remote,date:raw.date||null};}
+function normalJob(raw){if(!raw||typeof raw!=='object'||!validUrl(raw.url))return null;return {id:String(raw.id||raw.url),title:String(raw.title||'').slice(0,165),company:String(raw.company||'Entreprise').slice(0,135),location:String(raw.location||'Lieu non précisé').slice(0,130),description:String(raw.description||'').slice(0,5000),source:String(raw.source||'Source externe').slice(0,40),url:raw.url,sourceUrl:validUrl(raw.sourceUrl)?raw.sourceUrl:raw.url,applyUrl:validUrl(raw.applyUrl)?raw.applyUrl:raw.url,remote:!!raw.remote,date:raw.date||null,expiryDate:raw.expiryDate||null,employmentType:String(raw.employmentType||''),seniority:String(raw.seniority||''),salary:raw.salary&&typeof raw.salary==='object'?raw.salary:null,locationRestrictions:Array.isArray(raw.locationRestrictions)?raw.locationRestrictions.slice(0,20):[]};}
 const RADAR_SEEN_KEY='glwadys-radar-seen-v1';
 let newJobIds=new Set(), radarFirstVisit=false;
 function markNewJobs(){
@@ -79,7 +80,7 @@ function markNewJobs(){
     const raw=localStorage.getItem(RADAR_SEEN_KEY);
     radarFirstVisit=raw===null;
     const previous=new Set(JSON.parse(raw||'[]'));
-    newJobIds=new Set(radarFirstVisit?[]:jobs.filter(j=>!previous.has(j.id)).map(j=>j.id));
+    newJobIds=new Set(radarFirstVisit?[]:jobs.filter(j=>!previous.has(j.id) && (!window.GlwadysRadar || (window.GlwadysRadar.explain(j).score>=Math.max(65,window.GlwadysRadar.settings.minScore)&&window.GlwadysRadar.explain(j).where.matchZone&&!window.GlwadysRadar.explain(j).senior))).map(j=>j.id));
     localStorage.setItem(RADAR_SEEN_KEY,JSON.stringify(jobs.map(j=>j.id).slice(0,1000)));
   }catch{newJobIds=new Set()}
   const alerts=$('#new-job-count');
@@ -103,6 +104,7 @@ async function loadFeed(){
       const data=await response.json();
       jobs=(Array.isArray(data.jobs)?data.jobs:[]).map(normalJob).filter(Boolean);
       feedUpdated=data.generated_at||null;
+      window.GlwadysRadar?.onFeed?.(data);
       if(!jobs.length)throw Error('Source sans offres');
       const label=(data.sources||[]).join(' · ')||'Sources publiques';
       $('#feed-status').textContent=label+' · '+(feedUpdated?'Actualisé le '+formatDate(feedUpdated):'Catalogue disponible');
@@ -123,6 +125,7 @@ async function loadFeed(){
       source:'Remotive',url:x.url,remote:true,date:x.publication_date
     })).filter(Boolean);
     $('#feed-status').textContent='Remotive · annonces décalées d’au moins 24 h';
+    window.GlwadysRadar?.onFeed?.({sources:['Remotive'],generated_at:new Date().toISOString(),source_errors:[]});
     $('#feed-side-count').textContent=jobs.length;
     markNewJobs();
   }catch(e){
@@ -132,14 +135,69 @@ async function loadFeed(){
   }
   renderJobs();
 }
-function jobScore(job){let txt=lower([job.title,job.description].join(' '));let title=lower(job.title);let q=lower($('#offer-query').value.trim()||selectedKeyword());let terms=[...new Set([...q.split(/\s+/).filter(t=>t.length>2),'communication','marketing','social','content','community','retail','store','customer','event','brand','vente'])];let score=0;for(const t of terms){if(title.includes(t))score+=5;else if(txt.includes(t))score+=2;}if(job.remote)score+=1;return Math.min(99,Math.max(0,score*3));}
+function jobScore(job){
+ if(window.GlwadysRadar)return window.GlwadysRadar.score(job);
+ const txt=lower(job.title+' '+job.description),terms=['communication','marketing','social','content','retail','vente','event'];
+ return Math.min(100,terms.reduce((score,term)=>score+(lower(job.title).includes(term)?12:txt.includes(term)?5:0),0));
+}
 function regionMatch(job,region){const loc=lower(job.location);if(region==='all')return true;if(region==='remote')return job.remote;if(region==='fr')return /france|paris|lyon|rennes|nantes|brest|vannes|marseille|bordeaux|lille|nice|toulouse/i.test(loc);if(region==='be')return /belgium|belgique|brussels|bruxelles|liege|liège|antwerp|namur|ghent|gent/i.test(loc);return !(/france|belgium|belgique/i.test(loc))}
 let visibleJobs=24;
-function renderJobs(){if(!$('#jobs-grid'))return;const q=lower($('#offer-query').value.trim());const fam=$('#family').value;const reg=$('#offer-region').value;let list=jobs.filter(job=>regionMatch(job,reg));if(q)list=list.filter(job=>lower(job.title+' '+job.company+' '+job.description).includes(q));if(fam!=='all')list=list.filter(job=>familyKeywords[fam].some(t=>lower(job.title+' '+job.description).includes(lower(t))));list.sort((a,b)=>$('#offer-sort').value==='newest'?(new Date(b.date||0)-new Date(a.date||0)):jobScore(b)-jobScore(a));$('#total-jobs').textContent=jobs.length;$('#matching-jobs').textContent=list.length;
-if(!list.length){$('#jobs-grid').innerHTML=`<div class="empty-state"><h3>${jobs.length?'Aucune offre avec ces filtres.':'À la recherche des prochaines offres.'}</h3><p>${jobs.length?'Essaie un autre mot-clé ou sélectionne une autre zone.':'Les flux automatiques ne sont pas encore alimentés ou aucune annonce pertinente n’a été détectée. Tu peux dès maintenant chercher sur les plateformes françaises et belges.'}</p><button class="btn btn-primary" type="button" data-go-search>Explorer les plateformes ↗</button></div>`;return;}
-$('#jobs-grid').innerHTML=list.slice(0,visibleJobs).map(job=>{const saved=applications.some(a=>a.url===job.url);return `<article class="job-card"><div class="job-top"><span class="job-source">${esc(job.source)}</span>${newJobIds.has(job.id)?'<span class="job-new">NOUVEAU</span>':''}<span class="job-score">Indice ${jobScore(job)}/99</span></div><h3>${esc(job.title)}</h3><div class="job-company">${esc(job.company)}</div><div class="job-details">${esc(job.location)}${job.remote?' · Remote':''} ${job.date?' · '+formatDate(job.date):''}</div><p class="job-description">${esc(job.description||'Ouvre l’annonce pour découvrir les missions et les conditions proposées.').slice(0,260)}</p><div class="job-actions"><a class="btn btn-primary" href="${esc(job.url)}" target="_blank" rel="noopener noreferrer">Voir l’annonce ↗</a><button class="btn btn-outline" type="button" data-prepare-job="${esc(job.id)}">✦ CV + lettre</button><button class="btn btn-outline" type="button" data-save-job="${esc(job.id)}" ${saved?'disabled':''}>${saved?'Enregistrée ✓':'+ Suivre cette offre'}</button></div></article>`;}).join('');const more=document.getElementById('offer-more');if(more){more.hidden=visibleJobs>=list.length;more.textContent='Afficher '+Math.min(24,list.length-visibleJobs)+' offres supplémentaires ↗';}const summary=document.getElementById('offer-visible-count');if(summary)summary.textContent=''+Math.min(visibleJobs,list.length)+' sur '+list.length+' offres affichées';}
+function renderJobs(){
+ if(!$('#jobs-grid'))return;
+ const q=lower($('#offer-query').value.trim()),fam=$('#family').value,reg=$('#offer-region').value,radar=window.GlwadysRadar;
+ let list=jobs.filter(job=>regionMatch(job,reg)&&(!radar||radar.keep(job)));
+ if(q){const words=q.split(/\s+/).filter(x=>x.length>=3);list=list.filter(job=>{const text=lower(job.title+' '+job.company+' '+job.description);return !words.length||words.some(word=>text.includes(word))})}
+ if(fam!=='all')list=list.filter(job=>familyKeywords[fam].some(t=>lower(job.title+' '+job.description).includes(lower(t))));
+ list.sort((a,b)=>$('#offer-sort').value==='newest'?(new Date(b.date||0)-new Date(a.date||0)):jobScore(b)-jobScore(a));
+ $('#total-jobs').textContent=jobs.length;
+ $('#matching-jobs').textContent=list.length;
+ radar?.summary?.(jobs,list);
+ if(!list.length){
+  $('#jobs-grid').innerHTML='<div class="empty-state"><h3>'+(jobs.length?'Aucune offre selon ces critères.':'Aucune offre récupérée pour le moment.')+'</h3><p>'+(jobs.length?'Élargis la zone, baisse le seuil d’affinité ou essaie un autre mot-clé.':'Le radar vérifie ses sources. Les recherches externes restent accessibles.')+'</p><button class="btn btn-primary" type="button" data-go-search>Explorer les plateformes ↗</button></div>';
+  const more=document.getElementById('offer-more');if(more)more.hidden=true;
+  const summary=document.getElementById('offer-visible-count');if(summary)summary.textContent='Aucune offre affichée';
+  return;
+ }
+ $('#jobs-grid').innerHTML=list.slice(0,visibleJobs).map(job=>{
+  const saved=applications.some(a=>a.url===job.url),match=radar?.explain(job);
+  const detail=radar?radar.renderDetails(job,esc):'';
+  const apply=validUrl(job.applyUrl)?job.applyUrl:job.url;
+  const metadata=[job.location,job.remote?'Télétravail':'',job.date?formatDate(job.date):'',job.employmentType].filter(Boolean).join(' · ');
+  return '<article class="job-card">'
+   +'<div class="job-top"><span class="job-source">'+esc(job.source)+'</span>'
+   +(newJobIds.has(job.id)?'<span class="job-new">NOUVEAU</span>':'')
+   +'<span class="job-score">'+(match?'Affinité indicative ':'Indice ')+jobScore(job)+'/100</span></div>'
+   +'<h3>'+esc(job.title)+'</h3><div class="job-company">'+esc(job.company)+'</div>'
+   +'<div class="job-details">'+esc(metadata)+'</div>'
+   +'<p class="job-description">'+esc((job.description||'Consulte l’annonce officielle pour connaître les missions et les conditions.').slice(0,380))+'</p>'
+   +detail
+   +'<div class="job-actions"><a class="btn btn-outline" href="'+esc(job.url)+'" target="_blank" rel="noopener noreferrer">Annonce officielle ↗</a>'
+   +(apply!==job.url?'<a class="btn btn-outline" href="'+esc(apply)+'" target="_blank" rel="noopener noreferrer">Postuler ↗</a>':'')
+   +'<button class="btn btn-primary" type="button" data-prepare-job="'+esc(job.id)+'">✦ Générer CV + lettre</button>'
+   +'<button class="btn btn-outline" type="button" data-save-job="'+esc(job.id)+'" '+(saved?'disabled':'')+'>'+(saved?'Enregistrée ✓':'+ Suivre')+'</button>'
+   +'</div><button type="button" class="radar-dismiss" data-ignore-job="'+esc(job.id)+'">Masquer cette annonce</button></article>';
+ }).join('');
+ const more=document.getElementById('offer-more');
+ if(more){more.hidden=visibleJobs>=list.length;more.textContent='Afficher '+Math.min(24,list.length-visibleJobs)+' offres supplémentaires ↗';}
+ const summary=document.getElementById('offer-visible-count');
+ if(summary)summary.textContent=Math.min(visibleJobs,list.length)+' sur '+list.length+' offres affichées';
+}
+function prepareJob(job){
+ if(!job){toast('Offre introuvable : vérifie le lien source.');return;}
+ try{sessionStorage.setItem('glwadys-job-selection-v1',JSON.stringify({
+  role:job.title,company:job.company,ad:String(job.description||'').slice(0,12000),
+  source:job.source,url:job.url,location:job.location,date:job.date,
+  salary:job.salary||null
+ }));}catch(e){toast('Stockage désactivé : impossible de transférer la description de l’offre.');return;}
+ window.location.assign('atelier/?source=offre');
+}
 function makeId(){return (globalThis.crypto?.randomUUID?.()??('g'+Date.now()+'-'+Math.random().toString(16).slice(2)))}
-function addApplication(data){if(!validUrl(data.url)){toast('Entre un lien d’annonce valide (https://…).');return false;}if(applications.some(v=>v.url===data.url)){toast('Cette offre est déjà enregistrée.');return false;}applications.unshift({id:makeId(),title:String(data.title||'').slice(0,150),company:String(data.company||'').slice(0,150),city:String(data.city||''),url:data.url,notes:String(data.notes||'').slice(0,2000),status:'A étudier',createdAt:new Date().toISOString(),sentAt:null});persist();renderApplications();renderJobs();toast('Offre enregistrée dans ton suivi !');return true;}
+function addApplication(data){
+ if(!validUrl(data.url)){toast('Entre un lien d’annonce valide (https://…).');return false;}
+ if(applications.some(v=>v.url===data.url)){toast('Cette offre est déjà enregistrée.');return false;}
+ applications.unshift({id:makeId(),title:String(data.title||'').slice(0,150),company:String(data.company||'').slice(0,150),city:String(data.city||'').slice(0,120),url:data.url,description:String(data.description||'').slice(0,5000),source:String(data.source||'').slice(0,60),notes:String(data.notes||'').slice(0,2000),status:'A étudier',createdAt:new Date().toISOString(),sentAt:null});
+ persist();renderApplications();renderJobs();toast('Offre enregistrée dans ton suivi !');return true;
+}
 function updateCounts(){const sent=applications.filter(a=>['Envoyée','Entretien','Relance faite','Offre reçue'].includes(a.status)).length;const reminders=applications.filter(a=>a.status==='Envoyée'&&a.sentAt&&daysSince(a.sentAt)>=7).length;$('#app-count').textContent=applications.length;$('#count-total').textContent=applications.length;$('#count-sent').textContent=sent;$('#count-reminders').textContent=reminders;}
 function renderApplications(){const filter=$('#application-filter').value;const list=applications.filter(a=>filter==='all'||a.status===filter);if(!list.length){$('#applications-list').innerHTML=`<div class="empty-state"><h3>${applications.length?'Aucune candidature ici.':'Tout commence par une première offre.'}</h3><p>${applications.length?'Change le filtre pour retrouver tes candidatures.':'Ajoute une offre trouvée sur les plateformes. Tu pourras suivre ses étapes et préparer tes messages.'}</p><button class="btn btn-primary" type="button" data-open-add>Ajouter une offre +</button></div>`;return;}
 $('#applications-list').innerHTML=list.map(a=>`<article class="application-row"><div><h3>${esc(a.title)}</h3><div class="app-meta">${esc(a.company)} ${a.city?' · '+esc(a.city):''}</div><div class="app-date">Ajoutée le ${formatDate(a.createdAt)} ${a.status==='Envoyée'&&a.sentAt?' · Envoyée le '+formatDate(a.sentAt):''}</div>${a.status==='Envoyée'&&a.sentAt&&daysSince(a.sentAt)>=7?'<small class="source-badge">Relance à envisager</small>':''}</div><label class="field">STATUT <select aria-label="Statut de ${esc(a.title)}" data-status-id="${esc(a.id)}">${STATUS.map(s=>`<option value="${esc(s)}" ${a.status===s?'selected':''}>${esc(s)}</option>`).join('')}</select></label><div class="app-actions"><a class="small-link" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer">Annonce ↗</a><button class="btn btn-outline" type="button" data-draft-id="${esc(a.id)}">Message</button><button class="btn btn-primary" type="button" data-prepare-app="${esc(a.id)}">✦ CV + lettre</button><button class="danger-action" type="button" aria-label="Supprimer ${esc(a.title)}" data-delete-id="${esc(a.id)}">×</button></div></article>`).join('');}
@@ -149,20 +207,18 @@ else{text=`Objet : Candidature – ${role} – Glwadys Dalleau\n\n${greet}\n\nJe
 function download(name,content,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function exportCsv(){const rows=[['Entreprise','Poste','Ville','Statut','Date ajout','Date envoi','URL','Notes'],...applications.map(a=>[a.company,a.title,a.city,a.status,a.createdAt||'',a.sentAt||'',a.url,a.notes])];const csv=rows.map(row=>row.map(x=>'"'+String(x||'').replace(/"/g,'""')+'"').join(';')).join('\r\n');download('glwadys-candidatures.csv','\ufeff'+csv,'text/csv;charset=utf-8');toast('Export CSV créé.');}
 function exportJson(){download('glwadys-candidatures-sauvegarde.json',JSON.stringify({format:'glwadys-job-studio-v1',applications,exported_at:new Date().toISOString()},null,2),'application/json');toast('Sauvegarde téléchargée.');}
-async function importJson(file){if(!file)return;try{if(file.size>3_000_000)throw new Error('Fichier trop volumineux');const data=JSON.parse(await file.text());if(data.format!=='glwadys-job-studio-v1'||!Array.isArray(data.applications))throw Error('Format de sauvegarde non reconnu');let newItems=data.applications.filter(a=>a&&validUrl(a.url)&&typeof a.title==='string'&&typeof a.company==='string').slice(0,1000).map(a=>({id:makeId(),title:a.title.slice(0,150),company:a.company.slice(0,150),city:String(a.city||'').slice(0,120),url:a.url,notes:String(a.notes||'').slice(0,2000),status:STATUS.includes(a.status)?a.status:'A étudier',createdAt:a.createdAt||new Date().toISOString(),sentAt:a.sentAt||null}));let count=0;for(const a of newItems){if(!applications.some(prev=>prev.url===a.url)){applications.push(a);count++}}persist();renderApplications();toast(`${count} candidature(s) importée(s).`);}catch(e){toast('Import refusé : '+String(e.message||e));}}
+async function importJson(file){if(!file)return;try{if(file.size>3_000_000)throw new Error('Fichier trop volumineux');const data=JSON.parse(await file.text());if(data.format!=='glwadys-job-studio-v1'||!Array.isArray(data.applications))throw Error('Format de sauvegarde non reconnu');let newItems=data.applications.filter(a=>a&&validUrl(a.url)&&typeof a.title==='string'&&typeof a.company==='string').slice(0,1000).map(a=>({id:makeId(),title:a.title.slice(0,150),company:a.company.slice(0,150),city:String(a.city||'').slice(0,120),url:a.url,description:String(a.description||'').slice(0,5000),source:String(a.source||'').slice(0,50),notes:String(a.notes||'').slice(0,2000),status:STATUS.includes(a.status)?a.status:'A étudier',createdAt:a.createdAt||new Date().toISOString(),sentAt:a.sentAt||null}));let count=0;for(const a of newItems){if(!applications.some(prev=>prev.url===a.url)){applications.push(a);count++}}persist();renderApplications();toast(`${count} candidature(s) importée(s).`);}catch(e){toast('Import refusé : '+String(e.message||e));}}
 function openApplicationModal(){const dialog=$('#application-dialog');$('#application-form').reset();dialog.showModal();$('#app-title').focus()}
 function init(){const date=new Date();$('#today-label').textContent=date.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});$$('[data-view]').forEach(n=>n.addEventListener('click',()=>showView(n.dataset.view)));$$('[data-role]').forEach(n=>n.addEventListener('click',()=>{$('#keyword').value=n.dataset.role;renderSources();showView('recherche');$('#source-grid').scrollIntoView({behavior:'smooth',block:'start'});}));$('#keyword').addEventListener('input',renderSources);$('#location').addEventListener('change',renderSources);$('#family').addEventListener('change',()=>{renderSources();renderJobs()});$('#search-all').addEventListener('click',()=>{renderSources();$('#source-grid').scrollIntoView({behavior:'smooth',block:'start'});toast('Sélectionne un site pour ouvrir les offres correspondant à tes critères.');});
 $('#offer-query').addEventListener('input',renderJobs);$('#offer-region').addEventListener('change',renderJobs);$('#offer-sort').addEventListener('change',renderJobs);$('#application-filter').addEventListener('change',renderApplications);$('#add-application').addEventListener('click',openApplicationModal);$('#dialog-close').addEventListener('click',()=>$('#application-dialog').close());$('#application-form').addEventListener('submit',event=>{event.preventDefault();const ok=addApplication({title:$('#app-title').value,company:$('#app-company').value,city:$('#app-city').value,url:$('#app-url').value,notes:$('#app-notes').value});if(ok)$('#application-dialog').close()});$('#export-json').addEventListener('click',exportJson);$('#export-csv').addEventListener('click',exportCsv);$('#import-file').addEventListener('change',e=>{importJson(e.target.files?.[0]);e.target.value=''});$('#draft-form').addEventListener('submit',e=>{e.preventDefault();draft();toast('Brouillon généré, à personnaliser avant envoi.')});$('#copy-draft').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('#draft-result').textContent);toast('Message copié.')}catch{toast('La copie automatique n’est pas disponible ici.')}});
-document.addEventListener('click',event=>{const target=event.target.closest('[data-save-job],[data-generate-job],[data-go-search],[data-open-add],[data-delete-id],[data-draft-id]');if(!target)return;if(target.hasAttribute('data-go-search'))showView('recherche');if(target.hasAttribute('data-open-add'))openApplicationModal();if(target.hasAttribute('data-generate-job')){
- const found=jobs.find(j=>j.id===target.dataset.generateJob);
- if(found){
-   try{sessionStorage.setItem('glwadys-job-selection-v1',JSON.stringify({
-     role:found.title,company:found.company,ad:found.description,source:found.source,url:found.url,
-     location:found.location,date:found.date
-   }));}catch{}
-   window.location.href='atelier/?source=offre';
+document.addEventListener('click',event=>{const target=event.target.closest('[data-save-job],[data-prepare-job],[data-prepare-app],[data-go-search],[data-open-add],[data-delete-id],[data-draft-id]');if(!target)return;if(target.hasAttribute('data-go-search'))showView('recherche');if(target.hasAttribute('data-open-add'))openApplicationModal();if(target.hasAttribute('data-prepare-job')){
+  const found=jobs.find(j=>j.id===target.dataset.prepareJob);
+  if(found)prepareJob(found);
  }
-}if(target.hasAttribute('data-save-job')){const found=jobs.find(j=>j.id===target.dataset.saveJob);if(found)addApplication({title:found.title,company:found.company,city:found.location,url:found.url,notes:`Source : ${found.source}`})}if(target.hasAttribute('data-delete-id')){const id=target.dataset.deleteId;if(window.confirm('Supprimer cette offre du suivi ?')){applications=applications.filter(a=>a.id!==id);persist();renderApplications();renderJobs()}}if(target.hasAttribute('data-draft-id')){const a=applications.find(a=>a.id===target.dataset.draftId);if(a){$('#draft-role').value=a.title;$('#draft-company').value=a.company;$('#draft-detail').value=a.notes||'';showView('assistant');draft()}}});document.addEventListener('change',event=>{const target=event.target.closest('[data-status-id]');if(!target)return;const a=applications.find(a=>a.id===target.dataset.statusId);if(!a)return;const wasSent=a.status==='Envoyée';a.status=target.value;if(a.status==='Envoyée'&&!wasSent)a.sentAt=new Date().toISOString();if(a.status==='A étudier')a.sentAt=null;persist();renderApplications()});
+ if(target.hasAttribute('data-prepare-app')){
+  const saved=applications.find(a=>a.id===target.dataset.prepareApp);
+  if(saved)prepareJob({title:saved.title,company:saved.company,description:saved.description||saved.notes||'',source:saved.source||'Suivi',url:saved.url,location:saved.city});
+ }if(target.hasAttribute('data-save-job')){const found=jobs.find(j=>j.id===target.dataset.saveJob);if(found)addApplication({title:found.title,company:found.company,city:found.location,url:found.url,description:found.description,source:found.source,notes:`Source : ${found.source}`})}if(target.hasAttribute('data-delete-id')){const id=target.dataset.deleteId;if(window.confirm('Supprimer cette offre du suivi ?')){applications=applications.filter(a=>a.id!==id);persist();renderApplications();renderJobs()}}if(target.hasAttribute('data-draft-id')){const a=applications.find(a=>a.id===target.dataset.draftId);if(a){$('#draft-role').value=a.title;$('#draft-company').value=a.company;$('#draft-detail').value=a.notes||'';showView('assistant');draft()}}});document.addEventListener('change',event=>{const target=event.target.closest('[data-status-id]');if(!target)return;const a=applications.find(a=>a.id===target.dataset.statusId);if(!a)return;const wasSent=a.status==='Envoyée';a.status=target.value;if(a.status==='Envoyée'&&!wasSent)a.sentAt=new Date().toISOString();if(a.status==='A étudier')a.sentAt=null;persist();renderApplications()});
 $('#enable-radar-alerts')?.addEventListener('click',async()=>{
  try{
   if(!('Notification' in window)){toast('Ce navigateur ne prend pas en charge les notifications de page.');return}
@@ -189,7 +245,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    <button class="nav-link" type="button" data-view="candidatures"><span class="nav-icon">▤</span> Mes candidatures <span class="nav-count" id="app-count">0</span></button>
    <button class="nav-link" type="button" data-view="assistant"><span class="nav-icon">✎</span> Messages courts</button><a href="atelier/" class="studio-nav-link"><span class="nav-icon" aria-hidden="true">✦</span> Atelier CV & lettre <span aria-hidden="true" style="margin-left:auto">↗</span></a>
   </nav>
-  <a class="nav-link" href="atelier/" style="background:#eedfe2;color:#873f55;font-weight:700;border:1px solid #dcb6c0;margin:14px 1px 0;text-decoration:none;display:flex;align-items:center;gap:10px;line-height:1.4"><span class="nav-icon">✦</span> Atelier CV + lettre <span style="margin-left:auto;font-size:12px">↗</span></a>
   <div style="padding:12px 24px 22px;display:grid;gap:12px;border-top:1px solid #ded5d1">
     <a href="../fr/" style="font-size:12px;letter-spacing:.02em;color:#9b495c;text-decoration:none;font-weight:700">↗ Voir le portfolio</a>
     <a href="../cv/" style="font-size:12px;letter-spacing:.02em;color:#9b495c;text-decoration:none;font-weight:700">↗ CV premium &amp; versions ATS</a>
@@ -214,11 +269,24 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    <div class="source-grid" id="source-grid"></div>
    <div class="split-section"><div><p class="eyebrow">02 — LES MÉTIERS QUI TE CORRESPONDENT</p><h2>Ton champ des possibles.</h2><p>Ton parcours mêle gestion de boutique, conseil client, merchandising, contenus digitaux et organisation d’événements. Une double approche, c’est un atout quand on choisit les bons postes.</p></div><div class="role-list"><button type="button" data-role="Chargée de communication">Chargée de communication <span>01 ↗</span></button><button type="button" data-role="Community manager">Community manager <span>02 ↗</span></button><button type="button" data-role="Responsable adjointe de magasin">Responsable adjointe <span>03 ↗</span></button><button type="button" data-role="Chargée événementiel">Chargée d'événementiel <span>04 ↗</span></button><button type="button" data-role="Chargée de marketing">Chargée de marketing <span>05 ↗</span></button></div></div>
   </section>
-  <section class="view" id="view-offres" aria-labelledby="offers-title"><div class="inner-hero"><p class="eyebrow accent">OPPORTUNITÉS / FLUX PUBLICS</p><h1 id="offers-title">Votre radar. <em>Vos opportunités.</em></h1><p>Offres issues des sources publiques Remotive, Jobicy et Arbeitnow lorsque disponibles. Les annonces sont actualisées par le serveur et le tableau est rechargé lorsque l'application est ouverte. Le lien de l'annonce officielle fait foi.</p></div>
+  <section class="view" id="view-offres" aria-labelledby="offers-title"><div class="inner-hero"><p class="eyebrow accent">OPPORTUNITÉS / FLUX PUBLICS</p><h1 id="offers-title">Votre radar. <em>Vos opportunités.</em></h1><p>Offres récupérées via les API publiques Remotive, Jobicy, Arbeitnow et Himalayas lorsqu’elles sont disponibles. Les annonces sont actualisées par le serveur et le tableau est rechargé lorsque l'application est ouverte. Le lien de l'annonce officielle fait foi.</p></div>
+   <section class="radar-profile" aria-label="Mon radar personnalisé">
+    <div class="radar-profile-title"><div><p class="eyebrow accent">RADAR INTELLIGENT / MES CRITÈRES</p><h2>Des opportunités pour Glwadys.</h2><p>Le classement tient compte de son parcours en commerce, communication et événementiel, de la localisation et des missions. Tes choix restent enregistrés sur cet appareil.</p></div><span class="radar-live">Collecte automatique</span></div>
+    <div class="radar-controls">
+     <label>ZONE GÉOGRAPHIQUE<select id="radar-zone"><option value="frbe">France + Belgique</option><option value="breizh">Bretagne + Nantes</option><option value="fr">France entière</option><option value="be">Belgique entière</option><option value="remote">Télétravail compatible</option><option value="all">Toutes les zones</option></select></label>
+     <label>FAMILLE DE MÉTIERS<select id="radar-family"><option value="mix">Tous ses domaines</option><option value="communication">Communication / marketing</option><option value="retail">Commerce / management</option><option value="event">Événementiel / partenariats</option></select></label>
+     <label>NIVEAU VISÉ<select id="radar-level"><option value="junior">Junior / intermédiaire</option><option value="any">Tous les niveaux</option></select></label>
+     <label><span>AFFINITÉ MINIMUM · <output id="radar-minscore-value">35</output>/100</span><input type="range" id="radar-minscore" min="0" max="85" step="5" value="35"></label>
+    </div>
+    <div class="radar-profile-checks"><label><input type="checkbox" id="radar-remote" checked> Télétravail éligible</label><label><input type="checkbox" id="radar-only-new"> Uniquement les nouveautés</label><button type="button" id="radar-reset">Réinitialiser les critères et offres masquées</button></div>
+    <div class="radar-brief"><span><strong id="radar-personal-count">—</strong> offres selon les critères</span><span id="radar-alert-summary">Recherche en cours…</span><span>Dernière collecte : <strong id="radar-last-check">—</strong></span></div>
+    <div id="radar-top-picks" aria-live="polite"></div>
+    <p class="radar-note" id="radar-sources-status" style="margin-top:10px">Vérification des sources publiques…</p>
+   </section>
    <div class="summary-bar"><div><span class="summary-number" id="total-jobs">—</span><span class="summary-label">offres dans le flux</span></div><div><span class="summary-number" id="matching-jobs">—</span><span class="summary-label">selon tes filtres</span></div><div><span class="summary-label" id="feed-status">Chargement du catalogue…</span><span class="summary-label">Source affichée sur chaque annonce</span></div></div>
    <div class="toolbar"><label>Mot clé <input id="offer-query" placeholder="Ex. content, communication, sales"></label><label>Zone <select id="offer-region"><option value="all">Toutes les zones</option><option value="fr">France</option><option value="be">Belgique</option><option value="remote">Remote</option><option value="anywhere">Europe / autres</option></select></label><label>Trier <select id="offer-sort"><option value="match">Pertinence</option><option value="newest">Plus récentes</option></select></label></div>
-   <div class="radar-head"><span id="new-job-count" class="radar-pill" aria-live="polite">Détection des nouveautés…</span><button type="button" id="enable-radar-alerts" class="btn btn-outline">🔔 Alertes quand l’app est ouverte</button><span class="radar-note">Les alertes externes lorsque l'app est fermée nécessitent un service de notification distinct.</span></div>
-   <div id="jobs-grid" class="jobs-grid" aria-live="polite"></div><div class="offer-progress"><span id="offer-visible-count" aria-live="polite">Chargement des offres…</span><button class="btn btn-outline" id="offer-more" type="button" hidden>Afficher plus d’offres ↗</button></div><div class="end-note">Les scores sont de simples indices basés sur les mots-clés du CV, pas une prédiction de recrutement. Les plateformes d’emploi locales sont accessibles via « Rechercher ».</div>
+   <div class="radar-head"><span id="new-job-count" class="radar-pill" aria-live="polite">Détection des nouveautés…</span><button type="button" id="enable-radar-alerts" class="btn btn-outline">🔔 Alertes quand l’app est ouverte</button><span class="radar-note">Les alertes lorsque l’app est fermée nécessitent un canal de réception facultatif à configurer (email ou push).</span></div>
+   <div id="jobs-grid" class="jobs-grid" aria-live="polite"></div><div class="offer-progress"><span id="offer-visible-count" aria-live="polite">Chargement des offres…</span><button class="btn btn-outline" id="offer-more" type="button" hidden>Afficher plus d’offres ↗</button></div><div class="end-note">L’affinité combine les missions, le lieu et son parcours réel : ce n’est pas une probabilité d’embauche. Les plateformes d’emploi locales sont accessibles via « Rechercher ».</div>
   </section>
   <section class="view" id="view-candidatures" aria-labelledby="applications-title"><div class="inner-hero"><p class="eyebrow accent">TABLEAU DE BORD / CANDIDATURES</p><h1 id="applications-title">Un suivi <em>sans stress.</em></h1><p>Enregistre les offres qui t'intéressent, note tes envois et n'oublie aucune relance. Rien n’est envoyé à un serveur.</p></div>
    <div class="summary-bar"><div><span class="summary-number" id="count-total">0</span><span class="summary-label">offres enregistrées</span></div><div><span class="summary-number" id="count-sent">0</span><span class="summary-label">candidatures envoyées</span></div><div><span class="summary-number" id="count-reminders">0</span><span class="summary-label">relances à envisager</span></div></div>
@@ -233,6 +301,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <nav class="mobile-nav" aria-label="Navigation mobile"><button data-view="recherche" class="active">⌕<span>Recherche</span></button><button data-view="offres">◇<span>Offres</span></button><button data-view="candidatures">▤<span>Suivi</span></button><button data-view="assistant">✎<span>Messages</span></button><a href="atelier/" class="mobile-studio-cta" aria-label="Générer le CV et la lettre">✦<span>Atelier</span></a></nav>
 <dialog id="application-dialog" aria-labelledby="dialog-title"><form method="dialog" id="application-form"><div class="dialog-head"><h2 id="dialog-title">Enregistrer une offre</h2><button type="button" aria-label="Fermer" id="dialog-close">×</button></div><label>POSTE <input id="app-title" required maxlength="140"></label><label>ENTREPRISE <input id="app-company" required maxlength="140"></label><label>VILLE <input id="app-city" maxlength="90" placeholder="Vannes, Rennes, Bruxelles…"></label><label>LIEN VERS L'ANNONCE <input id="app-url" inputmode="url" placeholder="https://…" required></label><label>NOTES <textarea id="app-notes" rows="3" placeholder="Contact, points forts, prochaines étapes…" maxlength="2000"></textarea></label><button class="btn btn-primary" type="submit" id="dialog-submit">Enregistrer l’offre</button></form></dialog>
 <div class="toast" role="status" id="toast"></div>
+<script src="./radar-v2.js" defer></script>
 <script src="./studio-polish.js" defer></script>
 </body>
 </html>

@@ -34,7 +34,30 @@ async function main(){
   await page.screenshot({path:path.join(output,'studio-desktop.png'),fullPage:true});
   await page.locator('.side-nav [data-view="offres"]').click();
   await page.locator('.job-card').first().waitFor();
+  await page.screenshot({path:path.join(output,'radar-desktop.png'),fullPage:true});
   assert.equal(await page.locator('.job-card').count(),24,'24 jobs in first page');
+  assert.equal(await page.locator('#radar-zone').inputValue(),'frbe','France+Belgique is the default');
+  assert.ok((await page.locator('#radar-top-picks').textContent()).length>15,'personalized top recommendations visible');
+  assert.ok((await page.locator('.radar-match').first().textContent()).includes('Parcours'),'explainable fit details visible');
+  const eligibility=await page.evaluate(()=>{
+    const job=(overrides)=>Object.assign({id:'qa-check',title:'Community Manager',company:'Fictive',location:'France',description:'Social media content',remote:true,url:'https://example.org/qa'},overrides);
+    return {
+      ukOnly:GlwadysRadar.keep(job({location:'Ireland, UK',locationRestrictions:['GB']})),
+      usOnly:GlwadysRadar.keep(job({location:'Remote US',locationRestrictions:['US']})),
+      intern:GlwadysRadar.keep(job({title:'Alternance communication',employmentType:'Internship'})),
+      senior:GlwadysRadar.keep(job({title:'Senior Director Marketing',seniority:'Director'})),
+      france:GlwadysRadar.explain(job({location:'France',locationRestrictions:['FR']})).where.eligible
+    };
+  });
+  assert.equal(eligibility.ukOnly,false,'UK-only remote roles excluded');
+  assert.equal(eligibility.usOnly,false,'US-only remote roles excluded');
+  assert.equal(eligibility.intern,false,'internship roles excluded by default');
+  assert.equal(eligibility.senior,false,'senior roles excluded by default');
+  assert.equal(eligibility.france,true,'French roles remain eligible');
+  await page.locator('#radar-family').selectOption('retail');
+  assert.equal(await page.locator('.job-card').count(),0,'communication ads are filtered out in retail-only mode');
+  await page.locator('#radar-family').selectOption('mix');
+  assert.equal(await page.locator('.job-card').count(),24,'matching jobs return after resetting job family');
   await page.locator('#offer-more').click();
   assert.equal(await page.locator('.job-card').count(),count,'all jobs visible after load more');
   await page.locator('.job-card [data-prepare-job]').first().click();
@@ -56,6 +79,13 @@ async function main(){
   await page.locator('#ats-clean').check();
   assert.equal(await page.locator('body.ats-clean').count(),1,'ATS clean mode visible');
   await page.locator('#ats-clean').uncheck();
+  assert.equal(await page.locator('#download-cv-pdf').isVisible(),true,'CV download action visible');
+  const pdfNativeCv=await page.evaluate(()=>Array.from(window.GlwadysPDF.generateCv()));
+  assert.ok(pdfNativeCv.length>3000 && String.fromCharCode(...pdfNativeCv.slice(0,5))==='%PDF-','native CV is a real PDF');
+  fs.writeFileSync(path.join(output,'CV-natif-exemple-QA.pdf'),Buffer.from(pdfNativeCv));
+  const pdfNativeLetter=await page.evaluate(()=>Array.from(window.GlwadysPDF.generateLetter()));
+  assert.ok(pdfNativeLetter.length>2000 && String.fromCharCode(...pdfNativeLetter.slice(0,5))==='%PDF-','native letter is a real PDF');
+  fs.writeFileSync(path.join(output,'Lettre-native-exemple-QA.pdf'),Buffer.from(pdfNativeLetter));
   await page.evaluate(()=>{document.body.dataset.print='cv';document.body.dataset.tab='cv';});
   await page.pdf({path:path.join(output,'CV-exemple-fictif-QA.pdf'),format:'A4',printBackground:true});
   await page.locator('#tab-letter').click();
@@ -76,6 +106,9 @@ async function main(){
   await mp.locator('.mobile-studio-cta').waitFor();
   assert.equal(await mp.locator('.mobile-studio-cta').isVisible(),true);
   await mp.screenshot({path:path.join(output,'studio-mobile.png'),fullPage:true});
+  await mp.locator('.mobile-nav [data-view="offres"]').click();
+  await mp.locator('.job-card').first().waitFor();
+  await mp.screenshot({path:path.join(output,'radar-mobile.png'),fullPage:true});
   const overflow0=await mp.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
   assert.ok(overflow0<4,'mobile studio no horizontal overflow: '+overflow0);
   await mp.locator('.mobile-studio-cta').click();
