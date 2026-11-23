@@ -112,7 +112,7 @@
   const summary=$('ai-edit-summary').value.trim();
   const letter=$('ai-edit-letter').value.trim().split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);
   if(summary.length<30||summary.length>680){note('L’accroche doit contenir entre 30 et 680 caractères.');return}
-  if(letter.length<3||letter.join('').length<180){note('La lettre doit comporter une salutation et plusieurs paragraphes.');return}
+  if(letter.length<3||letter.join('').length<75){note('La lettre doit comporter une salutation et plusieurs paragraphes de texte.');return}
   active.cv.summary=summary;
   active.letter.greeting=letter[0].slice(0,90);
   active.letter.paragraphs=letter.slice(1,-1).map(x=>x.slice(0,760));
