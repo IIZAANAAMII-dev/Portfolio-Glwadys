@@ -14,6 +14,38 @@
  window.GlwadysAI={getActive};
  function status(text,isReady=false){const e=$('ai-status');if(e){e.textContent=text;e.dataset.ready=String(isReady)}}
  function note(text){const e=$('ai-feedback');if(e){e.textContent=text;e.hidden=!text}}
+ function diagnostic(text){
+  const e=$('ai-diagnostic');if(e){e.textContent=text||'';e.hidden=!text}
+ }
+ function classifyError(code,detail,statusCode){
+  const map={
+   INVALID_ACCESS_CODE:'Code d’accès refusé : vérifie le code privé du compte Izanami, sans espace supplémentaire.',
+   APP_RATE_LIMIT:'Trop d’essais : laisse le délai de sécurité se réinitialiser avant de recommencer.',
+   NOT_CONFIGURED:'Vercel ne reconnaît pas la configuration IA du projet gratuit.',
+   GATEWAY_MISSING_CREDENTIALS:'Le serveur n’a pas de jeton Vercel valide.',
+   GATEWAY_AUTH:'Le projet Izanami n’est pas autorisé auprès d’AI Gateway. Vérifier les réglages du compte Vercel.',
+   GATEWAY_CREDIT:'Crédit IA indisponible ou budget du projet atteint.',
+   GATEWAY_RATE_LIMIT:'Le modèle reçoit trop de demandes ; une nouvelle tentative sera nécessaire.',
+   GATEWAY_TIMEOUT:'Le service IA a dépassé le délai. Désactive la recherche entreprise puis réessaie.',
+   GATEWAY_REQUEST_REJECTED:'Le fournisseur a refusé certains paramètres IA. Le problème est côté application, pas dans ton CV.',
+   OUTPUT_INCOMPLETE:'L’IA n’a pas fini son dossier. Essaie de raccourcir le texte de l’offre.',
+   OUTPUT_INVALID_JSON:'La rédaction IA est arrivée dans un format invalide. Réessaie.',
+   OUTPUT_VALIDATION:'Le dossier IA n’a pas passé les vérifications de sécurité des affirmations.',
+   ORIGIN_BLOCKED:'Le navigateur bloque cet appel. Ouvre directement le Career Studio dans Safari ou Chrome.',
+   CONSENT_REQUIRED:'Coche la case d’accord explicite avant de lancer l’analyse.',
+   MISSING_DETAILS:'Renseigne le poste, l’entreprise et au moins 45 caractères de l’annonce.'
+  };
+  if(code==='CLIENT_TIMEOUT')return 'Le navigateur a interrompu l’attente. Essaie depuis Safari, sans recherche web.';
+  if(code==='NETWORK_FAILURE')return 'Impossible de joindre le service IA. Vérifie la connexion et ouvre le site dans Safari ou Chrome.';
+  return map[code]||detail||(statusCode?'Erreur du service IA (HTTP '+statusCode+').':'La génération n’a pas abouti.');
+ }
+ function handleFailure(code,detail,traceId,statusCode){
+  const label=classifyError(code,detail,statusCode);
+  diagnostic('Cause : '+label+(traceId?' · Référence technique '+traceId:''));
+  note(label+' Le CV et la lettre classiques restent disponibles.');
+  status(code==='INVALID_ACCESS_CODE'?'IA : code à vérifier':code==='GATEWAY_CREDIT'?'IA : crédit indisponible':'IA : erreur identifiée',false);
+  if(code==='INVALID_ACCESS_CODE'){try{sessionStorage.removeItem(codeKey)}catch{} const f=$('ai-code');if(f){f.value='';f.focus()}}
+ }
  const el=(tag,text,cls)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!==undefined)x.textContent=text;return x};
  function results(data,employer,warnings){
   const root=$('ai-results');root.replaceChildren();
@@ -52,13 +84,35 @@
    const response=await fetch('../api/ai',{cache:'no-store'});
    const data=await response.json();
    ready=!!data.enabled;
-   status(ready?'IA connectée · Génération sur demande':'IA en attente de configuration',ready);
-   note(ready?'Aucune donnée n’est envoyée tant que tu ne lances pas l’analyse.':'Le générateur premium local reste disponible. Le responsable du site doit activer l’accès IA.');
+   status(ready?'IA configurée · test du code disponible':'IA en attente de configuration',ready);
+   note(ready?'Vercel détecte la configuration, mais n’a pas encore vérifié une vraie génération. Commence par « Vérifier mon code » : ce test ne consomme aucun crédit.':'Le générateur premium local reste disponible. Le responsable du site doit activer l’accès IA.');
    $('ai-go').disabled=!ready;
   }catch{
    status('IA temporairement indisponible');
    $('ai-go').disabled=true;
   }
+ }
+ async function verifyAccess(){
+  if(working)return;
+  const value=$('ai-code').value.trim();
+  if(!value){handleFailure('INVALID_ACCESS_CODE','',null,null);return}
+  const btn=$('ai-check-access');if(btn)btn.disabled=true;
+  diagnostic('');
+  try{
+   const response=await fetch('../api/ai',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'preflight',code:value}),cache:'no-store'
+   });
+   const result=await response.json().catch(()=>({}));
+   if(!response.ok){handleFailure(result.code,result.error,result.requestId,response.status);return}
+   if(result.ok&&result.code==='ACCESS_OK'){
+    status('Code accepté · IA non encore testée',true);
+    note('Le code est correct, mais cela ne teste pas encore le modèle. Tu peux maintenant lancer la génération, sans ou avec recherche entreprise.');
+    diagnostic('');
+    try{sessionStorage.setItem(codeKey,value)}catch{}
+   }else{handleFailure('SERVICE_UNAVAILABLE','Réponse de test inattendue.',null,response.status)}
+  }catch(e){handleFailure('NETWORK_FAILURE',String(e.message||''),null,null)}
+  finally{if(btn)btn.disabled=false}
  }
  async function generate(){
   if(working||!ready)return;
@@ -68,6 +122,7 @@
   const passcode=$('ai-code').value.trim();
   if(!passcode){note('Renseigne le code d’accès privé, communiqué par le responsable du site.');return}
   const research=$('ai-research').checked;
+  diagnostic('');
   working=true;$('ai-go').disabled=true;
   status(research?'IA : recherche et rédaction…':'IA : analyse et rédaction…',true);
   note('Préparation des documents. Ne ferme pas cette page durant la génération.');
@@ -80,7 +135,13 @@
     signal:controller.signal,cache:'no-store'
    });
    let data={};try{data=await resp.json()}catch{}
-   if(!resp.ok)throw Error(data.error||'Service IA indisponible');
+   if(!resp.ok){
+    const failure=new Error(data.error||'Service IA indisponible');
+    failure.code=data.code||'SERVER_ERROR';
+    failure.status=resp.status;
+    failure.traceId=data.requestId;
+    throw failure;
+   }
    if(!data.ai||!data.dossier)throw Error('Le service n’a pas renvoyé un dossier IA complet.');
    active=data.dossier;
    active.id=String(Date.now());
@@ -93,8 +154,8 @@
    results(active,data.employer,data.warnings);
    $('ai-results').scrollIntoView({behavior:'smooth',block:'nearest'});
   }catch(err){
-   status('IA : essai non abouti',false);
-   note(String(err.message||'Erreur réseau').slice(0,240)+' — Les documents locaux restent disponibles.');
+   const code=err?.name==='AbortError'?'CLIENT_TIMEOUT':err?.code||(err instanceof TypeError?'NETWORK_FAILURE':'SERVER_ERROR');
+   handleFailure(code,String(err?.message||'Erreur réseau').slice(0,180),err?.traceId,err?.status);
   }finally{clearTimeout(timer);working=false;$('ai-go').disabled=!ready}
  }
  function invalidate(){
@@ -125,6 +186,7 @@
  // Optional use of session-only code; never persist it in localStorage.
  try{const prior=sessionStorage.getItem(codeKey);if(prior)$('ai-code').value=prior}catch{}
  $('ai-go')?.addEventListener('click',generate);
+ $('ai-check-access')?.addEventListener('click',verifyAccess);
  $('ai-apply')?.addEventListener('click',editDraft);
  for(const id of ['role','company','ad','focus','tone','recipient','fact']){
   $(id)?.addEventListener('input',invalidate);
