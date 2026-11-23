@@ -38,6 +38,21 @@ async function main(){
   assert.equal(await page.locator('#radar-zone').inputValue(),'frbe','France+Belgique is the default');
   assert.ok((await page.locator('#radar-top-picks').textContent()).length>15,'personalized top recommendations visible');
   assert.ok((await page.locator('.radar-match').first().textContent()).includes('Parcours'),'explainable fit details visible');
+  const eligibility=await page.evaluate(()=>{
+    const job=(overrides)=>Object.assign({id:'qa-check',title:'Community Manager',company:'Fictive',location:'France',description:'Social media content',remote:true,url:'https://example.org/qa'},overrides);
+    return {
+      ukOnly:GlwadysRadar.keep(job({location:'Ireland, UK',locationRestrictions:['GB']})),
+      usOnly:GlwadysRadar.keep(job({location:'Remote US',locationRestrictions:['US']})),
+      intern:GlwadysRadar.keep(job({title:'Alternance communication',employmentType:'Internship'})),
+      senior:GlwadysRadar.keep(job({title:'Senior Director Marketing',seniority:'Director'})),
+      france:GlwadysRadar.explain(job({location:'France',locationRestrictions:['FR']})).where.eligible
+    };
+  });
+  assert.equal(eligibility.ukOnly,false,'UK-only remote roles excluded');
+  assert.equal(eligibility.usOnly,false,'US-only remote roles excluded');
+  assert.equal(eligibility.intern,false,'internship roles excluded by default');
+  assert.equal(eligibility.senior,false,'senior roles excluded by default');
+  assert.equal(eligibility.france,true,'French roles remain eligible');
   await page.locator('#radar-family').selectOption('retail');
   assert.equal(await page.locator('.job-card').count(),0,'communication ads are filtered out in retail-only mode');
   await page.locator('#radar-family').selectOption('mix');
