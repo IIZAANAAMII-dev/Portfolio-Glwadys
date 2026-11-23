@@ -62,7 +62,7 @@
   }
   // A job labeled Remote but geographically listed as "Ireland, UK"
   // is not assumed open to applicants living in France.
-  const explicitForeign=match(location,['uk','united kingdom','ireland','netherlands','dutch','united states','usa','canada','australia','india','london','dublin','amsterdam']);
+  const explicitForeign=match(location,['uk','united kingdom','ireland','netherlands','dutch','united states','usa','canada','australia','india','london','dublin','amsterdam','germany','deutschland','italy','italia','spain','espana','switzerland','austria','portugal','poland','norway','sweden','denmark','finland','czechia','singapore','brazil','south africa']);
   if(explicitForeign&&!isOpenRegion(location))return {valid:false,text:'Télétravail probablement restreint à '+job.location+' : vérifier les conditions'};
   if(isOpenRegion(location))return {valid:true,text:'Télétravail en France / Belgique à vérifier auprès de l’employeur'};
   return {valid:true,text:'Télétravail : pays éligibles non indiqués, vérification nécessaire'};
@@ -93,8 +93,8 @@
   const strengths=facts.filter(f=>match(text,f.terms)).map(f=>f.label).slice(0,4);
   const gaps=unknown.filter(f=>match(' '+text+' ',f.terms)).map(f=>f.name).slice(0,3);
   const senior=/\b(senior|sr\.?|director|directeur|head of|vp|vice president|chief|principal|expert|lead|manager senior)\b/i.test(job.title+' '+(job.seniority||''))||/\b(?:minimum|at least|minimum of)\s*(?:[5-9]|1[0-9])\s*(?:ans|years)\b/i.test(job.description);
-  const internship=/\b(alternance|alternant|apprentissage|apprentice|internship|intern|stage|stagiaire|work-study)\b/i.test(job.title+' '+(job.employmentType||''));
-  const foreignLanguage=/\b(dutch|german|spanish|italian|polish|swedish|norwegian|portuguese|flemish|nederlands)\s*(?:speaking|fluent|native|bilingual)\b/i.test(job.title+' '+(job.description||'').slice(0,600));
+  const internship=/\b(alternance|alternant|apprentissage|apprentice|internship|intern|stage|stagiaire|work-study|freelance|independent contractor)\b/i.test(job.title+' '+(job.employmentType||''));
+  const foreignLanguage=/\b(dutch|german|spanish|italian|polish|swedish|norwegian|portuguese|flemish|nederlands)\s*(?:speaking|fluent|native|bilingual)\b|\bDACH\b|\bItalian\s+speaking\b/i.test(job.title+' '+(job.description||'').slice(0,600));
   const age=job.date?Math.floor((Date.now()-Date.parse(job.date))/86400000):null;
   let score=13;
   score+=Math.min(29,top.titleScore*19+Math.min(8,top.descScore*2));
