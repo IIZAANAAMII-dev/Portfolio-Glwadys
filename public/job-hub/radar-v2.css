@@ -1,0 +1,35 @@
+/* Glwadys Career Studio · Radar intelligence V2 · Premium ivory/wine UI. */
+.radar-profile{border:1px solid #dfd1d1;background:linear-gradient(135deg,#fffdfa 0%,#f8f0ee 100%);padding:22px 23px 18px;border-radius:15px;margin:0 0 23px;box-shadow:0 12px 38px #4624260b}
+.radar-profile-title{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}
+.radar-profile-title h2{font:400 clamp(24px,2.4vw,31px)/1.2 var(--serif);margin:7px 0 6px;color:#282127}
+.radar-profile-title p{font-size:12px;line-height:1.6;color:#675c64;margin:0;max-width:570px}
+.radar-profile-title .radar-live{border-radius:100px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;padding:8px 10px;font:600 10px var(--mono);background:#e5ede7;color:#34664a}
+.radar-live::before{content:"";display:block;width:7px;height:7px;background:#4d8961;border-radius:100%}
+.radar-controls{display:grid;grid-template-columns:1.25fr 1.1fr .8fr 1fr;gap:12px;margin-top:14px}
+.radar-controls label{font:600 10px var(--mono);display:grid;gap:7px;letter-spacing:.035em;color:#625960}
+.radar-controls select,.radar-controls input[type=range]{width:100%;min-width:0}
+.radar-controls select{background:#fffefa;border:1px solid #ddcdce;padding:12px 8px;border-radius:8px;color:#33272e;font-family:var(--font);font-size:12px;min-height:45px}
+.radar-controls input[type=range]{accent-color:#94465b;min-height:44px;cursor:pointer}
+.radar-profile-checks{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;margin-top:15px;padding:13px 0 12px;border-top:1px solid #e7dadb}
+.radar-profile-checks label{display:flex;align-items:center;gap:8px;font-size:12px;color:#4e474e;cursor:pointer}
+.radar-profile-checks input{width:15px;height:15px;accent-color:#94465b}
+.radar-profile-checks button{margin-left:auto;border:0;background:transparent;font-size:11px;color:#93465b;text-decoration:underline;text-underline-offset:3px;padding:7px;cursor:pointer}
+.radar-brief{display:flex;flex-wrap:wrap;gap:7px 20px;justify-content:space-between;color:#655760;font-size:11px;border-top:1px solid #e7dadb;padding-top:14px}
+.radar-brief strong{color:#93465b}
+#radar-top-picks{font-size:11px;color:#5c535a;line-height:1.65;margin:9px 0 0}
+.radar-match{padding:11px 12px;border:1px solid #e5d9d8;border-radius:9px;background:#fffafa;margin-top:auto;margin-bottom:11px;display:grid;gap:5px}
+.radar-match-good{font-size:11px;color:#4d654e;line-height:1.5;font-weight:600}
+.radar-match-warning{font-size:10px;color:#8b4d54;line-height:1.6}
+.radar-match-meta{font-size:10px;color:#625c61;line-height:1.45}
+.radar-match-meta a{color:#94465b;font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.radar-match-meta a:hover{color:#663044}
+.radar-match-why{color:#94465b;font-size:11px;font-weight:600}
+.job-card{min-height:315px}
+.job-actions{margin-top:5px}
+.radar-dismiss{border:0;background:transparent;color:#74636a;font-size:10px;cursor:pointer;text-decoration:underline;padding:8px 1px;align-self:flex-end}
+.radar-dismiss:hover{color:#93465b}
+.job-score{font-size:10px;font-weight:600;letter-spacing:0}
+#radar-alert-summary{font-size:11px;color:#775c65}
+@media(max-width:1200px){.radar-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.radar-profile{padding:18px 15px}.radar-profile-title{display:block}.radar-profile-title .radar-live{margin-top:14px}.radar-controls{grid-template-columns:1fr}.radar-profile-checks{display:grid;grid-template-columns:1fr 1fr;gap:12px}.radar-profile-checks button{grid-column:1/-1;text-align:left;margin:0}.job-card{min-height:0}.radar-match{margin-top:12px}}
+@media(prefers-reduced-motion:reduce){.radar-profile *{scroll-behavior:auto!important;transition-duration:0ms!important}}
