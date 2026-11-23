@@ -6,6 +6,7 @@
 <meta name="description" content="Atelier Glwadys : CV premium ciblé et lettre de motivation personnalisée, à partir d'expériences professionnelles vérifiées.">
 <title>Atelier de candidature — Glwadys Career Studio</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2395495e'/%3E%3Ctext x='32' y='44' fill='white' text-anchor='middle' font-family='Georgia' font-size='37'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="./ai-studio.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&family=EB+Garamond:wght@400;500;600&display=swap');
 :root{--bg:#fbf8f6;--paper:#fffcfa;--ink:#25232a;--wine:#95495e;--wine-dark:#783a4b;--pale:#f2eae7;--rule:#ded3d0;--muted:#625d63;--rose:#ccb0ae;--sans:'Lato',Arial,sans-serif;--serif:'EB Garamond',Georgia,serif}
@@ -267,6 +268,24 @@ body[data-tab="letter"] #open-generated-cv-pdf{display:none!important}
         <button class="button alt" type="button" id="copy-ai-brief" style="width:100%;min-height:39px;font-weight:600">✦ Copier un brief de relecture IA (facultatif)</button>
       </form>
       <div class="helper">La personnalisation conserve les cinq expériences et leurs dates, comme sur le CV original : Le Comptoir de Mathilde, Marseille Girls Club (bénévolat), Kiko Milano, AGLAIA × Une à Une et Yuna Bijoux. Les chiffres commerciaux et les outils non prouvés ne sont jamais ajoutés automatiquement.</div>
+      <section class="ai-panel" aria-labelledby="ai-panel-title">
+        <div class="ai-head">
+          <div><p class="eyebrow">02 / Expert candidature</p><h3 id="ai-panel-title">Le copilote IA.</h3><p>Analyse de l’offre, rédaction réellement adaptée et, si tu le souhaites, recherche sourcée sur l’entreprise.</p></div>
+          <span id="ai-status" class="ai-status" data-ready="false">Vérification de l’IA…</span>
+        </div>
+        <label class="ai-label"><input id="ai-consent" type="checkbox"><span>J’autorise l’envoi de l’annonce et des expériences professionnelles connues de Glwadys au service IA pour préparer cette candidature. Aucune candidature n’est envoyée à un employeur.</span></label>
+        <label class="ai-field"><span>Code d’accès IA (privé)</span><input type="password" id="ai-code" autocomplete="off" placeholder="Code communiqué par le responsable"></label>
+        <label class="ai-label"><input type="checkbox" id="ai-research"><span>Effectuer une recherche web IA sur l’entreprise, avec liens de sources (coût et durée supplémentaires).</span></label>
+        <button type="button" class="button ai-go" id="ai-go" disabled>✦ Analyser et générer mon dossier par IA</button>
+        <p id="ai-feedback" class="ai-feedback" aria-live="polite">L’analyse IA est facultative : le générateur premium local fonctionne toujours.</p>
+        <div id="ai-results" class="ai-results" aria-live="polite"></div>
+        <div id="ai-review" hidden>
+          <label class="ai-field"><span>Relire et modifier l’accroche du CV</span><textarea id="ai-edit-summary" rows="4" maxlength="680"></textarea></label>
+          <label class="ai-field"><span>Relire et modifier la lettre de motivation</span><textarea id="ai-edit-letter" rows="12" maxlength="3200"></textarea></label>
+          <button type="button" class="button alt" id="ai-apply">Appliquer mes corrections aux deux PDF</button>
+        </div>
+        <p class="ai-safe">La rédaction utilise uniquement les missions attestées. Les lacunes sont signalées ; toute affirmation doit être vérifiée avant envoi. Le quota IA et les crédits sont distincts du forfait Vercel Hobby.</p>
+      </section>
       <div class="result-box">
         <h3>Compétences attestées et pertinentes</h3><div class="chips" id="matches"><span class="chip">En attente de l’annonce</span></div>
         <h3 style="margin-top:16px">À confirmer avant envoi</h3><p id="gaps" class="warning">Les exigences de l’annonce non présentes dans son parcours seront signalées ici.</p>
@@ -399,9 +418,10 @@ function paragraphs(s,focus,hits){
 }
 function render(){
  const s=getState(),mode=chooseFocus(s),base=BASE[mode],info=rankSkills(s,base),sorted=evidenceOrder(base,s);
- $('cv-subtitle').textContent=base.subtitle;
- $('cv-summary').textContent=base.summary;
- $('cv-skills').textContent=info.selected.join(' · ');
+ const ai=window.GlwadysAI?.getActive?.(s);
+ $('cv-subtitle').textContent=ai?.cv?.headline||base.subtitle;
+ $('cv-summary').textContent=ai?.cv?.summary||base.summary;
+ $('cv-skills').textContent=(ai?.cv?.skills?.length?ai.cv.skills:info.selected).join(' · ');
  const jobs=$('cv-jobs');jobs.replaceChildren();for(const id of sorted)jobs.append(createJob(JOBS[id]));
  const chips=$('matches');chips.replaceChildren();for(const skill of info.hits)chips.append(element('span',skill.label,'chip'));if(!info.hits.length)chips.append(element('span','Aucune correspondance directe — à analyser','chip'));
  const unknown=UNKNOWN.filter(z=>has(norm(s.ad+' '+s.role),z.terms));
@@ -410,7 +430,7 @@ function render(){
  $('letter-to').textContent=s.recipient||'À l’attention de l’équipe de recrutement de '+(s.company||'[entreprise]');
  $('letter-date').textContent='Vannes, le '+new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'long',year:'numeric'}).format(new Date());
  $('letter-subject').textContent='Objet : candidature au poste de '+(s.role||'[intitulé du poste]');
- const txt=paragraphs(s,mode,info.hits);const body=$('letter-body');body.replaceChildren();for(const p of txt)body.append(element('p',p));
+ const txt=ai?.letter?[ai.letter.greeting,...ai.letter.paragraphs,ai.letter.closing].filter(Boolean):paragraphs(s,mode,info.hits);const body=$('letter-body');body.replaceChildren();for(const p of txt)body.append(element('p',p));
  document.title=(s.role?s.role+' | ':'')+'Atelier Glwadys Career Studio';
  return txt.join('\n\n')+'\n\nGlwadys Dalleau';
 }
@@ -454,6 +474,7 @@ try {
     const brief=String(offer.ad||'').trim();
     $('ad').value=(brief||['Poste : '+offer.role,'Entreprise : '+offer.company,'Lieu : '+(offer.location||'non précisé'),'Ouvrir l’annonce d’origine pour vérifier les missions avant envoi.'].join('\n')).slice(0,18000);
     $('focus').value='auto';
+    if(typeof offer.url==='string'&&/^https:\/\//.test(offer.url))sessionStorage.setItem('glwadys-ai-offer-context',JSON.stringify({role:offer.role,company:offer.company,url:offer.url.slice(0,700)}));
     sessionStorage.removeItem('glwadys-job-selection-v1');
     toast('Annonce importée. Le CV et la lettre sont prêts à être personnalisés.');
   }
@@ -464,6 +485,7 @@ selectTab('cv');
 window.GlwadysAtelier={getState,chooseFocus,rankSkills,paragraphs,render,toast,BASE,JOBS};
 </script>
 <script src="./pdf-export.js?v=20261122-2105" defer></script>
+<script src="./ai-studio.js?v=20261123-ia" defer></script>
 <script src="./ux-polish.js" defer></script>
 </body>
 </html>

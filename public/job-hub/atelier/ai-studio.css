@@ -1,0 +1,30 @@
+/* Career Studio · Expert IA dossier · premium ivory/bordeaux */
+.ai-panel{position:relative;margin:22px 0 15px;padding:21px;border-radius:14px;border:1px solid #ddc8cc;background:linear-gradient(150deg,#fffdfa 20%,#f7ecee 100%);box-shadow:0 13px 38px #592e3b0d}
+.ai-panel::before{content:"";position:absolute;top:-1px;left:20px;right:20px;height:3px;border-radius:3px;background:linear-gradient(90deg,#93465b,#d3aab2)}
+.ai-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ai-head h3{font:500 27px/1.08 var(--serif);margin:4px 0 5px;letter-spacing:-.03em}
+.ai-head p{font-size:11px;color:#63545a;line-height:1.6;margin:0 0 12px}
+.ai-status{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border:1px solid #dac0c7;border-radius:20px;font-size:10px;white-space:nowrap;background:#f9f0f1;color:#8c4458}
+.ai-status::before{content:"";width:6px;height:6px;background:currentColor;border-radius:50%}
+.ai-status[data-ready=true]{background:#e9f1e9;color:#437452;border-color:#c4ddc9}
+.ai-label{display:flex;align-items:flex-start;gap:9px;margin:11px 0;color:#494048;font-size:11px;line-height:1.5;cursor:pointer}
+.ai-label input[type=checkbox]{margin:3px 0 0;flex-shrink:0;width:16px;height:16px;accent-color:#93465b}
+.ai-field{display:grid;gap:6px;margin:13px 0}
+.ai-field span{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:.07em;color:#665961}
+.ai-field input{background:#fff;border:1px solid #e0cbd0;color:#281c25;border-radius:7px;padding:11px;font-size:16px;min-height:44px;width:100%}
+.ai-panel .ai-go{width:100%;justify-content:center;min-height:47px;white-space:normal;text-align:center;background:#93465b;color:white;font-size:12px;margin-top:7px}
+.ai-panel .ai-go[disabled]{opacity:.5;cursor:not-allowed}
+.ai-panel .ai-research-cost{font-size:10px;color:#78646f;line-height:1.5;margin:8px 0 0}
+.ai-panel .ai-results{display:grid;gap:11px;margin-top:15px}
+.ai-panel .ai-results:empty{display:none}
+.ai-result{padding:13px;border-radius:9px;background:#fffbf9;border:1px solid #e9d9dc}
+.ai-result h4{font:700 11px var(--sans);letter-spacing:.025em;color:#94465b;margin:0 0 7px}
+.ai-result p,.ai-result li{font-size:11px;line-height:1.6;margin:5px 0;color:#453e45}
+.ai-result ul{padding-left:16px;margin:0}.ai-result a{display:block;font-size:10px;color:#93465b;text-decoration:underline;word-break:break-all;margin:5px 0}
+.ai-result .ai-hint{font-size:10px;color:#8a535c}
+.ai-panel .ai-safe{margin:12px 0 0;font-size:10px;color:#6b5d64;line-height:1.65;border-top:1px solid #e9d8dc;padding-top:11px}
+.ai-panel [hidden]{display:none!important}
+.ai-feedback{font-size:11px;color:#804d5c;line-height:1.6;padding-top:8px;white-space:normal}
+.ai-badge{font-size:9px;color:#336044;background:#ecf4ec;border:1px solid #d2e8d3;padding:3px 6px;border-radius:10px;display:inline-block}
+@media(max-width:680px){.ai-panel{padding:17px 15px}.ai-head{flex-direction:column}.ai-status{margin-bottom:8px}.ai-head h3{font-size:26px}}
+@media(prefers-reduced-motion:reduce){.ai-panel *{animation:none!important;transition:none!important}}
