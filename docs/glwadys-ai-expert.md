@@ -27,7 +27,7 @@ Le projet est `glwadys-career-studio` sous l'équipe **iizaanaamii1 / Hobby**, s
 - `GLWADYS_AI_ACCESS_CODE` (**chiffrée**) : code privé connu du propriétaire, configuré dans les variables Vercel pour Production et Preview ; **NE JAMAIS committer ni partager publiquement**.
 - Authentification à AI Gateway : token OIDC reçu par l'en-tête `x-vercel-oidc-token` pour la fonction Vercel, ou `AI_GATEWAY_API_KEY` si explicitement configuré. Aucun jeton dans les fichiers du front.
 - Modèle par défaut : `openai/gpt-6-luna`. Réglage facultatif `GLWADYS_AI_MODEL` ou `GLWADYS_AI_RESEARCH_MODEL` côté serveur.
-- Crédits IA : indépendants des ressources d'hébergement. Vérifier les crédits restants et conserver les plafonds de dépenses dans la console Vercel AI Gateway ; l'offre gratuite ne constitue pas une garantie de volume illimité.
+- Crédits IA : indépendants des ressources d'hébergement. Un budget **de 1 USD/mois** a été configuré sur le seul projet Career Studio, avec alertes à 50/75/100 %, sans toucher aux autres projets. Le budget plafonne la consommation suivie côté AI Gateway mais son enforcement peut être légèrement différé ; il ne remplace pas une protection persistante contre l'abus.
 
 La protection associe un code privé fort et une limitation *best effort* en mémoire de la fonction. Celle-ci n'est **pas** une garantie de quota global entre instances : si le site devient public ou partagé largement, ajouter un rate limit persistant et des budgets stricts avant d'augmenter le volume. Les appels web et IA ne sont jamais lancés automatiquement à l'ouverture de la page.
 
