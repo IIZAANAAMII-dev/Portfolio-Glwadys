@@ -35,6 +35,13 @@ async function main(){
   await page.locator('.side-nav [data-view="offres"]').click();
   await page.locator('.job-card').first().waitFor();
   assert.equal(await page.locator('.job-card').count(),24,'24 jobs in first page');
+  assert.equal(await page.locator('#radar-zone').inputValue(),'frbe','France+Belgique is the default');
+  assert.ok((await page.locator('#radar-top-picks').textContent()).length>15,'personalized top recommendations visible');
+  assert.ok((await page.locator('.radar-match').first().textContent()).includes('Parcours'),'explainable fit details visible');
+  await page.locator('#radar-family').selectOption('retail');
+  assert.equal(await page.locator('.job-card').count(),0,'communication ads are filtered out in retail-only mode');
+  await page.locator('#radar-family').selectOption('mix');
+  assert.equal(await page.locator('.job-card').count(),24,'matching jobs return after resetting job family');
   await page.locator('#offer-more').click();
   assert.equal(await page.locator('.job-card').count(),count,'all jobs visible after load more');
   await page.locator('.job-card [data-prepare-job]').first().click();
@@ -56,6 +63,13 @@ async function main(){
   await page.locator('#ats-clean').check();
   assert.equal(await page.locator('body.ats-clean').count(),1,'ATS clean mode visible');
   await page.locator('#ats-clean').uncheck();
+  assert.equal(await page.locator('#download-cv-pdf').isVisible(),true,'CV download action visible');
+  const pdfNativeCv=await page.evaluate(()=>Array.from(window.GlwadysPDF.generateCv()));
+  assert.ok(pdfNativeCv.length>3000 && String.fromCharCode(...pdfNativeCv.slice(0,5))==='%PDF-','native CV is a real PDF');
+  fs.writeFileSync(path.join(output,'CV-natif-exemple-QA.pdf'),Buffer.from(pdfNativeCv));
+  const pdfNativeLetter=await page.evaluate(()=>Array.from(window.GlwadysPDF.generateLetter()));
+  assert.ok(pdfNativeLetter.length>2000 && String.fromCharCode(...pdfNativeLetter.slice(0,5))==='%PDF-','native letter is a real PDF');
+  fs.writeFileSync(path.join(output,'Lettre-native-exemple-QA.pdf'),Buffer.from(pdfNativeLetter));
   await page.evaluate(()=>{document.body.dataset.print='cv';document.body.dataset.tab='cv';});
   await page.pdf({path:path.join(output,'CV-exemple-fictif-QA.pdf'),format:'A4',printBackground:true});
   await page.locator('#tab-letter').click();
