@@ -5,6 +5,7 @@ on:
       - feat/glwadys-atelier-premium-cv-letter
       - feat/glwadys-ux-integrated
       - feat/glwadys-radar-v2-autonome
+      - feat/glwadys-ai-research-dossier
       - main
     paths:
       - public/job-hub/**
@@ -45,7 +46,7 @@ jobs:
           python3 - <<'PY'
           from pypdf import PdfReader
           from pathlib import Path
-          for file in ["CV-exemple-fictif-QA.pdf", "Lettre-exemple-fictif-QA.pdf", "CV-natif-exemple-QA.pdf", "Lettre-native-exemple-QA.pdf"]:
+          for file in ["CV-exemple-fictif-QA.pdf", "Lettre-exemple-fictif-QA.pdf", "CV-natif-exemple-QA.pdf", "Lettre-native-exemple-QA.pdf", "CV-IA-fictif-QA.pdf", "Lettre-IA-fictive-QA.pdf"]:
               path=Path("ux-proof") / file
               pages=len(PdfReader(str(path)).pages)
               print(file, "pages:", pages)
