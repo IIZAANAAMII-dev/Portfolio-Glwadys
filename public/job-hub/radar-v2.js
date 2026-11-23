@@ -12,8 +12,8 @@
   event:{name:'Événementiel',terms:['evenement','event','partenariat','partnership','animation','activation','operations','coordinateur evenementiel','gestion de projet']}
  };
  const facts=[
-  {label:'Management et coordination',terms:['management','team','equipe','coordination','leadership','supervision','responsable','pilotage']},
-  {label:'Merchandising',terms:['merchandising','vitrine','visual','implantation','produit','retail']},
+  {label:'Management et coordination',terms:['management','equipe','coordination','leadership','supervision','responsable','pilotage','team lead','managing a team']},
+  {label:'Merchandising',terms:['merchandising','vitrine','visual merchandising','implantation','presentoir','stock management']},
   {label:'Relation client et vente',terms:['client','customer','retail','vente','sales','commerce','relationship','hospitality']},
   {label:'Création de contenus',terms:['social media','community','content','reels','video','instagram','copy','editorial','contenus']},
   {label:'Organisation d’événements',terms:['evenement','events','event','salon','animation','partenariat','partnership']}
@@ -52,10 +52,20 @@
  }
  function remoteEligibility(job){
   const rest=Array.isArray(job.locationRestrictions)?job.locationRestrictions:[];
-  if(!job.remote||!rest.length)return {valid:true,text:job.remote?'Conditions de télétravail à vérifier':'Poste sur site'};
-  const r=rest.map(toNorm);
-  if(r.some(v=>/\b(fr|be|eu|europe|emea)\b/.test(v)||match(v,['france','belgium','belgique','worldwide','anywhere','global','european union'])))return {valid:true,text:'Télétravail : France / Belgique potentiellement éligibles'};
-  return {valid:false,text:'Télétravail réservé à un autre pays : '+rest.slice(0,3).join(', ')};
+  const location=toNorm(job.location);
+  if(!job.remote)return {valid:true,text:'Poste sur site'};
+  const isOpenRegion=v=>/\b(fr|be|eu|europe|emea)\b/.test(v)||match(v,['france','belgium','belgique','worldwide','anywhere','global','european union','all countries','europe']);
+  if(rest.length){
+   const locations=rest.map(toNorm);
+   if(locations.some(isOpenRegion))return {valid:true,text:'Télétravail potentiellement accessible depuis la France ou la Belgique'};
+   return {valid:false,text:'Télétravail limité à '+rest.slice(0,3).join(', ')};
+  }
+  // A job labeled Remote but geographically listed as "Ireland, UK"
+  // is not assumed open to applicants living in France.
+  const explicitForeign=match(location,['uk','united kingdom','ireland','netherlands','dutch','united states','usa','canada','australia','india','london','dublin','amsterdam']);
+  if(explicitForeign&&!isOpenRegion(location))return {valid:false,text:'Télétravail probablement restreint à '+job.location+' : vérifier les conditions'};
+  if(isOpenRegion(location))return {valid:true,text:'Télétravail en France / Belgique à vérifier auprès de l’employeur'};
+  return {valid:true,text:'Télétravail : pays éligibles non indiqués, vérification nécessaire'};
  }
  function geo(job){
   const loc=toNorm(job.location),inFrance=match(loc,france),inBelgium=match(loc,belgium),inNear=match(loc,near);
@@ -82,21 +92,26 @@
   const familyMatches=savedSettings.family==='mix'||families.find(f=>f.id===savedSettings.family && (f.titleScore>0||f.descScore>1));
   const strengths=facts.filter(f=>match(text,f.terms)).map(f=>f.label).slice(0,4);
   const gaps=unknown.filter(f=>match(' '+text+' ',f.terms)).map(f=>f.name).slice(0,3);
-  const senior=/\b(senior|director|directeur|head of|vp|vice president|chief|principal|expert|lead|10\+ years|8\+ years|7\+ years)\b/i.test(job.title+' '+(job.seniority||''))||/\bminimum (?:[6-9]|1[0-9]) ans\b/i.test(job.description);
+  const senior=/\b(senior|sr\.?|director|directeur|head of|vp|vice president|chief|principal|expert|lead|manager senior)\b/i.test(job.title+' '+(job.seniority||''))||/\b(?:minimum|at least|minimum of)\s*(?:[5-9]|1[0-9])\s*(?:ans|years)\b/i.test(job.description);
+  const internship=/\b(alternance|alternant|apprentissage|apprentice|internship|intern|stage|stagiaire|work-study)\b/i.test(job.title+' '+(job.employmentType||''));
+  const foreignLanguage=/\b(dutch|german|spanish|italian|polish|swedish|norwegian|portuguese|flemish|nederlands)\s*(?:speaking|fluent|native|bilingual)\b/i.test(job.title+' '+(job.description||'').slice(0,600));
   const age=job.date?Math.floor((Date.now()-Date.parse(job.date))/86400000):null;
   let score=13;
-  score+=Math.min(31,top.titleScore*18+Math.min(13,top.descScore*3));
-  score+=Math.min(24,strengths.length*6);
-  if(where.inNear)score+=18;
-  else if(where.inFrance||where.inBelgium)score+=13;
-  else if(where.remote&&where.eligible)score+=10;
+  score+=Math.min(29,top.titleScore*19+Math.min(8,top.descScore*2));
+  if(top.titleScore===0)score-=12;
+  score+=Math.min(20,strengths.length*5);
+  if(where.inNear)score+=24;
+  else if(where.inFrance||where.inBelgium)score+=15;
+  else if(where.remote&&where.eligible)score+=7;
   if(age!==null&&Number.isFinite(age)){
    if(age<=3)score+=11;
    else if(age<=14)score+=8;
    else if(age<=30)score+=5;
    else if(age>75)score-=10;
   }
-  if(senior)score-=25;
+  if(senior)score-=30;
+  if(internship)score-=30;
+  if(foreignLanguage)score-=25;
   if(gaps.length>=2)score-=Math.min(12,gaps.length*4);
   if(!where.eligible)score=0;
   if(!familyMatches)score-=25;
@@ -110,16 +125,18 @@
   if(age!==null&&age<=7)reasons.push('Annonce récente');
   const concerns=[];
   if(senior)concerns.push('Niveau senior à examiner');
+  if(internship)concerns.push('Stage / alternance : pas un poste permanent');
+  if(foreignLanguage)concerns.push('Langue étrangère spécifique à vérifier');
   if(gaps.length)concerns.push('Compétences à confirmer : '+gaps.join(', '));
   if(!where.eligible)concerns.push(where.reason);
   if(!job.description||job.description.length<120)concerns.push('Description incomplète : consulter la source');
-  return {score:Math.max(0,Math.min(100,Math.round(score))),family:top.id,familyMatches:!!familyMatches,where,strengths,reasons,concerns,gaps,senior,age};
+  return {score:Math.max(0,Math.min(100,Math.round(score))),family:top.id,familyMatches:!!familyMatches,where,strengths,reasons,concerns,gaps,senior,internship,foreignLanguage,age};
  }
  function keep(job){
   if(ignored.has(job.id)||ignored.has(job.url))return false;
   const e=evalJob(job);
   if(!e.where.matchZone)return false;
-  if(savedSettings.level==='junior'&&e.senior)return false;
+  if(savedSettings.level==='junior'&&(e.senior||e.internship||e.foreignLanguage))return false;
   if(!e.familyMatches)return false;
   if(e.score<savedSettings.minScore)return false;
   if(savedSettings.onlyNew&&!(typeof newJobIds!=='undefined'&&newJobIds.has(job.id)))return false;
