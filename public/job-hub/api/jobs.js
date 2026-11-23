@@ -4,7 +4,7 @@
  * Cached on Vercel CDN for 6 hours: max ~4 Remotive fetches/day/edge.
  */
 const TERMS=/communication|marketing|community|social[\s-]?media|content|brand|event|évén|retail|merchandis|boutique|store\s?manager|sales\s?(?:assistant|associate|advisor|executive)|customer\s?(?:experience|success|service)|partnership|relations publiques|commerce|vente|commerciale?|account manager|digital|e-?commerce|relations presse|influence|crm|employer branding|social content|charg[eé]e|gestionnaire de magasin/i;
-const EXCLUDE=/software\s?(?:engineer|developer)|développeur|full[\s-]?stack|backend engineer|data engineer|data scientist|accountant|comptable|security engineer|devops|physician|chirurgien|infirmier|mechanical engineer/i;
+const EXCLUDE=/\bengineer(?:ing)?\b|software\s?(?:engineer|developer)|développeur|full[\s-]?stack|backend engineer|data engineer|data scientist|accountant|comptable|security engineer|devops|physician|chirurgien|infirmier|mechanical engineer/i;
 const SOURCES=[
   {name:'Remotive',id:'remotive',url:'https://remotive.com/api/remote-jobs?category=marketing&limit=200',type:'remotive'},
   {name:'Arbeitnow',id:'arbeitnow-1',url:'https://www.arbeitnow.com/api/job-board-api',type:'arbeitnow'},
