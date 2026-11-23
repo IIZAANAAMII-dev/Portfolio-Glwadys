@@ -72,7 +72,7 @@ function locationValue(){return $('#location').value}
 function selectedKeyword(){const q=$('#keyword').value.trim();return q || 'communication'}
 function shouldShowSource(s,loc){if(isBelgium(loc))return s.zone==='BE'||s.zone.includes('BE')||s.zone==='REMOTE';if(isRemote(loc))return s.zone==='REMOTE'||s.name==='LinkedIn Jobs'||s.name==='Indeed';return s.zone.includes('FR')||s.zone==='REMOTE'}
 function renderSources(){const q=selectedKeyword(),l=locationValue();const sources=PLATFORMS.filter(s=>shouldShowSource(s,l));$('#source-grid').innerHTML=sources.map(s=>`<a class="source-card" target="_blank" rel="noopener noreferrer" href="${esc(s.fn(q,l))}" aria-label="Rechercher ${esc(q)} sur ${esc(s.name)}"><span class="source-arrow">↗</span><span class="source-badge">${esc(s.zone)}</span><span class="source-name">${esc(s.name)}</span><p>${esc(s.blurb)}</p></a>`).join('');}
-function normalJob(raw){if(!raw||typeof raw!=='object'||!validUrl(raw.url))return null;return {id:String(raw.id||raw.url),title:String(raw.title||'').slice(0,160),company:String(raw.company||'Entreprise').slice(0,90),location:String(raw.location||'Lieu non précisé').slice(0,100),description:String(raw.description||'').slice(0,3300),source:String(raw.source||'Source externe').slice(0,40),url:raw.url,remote:!!raw.remote,date:raw.date||null};}
+function normalJob(raw){if(!raw||typeof raw!=='object'||!validUrl(raw.url))return null;return {id:String(raw.id||raw.url),title:String(raw.title||'').slice(0,165),company:String(raw.company||'Entreprise').slice(0,135),location:String(raw.location||'Lieu non précisé').slice(0,130),description:String(raw.description||'').slice(0,5000),source:String(raw.source||'Source externe').slice(0,40),url:raw.url,sourceUrl:validUrl(raw.sourceUrl)?raw.sourceUrl:raw.url,applyUrl:validUrl(raw.applyUrl)?raw.applyUrl:raw.url,remote:!!raw.remote,date:raw.date||null,expiryDate:raw.expiryDate||null,employmentType:String(raw.employmentType||''),seniority:String(raw.seniority||''),salary:raw.salary&&typeof raw.salary==='object'?raw.salary:null,locationRestrictions:Array.isArray(raw.locationRestrictions)?raw.locationRestrictions.slice(0,20):[]};}
 const RADAR_SEEN_KEY='glwadys-radar-seen-v1';
 let newJobIds=new Set(), radarFirstVisit=false;
 function markNewJobs(){
@@ -80,7 +80,7 @@ function markNewJobs(){
     const raw=localStorage.getItem(RADAR_SEEN_KEY);
     radarFirstVisit=raw===null;
     const previous=new Set(JSON.parse(raw||'[]'));
-    newJobIds=new Set(radarFirstVisit?[]:jobs.filter(j=>!previous.has(j.id)).map(j=>j.id));
+    newJobIds=new Set(radarFirstVisit?[]:jobs.filter(j=>!previous.has(j.id) && (!window.GlwadysRadar || (window.GlwadysRadar.explain(j).score>=Math.max(65,window.GlwadysRadar.settings.minScore)&&window.GlwadysRadar.explain(j).where.matchZone&&!window.GlwadysRadar.explain(j).senior))).map(j=>j.id));
     localStorage.setItem(RADAR_SEEN_KEY,JSON.stringify(jobs.map(j=>j.id).slice(0,1000)));
   }catch{newJobIds=new Set()}
   const alerts=$('#new-job-count');
@@ -104,6 +104,7 @@ async function loadFeed(){
       const data=await response.json();
       jobs=(Array.isArray(data.jobs)?data.jobs:[]).map(normalJob).filter(Boolean);
       feedUpdated=data.generated_at||null;
+      window.GlwadysRadar?.onFeed?.(data);
       if(!jobs.length)throw Error('Source sans offres');
       const label=(data.sources||[]).join(' · ')||'Sources publiques';
       $('#feed-status').textContent=label+' · '+(feedUpdated?'Actualisé le '+formatDate(feedUpdated):'Catalogue disponible');
@@ -124,6 +125,7 @@ async function loadFeed(){
       source:'Remotive',url:x.url,remote:true,date:x.publication_date
     })).filter(Boolean);
     $('#feed-status').textContent='Remotive · annonces décalées d’au moins 24 h';
+    window.GlwadysRadar?.onFeed?.({sources:['Remotive'],generated_at:new Date().toISOString(),source_errors:[]});
     $('#feed-side-count').textContent=jobs.length;
     markNewJobs();
   }catch(e){
@@ -149,7 +151,12 @@ function prepareJob(job){
  window.location.assign('atelier/?source=offre');
 }
 function makeId(){return (globalThis.crypto?.randomUUID?.()??('g'+Date.now()+'-'+Math.random().toString(16).slice(2)))}
-function addApplication(data){if(!validUrl(data.url)){toast('Entre un lien d’annonce valide (https://…).');return false;}if(applications.some(v=>v.url===data.url)){toast('Cette offre est déjà enregistrée.');return false;}applications.unshift({id:makeId(),title:String(data.title||'').slice(0,150),company:String(data.company||'').slice(0,150),city:String(data.city||''),url:data.url,notes:String(data.notes||'').slice(0,2000),status:'A étudier',createdAt:new Date().toISOString(),sentAt:null});persist();renderApplications();renderJobs();toast('Offre enregistrée dans ton suivi !');return true;}
+function addApplication(data){
+ if(!validUrl(data.url)){toast('Entre un lien d’annonce valide (https://…).');return false;}
+ if(applications.some(v=>v.url===data.url)){toast('Cette offre est déjà enregistrée.');return false;}
+ applications.unshift({id:makeId(),title:String(data.title||'').slice(0,150),company:String(data.company||'').slice(0,150),city:String(data.city||'').slice(0,120),url:data.url,description:String(data.description||'').slice(0,5000),source:String(data.source||'').slice(0,60),notes:String(data.notes||'').slice(0,2000),status:'A étudier',createdAt:new Date().toISOString(),sentAt:null});
+ persist();renderApplications();renderJobs();toast('Offre enregistrée dans ton suivi !');return true;
+}
 function updateCounts(){const sent=applications.filter(a=>['Envoyée','Entretien','Relance faite','Offre reçue'].includes(a.status)).length;const reminders=applications.filter(a=>a.status==='Envoyée'&&a.sentAt&&daysSince(a.sentAt)>=7).length;$('#app-count').textContent=applications.length;$('#count-total').textContent=applications.length;$('#count-sent').textContent=sent;$('#count-reminders').textContent=reminders;}
 function renderApplications(){const filter=$('#application-filter').value;const list=applications.filter(a=>filter==='all'||a.status===filter);if(!list.length){$('#applications-list').innerHTML=`<div class="empty-state"><h3>${applications.length?'Aucune candidature ici.':'Tout commence par une première offre.'}</h3><p>${applications.length?'Change le filtre pour retrouver tes candidatures.':'Ajoute une offre trouvée sur les plateformes. Tu pourras suivre ses étapes et préparer tes messages.'}</p><button class="btn btn-primary" type="button" data-open-add>Ajouter une offre +</button></div>`;return;}
 $('#applications-list').innerHTML=list.map(a=>`<article class="application-row"><div><h3>${esc(a.title)}</h3><div class="app-meta">${esc(a.company)} ${a.city?' · '+esc(a.city):''}</div><div class="app-date">Ajoutée le ${formatDate(a.createdAt)} ${a.status==='Envoyée'&&a.sentAt?' · Envoyée le '+formatDate(a.sentAt):''}</div>${a.status==='Envoyée'&&a.sentAt&&daysSince(a.sentAt)>=7?'<small class="source-badge">Relance à envisager</small>':''}</div><label class="field">STATUT <select aria-label="Statut de ${esc(a.title)}" data-status-id="${esc(a.id)}">${STATUS.map(s=>`<option value="${esc(s)}" ${a.status===s?'selected':''}>${esc(s)}</option>`).join('')}</select></label><div class="app-actions"><a class="small-link" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer">Annonce ↗</a><button class="btn btn-outline" type="button" data-draft-id="${esc(a.id)}">Message</button><button class="btn btn-primary" type="button" data-prepare-app="${esc(a.id)}">✦ CV + lettre</button><button class="danger-action" type="button" aria-label="Supprimer ${esc(a.title)}" data-delete-id="${esc(a.id)}">×</button></div></article>`).join('');}
