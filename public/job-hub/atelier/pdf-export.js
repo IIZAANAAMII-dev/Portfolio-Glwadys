@@ -181,7 +181,7 @@ function drawStats(page){
 function cvDoc(s){
  const focus=A.chooseFocus(s),base=A.BASE[focus],skills=A.rankSkills(s,base),ai=window.GlwadysAI?.getActive?.(s);
  const clean=!!document.getElementById('ats-clean')?.checked;
- const page=new Page();basePage(page,'CV 2026 · Glwadys Dalleau');titleHeader(page,ai?.cv?.headline||base.subtitle, s.role?.trim() && s.company?.trim()?s.role:'',clean);
+ const page=new Page();basePage(page,'CV 2026 · Glwadys Dalleau');titleHeader(page,ai?.cv?.headline||base.subtitle, !ai&&s.role?.trim()&&s.company?.trim()?s.role:'',clean);
  const x=43,w=clean?508:369;
  if(!clean)drawStats(page);
  let y=234;
