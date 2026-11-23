@@ -474,6 +474,7 @@ try {
     const brief=String(offer.ad||'').trim();
     $('ad').value=(brief||['Poste : '+offer.role,'Entreprise : '+offer.company,'Lieu : '+(offer.location||'non précisé'),'Ouvrir l’annonce d’origine pour vérifier les missions avant envoi.'].join('\n')).slice(0,18000);
     $('focus').value='auto';
+    if(typeof offer.url==='string'&&/^https:\/\//.test(offer.url))sessionStorage.setItem('glwadys-ai-offer-url',offer.url.slice(0,700));
     sessionStorage.removeItem('glwadys-job-selection-v1');
     toast('Annonce importée. Le CV et la lettre sont prêts à être personnalisés.');
   }
