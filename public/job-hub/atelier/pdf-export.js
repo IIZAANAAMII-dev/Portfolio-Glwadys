@@ -179,16 +179,16 @@ function drawStats(page){
  });
 }
 function cvDoc(s){
- const focus=A.chooseFocus(s),base=A.BASE[focus],skills=A.rankSkills(s,base);
+ const focus=A.chooseFocus(s),base=A.BASE[focus],skills=A.rankSkills(s,base),ai=window.GlwadysAI?.getActive?.(s);
  const clean=!!document.getElementById('ats-clean')?.checked;
- const page=new Page();basePage(page,'CV 2026 · Glwadys Dalleau');titleHeader(page,base.subtitle, s.role?.trim() && s.company?.trim()?s.role:'',clean);
+ const page=new Page();basePage(page,'CV 2026 · Glwadys Dalleau');titleHeader(page,ai?.cv?.headline||base.subtitle, s.role?.trim() && s.company?.trim()?s.role:'',clean);
  const x=43,w=clean?508:369;
  if(!clean)drawStats(page);
  let y=234;
  y=page.section('Profil professionnel',x,y,x+w);
- y=page.paragraph(x,y+2,w,base.summary,9.5,12.8,'F1',C.ink)+10;
+ y=page.paragraph(x,y+2,w,ai?.cv?.summary||base.summary,9.5,12.8,'F1',C.ink)+10;
  y=page.section('Compétences clés',x,y,x+w);
- y=page.paragraph(x,y+3,w,skills.selected.join('  |  '),9.1,12.2,'F1')+10;
+ y=page.paragraph(x,y+3,w,(ai?.cv?.skills?.length?ai.cv.skills:skills.selected).join('  |  '),9.1,12.2,'F1')+10;
  y=page.section('Expériences professionnelles',x,y,x+w)+3;
  const order=[0,1,2,3,4]; // Preserve evidence chronology across every CV.
  order.forEach(i=>{
@@ -233,7 +233,7 @@ function letterPage(first=true){
 function letterDoc(s){
  if(!s.company||!s.role)throw new Error('Renseigner le poste et l’entreprise pour la lettre.');
  const focus=A.chooseFocus(s),hits=A.rankSkills(s,A.BASE[focus]).hits;
- const lines=A.paragraphs(s,focus,hits);
+ const ai=window.GlwadysAI?.getActive?.(s);const lines=ai?.letter?[ai.letter.greeting,...ai.letter.paragraphs,ai.letter.closing].filter(Boolean):A.paragraphs(s,focus,hits);
  const pages=[];let p=letterPage(true);pages.push(p);
  p.text(45,248,s.recipient?('À l’attention de '+s.recipient):('À l’attention de l’équipe de recrutement de '+s.company),10.5,'F1');
  p.text(45,270,'Vannes, le '+new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'long',year:'numeric'}).format(new Date()),9.3,'F1',C.muted);
@@ -254,7 +254,7 @@ const generatedUrls=[];
 const saved={cv:null,letter:null};
 function signature(){
  const c=document.getElementById('ats-clean');
- return JSON.stringify({data:A.getState(),ats:!!c?.checked});
+ return JSON.stringify({data:A.getState(),aiId:window.GlwadysAI?.getActive?.(A.getState())?.id||null,ats:!!c?.checked});
 }
 function syncUi(kind='cv'){
  const item=saved[kind],current=item&&item.sig===signature()?item:null;
