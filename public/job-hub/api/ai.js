@@ -43,16 +43,22 @@ function reply(res,status,data){
  res.setHeader('Cache-Control','no-store, max-age=0');res.setHeader('X-Content-Type-Options','nosniff');
  return res.status(status).json(data)
 }
+function errReply(res,status,code,message,requestId=null){
+ return reply(res,status,{error:message,code,requestId});
+}
+function serviceError(status,code,message){
+ return Object.assign(new Error(message),{status,code});
+}
 function accessCodeEqual(value){
  const expected=process.env.GLWADYS_AI_ACCESS_CODE;
  if(!expected||typeof value!=='string'||value.length!==expected.length)return false;
  return crypto.timingSafeEqual(Buffer.from(value),Buffer.from(expected));
 }
-function throttled(req){
- const now=Date.now(),key=String(req.headers['x-forwarded-for']||req.socket?.remoteAddress||'anonymous').split(',')[0].slice(0,90);
+function throttled(req,preflight=false){
+ const now=Date.now(),key=String(req.headers['x-forwarded-for']||req.socket?.remoteAddress||'anonymous').split(',')[0].slice(0,90)+(preflight?':check':':generate');
  const v=limitMap.get(key)||[];
  const recent=v.filter(t=>now-t<86400000);
- if(recent.filter(t=>now-t<60000).length>=2||recent.length>=18)return true;
+ if(recent.filter(t=>now-t<60000).length>=(preflight?5:2)||recent.length>=(preflight?35:18))return true;
  recent.push(now);limitMap.set(key,recent);
  if(limitMap.size>500){const old=limitMap.keys().next().value;limitMap.delete(old)}
  return false;
@@ -80,18 +86,28 @@ function gatewayToken(req){
  }
 async function callGateway(req,body,timeoutMs){
  const key=gatewayToken(req);
- if(!key)throw Object.assign(new Error('Accès IA non configuré sur Vercel'),{status:503});
+ if(!key)throw serviceError(503,'GATEWAY_MISSING_CREDENTIALS','Le service IA ne dispose pas de ses identifiants Vercel.');
  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),timeoutMs);
  try{
-  const response=await fetch('https://ai-gateway.vercel.sh/v1/responses',{
+  let response;
+  try{response=await fetch('https://ai-gateway.vercel.sh/v1/responses',{
    method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
    body:JSON.stringify(body),signal:controller.signal
-  });
-  if(!response.ok){
-   // Never return upstream provider messages (may include sensitive content).
-   throw Object.assign(new Error(response.status===402||response.status===429?'Crédit IA ou limite de requêtes atteint':'Service IA temporairement indisponible'),{status:response.status===402||response.status===429?429:502});
+  });}
+  catch(e){
+   if(controller.signal.aborted||e?.name==='AbortError')throw serviceError(504,'GATEWAY_TIMEOUT','La génération a dépassé le délai autorisé. Réessaie sans recherche web.');
+   throw serviceError(502,'GATEWAY_NETWORK','Impossible de joindre Vercel AI Gateway. Réessaie plus tard.');
   }
-  return response.json()
+  if(!response.ok){
+   const code=response.status;
+   if(code===401||code===403)throw serviceError(503,'GATEWAY_AUTH','Vercel AI Gateway refuse les identifiants du projet. Vérifier son autorisation sur Izanami Hobby.');
+   if(code===402)throw serviceError(429,'GATEWAY_CREDIT','Le crédit IA disponible est insuffisant ou bloqué par le budget du projet.');
+   if(code===429)throw serviceError(429,'GATEWAY_RATE_LIMIT','Le fournisseur IA limite temporairement les demandes. Réessaie plus tard.');
+   if(code===400||code===404||code===422)throw serviceError(502,'GATEWAY_REQUEST_REJECTED','Le modèle IA a refusé les paramètres de génération. Le responsable doit corriger la configuration.');
+   throw serviceError(502,'GATEWAY_UNAVAILABLE','Le service IA distant ne répond pas correctement. Réessaie plus tard.');
+  }
+  try{return await response.json()}
+  catch{throw serviceError(502,'GATEWAY_INVALID_RESPONSE','La réponse du service IA est illisible.')}
  }finally{clearTimeout(timer)}
 }
 async function researchEmployer(req,role,company,sourceUrl){
@@ -141,18 +157,25 @@ function cleanGenerated(raw){
  }
 }
 export default async function handler(req,res){
- if(!sameOrigin(req))return reply(res,403,{error:'Requête inter-site refusée'});
+ const traceId=crypto.randomUUID().slice(0,8);
+ if(!sameOrigin(req))return errReply(res,403,'ORIGIN_BLOCKED','Cette requête ne provient pas du site autorisé. Ouvre le Career Studio directement dans Safari ou Chrome.',traceId);
  const enabled=Boolean(gatewayToken(req)&&process.env.GLWADYS_AI_ACCESS_CODE);
- if(req.method==='GET')return reply(res,200,{enabled,model:'GPT-6 Luna',researchAvailable:enabled,privacy:'Appels uniquement sur demande explicite. La recherche web entraîne un coût supplémentaire. Aucun CV complet ni coordonnées n’est envoyé par le navigateur.'});
- if(req.method!=='POST'){res.setHeader('Allow','GET, POST');return reply(res,405,{error:'Méthode interdite'})}
- if(!enabled)return reply(res,503,{error:'IA non activée : connecte le service depuis les réglages du projet.'});
- if(!accessCodeEqual(req.body?.code))return reply(res,401,{error:'Code d’accès IA invalide'});
- if(throttled(req))return reply(res,429,{error:'Quota de sécurité temporaire atteint. Réessaie plus tard.'});
- const input=req.body||{};
- if(input.consent!==true)return reply(res,400,{error:'Consentement explicite requis'});
+ if(req.method==='GET')return reply(res,200,{
+  enabled,configured:enabled,verified:false,model:'GPT-6 Luna',researchAvailable:enabled,
+  privacy:'Configuration détectée uniquement : la réponse GET ne teste pas les appels facturés. Les demandes nécessitent le consentement explicite.'
+ });
+ if(req.method!=='POST'){res.setHeader('Allow','GET, POST');return errReply(res,405,'METHOD_NOT_ALLOWED','Méthode interdite',traceId)}
+ if(!enabled)return errReply(res,503,'NOT_CONFIGURED','Le service IA n’est pas prêt sur Vercel. L’atelier sans IA reste accessible.',traceId);
+ const input=req.body&&typeof req.body==='object'?req.body:{};
+ const preflight=input.action==='preflight';
+ if(throttled(req,preflight))return errReply(res,429,'APP_RATE_LIMIT','Trop de demandes sur cet appareil. Réessaie dans quelques instants.',traceId);
+ if(!accessCodeEqual(input.code))return errReply(res,401,'INVALID_ACCESS_CODE','Code d’accès IA non reconnu. Vérifie le code transmis pour ce projet.',traceId);
+ // Test explicitement sans modèle, sans crédit et sans envoyer d’annonce.
+ if(preflight)return reply(res,200,{ok:true,code:'ACCESS_OK',gatewayConfigured:!!gatewayToken(req),model:'GPT-6 Luna',verified:false,note:'Code accepté ; cela ne vérifie pas encore une génération réelle.'});
+ if(input.consent!==true)return errReply(res,400,'CONSENT_REQUIRED','Accord explicite de Glwadys requis avant l’analyse IA.',traceId);
  const role=safeText(input.role,125),company=safeText(input.company,110),ad=safeText(input.ad,12000),
   tone=['professional','warm','direct'].includes(input.tone)?input.tone:'professional',sourceUrl=supportedUrl(input.sourceUrl);
- if(!role||!company||ad.length<45)return reply(res,400,{error:'Renseigne un poste, une entreprise et une annonce d’au moins 45 caractères.'});
+ if(!role||!company||ad.length<45)return errReply(res,400,'MISSING_DETAILS','Renseigne le poste, l’entreprise et une annonce d’au moins 45 caractères.',traceId);
  const focus=['communication','retail','event'].includes(input.focus)?input.focus:'auto';
  let employer={summary:'',sources:[],verified:false},researchWarning='';
  if(input.research===true){
@@ -184,7 +207,7 @@ export default async function handler(req,res){
    text:{format:{type:'json_schema',name:'glwadys_candidature',strict:true,schema:SCHEMA}},
    reasoning:{effort:'low'},max_output_tokens:3300,store:false
   },27000);
-  if(response.status==='incomplete')throw new Error('La génération IA est incomplète');
+  if(response.status==='incomplete')throw serviceError(502,'OUTPUT_INCOMPLETE','La réponse de l’IA est incomplète. Réessaie sans recherche web.');
   const parsed=JSON.parse(outputText(response));
   return reply(res,200,{
    ok:true,ai:true,mode:'evidence_grounded',model:'GPT-6 Luna',
@@ -192,6 +215,10 @@ export default async function handler(req,res){
    warnings:[researchWarning,'Relire le texte avant envoi ; ce dossier n’est pas une preuve de compétence ni une garantie ATS.'].filter(Boolean)
   })
  }catch(e){
-  return reply(res,e.status||502,{error:e.message?.includes('JSON')?'Résultat IA inexploitable, veuillez réessayer.':safeText(e.message||'Génération IA indisponible',170)})
+  const status=e.status||502;
+  const code=e.code||(e instanceof SyntaxError?'OUTPUT_INVALID_JSON':'OUTPUT_VALIDATION');
+  // Journal minimal pour le diagnostic ; aucune annonce, aucun code d’accès ni réponse IA ne sont journalisés.
+  console.warn('[glwadys-ai]',traceId,code,status);
+  return errReply(res,status,code,e.message?.includes('JSON')?'Le modèle a renvoyé une réponse inexploitable. Réessaie.':safeText(e.message||'Génération IA indisponible',190),traceId)
  }
 }
