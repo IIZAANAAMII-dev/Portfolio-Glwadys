@@ -160,6 +160,27 @@ export default async function handler(req,res){
  const traceId=crypto.randomUUID().slice(0,8);
  if(!sameOrigin(req))return errReply(res,403,'ORIGIN_BLOCKED','Cette requête ne provient pas du site autorisé. Ouvre le Career Studio directement dans Safari ou Chrome.',traceId);
  const enabled=Boolean(gatewayToken(req)&&process.env.GLWADYS_AI_ACCESS_CODE);
+ if(req.method==='GET' && (req.query?.authcheck==='1' || String(req.url||'').includes('authcheck=1'))){
+  // One read-only, no-generation, no-credit authentication probe.
+  // Only returns status and a sanitized provider error code; never tokens or account balance.
+  if(throttled(req,true))return errReply(res,429,'DIAGNOSTIC_RATE_LIMIT','Diagnostic de connexion temporairement limité.');
+  const token=gatewayToken(req);
+  if(!token)return reply(res,200,{configured:false,check:'NO_TOKEN',message:'Vercel ne fournit pas de jeton au projet.'});
+  const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),6000);
+  try{
+   const upstream=await fetch('https://ai-gateway.vercel.sh/v1/credits',{
+    method:'GET',headers:{Authorization:'Bearer '+token,Accept:'application/json'},signal:controller.signal
+   });
+   let remote={};try{remote=await upstream.json()}catch{}
+   const detail=remote?.error&&typeof remote.error==='object'?remote.error:{};
+   const code=safeText(detail.code||detail.type||'UNSPECIFIED',64).replace(/[^a-zA-Z0-9_-]/g,'');
+   const data={configured:true,check:upstream.ok?'AUTH_ACCEPTED':upstream.status===403?'ACCESS_DENIED':upstream.status===401?'TOKEN_REJECTED':'UPSTREAM_ERROR',upstreamStatus:upstream.status,upstreamCode:code,
+    credentialSource:process.env.AI_GATEWAY_API_KEY?'api_key':req.headers?.['x-vercel-oidc-token']?'oidc_function_header':process.env.VERCEL_OIDC_TOKEN?'oidc_env':'unknown',
+    note:upstream.ok?'Jeton accepté. Cela ne garantit pas l’autorisation de génération du modèle.':'Contrôle gratuit des autorisations AI Gateway, sans appel de modèle.'};
+   return reply(res,200,data);
+  }catch(e){return reply(res,200,{configured:true,check:controller.signal.aborted?'PROBE_TIMEOUT':'PROBE_NETWORK_ERROR',note:'Le test de connexion n’a pas abouti. Aucun crédit utilisé.'})}
+  finally{clearTimeout(timer)}
+ }
  if(req.method==='GET')return reply(res,200,{
   enabled,configured:enabled,verified:false,model:'GPT-6 Luna',researchAvailable:enabled,
   privacy:'Configuration détectée uniquement : la réponse GET ne teste pas les appels facturés. Les demandes nécessitent le consentement explicite.'
