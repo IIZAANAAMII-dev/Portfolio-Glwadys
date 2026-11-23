@@ -84,6 +84,37 @@ function gatewayToken(req){
   // Vercel injects fresh OIDC credentials in the function request header.
   return process.env.AI_GATEWAY_API_KEY||req.headers?.['x-vercel-oidc-token']||process.env.VERCEL_OIDC_TOKEN;
  }
+
+const VERIFICATION_URL='https://vercel.com/iizaanaamii1/~/ai?modal=add-credit-card';
+let eligibilityCache={until:0,value:null};
+async function gatewayEligibility(req){
+ if(eligibilityCache.value&&Date.now()<eligibilityCache.until)return eligibilityCache.value;
+ const key=gatewayToken(req);
+ if(!key)return {checked:false,requiresVerification:false,reason:'NO_TOKEN'};
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),6800);
+ let value={checked:false,requiresVerification:false,reason:'UNKNOWN'};
+ try{
+  const response=await fetch('https://ai-gateway.vercel.sh/v1/models?include_availability',{
+   headers:{Accept:'application/json',Authorization:'Bearer '+key},signal:controller.signal
+  });
+  if(response.ok){
+   const json=await response.json();
+   const model=Array.isArray(json.data)?json.data.find(x=>x?.id==='openai/gpt-6-luna'):null;
+   const context=json.request_context_availability?.http || model?.model_eligibility?.http || {};
+   const reason=String(context.reason||'');
+   value={
+    checked:true,requiresVerification:reason==='customer_verification_required',
+    reason:reason==='customer_verification_required'?'CUSTOMER_VERIFICATION_REQUIRED':context.status==='available'?'AVAILABLE':'UNKNOWN'
+   };
+  }else value={checked:false,requiresVerification:false,reason:'UPSTREAM_'+response.status};
+ }catch{
+  value={checked:false,requiresVerification:false,reason:'PROBE_UNAVAILABLE'};
+ }finally{clearTimeout(timer)}
+ // Shorter cache when verification is missing so the owner can unlock promptly.
+ eligibilityCache={value,until:Date.now()+(value.requiresVerification?45000:4*60000)};
+ return value;
+}
+
 async function callGateway(req,body,timeoutMs){
  const key=gatewayToken(req);
  if(!key)throw serviceError(503,'GATEWAY_MISSING_CREDENTIALS','Le service IA ne dispose pas de ses identifiants Vercel.');
@@ -100,7 +131,13 @@ async function callGateway(req,body,timeoutMs){
   }
   if(!response.ok){
    const code=response.status;
-   if(code===401||code===403)throw serviceError(503,'GATEWAY_AUTH','Vercel AI Gateway refuse les identifiants du projet. Vérifier son autorisation sur Izanami Hobby.');
+   if(code===403){
+    let upstreamCode='';
+    try{const problem=await response.json();upstreamCode=String(problem?.error?.type||problem?.error?.code||'').slice(0,85)}catch{}
+    if(upstreamCode==='customer_verification_required')throw serviceError(403,'GATEWAY_VERIFICATION_REQUIRED','Vercel demande un moyen de paiement valide sur le compte Izanami Hobby pour activer les crédits IA gratuits. Le propriétaire doit vérifier le compte Vercel.');
+    throw serviceError(503,'GATEWAY_AUTH','Vercel AI Gateway refuse la génération. Vérifier les permissions du compte Izanami.');
+   }
+   if(code===401)throw serviceError(503,'GATEWAY_AUTH','Vercel AI Gateway refuse les identifiants du projet. Vérifier son autorisation sur Izanami Hobby.');
    if(code===402)throw serviceError(429,'GATEWAY_CREDIT','Le crédit IA disponible est insuffisant ou bloqué par le budget du projet.');
    if(code===429)throw serviceError(429,'GATEWAY_RATE_LIMIT','Le fournisseur IA limite temporairement les demandes. Réessaie plus tard.');
    if(code===400||code===404||code===422)throw serviceError(502,'GATEWAY_REQUEST_REJECTED','Le modèle IA a refusé les paramètres de génération. Le responsable doit corriger la configuration.');
@@ -159,19 +196,28 @@ function cleanGenerated(raw){
 export default async function handler(req,res){
  const traceId=crypto.randomUUID().slice(0,8);
  if(!sameOrigin(req))return errReply(res,403,'ORIGIN_BLOCKED','Cette requête ne provient pas du site autorisé. Ouvre le Career Studio directement dans Safari ou Chrome.',traceId);
- const enabled=Boolean(gatewayToken(req)&&process.env.GLWADYS_AI_ACCESS_CODE);
- if(req.method==='GET')return reply(res,200,{
-  enabled,configured:enabled,verified:false,model:'GPT-6 Luna',researchAvailable:enabled,
-  privacy:'Configuration détectée uniquement : la réponse GET ne teste pas les appels facturés. Les demandes nécessitent le consentement explicite.'
- });
+ const configured=Boolean(gatewayToken(req)&&process.env.GLWADYS_AI_ACCESS_CODE);
+ if(req.method==='GET'){
+  const availability=configured?await gatewayEligibility(req):{checked:false,requiresVerification:false};
+  const enabled=configured&&!availability.requiresVerification;
+  return reply(res,200,{
+   enabled,configured,verified:false,model:'GPT-6 Luna',researchAvailable:enabled,
+   requiresVerification:availability.requiresVerification,
+   verificationUrl:availability.requiresVerification?VERIFICATION_URL:null,
+   checkStatus:availability.checked?(availability.requiresVerification?'CUSTOMER_VERIFICATION_REQUIRED':'TOKEN_ACCEPTED'):'CHECK_UNAVAILABLE',
+   privacy:'Vérification d’éligibilité gratuite, sans génération. Les données professionnelles ne sont envoyées au modèle qu’avec consentement.'
+  });
+ }
  if(req.method!=='POST'){res.setHeader('Allow','GET, POST');return errReply(res,405,'METHOD_NOT_ALLOWED','Méthode interdite',traceId)}
- if(!enabled)return errReply(res,503,'NOT_CONFIGURED','Le service IA n’est pas prêt sur Vercel. L’atelier sans IA reste accessible.',traceId);
+ if(!configured)return errReply(res,503,'NOT_CONFIGURED','Le service IA n’est pas prêt sur Vercel. L’atelier sans IA reste accessible.',traceId);
  const input=req.body&&typeof req.body==='object'?req.body:{};
  const preflight=input.action==='preflight';
  if(throttled(req,preflight))return errReply(res,429,'APP_RATE_LIMIT','Trop de demandes sur cet appareil. Réessaie dans quelques instants.',traceId);
  if(!accessCodeEqual(input.code))return errReply(res,401,'INVALID_ACCESS_CODE','Code d’accès IA non reconnu. Vérifie le code transmis pour ce projet.',traceId);
+ const availability=await gatewayEligibility(req);
+ if(availability.requiresVerification)return errReply(res,403,'GATEWAY_VERIFICATION_REQUIRED','Vercel exige une vérification du compte Izanami Hobby avant de débloquer les crédits IA gratuits. Le propriétaire doit ajouter un moyen de paiement sur Vercel.',traceId);
  // Test explicitement sans modèle, sans crédit et sans envoyer d’annonce.
- if(preflight)return reply(res,200,{ok:true,code:'ACCESS_OK',gatewayConfigured:!!gatewayToken(req),model:'GPT-6 Luna',verified:false,note:'Code accepté ; cela ne vérifie pas encore une génération réelle.'});
+ if(preflight)return reply(res,200,{ok:true,code:'ACCESS_OK',gatewayConfigured:!!gatewayToken(req),model:'GPT-6 Luna',verified:false,note:'Code accepté et vérification Vercel non bloquante ; une génération réelle reste à confirmer.'});
  if(input.consent!==true)return errReply(res,400,'CONSENT_REQUIRED','Accord explicite de Glwadys requis avant l’analyse IA.',traceId);
  const role=safeText(input.role,125),company=safeText(input.company,110),ad=safeText(input.ad,12000),
   tone=['professional','warm','direct'].includes(input.tone)?input.tone:'professional',sourceUrl=supportedUrl(input.sourceUrl);
