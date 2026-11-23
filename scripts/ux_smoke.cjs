@@ -5,6 +5,7 @@ const path = require('path');
 const assert = require('assert/strict');
 const root = path.resolve(__dirname,'..');
 const output = path.join(root,'ux-proof');
+let activeBrowser=null;
 fs.mkdirSync(output,{recursive:true});
 const count=31;
 fs.writeFileSync(path.join(root,'public','job-hub','jobs-feed.json'),JSON.stringify({
@@ -22,6 +23,7 @@ fs.writeFileSync(path.join(root,'public','job-hub','jobs-feed.json'),JSON.string
 },null,2),'utf8');
 async function main(){
   const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+  activeBrowser=browser;
   const errors=[];
   const context=await browser.newContext({viewport:{width:1440,height:930},permissions:['clipboard-read','clipboard-write']});
   const page=await context.newPage();
@@ -90,12 +92,14 @@ async function main(){
   assert.equal(await page.locator('#cv-jobs .job').count(),5,'all verified jobs remain');
   assert.equal(await page.locator('.stat-circle').count(),3,'three right-side circles');
   assert.match(await page.locator('#gaps').textContent(),/GA4/,'unverified skills flagged');
+  console.log('QA: checking AI readiness and mocked generation');
   await page.locator('#ai-status[data-ready="true"]').waitFor({timeout:15000});
   await page.locator('#ai-consent').check();
   await page.locator('#ai-code').fill('TEST-CODE');
   await page.locator('#ai-research').check();
   await page.locator('#ai-go').click();
   await page.locator('#ai-status').filter({hasText:'dossier prêt'}).waitFor({timeout:15000});
+  console.log('QA: received mocked dossier',aiRequests);
   assert.equal(aiRequests,1,'user consent triggers exactly one mocked AI request');
   assert.match(await page.locator('#cv-summary').textContent(),/PARCOURS-IA-QA-CV/,'AI summary applied to CV');
   assert.match(await page.locator('#ai-results').textContent(),/GA4/,'AI gaps clearly disclosed');
@@ -162,4 +166,8 @@ async function main(){
   console.log('Screenshots and sample PDFs:',output);
   await browser.close();
 }
-main().catch(e=>{console.error('UX QA failed:',e.stack||e);process.exitCode=1;});
+main().catch(async e=>{
+  console.error('UX QA failed:',e.stack||e);
+  try{await activeBrowser?.close()}catch{}
+  process.exit(1);
+});
